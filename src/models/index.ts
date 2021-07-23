@@ -9,7 +9,7 @@ class Request extends RequestBase {
 		return super.request(name, method, { ...params }, options);
 	}
 }
- 
+
 var database = new Request(config.prefixer, storage.shared);
 
 database.urlencoded = false;
