@@ -1,0 +1,41 @@
+
+.nft_add {
+	background-color: #F9F9F9;
+
+	.inputs {
+		margin-top: 0.2rem;
+		// padding-left: 22rem;
+		background-color: #fff;
+
+		.i1 {
+			padding-top: 0.33rem;
+			padding-left: 0.51rem;
+			padding-bottom: 0.12rem;
+			border-bottom: solid 0.01rem #979797;
+			color: #000;
+			line-height: 0.37rem;
+			font-size: 0.26rem;
+			display: flex;
+			height: 0.8rem;
+			.txt1 {
+				width: 1.3rem;
+			}
+			.input {
+				width: 5rem;
+			}
+			.btn {
+				width: 0.5rem;
+				height: 0.5rem;
+				// background-color: #f00;
+				background-image: url(../res/1627293059467.jpg);
+				background-size: 0.38rem;
+				background-repeat: no-repeat;
+				background-position: center;
+				margin-top: -0.07rem;
+			}
+			.btn:active {
+				opacity: 0.5;
+			}
+		}
+	}
+}

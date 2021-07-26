@@ -36,19 +36,16 @@ import './src/css/util.css';
 import sdk,{initialize} from './src/sdk';
 import utils from 'somes';
 import errnoHandles from 'webpkit/lib/errno_handles';
-import {Console} from 'somes/log';
+// import {Console} from 'somes/log';
 
-utils.onUncaughtException.on((e)=>{
-	errnoHandles(e.data);
-});
-
-utils.onUnhandledRejection.on((e)=>{
-	errnoHandles(e.data.reason);
-});
+utils.onUncaughtException.on((e)=>errnoHandles(e.data));
+utils.onUnhandledRejection.on((e)=>errnoHandles(e.data.reason));
 
 class MyRoot<P> extends Root<P> {
 
 	protected startupPath: string = path.getParam('init_url') || '/';
+
+	triggerNav() {}
 
 	async triggerLoad() {
 		await super.triggerLoad();
@@ -70,4 +67,4 @@ class MyRoot<P> extends Root<P> {
 
 ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
-Console.defaultInstance.log('init ok');
+// Console.defaultInstance.log('init ok');

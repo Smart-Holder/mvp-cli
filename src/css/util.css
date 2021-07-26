@@ -3,6 +3,18 @@ body {
 	font-family:sans-serif,STHeiti,Microsoft YaHei,Helvetica,Arial;
 }
 
+._main {
+	background: none;
+}
+
+._main ._title {
+	/* background: none; */
+}
+
+._main ._title ._b:after {
+	content: none;
+}
+
 ._btn {
 	width: 80%;
 	text-align: center;

@@ -1,0 +1,92 @@
+
+.device_nft {
+	.list {
+		margin: 0.45rem auto 0.2rem;
+		width: 6.5rem;
+		background-color: #F9F9F9;
+		border: solid 0.01rem #979797;
+		border-radius: 0.17rem;
+		.list_header {
+			padding-top: 0.26rem;
+			.txt1 {
+				margin: 0.1rem 0.28rem 0;
+				line-height: 0.45rem;
+				font-size: 0.32rem;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				// height: 0.45rem;
+			}
+			.txt1.txt1_1 {
+				padding-bottom: 0.16rem;
+				border-bottom: solid 0.01rem #2D2D2D;
+			}
+			.btn_p {
+				text-align: center;
+				padding: 0.25rem 0 0.4rem 0;
+				> div {
+					font-size: 0.32rem;
+					background-color: #D8D8D8;
+					line-height: 0.77rem;
+					width: 2.76rem;
+					text-align: center;
+					color: #2A2A30;
+					margin: 0 0.19rem;
+					display: inline-block;
+					border-radius: 0.08rem;
+				}
+				> div:active {
+					opacity: 0.5;
+				}
+				.set {
+					background-color: #000;
+					color: #fff;
+				}
+			}
+		}
+		.item {
+			background-color: #fff;
+			border-radius: 0.17rem;
+			width: 6.12rem;
+			margin: 0.42rem auto 0;
+			padding-top: 0.26rem;
+			.img {
+				width: 5.50rem;
+				height: 4.06rem;
+				margin: auto;
+				background-color: #979797;
+			}
+			.txt1 {
+				padding: 0.24rem 0.34rem 0;
+				line-height: 0.37rem;
+				color: #2A2A30;
+				font-size: 0.26rem;
+			}
+			.txt2 {
+				line-height: 0.33rem;
+				height: 0.33rem;
+				padding: 0 0.34rem;
+				font-size: 0.24rem;
+				color: #2A2A30;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.btn_p {
+				padding: 0.48rem 0.3rem 0.16rem;
+				text-align: right;
+				> div{
+					width: 2.36rem;
+					line-height: 0.64rem;
+					text-align: center;
+					display: inline-block;
+					font-size: 0.28rem;
+					background-color: #000;
+					color: #fff;
+					border-radius: 0.08rem;
+				}
+				> div:active{
+					opacity: 0.5;
+				}
+			}
+		}
+	}
+}

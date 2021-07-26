@@ -1,0 +1,39 @@
+
+.device {
+	.list {
+		> div.a {
+			background-position: 1.9rem center;
+		}
+		> div.b {
+			position: relative;
+			.txt1 {
+				margin: 0.48rem 1.4rem 0 0.18rem;
+				line-height: 0.4rem;
+				font-size: 0.28rem;
+			}
+			.txt2 {
+				margin: 0.09rem 1.4rem 0 0.18rem;
+				line-height: 0.4rem;
+				font-size: 0.28rem;
+			}
+			.txt3 {
+				position:absolute;
+				width: 1.1rem;
+				height: 0.96rem;
+				border: solid 0.01rem #2C2C2C;
+				border-top: none;
+				border-bottom: none;
+				font-size: 0.34rem;
+				line-height: 0.48rem;
+				text-align: center;
+				right: 0.3rem;
+				bottom: 0.48rem;
+				> span {
+					font-size: 0.22rem;
+					padding-top: 0.11rem;
+					line-height: 0.3rem;
+				}
+			}
+		}
+	}
+}

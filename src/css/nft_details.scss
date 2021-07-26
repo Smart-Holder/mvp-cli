@@ -1,0 +1,61 @@
+
+.nft_details {
+
+	.item {
+		margin: 0.5rem auto;
+		width: 6.5rem;
+		border: solid 0.01rem #979797;
+		border-radius: 0.17rem;
+		.img {
+			width: 4.66rem;
+			height: 5.88rem;
+			background: #979797;
+			margin: 0.4rem auto 0.17rem auto;
+			border-radius: 0.05rem;
+		}
+		.txt1 {
+			font-size: 0.26rem;
+			padding-left: 0.86rem;
+			padding-right: 0.86rem;
+			margin-top: 0.13rem;
+			line-height: 0.37rem;
+		}
+		.txt1.txt1_1 {
+			padding-bottom: 0.48rem;
+		}
+		.txt2 {
+			padding-top: 0.1rem;
+			padding-left: 0.46rem;
+			line-height: 0.37rem;
+			font-size: 0.26rem;
+		}
+		.txt3{
+			padding-top: 0.1rem;
+			margin-left: 0.46rem;
+			margin-right: 0.46rem;
+			padding-bottom: 0.12rem;
+			line-height: 0.3rem;
+			border-bottom: solid 0.01rem rgba(0,0,0,0.5);
+		}
+		.txt3.txt3_1 {
+			border-bottom: none;
+		}
+		.btn_p {
+			padding: 0.58rem 0.3rem 0.3rem;
+			text-align: right;
+		}
+		.btn_p > div {
+			background-color: black;
+			height: 0.66rem;
+			line-height: 0.66rem;
+			padding: 0 0.52rem;
+			color: #fff;
+			font-size: 0.28rem;
+			display: inline-block;
+			border-radius: 0.08rem;
+		}
+		.btn_p > div:active {
+			opacity: 0.5;
+		}
+	}
+}

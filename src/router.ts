@@ -2,58 +2,42 @@
 export default [
 	{
 		path: '/',
-		page: () => import('./pages/index'),
+		page: () => import('./pages/nft'),
 	},
 	{
-		path: '/index',
-		page: () => import('./pages/index'),
+		path: '/device_add',
+		page: () => import('./pages/device_add'),
 	},
 	{
-		path: '/404',
-		page: () => import('./pages/404'),
+		path: '/device_nft',
+		page: () => import('./pages/device_nft'),
 	},
 	{
-		path: '/bad_pixels',
-		page: () => import('./pages/bad_pixels'),
+		path: '/device_set_screen',
+		page: () => import('./pages/device_set_screen'),
 	},
 	{
-		path: '/details',
-		page: () => import('./pages/details'),
+		path: '/device_set_screen_img',
+		page: () => import('./pages/device_set_screen_img'),
 	},
 	{
-		path: '/ethereum',
-		page: () => import('./pages/ethereum'),
+		path: '/device_set_screen_time',
+		page: () => import('./pages/device_set_screen_time'),
 	},
 	{
-		path: '/iframe',
-		page: () => import('./pages/iframe'),
+		path: '/device_set',
+		page: () => import('./pages/device_set'),
 	},
 	{
-		path: '/led',
-		page: () => import('./pages/led'),
+		path: '/device',
+		page: () => import('./pages/device'),
 	},
 	{
-		path: '/media',
-		page: () => import('./pages/media'),
+		path: '/nft_add',
+		page: () => import('./pages/nft_add'),
 	},
 	{
-		path: '/network',
-		page: () => import('./pages/network'),
-	},
-	{
-		path: '/network_set',
-		page: () => import('./pages/network_set'),
-	},
-	{
-		path: '/photo',
-		page: () => import('./pages/photo'),
-	},
-	{
-		path: '/other',
-		page: () => import('./pages/other'),
-	},
-	{
-		path: '/factory',
-		page: () => import('./pages/factory'),
+		path: '/nft_details',
+		page: () => import('./pages/nft_details'),
 	},
 ];
