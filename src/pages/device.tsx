@@ -1,6 +1,7 @@
 
 import { React, NavPage } from 'webpkit/mobile';
 import Header from '../util/header';
+import Tools from '../util/tools';
 import '../css/index.scss';
 import '../css/device.scss';
 
@@ -25,6 +26,7 @@ export default class extends NavPage {
 						<div className="txt3">04<br/><span>NFT</span></div>
 					</div>
 				</div>
+				<Tools page={this} />
 			</div>
 		);
 	}

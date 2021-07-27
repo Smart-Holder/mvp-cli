@@ -1,0 +1,57 @@
+
+.device_set {
+	._title {
+		background: none;
+	}
+	background-color: #F9F9F9;
+	.items {
+		padding-top: 0.1rem;
+		.item {
+			padding-left: 0.43rem;
+			height: 0.85rem;
+			background: #fff;
+			display: flex;
+			border-bottom: solid 0.01rem #979797;
+			font-size: 0.26rem;
+			align-items: center;
+			position: relative;
+			.checkbox {
+				width: 0.34rem;
+				height: 0.34rem;
+				border: solid 0.01rem #979797;
+				margin-right: 0.2rem;
+			}
+			.txt1 {
+				width: 5.8rem;
+				// text-align: right;
+			}
+			.txt2 {
+				width: 5.8rem;
+				text-align: right;
+			}
+			.arrow {
+				// content: '';
+				display: block;
+				width: 0.12rem;
+				height: 0.21rem;
+				background-color: #f00;
+				margin-right: 0.41rem;
+				background-image: url(../res/1627360991821.jpg);
+				background-size: 115%;
+				position:absolute;
+				right: 0;
+			}
+		}
+		.item.on {
+			.checkbox {
+				background-color:#0f0;
+			}
+		}
+		:last-child {
+			border-bottom: none;
+		}
+		.item:active {
+			opacity: 0.5;
+		}
+	}
+}

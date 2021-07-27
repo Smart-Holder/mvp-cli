@@ -1,0 +1,37 @@
+
+.device_set_screen_img {
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding-top: 0.1rem;
+		.item {
+			width: 3.07rem;
+			height: 4.56rem;
+			margin: 0.23rem 0.18rem;
+			border: solid 0.01rem #979797;
+			border-radius: 0.17rem;
+			box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,0.06);
+			position: relative;
+			.img {
+			}
+			.checkbox {
+				position:absolute;
+				right: 0.22rem;
+				bottom: 0.17rem;
+				width: 0.39rem;
+				height: 0.39rem;
+				border: solid 0.01rem #979797;
+				border-radius: 0.2rem;
+			}
+		}
+		.item.on {
+			.checkbox {
+				background: #0f0;
+			}
+		}
+		.item:active {
+			opacity: 0.5;
+		}
+	}
+}

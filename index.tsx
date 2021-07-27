@@ -32,7 +32,7 @@ import {React,Root,ReactDom,dialog} from 'webpkit/mobile';
 import _404 from './src/pages/404';
 import routes from './src/router';
 import path from 'somes/path';
-import './src/css/util.css';
+import './src/css/util.scss';
 import sdk,{initialize} from './src/sdk';
 import utils from 'somes';
 import errnoHandles from 'webpkit/lib/errno_handles';
