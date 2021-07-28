@@ -50,17 +50,17 @@ class MyRoot<P> extends Root<P> {
 		await super.triggerLoad();
 
 		try {
-			await initialize();
+			// await initialize();
 		} catch(err) {
 			dialog.alert(err.message + ', ' + err.code + ',' + err.stack);
 			throw err;
 		}
 
-		sdk.message.addEventListener('BluetoothPairRequest', e=>{
-			dialog.confirm(e.data.mobile + ',请求蓝牙配对', e=>{
-				sdk.device.methods.agreeBluetoothPair({ isAgree: e }).catch(console.error);
-			});
-		});
+		// sdk.message.addEventListener('BluetoothPairRequest', e=>{
+		// 	dialog.confirm(e.data.mobile + ',请求蓝牙配对', e=>{
+		// 		sdk.device.methods.agreeBluetoothPair({ isAgree: e }).catch(console.error);
+		// 	});
+		// });
 	}
 	
 
