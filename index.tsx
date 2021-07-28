@@ -36,6 +36,7 @@ import './src/css/util.scss';
 import sdk,{initialize} from './src/sdk';
 import utils from 'somes';
 import errnoHandles from 'webpkit/lib/errno_handles';
+import Tools from './src/util/tools';
 // import {Console} from 'somes/log';
 
 utils.onUncaughtException.on((e)=>errnoHandles(e.data));
@@ -43,9 +44,7 @@ utils.onUnhandledRejection.on((e)=>errnoHandles(e.data.reason));
 
 class MyRoot<P> extends Root<P> {
 
-	protected startupPath: string = path.getParam('init_url') || '/';
-
-	triggerNav() {}
+	isHashRoutes = false;
 
 	async triggerLoad() {
 		await super.triggerLoad();
@@ -62,6 +61,15 @@ class MyRoot<P> extends Root<P> {
 				sdk.device.methods.agreeBluetoothPair({ isAgree: e }).catch(console.error);
 			});
 		});
+	}
+	
+
+	_getNav = ()=>{
+		return this.refs.nav as any;
+	}
+
+	renderTools() {
+		return <Tools nav={this._getNav} />;
 	}
 }
 

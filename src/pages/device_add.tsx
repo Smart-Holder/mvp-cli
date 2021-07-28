@@ -8,7 +8,7 @@ export default class extends NavPage {
 	render() {
 		return (
 			<div className="index index2">
-				<Header title="添加NFT" page={this} />
+				<Header title="添加设备" page={this} />
 			</div>
 		);
 	}

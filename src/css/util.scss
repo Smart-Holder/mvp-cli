@@ -7,8 +7,12 @@ body {
 	background: none;
 }
 
+._main > div {
+	padding-bottom: 1.35rem;
+}
+
 ._main ._title {
-	/* background: none; */
+	// background: none;
 }
 
 ._main ._title ._b:after {
@@ -47,6 +51,8 @@ body {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+	background: #fff;
+	z-index: 1000;
 	.btn {
 		width: 0.65rem;
 		height: 0.88rem;
@@ -63,7 +69,7 @@ body {
 			width: 0.48rem;
 			height: 0.48rem;
 			// background-color: #f00;
-			background-size: 100%;
+			background-size: 100% 100%;
 		}
 		.icon.a {
 			background-image: url(../res/1627382932865.jpg);
@@ -76,9 +82,9 @@ body {
 			line-height: 0.33rem;
 		}
 		&:active {
-			opacity: 0.8 !important;
+			opacity: 0.5 !important;
 		}
-		opacity: 0.5;
+		// opacity: 0.5;
 	}
 	.btn.on {
 		opacity: 1;
