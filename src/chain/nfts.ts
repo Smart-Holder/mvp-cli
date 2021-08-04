@@ -26,7 +26,7 @@ export class ApiIMPL implements nfts.APINFTs {
 		await nft.api.mint(tokenId).call();
 		var r = await nft.api.mint(tokenId).post();
 		var evt = await nft.findEventFromReceipt('Transfer', r);
-		var values = evt[0].returnValues as any;
+		var values = evt.returnValues as any;
 		return {
 			from: values.address as string,
 			to: values.to as string,
@@ -40,7 +40,7 @@ export class ApiIMPL implements nfts.APINFTs {
 		await nft.api.safeMintURI(to, tokenId, tokenURI, data_).call();
 		var r = await nft.api.safeMintURI(to, tokenId, tokenURI, data_).post();
 		var evt = await nft.findEventFromReceipt('Transfer', r);
-		var values = evt[0].returnValues as any;
+		var values = evt.returnValues as any;
 		return {
 			from: values.address as string,
 			to: values.to as string,
