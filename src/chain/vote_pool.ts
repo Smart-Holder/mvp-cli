@@ -1,58 +1,86 @@
 
-import {Address,Uint256} from 'web3z/solidity_types'
+import * as vp from '../vote_pool';
+import artifacts from './artifacts';
 
-// 投票质押信息，用于记录每一张投票信息
-export interface Vote {
-	voter: Address; // 投票人
-	orderId: Uint256; // 所参与的竞拍活动
-	votes: Uint256; // 投票质押数量
-	weight: Uint256; // 投票质押系数
-	blockNumber: Uint256; // 投票区块高度
-}
+export class ApiIMPL implements vp.APIVotePool {
 
-// 竞拍活动的投票质押信息总览
-export interface OrderSummary {
-	totalVotes: Uint256;// 总投票质押数量
-	totalCanceledVotes: Uint256;
-	fixedRate: Uint256;
-	totalShares: Uint256; // 当前有效投票质押总股份（凭证）
-	commission: Uint256; // 竞拍成功时质押投票分成佣金额
-	stoped: boolean;
-}
+	private get _artifact() { return artifacts.vote_pool.api }
 
-export interface APIVotePool {
+	get contractAddress() { return artifacts.vote_pool.address }
 
-	contractAddress: string;
+	// 投票最小锁定时间
+	voteLockTime() {
+		return this._artifact.voteLockTime().call();
+	}
+
+	// 投票人的投票集合
+	async votes(voter: string) {
+		// TODO ...
+		var votes: vp.Vote[] = [];
+		var voter_ids = await this._artifact.votesByVoter(voter).call();
+		for (var id of voter_ids) {
+			votes.push(await this.votesById(id));
+		}
+		return votes;
+	}
 
 	// 通过投票id返回投票信息
-	votesById(voteId: bigint): Promise<Vote>;
+	votesById(voteId: bigint) {
+		return this._artifact.votesById(voteId).call();
+	}
 
 	// 通过订单返回竞拍活动的投票质押信息总览
-	ordersById(orderId: bigint): Promise<OrderSummary>;
+	ordersById(orderId: bigint) {
+		return this._artifact.ordersById(orderId).call();
+	}
 
 	// vote
-	marginVote(orderId: bigint, amount: bigint): Promise<{
-		orderId: bigint;
-		voter: string;
-		voteId: bigint;
-		votes: bigint;
-		weight: bigint;
-	}>;
+	async marginVote(orderId: bigint, amount: bigint) {
+		await this._artifact.marginVote(orderId).call({ value: String(amount) });
+		var r = await this._artifact.marginVote(orderId).post({ value: String(amount) });
+		var evt = await artifacts.vote_pool.findEventFromReceipt('Voted', r);
+		var values = evt[0].returnValues as any;
+		return {
+			orderId: BigInt(values.orderId),
+			voter: String(values.voter), voteId: BigInt(values.voteId),
+			votes: BigInt(values.votes), weight: BigInt(values.weight),
+		};
+	}
 
 	// 取消vote
-	cancelVote(voteId: bigint): Promise<{
-		orderId: bigint;
-		voter: string;
-		voteId: bigint;
-	}>;
+	async cancelVote(voteId: bigint) {
+		await this._artifact.cancelVote(voteId).call();
+		var r = await this._artifact.cancelVote(voteId).post();
+		var evt = await artifacts.vote_pool.findEventFromReceipt('Canceled', r);
+		var values = evt[0].returnValues as any;
+		return {
+			orderId: BigInt(values.orderId),
+			voter: String(values.voter), voteId: BigInt(values.voteId),
+		};
+	}
 
 	// 返回订单的投票总量
-	orderTotalVotes(orderId: bigint): Promise<bigint>;
+	orderTotalVotes(orderId: bigint) {
+		return this._artifact.orderTotalVotes(orderId).call();
+	}
 
 	// 要释放的金额,我的收益
-	canRelease(holder: string): Promise<bigint>;
+	canRelease(holder: string) {
+		return this._artifact.canRelease(holder).call();
+	}
 
 	// 尝试释放结束的投票金额,释放我的收益
-	tryRelease(holder: string): Promise<bigint>;
+	async tryRelease(holder: string) {
+		var sumProfit = await this._artifact.tryRelease(holder).call();
+		await this._artifact.tryRelease(holder).post();
+		return sumProfit;
+	}
+
+	// 投票人的投票凭据ID集合
+	allVotes(voter: string) {
+		return this._artifact.allVotes(voter).call();
+	}
 
 }
+
+export default new ApiIMPL;
