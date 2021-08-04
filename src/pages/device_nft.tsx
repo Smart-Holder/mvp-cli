@@ -1,9 +1,12 @@
 
-import { React, NavPage } from 'webpkit/mobile';
+import { React } from 'webpkit/mobile';
+import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_nft.scss';
 
 export default class extends NavPage {
+
+	title = '设备NFT';
 
 	_Unbind = ()=>{
 		//

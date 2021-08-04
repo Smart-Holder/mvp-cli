@@ -9,6 +9,7 @@
 		"build": "NODE_ENV=prod node node_modules/webpkit/tools/build.js"
 	},
 	"devDependencies": {
-		"webpkit": "file:deps/webpkit"
+		"webpkit": "file:deps/webpkit",
+		"web3z": "file:deps/web3z"
 	}
 }

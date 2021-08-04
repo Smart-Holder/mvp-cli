@@ -1,9 +1,12 @@
 
-import { React, NavPage } from 'webpkit/mobile';
+import { React } from 'webpkit/mobile';
+import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_set.scss';
 
 export default class extends NavPage {
+
+	title = '设置';
 
 	_ImgSelect = ()=>{
 		this.pushPage({url: '/device_set_screen'});

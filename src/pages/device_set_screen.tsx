@@ -1,9 +1,12 @@
 
-import { React, NavPage } from 'webpkit/mobile';
+import { React } from 'webpkit/mobile';
+import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_set.scss';
 
 export default class extends NavPage {
+
+	title = '选择轮播项目';
 
 	_SelectImg = ()=>{
 		this.pushPage('/device_set_screen_img?type=0');

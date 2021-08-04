@@ -1,10 +1,13 @@
 
-import { React, NavPage } from 'webpkit/mobile';
+import { React } from 'webpkit/mobile';
+import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/index.scss';
 import '../css/device.scss';
 
 export default class extends NavPage {
+
+	title = '设备列表';
 
 	_DeviceAdd = ()=>{
 		this.pushPage('/device_add');

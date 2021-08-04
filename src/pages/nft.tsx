@@ -1,9 +1,12 @@
 
-import { React, NavPage } from 'webpkit/mobile';
+import { React } from 'webpkit/mobile';
+import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/index.scss';
 
 export default class extends NavPage {
+
+	title = 'NFT列表';
 
 	_NftAdd = ()=>{
 		this.pushPage('/nft_add');
