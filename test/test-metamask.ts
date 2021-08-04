@@ -28,7 +28,7 @@
  * 
  * ***** END LICENSE BLOCK ***** */
 
-import web3 from '../src/chain/web3';
+import web3 from '../src/chain';
 
 export default async function() {
 

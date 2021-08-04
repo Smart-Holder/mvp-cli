@@ -33,7 +33,7 @@ import _404 from './pages/404';
 import routes from './router';
 import './css/util.scss';
 import {initialize} from './sdk';
-import {initialize as initialize_chain} from './chain';
+import chain from './chain';
 import utils from 'somes';
 import errnoHandles from 'webpkit/lib/errno_handles';
 import Tools from './util/tools';
@@ -67,7 +67,7 @@ class MyRoot<P> extends Root<P> {
 	}
 }
 
-initialize_chain().then(()=>{
+chain.initialize().then(()=>{
 
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 

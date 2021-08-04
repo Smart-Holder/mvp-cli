@@ -28,7 +28,7 @@
  * 
  * ***** END LICENSE BLOCK ***** */
 
-import { history } from 'webpkit/lib/router';
+// import { history } from 'webpkit/lib/router';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
@@ -51,7 +51,7 @@ export class Web3IMPL extends Web3Z {
 			this._metaMask = (globalThis as any).ethereum;
 			// check _metaMask
 			if (!this._metaMask) {
-				history.push('/install');
+				// history.push('/install');
 				throw Error.new('Matemask wallet needs to be installed');
 			}
 			var currentChainId = this._metaMask.chainId;
