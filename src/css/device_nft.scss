@@ -54,6 +54,9 @@
 				height: 4.06rem;
 				margin: auto;
 				background-color: #979797;
+				* > {
+					width: 100%;
+				}
 			}
 			.txt1 {
 				padding: 0.24rem 0.34rem 0;
@@ -88,5 +91,12 @@
 				}
 			}
 		}
+	}
+	.bind {
+		height: 80%;
+		font-size: 0.25rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 }

@@ -3,17 +3,18 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_set.scss';
+import {Device} from '../models/device';
 
-export default class extends NavPage {
+export default class extends NavPage<Device> {
 
 	title = '设置';
 
 	_ImgSelect = ()=>{
-		this.pushPage({url: '/device_set_screen'});
+		this.pushPage({url: '/device_set_screen', params: this.params});
 	};
 
 	_TimeSelect = ()=>{
-		this.pushPage({url: '/device_set_screen_time'});
+		this.pushPage({url: '/device_set_screen_time', params: this.params});
 	};
 
 	render() {

@@ -28,7 +28,6 @@
  * 
  * ***** END LICENSE BLOCK ***** */
 
-// import { history } from 'webpkit/lib/router';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
@@ -66,8 +65,6 @@ export class Web3IMPL extends Web3Z {
 
 	getProvider() {
 		return this.metaMask;
-		// return 'http://hw1.ngui.fun:7777';
-		// return 'http://114.115.155.154:7777'
 	}
 
 	async getDefaultAccount() {

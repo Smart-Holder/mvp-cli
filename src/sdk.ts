@@ -12,7 +12,7 @@ export async function initialize() {
 	if (!user) {
 		await store.core.auth.methods.register({ name: authName(), key: publicKey() });
 	}
-	console.log('auth.user',  user);
+	console.log('auth.user', user);
 }
 
 export default store.core;

@@ -12,6 +12,10 @@
 			background: #979797;
 			margin: 0.4rem auto 0.17rem auto;
 			border-radius: 0.05rem;
+			* {
+				width: 100%;
+				height: 100%;
+			}
 		}
 		.txt1 {
 			font-size: 0.26rem;
@@ -39,6 +43,8 @@
 		}
 		.txt3.txt3_1 {
 			border-bottom: none;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		.btn_p {
 			padding: 0.58rem 0.3rem 0.3rem;

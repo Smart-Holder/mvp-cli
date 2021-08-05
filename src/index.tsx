@@ -35,7 +35,7 @@ import './css/util.scss';
 import sdk,{initialize} from './sdk';
 import chain from './chain';
 import utils from 'somes';
-import errnoHandles from 'webpkit/lib/errno_handles';
+import errnoHandles from './handle';
 import Tools from './util/tools';
 
 utils.onUncaughtException.on((e)=>errnoHandles(e.data));
