@@ -8,3 +8,8 @@
 	path = deps/web3z
 	url = http://gitlab.stars-mine.com/hardware/web3z.git
 	# url = https://github.com/louis-tru/web3z.git
+
+[submodule "mvp-ser"]
+	path = deps/mvp-ser
+	url = http://gitlab.stars-mine.com/hardware/mvp-ser.git
+	# url = https://github.com/louis-tru/mvp-ser.git

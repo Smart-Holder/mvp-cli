@@ -32,7 +32,7 @@ import {React,Root,ReactDom,dialog, Nav} from 'webpkit/mobile';
 import _404 from './pages/404';
 import routes from './router';
 import './css/util.scss';
-import {initialize} from './sdk';
+import sdk,{initialize} from './sdk';
 import chain from './chain';
 import utils from 'somes';
 import errnoHandles from 'webpkit/lib/errno_handles';
@@ -51,19 +51,19 @@ class MyRoot<P> extends Root<P> {
 		await super.triggerLoad();
 		try {
 			await initialize();
-			// await sdk.nft.methods.getNftByOwner({owner:'0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'});
+			// console.log(await sdk.nft.methods.getNftByOwner({owner:'0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'}));
 		} catch(err) {
 			dialog.alert(err.message + ', ' + err.code + ',' + err.stack);
 			throw err;
 		}
 	}
 
-	private _getNav = ()=>{
+	private _nav = ()=>{
 		return this.refs.nav as any;
 	}
 
 	renderTools() {
-		return <Tools nav={this._getNav} />;
+		return <Tools nav={this._nav} />;
 	}
 }
 

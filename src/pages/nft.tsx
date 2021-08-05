@@ -3,6 +3,8 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/index.scss';
+import models, { Nft } from '../models';
+import {address} from '../key';
 
 export default class extends NavPage {
 
@@ -14,6 +16,12 @@ export default class extends NavPage {
 
 	_NftDetails = ()=>{
 		this.pushPage('/nft_details');
+	}
+
+	state = { nft: [] as Nft[] };
+
+	async triggerLoad() {
+		this.setState({ nft:  await models.nft.methods.getNftByOwner({ owner: address() }) });
 	}
 
 	render() {
