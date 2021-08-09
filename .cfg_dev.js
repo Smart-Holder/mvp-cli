@@ -1,9 +1,14 @@
 
+try {
+	var deploy = require('./deps/mvp-sol/out/deploy_pub.json');
+} catch(err) {}
+
 module.exports = {
-	sdk: 'http://127.0.0.01:8091/service-api',
+	sdk: 'http://192.168.1.100:8001/service-api',
 	prefixer: 'http://hash-release.stars-mine.com/v2',
-	contracts: {
-		erc721: '0xeaB062E157C6D316f5f3E41c35868A7B1cB40E52',
-		erc721_proxy: '0xeaB062E157C6D316f5f3E41c35868A7B1cB40E52',
-	},
+	platform: 'eth',
+	contracts: Object.assign({
+		ERC721: '0xFA6dFa64cEC3401106a9F75bD57a2F484B47e72c',
+		ERC721Proxy: '0xb801fe5300eAEF8bf21BBD9F76f0d04C4B240923',
+	}, deploy),
 }

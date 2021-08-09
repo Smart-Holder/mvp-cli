@@ -5,12 +5,12 @@
 
  import {Address,Uint256,Bytes} from 'web3z/solidity_types';
  import {Result} from 'web3z/happy';
- import * as json from '../../../out/abi/ERC721Proxy.json';
+ import * as json from '../../../deps/mvp-sol/out/abi/ERC721Proxy.json';
  import {contracts} from '../../../config';
  
  export const abi = json.abi;
  export const contractName = json.contractName;
- export const contractAddress = contracts.erc721_proxy;
+ export const contractAddress = contracts.ERC721Proxy;
  
  export default interface ERC721Proxy {
 	 balanceOf(owner: Address): Result<Uint256>;
