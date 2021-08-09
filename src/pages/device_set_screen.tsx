@@ -37,12 +37,12 @@ export default class extends NavPage<device.Device> {
 						<div className="txt1">选择单张图片</div>
 						<div className="arrow"></div>
 					</div>
-					<div className={this.get_cls('video')} onClick={this._SelectImgs}>
+					<div className={this.get_cls('multi')} onClick={this._SelectImgs}>
 						<div className="checkbox"></div>
 						<div className="txt1">选择多张轮播图片</div>
 						<div className="arrow"></div>
 					</div>
-					<div className={this.get_cls('multi')} onClick={this._SelectVideo}>
+					<div className={this.get_cls('video')} onClick={this._SelectVideo}>
 						<div className="checkbox"></div>
 						<div className="txt1">选择一个视频</div>
 						<div className="arrow"></div>

@@ -5,16 +5,23 @@
 	"author": "louistru@hotmail.com",
 	"private": true,
 	"scripts": {
-		"dev": "DEV_INLINE=false node node_modules/webpkit/tools/dev --inline --progress --config tools/dev.js",
-		"build": "NODE_ENV=prod node tools/build.js"
+		"dev": "DEV_INLINE=false MAP=true node node_modules/webpkit/tools/dev --inline --progress --config tools/dev.js",
+		"build": "NODE_ENV=prod MAP=true MINIM=false node tools/build.js",
+		"abi": "truffle compile && node tools/abi.js",
+		"deploy": "truffle deploy",
+		"deploy2": "UPGRADE=true truffle deploy"
 	},
 	"devDependencies": {
 		"somes": "file:deps/webpkit/deps/somes",
 		"crypto-tx": "file:deps/webpkit/deps/crypto-tx",
 		"web3z": "file:deps/web3z",
-		"webpkit": "file:deps/webpkit"
-	},
-	"dependencies": {
-		"sha256": "^0.2.0"
+		"webpkit": "file:deps/webpkit",
+		"mvp-cli-tools": "file:tools",
+		"@openzeppelin/contracts": "^3.3.0",
+		"@openzeppelin/contracts-ethereum-package": "^3.0.0",
+		"@openzeppelin/truffle-upgrades": "^1.3.1",
+		"solidity-coverage": "^0.7.13",
+		"solidity-docgen": "^0.5.10",
+		"truffle": "~5.1.60"
 	}
 }

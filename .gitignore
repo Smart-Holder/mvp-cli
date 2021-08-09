@@ -9,3 +9,5 @@ package-lock.json
 nohup.out
 var
 nifty
+.openzeppelin
+yarn.lock

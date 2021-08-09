@@ -31,7 +31,7 @@ export default class extends NavPage<{id:number}> {
 		this.pushPage({url: '/device', params: {type: 'back' }})
 	}
 
-	render() {
+	render() {debugger
 		return (
 			<div className="nft_details">
 				<Header title="NFT详情" page={this} />
@@ -42,7 +42,7 @@ export default class extends NavPage<{id:number}> {
 					<div className="txt2">合约地址:</div>
 					<div className="txt3">{this.state.nft?.token}</div>
 					<div className="txt2">作品序号:</div>
-					<div className="txt3 txt3_1">#{this.state.nft?.tokenId}</div>
+					<div className="txt3 txt3_1">{this.state.nft?.tokenId}</div>
 					<div className="btn_p"><div onClick={this._Handle}>存入到设备</div></div>
 				</div>
 			</div>
