@@ -5,11 +5,11 @@
 
 import web3 from '..';
 import Happy from 'web3z/happy';
-import * as NFTs from './NFTs';
+import * as ERC721 from './ERC721';
 
 const ex_ = {
-	get nfts() { return Happy.instance<NFTs.default>(NFTs, web3) },
-	nft(address: string) { return Happy.instance<NFTs.default>({...NFTs, contractAddress: address}, web3, address) },
+	get erc721() { return Happy.instance<ERC721.default>(ERC721, web3) },
+	nft(address: string) { return Happy.instance<ERC721.default>({...ERC721, contractAddress: address}, web3, address) },
 }
 
 export default ex_;
