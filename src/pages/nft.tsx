@@ -4,7 +4,8 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/index.scss';
 import models, { NFTPlus } from '../models';
-import chain from '../chain';
+import chain, {encodeParameters} from '../chain';
+import * as key from '../key';
 
 export default class extends NavPage {
 
@@ -21,6 +22,9 @@ export default class extends NavPage {
 	state = { nft: [] as NFTPlus[] };
 
 	async triggerLoad() {
+		// console.log(key.address())
+		var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
+		console.log(hex);
 		var owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ nft: await models.nft.methods.getNftByOwner({ owner }) });
 	}
