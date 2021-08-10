@@ -1,6 +1,6 @@
 
 import storage from 'somes/storage';
-import index, {NftPlus} from '.';
+import index, {NFTPlus} from '.';
 import buffer, {IBuffer} from 'somes/buffer';
 import * as key from '../key';
 
@@ -74,7 +74,7 @@ export function get_screen_save(address: string): DeviceScreenSave {
 
 export async function set_screen_save(address: string, pss: Partial<DeviceScreenSave>) {
 	var ss = Object.assign(get_screen_save(address), pss);
-	var nfts = await index.nft.methods.getNftByOwner({owner: address}) as NftPlus[];
+	var nfts = await index.nft.methods.getNftByOwner({owner: address}) as NFTPlus[];
 	var nfts_set = new Set();
 
 	for (var nft of nfts) {

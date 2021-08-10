@@ -2,27 +2,26 @@
 import buffer from 'somes/buffer'
 import { Address } from 'web3z/solidity_types';
 import artifacts from './artifacts';
-// import * as nfts from '../nfts';
 
-export class ApiIMPL /*implements nfts.APINFTs*/ {
+export class ApiIMPL {
 
-	get contractAddress() { return artifacts.nfts.address }
+	get contractAddress() { return '' }
 
 	// get token uri
 	tokenURI(token: string, tokenId: bigint): Promise<string> {
-		return artifacts.nft(token).api.tokenURI(tokenId).call();
+		return artifacts.erc721(token).api.tokenURI(tokenId).call();
 	}
 
 	// 设置token uri
 	async setTokenURI(token: string, tokenId: bigint, tokenURI: string): Promise<void> {
-		var nft = artifacts.nft(token);
+		var nft = artifacts.erc721(token);
 		await nft.api.setTokenURI(tokenId, tokenURI).call();
 		await nft.api.setTokenURI(tokenId, tokenURI).post();
 	}
 
 	// 创建一个新的资产
 	async mint(token: string, tokenId: bigint) {
-		var nft = artifacts.nft(token);
+		var nft = artifacts.erc721(token);
 		await nft.api.mint(tokenId).call();
 		var r = await nft.api.mint(tokenId).post();
 		var evt = await nft.findEventFromReceipt('Transfer', r);
@@ -35,7 +34,7 @@ export class ApiIMPL /*implements nfts.APINFTs*/ {
 	}
 
 	async safeMintURI(token: string, to: Address, tokenId: bigint, tokenURI: string, data?: Uint8Array) {
-		var nft = artifacts.nft(token);
+		var nft = artifacts.erc721(token);
 		var data_ = data ? '0x' + buffer.from(data).toString('hex'): '0x0';
 		await nft.api.safeMintURI(to, tokenId, tokenURI, data_).call();
 		var r = await nft.api.safeMintURI(to, tokenId, tokenURI, data_).post();
@@ -48,9 +47,9 @@ export class ApiIMPL /*implements nfts.APINFTs*/ {
 		};
 	}
 
-	// 健全转移资产
+	// 安全转移资产
 	async safeTransferFrom(token: string, from: string, to: string, tokenId: bigint, data?: Uint8Array) {
-		var nft = artifacts.nft(token);
+		var nft = artifacts.erc721(token);
 		var data_ = data ? '0x' + buffer.from(data).toString('hex'): '0x0';
 		// var uri = await nft.api.tokenURI(tokenId).call();
 		// console.log(uri);
@@ -67,7 +66,7 @@ export class ApiIMPL /*implements nfts.APINFTs*/ {
 
 	// 查看资产是否存在
 	exists(token: string, tokenId: bigint) {
-		return artifacts.nft(token).api.exists(tokenId).call();
+		return artifacts.erc721(token).api.exists(tokenId).call();
 	}
 
 }

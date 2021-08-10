@@ -3,7 +3,7 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/index.scss';
-import models, { NftPlus } from '../models';
+import models, { NFTPlus } from '../models';
 import chain from '../chain';
 
 export default class extends NavPage {
@@ -14,11 +14,11 @@ export default class extends NavPage {
 		this.pushPage('/nft_add');
 	}
 
-	_NftDetails(e: NftPlus) {
+	_NftDetails(e: NFTPlus) {
 		this.pushPage({url:`/nft_details`, params: {id:e.id}});
 	}
 
-	state = { nft: [] as NftPlus[] };
+	state = { nft: [] as NFTPlus[] };
 
 	async triggerLoad() {
 		var owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'

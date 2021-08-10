@@ -1,8 +1,8 @@
 
 import { React } from 'webpkit/mobile';
-import {NftPlus} from '../models';
+import {NFTPlus} from '../models';
 
-export function renderNft(e: NftPlus) {
+export function renderNft(e: NFTPlus) {
 	var uri = e.uri;
 	if (uri.match(/\.(mp4)/)) {
 		return <audio src={uri} />

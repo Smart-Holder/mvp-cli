@@ -3,31 +3,37 @@
  * @date 2021-01-04
  */
 
-import {Address,Uint256,Bytes32} from 'web3z/solidity_types';
+import {Address,Uint256,Bytes} from 'web3z/solidity_types';
 import {Result} from 'web3z/happy';
 import * as json from '../../../deps/mvp-sol/out/abi/ERC721.json';
 import {contracts} from '../../../config';
 
 export const abi = json.abi;
 export const contractName = json.contractName;
-export const contractAddress = contracts.ERC721;// '0x7322ee767aaD2dEf9e3527Dc1230fB5f09ead682';
-
-export interface Signature {
-	r: Bytes32; s: Bytes32; v: number;
-}
-
-export interface TransferTx {
-	token: Address;
-	tokenId: Uint256;
-	to: Address;
-	expiry: Uint256; // second
-	rsv: Signature;
-}
+export const contractAddress = contracts.ERC721;
 
 export default interface ERC721 {
-	ownerOf(token: Address, tokenId: Uint256): Result<Address>;
-	withdraw(to: Address, token: Address, tokenId: Uint256): Result;
-	transfer(to: Address, token: Address, tokenId: Uint256): Result;
-	withdrawFrom(tx: TransferTx): Result;
-	transferFrom(tx: TransferTx): Result;
+	balanceOf(owner: Address): Result<Uint256>;
+	ownerOf(tokenId: Uint256): Result<Address>;
+	name(): Result<string>;
+	symbol(): Result<string>;
+	tokenURI(tokenId: Uint256): Result<string>;
+	baseURI(): Result<string>;
+	tokenOfOwnerByIndex(owner: Address, index: Uint256): Result<Uint256>;
+	totalSupply(): Result<Uint256>
+	tokenByIndex(index: Uint256): Result<Uint256>;
+	approve(to: Address, tokenId: Uint256): Result<void>
+	getApproved(tokenId: Uint256): Result<Address>;
+	setApprovalForAll(operator: Address, approved: boolean): Result<void>;
+	isApprovedForAll(owner: Address, operator: Address): Result<boolean>;
+	transferFrom(from: Address, to: Address, tokenId: Uint256): Result<void>;
+	safeTransferFrom(from: Address, to: Address, tokenId: Uint256, data: Bytes): Result<void>;
+	mint(tokenId: Uint256): Result<void>;
+	safeMintURI(to: Address, tokenId: Uint256, tokenURI: string, data: Bytes): Result<void>;
+	safeMint(to: Address, tokenId: Uint256, data: Bytes): Result<void>;
+	burn(tokenId: Uint256): Result<void>;
+	setTokenURI(tokenId: Uint256, tokenURI: string): Result<void>;
+	setBaseURI(baseURI: string): Result<void>;
+	exists(tokenId: Uint256): Result<boolean>;
+	isApprovedOrOwner(spender: Address, tokenId: Uint256): Result<boolean>;
 }
