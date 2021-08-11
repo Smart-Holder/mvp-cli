@@ -3,32 +3,37 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/nft_details.scss';
-import models, { NFTPlus, NFTMode } from '../models';
+import models, { NFT, NFTMode } from '../models';
 import erc721 from '../chain/erc721';
-import {encodeParameters} from '../chain';
+import chain, {encodeParameters} from '../chain';
 import {alert} from 'webpkit/lib/dialog';
-import * as key from '../key';
 import Loading from 'webpkit/lib/loading';
 import {contracts} from '../../config';
 import somes from 'somes';
+
+// import nft_proxy from '../chain/nft_proxy';
 
 export default class extends NavPage<{id:number}> {
 
 	title = 'NFT详情';
 
-	state = { nft: null as NFTPlus | null };
+	state = { NFTs: [] as NFT[], from: '' };
 
 	async triggerLoad() {
-		this.setState({ nft: await models.nft.methods.getNftById({ id: this.params.id }) });
+		var from = await chain.getDefaultAccount();
+		this.setState({
+			from,
+			NFTs: await models.nft.methods.getNFTById({ id: this.params.id, owner: from }),
+		});
 	}
 
-	private async _transferToDevice(device_address: string, nft: NFTPlus) {
-		var from = key.address();
+	private async _transferToDevice(device_address: string, nft: NFT) {
+		var from = this.state.from;
 		if (nft.mode == NFTMode.ERC721) { // erc721
-			var d_hex = encodeParameters(['address'], [device_address]);
+			var buf = encodeParameters(['address'], [device_address]);
 			// var data = buffer.from(data_str.slice(2), 'hex');
 			await erc721.safeTransferFrom( // 转移给代理协约
-				nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), d_hex);
+				nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} else {
@@ -40,9 +45,9 @@ export default class extends NavPage<{id:number}> {
 		super.triggerShow(data);
 		var device_address = data.address as string;
 		if (device_address) { // 存入到设备
-			var nft = this.state.nft as NFTPlus;
-			var addr = key.address();
-			somes.assert(nft.owner == addr || nft.delegate == addr, '#nft_details#triggerShow: NOT_OWN_TOKEN');
+			var [nft] = this.state.NFTs;
+			var from = this.state.from;
+			somes.assert(nft.owner == from || nft.ownerBase == from, '#nft_details#triggerShow: NOT_OWN_TOKEN');
 			var l = await Loading.show('正在存入到设备');
 			try {
 				await this._transferToDevice(device_address, nft);
@@ -55,22 +60,27 @@ export default class extends NavPage<{id:number}> {
 		}
 	}
 
-	_Handle = ()=>{
+	_Handle = async ()=>{
 		this.pushPage({url: '/device', params: {type: 'back' }})
+		// var [nft] = this.state.NFTs;
+		// var from = this.state.from;
+		// await nft_proxy.New(nft.owner as string)
+		// 	.test_withdrawFrom(from, from, nft.token, BigInt(nft.tokenId), BigInt(1));
 	}
 
 	render() {
+		var [nft] = this.state.NFTs;
 		return (
 			<div className="nft_details">
 				<Header title="NFT详情" page={this} />
 				<div className="item">
-					<div className="img"><img src={this.state.nft?.uri} /></div>
-					<div className="txt1">作品名称: {this.state.nft?.name}</div>
-					<div className="txt1 txt1_1">作者: {this.state.nft?.author} </div>
+					<div className="img"><img src={nft?.uri} /></div>
+					<div className="txt1">作品名称: {nft?.name}</div>
+					<div className="txt1 txt1_1">作者: {nft?.author} </div>
 					<div className="txt2">合约地址:</div>
-					<div className="txt3">{this.state.nft?.token}</div>
+					<div className="txt3">{nft?.token}</div>
 					<div className="txt2">作品序号:</div>
-					<div className="txt3 txt3_1">{this.state.nft?.tokenId}</div>
+					<div className="txt3 txt3_1">{nft?.tokenId}</div>
 					<div className="btn_p"><div onClick={this._Handle}>存入到设备</div></div>
 				</div>
 			</div>

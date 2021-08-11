@@ -1,6 +1,6 @@
 
 import storage from 'somes/storage';
-import index, {NFTPlus} from '.';
+import index, {NFT} from '.';
 import buffer, {IBuffer} from 'somes/buffer';
 import * as key from '../key';
 
@@ -21,7 +21,7 @@ export async function devices(): Promise<Device[]> {
 	var list = storage.get('__deviceList', []) as Device[];
 	if (list.length) {
 		var owners = list.map(e=>e.address);
-		var counts = await index.nft.methods.getNftCountByOwners({ owners }) as number[];
+		var counts = await index.nft.methods.getNFTCountByOwners({ owners }) as number[];
 		list.forEach((e,j)=>(e.nft=counts[j]));
 	}
 	return list;
@@ -74,7 +74,7 @@ export function get_screen_save(address: string): DeviceScreenSave {
 
 export async function set_screen_save(address: string, pss: Partial<DeviceScreenSave>) {
 	var ss = Object.assign(get_screen_save(address), pss);
-	var nfts = await index.nft.methods.getNftByOwner({owner: address}) as NFTPlus[];
+	var nfts = await index.nft.methods.getNFTByOwner({owner: address}) as NFT[];
 	var nfts_set = new Set();
 
 	for (var nft of nfts) {

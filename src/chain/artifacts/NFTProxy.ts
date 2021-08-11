@@ -20,15 +20,16 @@ export interface TransferTx {
 	token: Address;
 	tokenId: Uint256;
 	to: Address;
+	amount: Uint256;
 	expiry: Uint256; // second
 	rsv: Signature;
 }
 
 export default interface NFTProxy {
-	ownerOf(token: Address, tokenId: Uint256): Result<Address>;
-	deposit(to: Address, token: Address, tokenId: Uint256): Result;
-	withdraw(to: Address, token: Address, tokenId: Uint256): Result;
-	transfer(to: Address, token: Address, tokenId: Uint256): Result;
+	balanceOf(token: Address, tokenId: Uint256, owner: Address): Result<Uint256>;
+	deposit(to: Address, token: Address, tokenId: Uint256, amount: Uint256): Result;
+	withdraw(to: Address, token: Address, tokenId: Uint256, amount: Uint256): Result;
+	transfer(to: Address, token: Address, tokenId: Uint256, amount: Uint256): Result;
 	withdrawFrom(tx: TransferTx): Result;
 	transferFrom(tx: TransferTx): Result;
 }

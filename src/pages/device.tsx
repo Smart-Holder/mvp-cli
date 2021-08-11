@@ -51,13 +51,13 @@ export default class extends NavPage<{type?: 'back'}> {
 					)}
 
 					{/* test */}
-					{/* <div className="b" onClick={e=>this._DeviceNft({
+					<div className="b" onClick={e=>this._DeviceNft({
 						sn: '012018116A93CC7946', address: '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'})}>
 						<div className="more">More...</div>
 						<div className="txt1">SN: 012018116A93CC7946</div>
 						<div className="txt2">Address：0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3</div>
 						<div className="txt3">04<br/><span>NFT</span></div>
-					</div> */}
+					</div>
 
 				</div>
 			</div>

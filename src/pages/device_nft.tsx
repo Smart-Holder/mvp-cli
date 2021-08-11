@@ -5,13 +5,13 @@ import Header from '../util/header';
 import '../css/device_nft.scss';
 import * as device from '../models/device';
 import {alert} from 'webpkit/lib/dialog';
-import models, {NFTPlus} from '../models';
+import models, {NFT} from '../models';
 import {renderNft} from '../util/media';
 import nft_proxy from '../chain/nft_proxy';
-import * as key from '../key';
 import somes from 'somes';
 import {contracts} from '../../config';
 import Loading from 'webpkit/lib/loading';
+import chain from '../chain';
 
 type Device = device.Device;
 
@@ -30,15 +30,16 @@ export default class extends NavPage<Device> {
 
 	// _Withdraw
 
-	_Withdraw = async (nft: NFTPlus)=>{
-		var to = key.address();
-		var from = nft.delegate;
+	_Withdraw = async (nft: NFT)=>{
+		var to = await chain.getDefaultAccount();
+		var from = nft.ownerBase || '';
 		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持非代理取出
 		somes.assert(nft.owner == contracts.ERC721Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
 		var l = await Loading.show('正在取出到钱包');
 		try {
-			await nft_proxy.New(nft.owner).withdrawFrom(from, to, nft.token, BigInt(nft.tokenId));
+			await nft_proxy.New(nft.owner as string)
+				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(1)); // 取出一个
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} catch(err) {
@@ -51,10 +52,10 @@ export default class extends NavPage<Device> {
 
 	async triggerLoad() {
 		var owner = this.params.address;
-		this.setState({ nft: await models.nft.methods.getNftByOwner({ owner }) });
+		this.setState({ nft: await models.nft.methods.getNFTByOwner({ owner }) });
 	}
 
-	state = { nft: [] as NFTPlus[] };
+	state = { nft: [] as NFT[] };
 
 	render() {
 		return (

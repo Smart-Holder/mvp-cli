@@ -36,7 +36,8 @@ const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
 
 export function encodeParameters(types: any[], paramaters: any[]) {
-	return AbiCoder.encodeParameters(types, paramaters);
+	var str = AbiCoder.encodeParameters(types, paramaters);
+	return buffer.from(str.slice(2), 'hex');
 }
 
 export class Web3IMPL extends Web3Z {

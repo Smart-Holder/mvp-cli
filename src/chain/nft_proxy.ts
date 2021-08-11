@@ -1,14 +1,16 @@
 
 import somes from 'somes';
-import buffer from 'somes/buffer';
 import { Address, Uint256, } from 'web3z/solidity_types';
 import artifacts from './artifacts';
 import NFTProxy, { TransferTx } from './artifacts/NFTProxy';
 import HappyContract from 'web3z/happy';
 import {contracts} from '../../config';
 import * as device from '../models/device';
+import index, {encodeParameters} from '.';
+import buffer, {IBuffer} from 'somes/buffer';
 
-var crypto_tx = require('crypto-tx/sign');
+var tx_sign = require('crypto-tx/sign');
+var crypto_tx = require('crypto-tx');
 
 export default class ApiIMPL {
 
@@ -24,31 +26,34 @@ export default class ApiIMPL {
 
 	get contractAddress() { return this._artifacts.address }
 
-	ownerOf(token: Address, tokenId: Uint256) {
-		return this._artifacts.api.ownerOf(token, tokenId).call();
+	balanceOf(token: Address, tokenId: Uint256, owner: Address) {
+		return this._artifacts.api.balanceOf(token, tokenId, owner).call();
 	}
-	async deposit(to: Address, token: Address, tokenId: Uint256) {
-		await this._artifacts.api.deposit(to, token, tokenId).call();
-		await this._artifacts.api.deposit(to, token, tokenId).post();
+	async deposit(to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		await this._artifacts.api.deposit(to, token, tokenId, amount).call();
+		await this._artifacts.api.deposit(to, token, tokenId, amount).post();
 	}
-	async withdraw(to: Address, token: Address, tokenId: Uint256) {
-		await this._artifacts.api.withdraw(to, token, tokenId).call();
-		await this._artifacts.api.withdraw(to, token, tokenId).post();
+	async withdraw(to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		await this._artifacts.api.withdraw(to, token, tokenId, amount).call();
+		await this._artifacts.api.withdraw(to, token, tokenId, amount).post();
 	}
-	async transfer(to: Address, token: Address, tokenId: Uint256) {
-		await this._artifacts.api.transfer(to, token, tokenId).call();
-		await this._artifacts.api.transfer(to, token, tokenId).post();
+	async transfer(to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		await this._artifacts.api.transfer(to, token, tokenId, amount).call();
+		await this._artifacts.api.transfer(to, token, tokenId, amount).post();
 	}
 
-	private async _tx(from: Address, to: Address, token: Address, tokenId: Uint256) {
-		var target = await this.ownerOf(token, tokenId) as string;
-		somes.assert(from == target, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
+	private async _tx(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		var balance = await this.balanceOf(token, tokenId, from);
+		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
-		var msg = crypto_tx.message([token, tokenId, to, expiry], ['address', 'uint256', 'address', 'uint256']);
-		var sign_hex = await device.sign(target, buffer.from(msg)) as string;
+		var msg = crypto_tx.message(
+			[token, tokenId, to, amount, expiry],
+			['address', 'uint256', 'address', 'uint256', 'uint256']
+		);
+		var sign_hex = await device.sign(from as string, buffer.from(msg)) as string;
 		var sign = buffer.from(sign_hex.slice(2), 'hex');
 		var tx: TransferTx = {
-			token, tokenId, to, expiry: BigInt(expiry),
+			token, tokenId, to, amount, expiry: BigInt(expiry),
 			rsv: {
 				r: '0x' + sign.slice(0, 32).toString('hex'),
 				s: '0x' + sign.slice(32, 64).toString('hex'),
@@ -58,15 +63,62 @@ export default class ApiIMPL {
 		return tx;
 	}
 
-	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256) {
-		var tx = await this._tx(from, to, token, tokenId);
+	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		var tx = await this._tx(from, to, token, tokenId, amount);
 		await this._artifacts.api.withdrawFrom(tx).call();
 		await this._artifacts.api.withdrawFrom(tx).post();
 	}
-	async transferFrom(from: Address, to: Address, token: Address, tokenId: Uint256) {
-		var tx = await this._tx(from, to, token, tokenId);
+	async transferFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+		var tx = await this._tx(from, to, token, tokenId, amount);
 		await this._artifacts.api.transferFrom(tx).call();
 		await this._artifacts.api.transferFrom(tx).post();
+	}
+
+	// test
+
+	private async _sign(buf: IBuffer, from: string) {
+		var mask = index.metaMask;
+		var hex = await mask.request({
+			method: 'personal_sign',
+			// method: 'eth_sign',
+			params: [ '0x' + buf.toString('hex'), from ],
+		}) as string;
+		return buffer.from(hex.slice(2), 'hex');
+	}
+
+	async test_withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+
+		var balance = await this.balanceOf(token, tokenId, from);
+		somes.assert(balance, '#ApiIMPL#test: NOT_OWN_TOKEN');
+		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
+
+		var buf = tx_sign.concat(
+			[token, tokenId, from, amount, expiry],
+			['address', 'uint256', 'address', 'uint256', 'uint256']
+		);
+
+		var msg = crypto_tx.keccak(buf);
+
+		console.log(msg.hex);
+
+		var sign = await this._sign(buf, from as string);
+		var signature = sign.slice(0, 64);
+		var recover = crypto_tx.publicToAddress(crypto_tx.recover(buffer.from(msg.data), signature, sign[64] - 27));
+
+		console.log(recover);
+
+		var tx: TransferTx = {
+			token, tokenId, to, amount, expiry: BigInt(expiry),
+			rsv: {
+				r: '0x' + sign.slice(0, 32).toString('hex'),
+				s: '0x' + sign.slice(32, 64).toString('hex'),
+				v: sign[64],
+			},
+		};
+
+		var r = await this._artifacts.api.withdrawFrom(tx).call();
+		console.log(r);
+		await this._artifacts.api.withdrawFrom(tx).post();
 	}
 
 }
