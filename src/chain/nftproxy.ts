@@ -1,6 +1,6 @@
 
 import somes from 'somes';
-import { Address, Uint256, } from 'web3z/solidity_types';
+import { Address, Uint256, Bytes} from 'web3z/solidity_types';
 import artifacts from './artifacts';
 import NFTProxy, { TransferTx } from './artifacts/NFTProxy';
 import HappyContract from 'web3z/happy';
@@ -42,7 +42,7 @@ export default class ApiIMPL {
 		await this._artifacts.api.transfer(to, token, tokenId, amount).post();
 	}
 
-	private async _tx(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
+	private async _tx(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
 		var balance = await this.balanceOf(token, tokenId, from);
 		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
@@ -54,6 +54,7 @@ export default class ApiIMPL {
 		var sign = buffer.from(sign_hex.slice(2), 'hex');
 		var tx: TransferTx = {
 			token, tokenId, to, amount, expiry: BigInt(expiry),
+			data: data || '0x00',
 			rsv: {
 				r: '0x' + sign.slice(0, 32).toString('hex'),
 				s: '0x' + sign.slice(32, 64).toString('hex'),
@@ -63,13 +64,13 @@ export default class ApiIMPL {
 		return tx;
 	}
 
-	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
-		var tx = await this._tx(from, to, token, tokenId, amount);
+	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
+		var tx = await this._tx(from, to, token, tokenId, amount, data);
 		await this._artifacts.api.withdrawFrom(tx).call();
 		await this._artifacts.api.withdrawFrom(tx).post();
 	}
-	async transferFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256) {
-		var tx = await this._tx(from, to, token, tokenId, amount);
+	async transferFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
+		var tx = await this._tx(from, to, token, tokenId, amount, data);
 		await this._artifacts.api.transferFrom(tx).call();
 		await this._artifacts.api.transferFrom(tx).post();
 	}
@@ -109,6 +110,7 @@ export default class ApiIMPL {
 
 		var tx: TransferTx = {
 			token, tokenId, to, amount, expiry: BigInt(expiry),
+			data: '0x00',
 			rsv: {
 				r: '0x' + sign.slice(0, 32).toString('hex'),
 				s: '0x' + sign.slice(32, 64).toString('hex'),

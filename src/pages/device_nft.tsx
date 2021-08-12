@@ -7,7 +7,7 @@ import * as device from '../models/device';
 import {alert} from 'webpkit/lib/dialog';
 import models, {NFT} from '../models';
 import {renderNft} from '../util/media';
-import nft_proxy from '../chain/nft_proxy';
+import nft_proxy from '../chain/nftproxy';
 import somes from 'somes';
 import {contracts} from '../../config';
 import Loading from 'webpkit/lib/loading';

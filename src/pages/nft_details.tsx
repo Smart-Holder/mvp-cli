@@ -5,7 +5,7 @@ import Header from '../util/header';
 import '../css/nft_details.scss';
 import models, { NFT, NFTMode } from '../models';
 import erc721 from '../chain/erc721';
-import {erc721_proxy} from '../chain/nft_proxy';
+import {erc721_proxy} from '../chain/nftproxy';
 import chain, {encodeParameters} from '../chain';
 import {alert} from 'webpkit/lib/dialog';
 import Loading from 'webpkit/lib/loading';

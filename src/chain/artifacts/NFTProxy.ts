@@ -3,7 +3,7 @@
  * @date 2021-01-04
  */
 
-import {Address,Uint256,Bytes32} from 'web3z/solidity_types';
+import {Address,Uint256,Bytes32,Bytes} from 'web3z/solidity_types';
 import {Result} from 'web3z/happy';
 import * as json from '../../../deps/mvp-sol/out/abi/NFTProxy.json';
 import {contracts} from '../../../config';
@@ -21,6 +21,7 @@ export interface TransferTx {
 	tokenId: Uint256;
 	to: Address;
 	amount: Uint256;
+	data: Bytes;
 	expiry: Uint256; // second
 	rsv: Signature;
 }
