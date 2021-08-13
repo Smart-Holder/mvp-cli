@@ -47,14 +47,14 @@ export default class ApiIMPL {
 		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
 		var msg = crypto_tx.message(
-			[token, tokenId, to, amount, expiry],
-			['address', 'uint256', 'address', 'uint256', 'uint256']
+			[token, tokenId, to, amount, data || '0x', expiry],
+			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256']
 		);
-		var sign_hex = await device.sign(from as string, buffer.from(msg)) as string;
+		var sign_hex = await device.sign(from as string, msg) as string;
 		var sign = buffer.from(sign_hex.slice(2), 'hex');
 		var tx: TransferTx = {
 			token, tokenId, to, amount, expiry: BigInt(expiry),
-			data: data || '0x00',
+			data: data || '0x',
 			rsv: {
 				r: '0x' + sign.slice(0, 32).toString('hex'),
 				s: '0x' + sign.slice(32, 64).toString('hex'),
