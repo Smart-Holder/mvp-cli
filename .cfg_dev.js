@@ -1,6 +1,6 @@
 
 module.exports = {
-	sdk: 'http://mvp-dev.stars-mine.com/service-api',
+	sdk: 'https://mvp-dev.stars-mine.com/service-api',
 	platform: 'eth',
 	contracts: {
 		ERC721: '0xb57C79944EE0E33F24E90213AD6E4D04CE4d2ED7',

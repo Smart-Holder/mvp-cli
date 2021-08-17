@@ -16,7 +16,7 @@ fi
 
 build: cfg
 	@npm run $@
-	@cd out/public; tar cfvz ../$(NAME).tgz ./*
+	@cd out; tar cfvz $(NAME).tgz ./public
 
 dev: cfg
 	@npm run $@
