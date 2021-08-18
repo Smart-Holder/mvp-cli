@@ -6,6 +6,8 @@ import '../css/device_nft.scss';
 import * as device from '../models/device';
 import {alert} from 'webpkit/lib/dialog';
 
+const crypto_tx = require('crypto-tx');
+
 export default class extends NavPage<{a?: string; c?: string}> {
 
 	title = '添加设备';
@@ -29,7 +31,7 @@ export default class extends NavPage<{a?: string; c?: string}> {
 
 	async triggerLoad() {
 		if (this.params.a && this.params.c) {
-			await this._AddDevice(this.params.a, this.params.c);
+			await this._AddDevice(crypto_tx.checksumAddress(this.params.a), this.params.c);
 		} else {
 			alert('请使用钱包扫码功能扫描设备屏幕二维码', ()=>this._back());
 		}
