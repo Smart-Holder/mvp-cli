@@ -35,7 +35,7 @@ export async function call(target: string, method: string, args?: any): Promise<
 	var {signature,recovery} = key.sign(msg);
 	var sign = buffer.concat([signature, [recovery]]).toString('base64');
 	var r = await index.mbx.methods.post({hash, signature: sign});
-	return r;
+	return JSON.parse(r);
 }
 
 export async function ping(target: string) {
