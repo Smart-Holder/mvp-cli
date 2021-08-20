@@ -65,9 +65,14 @@ export async function bind(target: string, authCode: string) {
 		publicKey: key.publicKey(), authCode: authCode,
 	});
 
+	var NewDevice = { address: target, sn: sn || target };
+
 	var list = storage.get('__deviceList', []) as Device[];
-	if (!list.find(e=>e.address == target)) {
-		list.push({ address: target, sn: sn || target });
+	var it = list.find(e=>e.address == target);
+	if (!it) {
+		list.push(NewDevice);
+	} else {
+		Object.assign(it, NewDevice);
 	}
 	storage.set('__deviceList', list);
 }
