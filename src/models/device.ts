@@ -28,7 +28,7 @@ export async function devices(): Promise<Device[]> {
 }
 
 export async function call(target: string, method: string, args?: any): Promise<any> {
-	var hash = await index.mbx.methods.call({target, method, args}) as string;
+	var hash = await index.mbx.methods.call({target, method, args: JSON.stringify(args)}) as string;
 	var msg = buffer.from(hash, 'base64');
 	var {signature,recovery} = key.sign(msg);
 	var sign = buffer.concat([signature, [recovery]]).toString('base64');
