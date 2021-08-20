@@ -58,16 +58,30 @@ export function sign(target: string, msg: IBuffer) {
 	return call(target, 'sign', { message: msg.toString('base64') });
 }
 
-export function bind(target: string, authCode: string) {
-	return call(target, 'bind', { 
+export async function bind(target: string, authCode: string) {
+	var sn = await call(target, 'bind', {
 		name: key.authName(),
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
 	});
+
+	var list = storage.get('__deviceList', []) as Device[];
+	if (!list.find(e=>e.address == target)) {
+		list.push({ address: target, sn: sn || target });
+	}
+	storage.set('__deviceList', list);
 }
 
-export function unbind(target: string) {
-	return call(target, 'unbind', { name: key.authName() });
+export async function unbind(target: string) {
+	await call(target, 'unbind', { name: key.authName() });
+
+	var list = storage.get('__deviceList', []) as Device[];
+	var i = -1;
+
+	if (list.find((e,j)=>(i=j,e.address==target))) {
+		list.splice(i, 1);
+		storage.set('__deviceList', list);
+	}
 }
 
 export function get_screen_save(address: string): DeviceScreenSave {

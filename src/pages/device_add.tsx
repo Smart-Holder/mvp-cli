@@ -16,7 +16,8 @@ export default class extends NavPage<{a?: string; c?: string}> {
 		if (this.nav.length > 1) {
 			this.popPage();
 		} else {
-			globalThis.close(); // close window
+			this.replacePage('/device');
+			// globalThis.close(); // close window
 		}
 	}
 
