@@ -79,7 +79,7 @@ export default class extends NavPage<{id:number}> {
 			<div className="nft_details">
 				<Header title="NFT详情" page={this} />
 				<div className="item">
-					<div className="img"><img src={nft?.uri} /></div>
+					<div className="img"><img src={nft?.media||nft?.mediaOrigin} /></div>
 					<div className="txt1">作品名称: {nft?.name || '无'}</div>
 					<div className="txt1 txt1_1">作者: {nft?.author || '无'} </div>
 					<div className="txt2">合约地址:</div>

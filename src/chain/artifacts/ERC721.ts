@@ -5,7 +5,7 @@
 
 import {Address,Uint256,Bytes} from 'web3z/solidity_types';
 import {Result} from 'web3z/happy';
-import * as json from '../../../deps/mvp-sol/out/abi/ERC721.json';
+import * as json from '../../../deps/mvp-ser/abi/ERC721.json';
 import {contracts} from '../../../config';
 
 export const abi = json.abi;

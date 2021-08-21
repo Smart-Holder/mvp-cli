@@ -5,7 +5,7 @@
 
 import {Address,Uint256,Bytes32,Bytes} from 'web3z/solidity_types';
 import {Result} from 'web3z/happy';
-import * as json from '../../../deps/mvp-sol/out/abi/NFTProxy.json';
+import * as json from '../../../deps/mvp-ser/abi/ERC1155Proxy.json';
 import {contracts} from '../../../config';
 
 export const abi = json.abi;
