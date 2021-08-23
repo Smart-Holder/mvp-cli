@@ -12,8 +12,7 @@ import {alert} from 'webpkit/lib/dialog';
 import Loading from 'webpkit/lib/loading';
 import {contracts} from '../../config';
 import somes from 'somes';
-
-// import nft_proxy from '../chain/nft_proxy';
+import {renderNft} from '../util/media';
 
 export default class extends NavPage<{id:number}> {
 
@@ -41,7 +40,7 @@ export default class extends NavPage<{id:number}> {
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
-		} else if (nft.mode == NFTMode.ERC721) {
+		} else if (nft.mode == NFTMode.ERC1155) {
 			var buf = encodeParameters(['address'], [device_address]);
 			if (nft.ownerBase) {
 				await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
@@ -89,9 +88,9 @@ export default class extends NavPage<{id:number}> {
 			<div className="nft_details">
 				<Header title="NFT详情" page={this} />
 				<div className="item">
-					<div className="img"><img src={nft?.media||nft?.mediaOrigin} /></div>
+					<div className="img">{renderNft(nft)}</div>
 					<div className="txt1">作品名称: {nft?.name || '无'}</div>
-					<div className="txt1 txt1_1">作者: {nft?.author || '无'} </div>
+					<div className="txt1 txt1_1"> {nft?.info || '无'} </div>
 					<div className="txt2">合约地址:</div>
 					<div className="txt3">{nft?.token}</div>
 					<div className="txt2">作品序号:</div>

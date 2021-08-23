@@ -46,12 +46,16 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 	}
 
 	render() {
+		var list = this.params.type == 'video' ?
+			this.state.list.filter(e=>e.media.match(/\.mp4/i)): 
+			this.state.list.filter(e=>!e.media.match(/\.mp4/i));
+
 		return (
 			<div className="device_set_screen_img">
 				<Header title="选择轮播项目" page={this} />
 
 				<div className="list">
-					{this.state.list.map((e,j)=>
+					{list.map((e,j)=>
 						<div className={this.get_cls(e)} key={j} onClick={()=>this._Handle(e)}>
 							<div className="img">
 								{renderNft(e)}
