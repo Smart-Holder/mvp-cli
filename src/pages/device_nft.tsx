@@ -40,7 +40,7 @@ export default class extends NavPage<Device> {
 		var l = await Loading.show('正在取出到钱包');
 		try {
 			await nft_proxy.New(nft.owner as string)
-				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(1)); // 取出一个
+				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} catch(err) {

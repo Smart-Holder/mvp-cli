@@ -46,7 +46,7 @@ export default class ApiIMPL {
 		var balance = await this.balanceOf(token, tokenId, from);
 		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
-		var msg = crypto_tx.message(
+		var msg = tx_sign.message(
 			[token, tokenId, to, amount, data || '0x', expiry],
 			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256']
 		);
