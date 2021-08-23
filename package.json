@@ -5,7 +5,7 @@
 	"author": "louistru@hotmail.com",
 	"private": true,
 	"scripts": {
-		"dev": "DEV_INLINE=false MAP=true node node_modules/webpkit/tools/dev --inline --progress --config tools/dev.js",
+		"dev": "DEV_INLINE=false MAP=false node node_modules/webpkit/tools/dev --inline --progress --config tools/dev.js",
 		"build": "NODE_ENV=prod MAP=true MINIM=false node tools/build.js",
 		"abi": "truffle compile && node tools/abi.js",
 		"deploy": "truffle deploy",

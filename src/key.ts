@@ -4,25 +4,42 @@ import buffer, {IBuffer} from 'somes/buffer';
 import {Signer} from 'somes/request';
 import { sha256 } from 'somes/hash';
 import somes from 'somes';
+import chain from './chain';
+import hash from 'somes/hash';
 
 const crypto_tx = require('crypto-tx');
 
 var _PrivateKey: IBuffer | null = null;
 
-function privateKey() {
+export async function genPrivateKey() {
 	if (!_PrivateKey) {
 		if (storage.has('__as1ahaasr')) {
 			_PrivateKey = buffer.from(storage.get('__as1ahaasr'), 'base64')
 		} else {
-			_PrivateKey = buffer.from(crypto_tx.genPrivateKey());
+			var mask = chain.metaMask;
+			var from = await chain.getDefaultAccount();
+
+			var r = await mask.request({
+				method: 'personal_sign',
+				params: [
+					'0x' + buffer.from('Login to wallet').toString('hex'),
+					from,
+				],
+			});
+			_PrivateKey = hash.sha256(r);
+
 			storage.set('__as1ahaasr', _PrivateKey.toString('base64'));
-		}	
+		}
 	}
-	return _PrivateKey;
+}
+
+function privateKey() {
+	somes.assert(_PrivateKey, 'not init call genPrivateKey()');
+	return _PrivateKey as IBuffer;
 }
 
 export function publicKey() {
-	return '0x' + crypto_tx.getPublic(privateKey(), true).toString('hex');
+	return '0x' + crypto_tx.getPublic( privateKey(), true).toString('hex');
 }
 
 export function address() {

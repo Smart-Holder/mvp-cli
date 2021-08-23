@@ -5,7 +5,8 @@ import Header from '../util/header';
 import '../css/nft_details.scss';
 import models, { NFT, NFTMode } from '../models';
 import erc721 from '../chain/erc721';
-import {erc721_proxy} from '../chain/nftproxy';
+import erc1155 from '../chain/erc1155';
+import * as nftproxy from '../chain/nftproxy';
 import chain, {encodeParameters} from '../chain';
 import {alert} from 'webpkit/lib/dialog';
 import Loading from 'webpkit/lib/loading';
@@ -32,12 +33,21 @@ export default class extends NavPage<{id:number}> {
 		var from = this.state.from;
 		if (nft.mode == NFTMode.ERC721) { // erc721
 			var buf = encodeParameters(['address'], [device_address]);
-			// var data = buffer.from(data_str.slice(2), 'hex');
 			if (nft.ownerBase) {
-				await erc721_proxy.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
+				await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
 			} else {
 				await erc721.safeTransferFrom( // 转移给代理协约
 					nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
+			}
+			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
+			this.popPage();
+		} else if (nft.mode == NFTMode.ERC721) {
+			var buf = encodeParameters(['address'], [device_address]);
+			if (nft.ownerBase) {
+				await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+			} else {
+				await erc1155.safeTransferFrom( // 转移给代理协约
+					nft.token, from, contracts.ERC1155Proxy, BigInt(nft.tokenId), BigInt(nft.count), buf);
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();

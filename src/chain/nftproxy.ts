@@ -125,4 +125,5 @@ export default class ApiIMPL {
 
 }
 
-export const erc721_proxy = ApiIMPL.New(contracts.ERC721Proxy);
+export const proxy721 = ApiIMPL.New(contracts.ERC721Proxy);
+export const proxy1155 = ApiIMPL.New(contracts.ERC1155Proxy);
