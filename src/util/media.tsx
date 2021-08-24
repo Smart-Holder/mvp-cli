@@ -9,7 +9,7 @@ export function renderNft(e?: NFT, isFirstImg?: boolean) {
 	var uri = isFirstImg ? (img || media): media;
 	if (uri) {
 		if (uri.match(/\.(mp4)/)) {
-			return <div className="renderNft"><audio src={uri} /></div>
+			return <div className="renderNft"><video src={uri} controls={true} /></div>
 		} else {
 			return <div className="renderNft"><img src={uri} /></div>
 		}

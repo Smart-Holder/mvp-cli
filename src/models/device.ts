@@ -3,6 +3,7 @@ import storage from 'somes/storage';
 import index, {NFT} from '.';
 import buffer, {IBuffer} from 'somes/buffer';
 import * as key from '../key';
+import somes from 'somes';
 
 export interface Device {
 	sn: string;
@@ -43,15 +44,15 @@ export async function ping(target: string) {
 }
 
 export function displaySingleImage(target: string, token: string, tokenId: string) {
-	return call(target, 'displaySingleImage', { token, tokenId });
+	return call(target, 'displaySingleImage', { type: 'image', time: 0, data:[{ token, tokenId }] });
 }
 
 export function displayMultiImage(target: string, time: number, data: {token: string, tokenId: string}[]) {
-	return call(target, 'displayMultiImage', { time, data });
+	return call(target, 'displayMultiImage', { type: 'image', time, data });
 }
 
 export function displayVideo(target: string, token: string, tokenId: string) {
-	return call(target, 'displayVideo', { token, tokenId });
+	return call(target, 'displayVideo', { type: 'video', time: 0, data:[{ token, tokenId }] });
 }
 
 export function sign(target: string, msg: IBuffer) {
@@ -89,14 +90,16 @@ export async function unbind(target: string) {
 	}
 }
 
-export function get_screen_save(address: string, _type?: string): DeviceScreenSave {
+export function get_screen_save(address: string, _type?: 'single' | 'multi' | 'video'): DeviceScreenSave {
 	var type = _type || storage.get('__device_set_screen_save_cur_' + address, 'single');
 	return { data: [], ...storage.get(
 		'__device_set_screen_save_' + address + type, { address, time: 10, type }) 
 	};
 }
 
-export async function set_screen_save(address: string, pss: Partial<DeviceScreenSave>, type: string) {
+export async function set_screen_save(address: string, 
+	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video') 
+{
 	var ss = Object.assign(get_screen_save(address, type), pss);
 	var nfts = await index.nft.methods.getNFTByOwner({owner: address}) as NFT[];
 	var nfts_set = new Set();
@@ -111,15 +114,18 @@ export async function set_screen_save(address: string, pss: Partial<DeviceScreen
 		// ss.data = [nfts[0]];
 	}
 
+	ss.type = type;
 	storage.set('__device_set_screen_save_cur_' + address, type);
 	storage.set('__device_set_screen_save_' + address + type, ss);
 
 	if (pss.data) {
 		if (type == 'single') {
+			somes.assert(pss.data.length, 'Bad param for call displaySingleImage()');
 			await displaySingleImage(address, pss.data[0].token, pss.data[0].tokenId);
-		} else if ('multi') {
+		} else if (type == 'multi') {
 			await displayMultiImage(address, ss.time, pss.data);
 		} else {
+			somes.assert(pss.data.length, 'Bad param for call displayVideo()');
 			await displayVideo(address, pss.data[0].token, pss.data[0].tokenId);
 		}
 	} else if (pss.time) {
