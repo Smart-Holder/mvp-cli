@@ -48,7 +48,8 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 
 		await device.set_screen_save(this.params.address, { ...save }, type);
 
-		this.popPage();
+		if (type != 'multi')
+			this.popPage();
 	}
 
 	render() {

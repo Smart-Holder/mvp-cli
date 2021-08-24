@@ -129,7 +129,7 @@ export async function set_screen_save(address: string,
 			await displayVideo(address, pss.data[0].token, pss.data[0].tokenId);
 		}
 	} else if (pss.time) {
-		if (ss.type == 'multi')
+		if (type == 'multi')
 			await displayMultiImage(address, ss.time, ss.data);
 	}
 }
