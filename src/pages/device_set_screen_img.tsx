@@ -20,11 +20,11 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 	}
 
 	async triggerLoad() {
-		var list = await models.nft.methods.getNFTByOwner({owner:this.params.address});
+		var list = await models.nft.methods.getNFTByOwner({owner:this.params.address}) as NFT[];
 
 		list = this.params.type == 'video' ?
-			this.state.list.filter(e=>e.media.match(/\.mp4/i)): 
-			this.state.list.filter(e=>!e.media.match(/\.mp4/i));
+			list.filter(e=>e.media.match(/\.mp4/i)): 
+			list.filter(e=>!e.media.match(/\.mp4/i));
 
 		this.setState({ list });
 	}
@@ -62,7 +62,7 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 					{list.map((e,j)=>
 						<div className={this.get_cls(e)} key={j} onClick={()=>this._Handle(e)}>
 							<div className="img">
-								{renderNft(e)}
+								{renderNft(e, true)}
 							</div>
 							<div className="checkbox"></div>
 						</div>
