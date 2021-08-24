@@ -9,14 +9,14 @@ export default class extends NavPage<device.Device> {
 
 	title = '选择轮播时间';
 
-	state = { save: device.get_screen_save(this.params.address) };
+	state = { save: device.get_screen_save(this.params.address, 'video') };
 
 	get_cls(time: number) {
 		return `item ${time == this.state.save.time ? 'on': ''}`;
 	}
 
 	async _Handle(time: number) {
-		await device.set_screen_save(this.params.address, {time});
+		await device.set_screen_save(this.params.address, {time}, 'video');
 		this.setState({time});
 		this.popPage();
 	}

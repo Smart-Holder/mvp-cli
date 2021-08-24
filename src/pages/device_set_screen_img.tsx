@@ -11,7 +11,7 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 
 	title = '选择轮播项目';
 
-	state = { save: device.get_screen_save(this.params.address), list: [] as NFT[] };
+	state = { save: device.get_screen_save(this.params.address, this.params.type), list: [] as NFT[] };
 
 	get_cls(nft: NFT) {
 		var save = this.state.save;
@@ -20,7 +20,13 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 	}
 
 	async triggerLoad() {
-		this.setState({ list: await models.nft.methods.getNFTByOwner({owner:this.params.address}) });
+		var list = await models.nft.methods.getNFTByOwner({owner:this.params.address});
+
+		list = this.params.type == 'video' ?
+			this.state.list.filter(e=>e.media.match(/\.mp4/i)): 
+			this.state.list.filter(e=>!e.media.match(/\.mp4/i));
+
+		this.setState({ list });
 	}
 
 	async _Handle(nft: NFT) {
@@ -40,15 +46,13 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 
 		this.setState({save});
 
-		await device.set_screen_save(this.params.address, { ...save, type });
+		await device.set_screen_save(this.params.address, { ...save }, type);
 
 		this.popPage();
 	}
 
 	render() {
-		var list = this.params.type == 'video' ?
-			this.state.list.filter(e=>e.media.match(/\.mp4/i)): 
-			this.state.list.filter(e=>!e.media.match(/\.mp4/i));
+		var list = this.state.list;
 
 		return (
 			<div className="device_set_screen_img">
