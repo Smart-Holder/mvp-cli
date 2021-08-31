@@ -1,15 +1,12 @@
 
 import storage from 'somes/storage';
-import index, {NFT} from '.';
+import index, {NFT,Device} from '.';
 import buffer, {IBuffer} from 'somes/buffer';
 import * as key from '../key';
 import somes from 'somes';
+import sdk from '../sdk';
 
-export interface Device {
-	sn: string;
-	address: string;
-	nft?: number;
-}
+export {Device};
 
 export interface DeviceScreenSave {
 	address: string;
@@ -18,14 +15,8 @@ export interface DeviceScreenSave {
 	data: {token: string; tokenId: string}[];
 }
 
-export async function devices(): Promise<Device[]> {
-	var list = storage.get('__deviceList', []) as Device[];
-	if (list.length) {
-		var owners = list.map(e=>e.address);
-		var counts = await index.nft.methods.getNFTCountByOwners({ owners }) as number[];
-		list.forEach((e,j)=>(e.nft=counts[j]));
-	}
-	return list;
+export function devices(): Promise<Device[]> {
+	return sdk.user.methods.devices();
 }
 
 export async function call(target: string, method: string, args?: any): Promise<any> {
@@ -65,29 +56,12 @@ export async function bind(target: string, authCode: string) {
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
 	});
-
-	var NewDevice = { address: target, sn: sn || target };
-
-	var list = storage.get('__deviceList', []) as Device[];
-	var it = list.find(e=>e.address == target);
-	if (!it) {
-		list.push(NewDevice);
-	} else {
-		Object.assign(it, NewDevice);
-	}
-	storage.set('__deviceList', list);
+	await sdk.user.methods.addDevice({ address: target, sn: sn || target });
 }
 
 export async function unbind(target: string) {
 	await call(target, 'unbind', { name: key.authName() });
-
-	var list = storage.get('__deviceList', []) as Device[];
-	var i = -1;
-
-	if (list.find((e,j)=>(i=j,e.address==target))) {
-		list.splice(i, 1);
-		storage.set('__deviceList', list);
-	}
+	await sdk.user.methods.deleteDevice({ address: target });
 }
 
 export function get_screen_save(address: string, _type?: 'single' | 'multi' | 'video'): DeviceScreenSave {

@@ -9,9 +9,9 @@ export const store = new Store('mvp/cli');
 export async function initialize() {
 	await genPrivateKey();
 	await make({ url: config.sdk, store, signer: new SDKSigner() });
-	var user = await store.core.auth.methods.authUser();
+	var user = await store.core.user.methods.authUser();
 	if (!user) {
-		await store.core.auth.methods.register({ name: authName(), key: publicKey() });
+		await store.core.user.methods.register({ name: authName(), key: publicKey() });
 	}
 	console.log('auth.user', user);
 }
