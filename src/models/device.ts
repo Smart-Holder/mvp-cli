@@ -5,6 +5,7 @@ import buffer, {IBuffer} from 'somes/buffer';
 import * as key from '../key';
 import somes from 'somes';
 import sdk from '../sdk';
+import chain from '../chain';
 
 export {Device};
 
@@ -55,6 +56,7 @@ export async function bind(target: string, authCode: string) {
 		name: key.authName(),
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
+		addressOrigin: await chain.getDefaultAccount(),
 	});
 	await sdk.user.methods.addDevice({ address: target, sn: sn || target });
 }
