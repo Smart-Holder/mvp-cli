@@ -20,9 +20,9 @@ export function devices(): Promise<Device[]> {
 	return sdk.user.methods.devices();
 }
 
-export async function call(target: string, method: string, args?: any): Promise<any> {
+export async function call(target: string, method: string, args?: any, vCheck?: string): Promise<any> {
 	var hash = await index.mbx.methods.call({
-		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }
+		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
 	}) as string;
 	var msg = buffer.from(hash, 'base64');
 	var {signature,recovery} = key.sign(msg);
@@ -51,14 +51,14 @@ export function sign(target: string, msg: IBuffer) {
 	return call(target, 'sign', { message: msg.toString('base64') });
 }
 
-export async function bind(target: string, authCode: string) {
+export async function bind(target: string, authCode: string, vCheck?: string) {
 	var sn = await call(target, 'bind', {
 		name: key.authName(),
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
 		addressOrigin: await chain.getDefaultAccount(),
-	});
-	await sdk.user.methods.addDevice({ address: target, sn: sn || target });
+	}, vCheck);
+	await sdk.user.methods.addDevice({ address: target, sn: sn || target, vCheck });
 }
 
 export async function unbind(target: string) {
