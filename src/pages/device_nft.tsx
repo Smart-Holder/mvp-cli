@@ -9,7 +9,7 @@ import models, {NFT} from '../models';
 import {renderNft} from '../util/media';
 import nft_proxy from '../chain/nftproxy';
 import somes from 'somes';
-import {contracts} from '../../config';
+import {contracts, env} from '../../config';
 import Loading from 'webpkit/lib/loading';
 import chain from '../chain';
 
@@ -43,9 +43,12 @@ export default class extends NavPage<Device> {
 				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
-		} catch(err) {
+		} catch(err: any) {
 			console.error(err);
 			alert('取出到钱包失败');
+			if (env == 'dev') {
+				alert(err + '');
+			}
 		} finally {
 			l.close();
 		}

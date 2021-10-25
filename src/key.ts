@@ -13,22 +13,23 @@ var _PrivateKey: IBuffer | null = null;
 
 export async function genPrivateKey() {
 	if (!_PrivateKey) {
-		if (storage.has('__as1ahaasr')) {
-			_PrivateKey = buffer.from(storage.get('__as1ahaasr'), 'base64')
+		var from = await chain.getDefaultAccount();
+		var key = '__as1ahaasr_' + from;
+		if (storage.has(key)) {
+			_PrivateKey = buffer.from(storage.get(key), 'base64');
 		} else {
-			var mask = chain.metaMask;
-			var from = await chain.getDefaultAccount();
+			// var mask = chain.metaMask;
+			// var r = await mask.request({
+			// 	method: 'personal_sign',
+			// 	params: [
+			// 		'0x' + buffer.from('Login to wallet').toString('hex'),
+			// 		from,
+			// 	],
+			// });
+			// _PrivateKey = hash.sha256(r);
+			_PrivateKey = hash.sha256(key + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
 
-			var r = await mask.request({
-				method: 'personal_sign',
-				params: [
-					'0x' + buffer.from('Login to wallet').toString('hex'),
-					from,
-				],
-			});
-			_PrivateKey = hash.sha256(r);
-
-			storage.set('__as1ahaasr', _PrivateKey.toString('base64'));
+			storage.set(key, _PrivateKey.toString('base64'));
 		}
 	}
 }

@@ -2,6 +2,7 @@
 module.exports = {
 	sdk: 'https://mvp.stars-mine.com/service-api',
 	platform: 'eth',
+	env: 'prod',
 	contracts: {
 		ERC721: '0xbe6e3669464E7dB1e1528212F0BfF5039461CB82',
 		ERC1155: '0x495f947276749Ce646f68AC8c248420045cb7b5e',
