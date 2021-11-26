@@ -43,7 +43,7 @@ export default class extends NavPage<Device> {
 				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
-		} catch(err) {
+		} catch(err: any) {
 			console.error(err);
 			alert('取出到钱包失败');
 			if (env == 'dev') {

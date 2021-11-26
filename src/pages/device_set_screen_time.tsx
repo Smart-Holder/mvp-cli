@@ -9,7 +9,11 @@ export default class extends NavPage<device.Device> {
 
 	title = '选择轮播时间';
 
-	state = { save: device.get_screen_save(this.params.address, 'multi') };
+	state = { save: {} as device.DeviceScreenSave };
+
+	async triggerLoad() {
+		this.setState({ save:  await device.get_screen_save(this.params.address, 'multi') });
+	}
 
 	get_cls(time: number) {
 		return `item ${time == this.state.save.time ? 'on': ''}`;

@@ -47,8 +47,8 @@ export default class ApiIMPL {
 		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
 		var msg = tx_sign.message(
-			[token, tokenId, to, amount, data || '0x', expiry, from],
-			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256', 'address']
+			[token, tokenId, to, amount, data || '0x', expiry/*, from*/],
+			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256'/*, 'address'*/]
 		);
 		var sign_hex = await device.sign(from as string, msg) as string;
 		console.log('device.sign()', `msg=0x${msg.toString('hex')}`, `sign=${sign_hex}`);

@@ -65,7 +65,7 @@ export default class extends NavPage<{id:number}> {
 			var l = await Loading.show('正在存入到设备');
 			try {
 				await this._transferToDevice(device_address, nft);
-			} catch(err) {
+			} catch(err: any) {
 				console.error(err);
 				alert('存入到设备失败');
 			} finally {

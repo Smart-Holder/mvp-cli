@@ -11,7 +11,7 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 
 	title = '选择轮播项目';
 
-	state = { save: device.get_screen_save(this.params.address, this.params.type), list: [] as NFT[] };
+	state = { save: {} as device.DeviceScreenSave, list: [] as NFT[] };
 
 	get_cls(nft: NFT) {
 		var save = this.state.save;
@@ -20,6 +20,7 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 	}
 
 	async triggerLoad() {
+		this.setState({ save: await device.get_screen_save(this.params.address, this.params.type) });
 		var list = await models.nft.methods.getNFTByOwner({owner:this.params.address}) as NFT[];
 
 		list = this.params.type == 'video' ?

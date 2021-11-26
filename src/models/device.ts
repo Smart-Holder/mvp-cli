@@ -66,17 +66,16 @@ export async function unbind(target: string) {
 	await sdk.user.methods.deleteDevice({ address: target });
 }
 
-export function get_screen_save(address: string, _type?: 'single' | 'multi' | 'video'): DeviceScreenSave {
-	var type = _type || storage.get('__device_set_screen_save_cur_' + address, 'single');
-	return { data: [], ...storage.get(
-		'__device_set_screen_save_' + address + type, { address, time: 10, type }) 
-	};
+export async function get_screen_save(address: string, _type?: 'single' | 'multi' | 'video'): Promise<DeviceScreenSave> {
+	var type = _type || await storage.get('__device_set_screen_save_cur_' + address, 'single');
+	var save = await storage.get('__device_set_screen_save_' + address + type, { address, time: 10, type })
+	return { data: [], ...save };
 }
 
 export async function set_screen_save(address: string, 
 	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video') 
 {
-	var ss = Object.assign(get_screen_save(address, type), pss);
+	var ss = Object.assign(await get_screen_save(address, type), pss);
 	var nfts = await index.nft.methods.getNFTByOwner({owner: address}) as NFT[];
 	var nfts_set = new Set();
 
@@ -91,8 +90,8 @@ export async function set_screen_save(address: string,
 	}
 
 	ss.type = type;
-	storage.set('__device_set_screen_save_cur_' + address, type);
-	storage.set('__device_set_screen_save_' + address + type, ss);
+	await storage.set('__device_set_screen_save_cur_' + address, type);
+	await storage.set('__device_set_screen_save_' + address + type, ss);
 
 	if (pss.data) {
 		if (type == 'single') {

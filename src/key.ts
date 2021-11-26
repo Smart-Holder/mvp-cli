@@ -15,8 +15,8 @@ export async function genPrivateKey() {
 	if (!_PrivateKey) {
 		var from = await chain.getDefaultAccount();
 		var key = '__as1ahaasr_' + from;
-		if (storage.has(key)) {
-			_PrivateKey = buffer.from(storage.get(key), 'base64');
+		if (await storage.has(key)) {
+			_PrivateKey = buffer.from(await storage.get(key), 'base64');
 		} else {
 			// var mask = chain.metaMask;
 			// var r = await mask.request({

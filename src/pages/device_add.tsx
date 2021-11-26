@@ -26,7 +26,7 @@ export default class extends NavPage<{a?: string; c?: string; v?: string;}> {
 		try {
 			await device.bind(target, code, check);
 			alert('绑定设备成功', ()=>this._back());
-		} catch(err) {
+		} catch(err: any) {
 			alert(err.message, ()=>this._back());
 		}
 	}

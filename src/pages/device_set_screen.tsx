@@ -9,7 +9,11 @@ export default class extends NavPage<device.Device> {
 
 	title = '选择轮播项目';
 
-	state = { save: device.get_screen_save(this.params.address) };
+	state = { save: {} as device.DeviceScreenSave };
+
+	async triggerLoad() {
+		this.setState({ save: await device.get_screen_save(this.params.address) });
+	}
 
 	_SelectImg = ()=>{// 'single' | 'multi' | 'video'
 		this.pushPage({url:'/device_set_screen_img?type=single', params: this.params});
