@@ -1,9 +1,9 @@
 
 import { React } from 'webpkit/mobile';
-import {NFT} from '../models';
+import {Asset} from '../models';
 import './media.scss';
 
-export function renderNft(e?: NFT, isFirstImg?: boolean) {
+export function renderNft(e?: Asset, isFirstImg?: boolean) {
 	var media = e?.media || e?.mediaOrigin;
 	var img = e?.image || e?.imageOrigin;
 	var uri = isFirstImg ? (img || media): media;

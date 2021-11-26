@@ -3,7 +3,7 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/nft_details.scss';
-import models, { NFT, NFTMode } from '../models';
+import models, { NFT, AssetType } from '../models';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import * as nftproxy from '../chain/nftproxy';
@@ -30,7 +30,7 @@ export default class extends NavPage<{id:number}> {
 
 	private async _transferToDevice(device_address: string, nft: NFT) {
 		var from = this.state.from;
-		if (nft.mode == NFTMode.ERC721) { // erc721
+		if (nft.type == AssetType.ERC721) { // erc721
 			var buf = encodeParameters(['address'], [device_address]);
 			if (nft.ownerBase) {
 				await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
@@ -40,7 +40,7 @@ export default class extends NavPage<{id:number}> {
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
-		} else if (nft.mode == NFTMode.ERC1155) {
+		} else if (nft.type == AssetType.ERC1155) {
 			var buf = encodeParameters(['address'], [device_address]);
 			if (nft.ownerBase) {
 				await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));

@@ -46,7 +46,7 @@ export default class extends NavPage<{type?: 'back'}> {
 							<div className="more">More...</div>
 							<div className="txt1">SN: {e.sn}</div>
 							<div className="txt2">Address：{e.address}</div>
-							<div className="txt3">{e.nft}<br/><span>NFT</span></div>
+							<div className="txt3">{e.assetCount}<br/><span>NFT</span></div>
 						</div>
 					)}
 
