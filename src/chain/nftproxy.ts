@@ -47,10 +47,11 @@ export default class ApiIMPL {
 		somes.assert(balance, '#ApiIMPL#_tx: NOT_OWN_TOKEN');
 		var expiry = Math.floor((Date.now() + 6e4) / 1e3);
 		var msg = tx_sign.message(
-			[token, tokenId, to, amount, data || '0x', expiry],
-			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256']
+			[token, tokenId, to, amount, data || '0x', expiry, from],
+			['address', 'uint256', 'address', 'uint256', 'bytes', 'uint256', 'address']
 		);
 		var sign_hex = await device.sign(from as string, msg) as string;
+		console.log('device.sign()', `msg=0x${msg.toString('hex')}`, `sign=${sign_hex}`);
 		var sign = buffer.from(sign_hex.slice(2), 'hex');
 		var tx: TransferTx = {
 			token, tokenId, to, amount, expiry: BigInt(expiry),
@@ -66,6 +67,7 @@ export default class ApiIMPL {
 
 	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
 		var tx = await this._tx(from, to, token, tokenId, amount, data);
+		// var count = await this._artifacts.api.balanceOf(token, tokenId, from).call();
 		await this._artifacts.api.withdrawFrom(tx).call();
 		await this._artifacts.api.withdrawFrom(tx).post();
 	}
