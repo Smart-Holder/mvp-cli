@@ -1,13 +1,9 @@
-
 .index {
-	
 }
-
 .index .list {
 	padding-top: 0.42rem;
 	padding-bottom: 0.42rem;
 }
-
 
 .index .list > div {
 	width: 6.48rem;
@@ -16,7 +12,7 @@
 	border-radius: 0.17rem;
 	margin: auto;
 	margin-bottom: 0.4rem;
-	box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,0.06);
+	box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.06);
 }
 
 .index .list > div:active {
@@ -25,7 +21,7 @@
 
 .index .list > div.a {
 	font-size: 0.32rem;
-	color: #2A2A30;
+	color: #2a2a30;
 	text-align: center;
 	line-height: 2.32rem;
 	background-image: url(../res/1627289320396.jpg);
@@ -35,14 +31,14 @@
 }
 
 .index .list > div.b {
-	background-color: #F9F9F9;
-	box-shadow: 0 0.07rem 0.04rem rgba(0,0,0,0.1);
+	background-color: #f9f9f9;
+	box-shadow: 0 0.07rem 0.04rem rgba(0, 0, 0, 0.1);
 }
 
 .index .list > div.b .more {
 	height: 0.15rem;
 	line-height: 0.15rem;
-	color: #2A2A30;
+	color: #2a2a30;
 	font-size: 0.22rem;
 	margin-top: 0.25rem;
 	margin-right: 0.31rem;
@@ -53,14 +49,53 @@
 .index .list > div.b .txt1 {
 	font-size: 0.28rem;
 	line-height: 0.45rem;
-	margin: 0.0rem 0.32rem 0 0.32rem;
+	margin: 0rem 0.32rem 0 0.32rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 .index .list > div.b .txt2 {
 	font-size: 0.24rem;
 	line-height: 0.33rem;
-	margin: 0.0rem 0.32rem 0 0.32rem;
+	margin: 0rem 0.32rem 0 0.32rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.device_list_page {
+	padding: 0 0.3rem;
+	background-color: #f5f5f5;
+	background-image: url("../assets/home_bg.png");
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+.device_list {
+	padding: 0.24rem;
+	background-color: rgba(254, 255, 254, 0.639);
+	border-radius: 0.32rem;
+	margin-top: 2.12rem;
+	.list_title {
+		font-size: 0.36rem;
+		color: #333;
+		margin-bottom: 0.24rem;
+	}
+	.bind_device_btn {
+		padding: 0.49rem 0;
+		border-radius: 0.16rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(245, 245, 245, 0.502);
+		margin-bottom: 0.4rem;
+		font-size: 0.32rem;
+		.add_icon {
+			width: 0.36rem;
+			margin-right: 0.08rem;
+		}
+	}
+
+	.device_list_loading {
+		width: 100%;
+		padding: 0.6rem 0;
+	}
 }

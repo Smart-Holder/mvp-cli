@@ -5,6 +5,18 @@ export default [
 		page: () => import('./pages/nft'),
 	},
 	{
+		path: '/device',
+		page: () => import('./pages/nft'),
+	},
+	{
+		path: '/my',
+		page: () => import('./pages/my'),
+	},
+	{
+		path: '/device_info',
+		page: () => import('./pages/device_info'),
+	},
+	{
 		path: '/device_add',
 		page: () => import('./pages/device_add'),
 	},
@@ -28,10 +40,10 @@ export default [
 		path: '/device_set',
 		page: () => import('./pages/device_set'),
 	},
-	{
-		path: '/device',
-		page: () => import('./pages/device'),
-	},
+	// {
+	// 	path: '/device',
+	// 	page: () => import('./pages/device'),
+	// },
 	{
 		path: '/nft_add',
 		page: () => import('./pages/nft_add'),

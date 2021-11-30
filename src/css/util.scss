@@ -1,6 +1,6 @@
-
 body {
-	font-family:sans-serif,STHeiti,Microsoft YaHei,Helvetica,Arial;
+	font-family: sans-serif, STHeiti, Microsoft YaHei, Helvetica, Arial;
+	color: #333;
 }
 
 ._main {
@@ -66,7 +66,7 @@ body {
 }
 
 ._tools {
-	position:fixed;
+	position: fixed;
 	height: 1.35rem;
 	width: 100%;
 	bottom: 0;
@@ -78,6 +78,7 @@ body {
 	z-index: 99;
 	transform: translateX(0) translateZ(99px);
 	.btn {
+		transition: all 0.5s;
 		width: 0.65rem;
 		height: 0.88rem;
 		// background: #f00;
@@ -102,7 +103,7 @@ body {
 			background-image: url(../res/1627383050781.jpg);
 		}
 		.txt {
-			margin-top: 0.07rem;
+			// margin-top: 0.07rem;
 			line-height: 0.33rem;
 		}
 		&:active {
@@ -113,4 +114,11 @@ body {
 	.btn.on {
 		opacity: 1;
 	}
+}
+
+.textNoWrap {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: break-all;
 }

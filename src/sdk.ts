@@ -1,8 +1,8 @@
 
 import * as config from '../config';
 import Store from 'somes/store';
-import {make} from 'webpkit/lib/store';
-import {SDKSigner,authName,publicKey,genPrivateKey} from './key';
+import { make } from 'webpkit/lib/store';
+import { SDKSigner, authName, publicKey, genPrivateKey } from './key';
 
 export const store = new Store('mvp/cli');
 

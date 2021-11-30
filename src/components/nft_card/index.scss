@@ -1,0 +1,43 @@
+.nft_card {
+		padding: 0.24rem;
+		background-color: #fefffe;
+		border-radius: 0.16rem;
+		margin-bottom: 0.4rem;
+		.nft_img_box {
+			width: 100%;
+			margin-bottom: 0.3rem;
+			img {
+				width: 100%;
+				max-height: 3.73rem;
+				object-fit: cover;
+				border-radius: 0.16rem;
+			}
+		}
+
+		.nft_address_box {
+			margin-bottom: 0.24rem;
+		}
+
+		.nft_address_title,
+		.nft_hash_title {
+			line-height: 0.32rem;
+			font-size: 0.32rem;
+		}
+
+		.nft_address,
+		.nft_hash {
+			font-size: 0.28rem;
+		}
+
+		.action_btn_box {
+			margin-top: 0.4rem;
+			width: 100%;
+			.ant-btn {
+				width: 100%;
+				border-radius: 0.16rem;
+				font-size: 0.34rem;
+				height: auto;
+				padding: 0.12rem 0;
+			}
+		}
+	}

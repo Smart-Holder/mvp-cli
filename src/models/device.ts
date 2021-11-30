@@ -1,19 +1,19 @@
 
 import storage from 'somes/storage';
-import index, {NFT,Device} from '.';
-import buffer, {IBuffer} from 'somes/buffer';
+import index, { NFT, Device } from '.';
+import buffer, { IBuffer } from 'somes/buffer';
 import * as key from '../key';
 import somes from 'somes';
 import sdk from '../sdk';
 import chain from '../chain';
 
-export {Device};
+export { Device };
 
 export interface DeviceScreenSave {
 	address: string;
 	time: number;
 	type: 'single' | 'multi' | 'video';
-	data: {token: string; tokenId: string}[];
+	data: { token: string; tokenId: string }[];
 }
 
 export function devices(): Promise<Device[]> {
@@ -25,26 +25,26 @@ export async function call(target: string, method: string, args?: any, vCheck?: 
 		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
 	}) as string;
 	var msg = buffer.from(hash, 'base64');
-	var {signature,recovery} = key.sign(msg);
+	var { signature, recovery } = key.sign(msg);
 	var sign = buffer.concat([signature, [recovery]]).toString('base64');
-	var r = await index.mbx.methods.post({hash, signature: sign});
+	var r = await index.mbx.methods.post({ hash, signature: sign });
 	return JSON.parse(r);
 }
 
 export async function ping(target: string) {
-	await index.mbx.methods.ping({target});
+	await index.mbx.methods.ping({ target });
 }
 
 export function displaySingleImage(target: string, token: string, tokenId: string) {
-	return call(target, 'displaySingleImage', { type: 'image', time: 0, data:[{ token, tokenId }] });
+	return call(target, 'displaySingleImage', { type: 'image', time: 0, data: [{ token, tokenId }] });
 }
 
-export function displayMultiImage(target: string, time: number, data: {token: string, tokenId: string}[]) {
+export function displayMultiImage(target: string, time: number, data: { token: string, tokenId: string }[]) {
 	return call(target, 'displayMultiImage', { type: 'image', time, data });
 }
 
 export function displayVideo(target: string, token: string, tokenId: string) {
-	return call(target, 'displayVideo', { type: 'video', time: 0, data:[{ token, tokenId }] });
+	return call(target, 'displayVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
 }
 
 export function sign(target: string, msg: IBuffer) {
@@ -72,18 +72,17 @@ export async function get_screen_save(address: string, _type?: 'single' | 'multi
 	return { data: [], ...save };
 }
 
-export async function set_screen_save(address: string, 
-	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video') 
-{
+export async function set_screen_save(address: string,
+	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video') {
 	var ss = Object.assign(await get_screen_save(address, type), pss);
-	var nfts = await index.nft.methods.getNFTByOwner({owner: address}) as NFT[];
+	var nfts = await index.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
 	var nfts_set = new Set();
 
 	for (var nft of nfts) {
 		nfts_set.add(nft.token + nft.tokenId);
 	}
 
-	ss.data = ss.data.filter(e=>nfts_set.has(e.token+e.tokenId));
+	ss.data = ss.data.filter(e => nfts_set.has(e.token + e.tokenId));
 
 	if (!ss.data.length && nfts.length) {
 		// ss.data = [nfts[0]];

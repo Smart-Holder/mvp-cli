@@ -28,18 +28,19 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-import {React,Root,ReactDom,dialog, Nav} from 'webpkit/mobile';
+import { React, Root, ReactDom, dialog, Nav } from 'webpkit/mobile';
 import _404 from './pages/404';
 import routes from './router';
 import './css/util.scss';
-import sdk,{initialize} from './sdk';
+import './index.css';
+import sdk, { initialize } from './sdk';
 import chain from './chain';
 import utils from 'somes';
 import errnoHandles from './handle';
 import Tools from './util/tools';
 
-utils.onUncaughtException.on((e)=>errnoHandles(e.data));
-utils.onUnhandledRejection.on((e)=>errnoHandles(e.data.reason));
+utils.onUncaughtException.on((e) => errnoHandles(e.data));
+utils.onUnhandledRejection.on((e) => errnoHandles(e.data.reason));
 
 Nav.platform = '_mini_app';
 
@@ -52,13 +53,13 @@ class MyRoot<P> extends Root<P> {
 		try {
 			await initialize();
 			// console.log(await sdk.nft.methods.getNFTByOwner({owner:'0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'}));
-		} catch(err: any) {
+		} catch (err: any) {
 			dialog.alert(err.message + ', ' + err.code + ',' + err.stack);
 			throw err;
 		}
 	}
 
-	private _nav = ()=>{
+	private _nav = () => {
 		return this.refs.nav as any;
 	}
 
@@ -67,7 +68,7 @@ class MyRoot<P> extends Root<P> {
 	}
 }
 
-chain.initialize().then(()=>{
+chain.initialize().then(() => {
 
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
