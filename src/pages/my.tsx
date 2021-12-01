@@ -56,8 +56,7 @@ export default class extends NavPage {
 							</div>
 
 						</div>
-					})
-					}
+					})}
 				</div>
 		});
 	}
