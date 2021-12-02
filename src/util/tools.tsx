@@ -3,6 +3,7 @@ import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 import "./tools.scss"
+import { NFT } from '../models';
 
 export default class extends ViewController<{ nav: () => Nav }> {
 	state = {
@@ -38,3 +39,15 @@ export default class extends ViewController<{ nav: () => Nav }> {
 		);
 	}
 }
+
+export type IDisabledType = 'draw' | 'transfer';
+
+// 设置记录当前nft 存入设备操作时间
+export const setNftDisabledTime = (nft: NFT, type: IDisabledType) => {
+	let nftDisabledTimeStr = localStorage.getItem('nftDisabledTime');
+	let nftDisabledTime: { [key: string]: { date: string, type: IDisabledType } } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	nftDisabledTime[nft.tokenId] = { date: String(Date.now()), type };
+	localStorage.setItem('nftDisabledTime', JSON.stringify(nftDisabledTime));
+}
+
+

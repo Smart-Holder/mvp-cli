@@ -38,6 +38,7 @@ import chain from './chain';
 import utils from 'somes';
 import errnoHandles from './handle';
 import Tools from './util/tools';
+import 'antd-mobile/dist/antd-mobile.css'
 
 utils.onUncaughtException.on((e) => errnoHandles(e.data));
 utils.onUnhandledRejection.on((e) => errnoHandles(e.data.reason));

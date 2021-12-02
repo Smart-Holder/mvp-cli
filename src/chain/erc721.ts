@@ -35,7 +35,7 @@ export class ApiIMPL {
 
 	async safeMintURI(token: string, to: Address, tokenId: bigint, tokenURI: string, data?: Uint8Array) {
 		var nft = artifacts.erc721(token);
-		var data_ = data ? '0x' + buffer.from(data).toString('hex'): '0x0';
+		var data_ = data ? '0x' + buffer.from(data).toString('hex') : '0x0';
 		await nft.api.safeMintURI(to, tokenId, tokenURI, data_).call();
 		var r = await nft.api.safeMintURI(to, tokenId, tokenURI, data_).post();
 		var evt = await nft.findEventFromReceipt('Transfer', r);
@@ -50,7 +50,7 @@ export class ApiIMPL {
 	// 安全转移资产
 	async safeTransferFrom(token: string, from: string, to: string, tokenId: bigint, data?: Uint8Array) {
 		var nft = artifacts.erc721(token);
-		var data_ = data ? '0x' + buffer.from(data).toString('hex'): '0x0';
+		var data_ = data ? '0x' + buffer.from(data).toString('hex') : '0x0';
 		// var uri = await nft.api.tokenURI(tokenId).call();
 		// console.log(uri);
 		await nft.api.safeTransferFrom(from, to, tokenId, data_).call();

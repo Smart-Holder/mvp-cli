@@ -1,15 +1,17 @@
 import { React } from 'webpkit/mobile';
-import { NFT } from '../../models';
+import { INftItem } from '../../pages/my';
 import Button from '../button';
 import "./index.scss";
 
 interface INftCardProps {
-	nft: NFT;
-	saveNftOfDeviceClick: () => void;
+	nft: INftItem;
+	btnClick: () => void;
+	btnText: string;
+	btnLoadingText: string;
 }
 
 const NftCard = (props: INftCardProps) => {
-	let { nft, saveNftOfDeviceClick } = props;
+	let { nft, btnClick, btnText, btnLoadingText } = props;
 	return <div className="nft_card">
 		<div className="nft_info_box">
 			<div className="nft_img_box">
@@ -28,7 +30,7 @@ const NftCard = (props: INftCardProps) => {
 		</div>
 
 		<div className="action_btn_box">
-			<Button type="primary" onClick={saveNftOfDeviceClick}>存入到设备</Button>
+			<Button loading={nft.btn_disabled} disabled={nft.btn_disabled} type="primary" onClick={btnClick}>{nft.btn_disabled ? btnLoadingText : btnText}</Button>
 		</div>
 	</div>;
 }

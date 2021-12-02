@@ -122,3 +122,8 @@ body {
 	text-overflow: ellipsis;
 	word-break: break-all;
 }
+
+.dialog .btns > div,
+.dialog .btns .ok {
+	color: #1677ff;
+}

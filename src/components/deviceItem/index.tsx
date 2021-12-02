@@ -33,7 +33,7 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 			</div>
 			<div className="bottom_part">
 				<div className="nft_title">NFT</div>
-				<div className="nft_price">{deviceInfo.assetCount || 0}</div>
+				<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
 			</div>
 		</div>
 
