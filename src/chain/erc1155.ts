@@ -22,6 +22,8 @@ export class ApiIMPL {
 		};
 	}
 
+	//balanceOf(from: Address, tokenId: Uint256): Result<Uint256>;
+
 }
 
 export default new ApiIMPL;

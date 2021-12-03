@@ -12,6 +12,7 @@ import somes from 'somes';
 import {contracts, env} from '../../config';
 import Loading from 'webpkit/lib/loading';
 import chain from '../chain';
+import artifacts from '../chain/artifacts';
 
 type Device = device.Device;
 
@@ -39,7 +40,12 @@ export default class extends NavPage<Device> {
 
 		var l = await Loading.show('正在取出到钱包');
 		try {
-			await nft_proxy.New(nft.owner as string)
+			var proxy = nft_proxy.New(nft.owner as string);
+			// var val = await proxy.balanceOf(nft.token, BigInt(nft.tokenId), from);
+			// var val1 = await artifacts.erc1155(nft.token).api.balanceOf('0xb02cbeD3aC823085CfB1A667Fb1C73E19E724657', BigInt(nft.tokenId)).call();
+			// console.log(val, val1);
+			// return;
+			await proxy
 				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
