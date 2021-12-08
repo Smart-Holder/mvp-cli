@@ -31,9 +31,11 @@ export default class extends NavPage<{id:number}> {
 	private async _transferToDevice(device_address: string, nft: NFT) {
 		var from = this.state.from;
 		if (nft.type == AssetType.ERC721) { // erc721
-			var buf = encodeParameters(['address'], [device_address]);
+			var buf = encodeParameters(['address[]', 'uint256'], [
+				[device_address/*这里可以写一个owners列表,表示这个资产属于这一群人*/], 1/*转移资产时需要几个人签名*/]);
 			if (nft.ownerBase) {
-				await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
+				await nftproxy.proxy721.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1), BigInt(1));
+				//alert('暂时不支持这种类型的NFT存入到设备'); return;
 			} else {
 				await erc721.safeTransferFrom( // 转移给代理协约
 					nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
@@ -41,9 +43,11 @@ export default class extends NavPage<{id:number}> {
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} else if (nft.type == AssetType.ERC1155) {
-			var buf = encodeParameters(['address'], [device_address]);
+			var buf = encodeParameters(['address[]', 'uint256'], [
+				[device_address/*这里可以写一个owners列表,表示这个资产属于这一群人*/], 1/*转移资产时需要几个人签名*/]);
 			if (nft.ownerBase) {
-				await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+				await nftproxy.proxy1155.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count), BigInt(1));
+				// alert('暂时不支持这种类型的NFT存入到设备'); return;
 			} else {
 				await erc1155.safeTransferFrom( // 转移给代理协约
 					nft.token, from, contracts.ERC1155Proxy, BigInt(nft.tokenId), BigInt(nft.count), buf);
@@ -76,10 +80,10 @@ export default class extends NavPage<{id:number}> {
 
 	_Handle = async ()=>{
 		this.pushPage({url: '/device', params: {type: 'back' }})
-		// var [nft] = this.state.NFTs;
-		// var from = this.state.from;
-		// await nft_proxy.New(nft.owner as string)
-		// 	.test_withdrawFrom(from, from, nft.token, BigInt(nft.tokenId), BigInt(1));
+		var [nft] = this.state.NFTs;
+		var from = this.state.from;
+		// await nftproxy.New(nft.owner as string);
+		//nftproxy.proxy1155.test_withdraw(from, [from], nft.token, BigInt(nft.tokenId), BigInt(1));
 	}
 
 	render() {

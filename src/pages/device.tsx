@@ -54,7 +54,7 @@ export default class extends NavPage<{type?: 'back'}> {
 					{/* test */}
 					{location.href.indexOf('__test')!=-1?
 					<div className="b" onClick={e=>this._DeviceNft({
-						sn: '012018116A93CC7946', address: '0x137C59F4eb2BcfE409dad6C467Af90459383FA3A'})}>
+						sn: '012018116A93CC7946', address: '0x137C59F4eb2BcfE409dad6C467Af90459383FA3A', user: ''})}>
 						<div className="more">More...</div>
 						<div className="txt1">SN: 012018116A93CC7946</div>
 						<div className="txt2">Address：0x137C59F4eb2BcfE409dad6C467Af90459383FA3A</div>
