@@ -2,10 +2,16 @@
 import buffer from 'somes/buffer'
 import { Address } from 'web3z/solidity_types';
 import artifacts from './artifacts';
+import chain, {encodeParameters} from '.';
 
 export class ApiIMPL {
 
 	get contractAddress() { return '' }
+
+	async balanceOf(token: string, from: string) {
+		var nft = artifacts.erc721(token);
+		return await nft.api.balanceOf(from).call();
+	}
 
 	// get token uri
 	tokenURI(token: string, tokenId: bigint): Promise<string> {
@@ -67,6 +73,12 @@ export class ApiIMPL {
 	// 查看资产是否存在
 	exists(token: string, tokenId: bigint) {
 		return artifacts.erc721(token).api.exists(tokenId).call();
+	}
+
+	async safeTransferToProxy(token: string, to: string[], tokenId: bigint, proxy: string, signCount = 1) {
+		var from = await chain.getDefaultAccount();
+		var buf = encodeParameters(['address[]', 'uint256'], [to, signCount]);
+		await this.safeTransferFrom(token, from, proxy, tokenId, buf);
 	}
 
 }
