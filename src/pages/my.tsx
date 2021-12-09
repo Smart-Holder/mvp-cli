@@ -10,9 +10,12 @@ import * as nftproxy from '../chain/nftproxy';
 import erc721 from '../chain/erc721';
 import { contracts } from '../../config';
 import erc1155 from '../chain/erc1155';
-import '../css/my.scss';
 import { Empty } from 'antd';
-import { IDisabledType, setNftDisabledTime } from '../util/tools';
+import { removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
+import '../css/my.scss';
+import Loading from '../../deps/webpkit/lib/loading';
+
+
 
 export interface INftItem extends NFT {
 	btn_disabled?: boolean
@@ -27,29 +30,26 @@ export default class extends NavPage {
 		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ from: owner });
 		this.getNFTList(owner);
+
+		models.msg.addEventListener('UpdateNFT', (e) => {
+			let data: NFT = e.data;
+			console.log(e.data, "--------ws-------");
+			if (!data.ownerBase) {
+				removeNftDisabledTimeItem(data, "nftDisabledTime");
+				this.getNFTList(owner);
+			}
+		}, this);
+	}
+
+	triggerRemove() {
+		models.msg.removeEventListenerWithScope(this);
 	}
 
 	// 获取nft列表
 	async getNFTList(owner: string) {
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 
-		let nftDisabledTimeStr = localStorage.getItem('nftDisabledTime');
-		let nftDisabledTime: { [key: string]: { date: string, type: IDisabledType } } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
-
-		Object.keys(nftDisabledTime).forEach(key => {
-			if (nftDisabledTime[key].type === 'transfer') delete nftDisabledTime[key];
-		});
-
-		Object.keys(nftDisabledTime).map(tokenId => {
-			nftList.forEach(item => {
-				if (tokenId === item.tokenId) delete nftDisabledTime[tokenId];
-			})
-		});
-
-		nftList.forEach(item => {
-			let nftSaveTime = Number(nftDisabledTime[item.tokenId]);
-			item.btn_disabled = nftSaveTime && (Date.now() - nftSaveTime) < 180000 ? true : false;
-		});
+		nftList = setNftActionLoading(nftList, "nftDisabledTime");
 
 		this.setState({ nft: nftList });
 	}
@@ -62,7 +62,7 @@ export default class extends NavPage {
 
 	// 选择设备弹框确认按钮点击事件
 	async selectDeviceModalok() {
-		let { currDevice, currNFT, from, nft } = this.state;
+		let { currDevice, currNFT, nft } = this.state;
 
 		let index = nft.findIndex((item) => item.tokenId === currNFT.tokenId);
 		let newNftItem = { ...nft[index] };
@@ -73,8 +73,11 @@ export default class extends NavPage {
 
 		try {
 			if (currDevice?.address) {
+				var l = await Loading.show('正在存入到设备');
+
 				this.setState({ visible: false, nft: newNftList });
 				await this._transferToDevice(currDevice.address, currNFT);
+				l.close();
 			}
 
 		} catch (error: any) {
@@ -84,10 +87,9 @@ export default class extends NavPage {
 			this.setState({ nft: newNftList });
 			if (error?.code == 4001) errorText = '已取消存储操作';
 			show({ text: String(errorText), buttons: { '我知道了': () => { } } });
-
 		}
 
-
+		this.setState({ visible: false });
 	}
 
 	// 将nft存入设备
@@ -114,6 +116,7 @@ export default class extends NavPage {
 
 				if (nft.type == AssetType.ERC721) { // erc721
 					var buf = encodeParameters(['address'], [device_address]);
+					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
 						await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
@@ -121,10 +124,10 @@ export default class extends NavPage {
 							nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
 					}
 					showTip();
-					setNftDisabledTime(nft, 'transfer');
 					resolve(nft);
 				} else if (nft.type == AssetType.ERC1155) {
 					var buf = encodeParameters(['address'], [device_address]);
+					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
 						await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
@@ -132,7 +135,6 @@ export default class extends NavPage {
 							nft.token, from, contracts.ERC1155Proxy, BigInt(nft.tokenId), BigInt(nft.count), buf);
 					}
 					showTip();
-					setNftDisabledTime(nft, 'transfer');
 					resolve(nft);
 				} else {
 					reject('暂时不支持这种类型的NFT存入到设备');

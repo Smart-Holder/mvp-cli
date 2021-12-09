@@ -1,71 +1,69 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import { DeviceItem } from '../components/deviceItem';
-import { Device } from '../models/device';
+import { Device, devices } from '../models/device';
 import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import { INftItem } from './my';
-import '../css/device_info.scss';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
 import { contracts, env } from '../../config';
 import nft_proxy from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-import { alert } from 'webpkit/lib/dialog';
-import { IDisabledType, setNftDisabledTime } from '../util/tools';
+import { alert, show } from 'webpkit/lib/dialog';
+import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
+import Header from '../util/header';
+import * as device from '../models/device';
+
+import '../css/device_info.scss';
 
 
 export default class extends NavPage<Device> {
 
 	state = {
-		nftList: [] as INftItem[]
+		nftList: [] as INftItem[],
+		deviceInfo: this.params,
+		loading: false
 	}
 
 	async triggerLoad() {
-		// let nftList = await models.nft.methods.getNFTByOwner({ owner: this.params.address });
-		// this.setState({ nftList });
-		this.getNFTList(this.params.address);
+		let owner = this.params.address;
+		this.getNFTList(owner);
+		models.msg.addEventListener('UpdateNFT', e => {
+			let data: NFT = e.data;
+			if (data.ownerBase === owner) {
+				console.log(e, "--------ws-------");
+				removeNftDisabledTimeItem(data, "drawNftDisabledTime");
+				this.getNFTList(owner);
+			}
+		}, this);
 	}
 
+
+	triggerRemove() {
+		models.msg.removeEventListenerWithScope(this);
+	}
+
+	// 获取设备信息
+	async getDeviceInfo(address: string) {
+		let device = await devices();
+		let deviceObj = ArrayToObj(device, 'address');
+		this.setState({ deviceInfo: deviceObj[address] })
+	}
 
 	// 获取nft列表
 	async getNFTList(owner: string) {
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
-
-		let nftDisabledTimeStr = localStorage.getItem('nftDisabledTime');
-		let nftDisabledTime: { [key: string]: { date: string, type: IDisabledType } } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
-
-		// nftList.forEach(item => {
-		// 	let nftSaveTime = Number(nftDisabledTime[item.tokenId]);
-		// 	item.btn_disabled = nftSaveTime && (Date.now() - nftSaveTime) < 180000 ? true : false;
-		// });
-		Object.keys(nftDisabledTime).forEach(key => {
-			if (nftDisabledTime[key].type === 'draw') delete nftDisabledTime[key];
-		});
-
-		Object.keys(nftDisabledTime).map(tokenId => {
-			nftList.forEach(item => {
-				if (tokenId === item.tokenId) delete nftDisabledTime[tokenId];
-			})
-		});
-
-		nftList.forEach(item => {
-			let nftSaveTime = Number(nftDisabledTime[item.tokenId]);
-			item.btn_disabled = nftSaveTime && (Date.now() - nftSaveTime) < 180000 ? true : false;
-		});
-
-		localStorage.setItem('nftDisabledTime', JSON.stringify(nftDisabledTime));
-
+		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
 		this.setState({ nftList });
+		this.getDeviceInfo(owner);
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT) {
 		try {
-
+			setNftDisabledTime(nft, "drawNftDisabledTime", this.getNFTList.bind(this, this.params.address));
 			await this._Withdraw(nft);
 			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示', () => this.getNFTList(this.params.address));
-			setNftDisabledTime(nft, 'draw');
-
 		} catch (error) {
 			alert(String(error));
 
@@ -96,16 +94,38 @@ export default class extends NavPage<Device> {
 		})
 	};
 
+	// 解绑设备
+	onUnbindDevice() {
+		this.setState({ loading: true });
+		show({
+			id: 'bind_device', title: "是否解绑设备", text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
+				'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
+					try {
+						await device.unbind(this.state.deviceInfo.address);
+						alert('解绑设备成功', () => window.history.back());
+					} catch (error: any) {
+						alert(error.message)
+					} finally {
+						this.setState({ loading: false });
+					}
+
+				}
+			}
+		});
+	}
+
 	render() {
-		let { nftList } = this.state;
+		let { nftList, loading } = this.state;
 		return <div className="device_info_page">
-			<div className="device_info_page_title">设备列表</div>
+			{/* <div className="device_info_page_title">设备列表</div> */}
+			<Header title="设备列表" page={this} />
+
 
 			<div className="device_info_page_content">
 
 
 				<div className="device_card_box">
-					<DeviceItem deviceInfo={this.params} showArrow={false} showActionBtn={true} />
+					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
 
 

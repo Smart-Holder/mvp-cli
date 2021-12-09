@@ -40,3 +40,10 @@
 	text-shadow: none !important;
 	box-shadow: none !important;
 }
+
+.ant-btn-background-ghost.ant-btn-primary {
+	color: #1677ff !important;
+	background: transparent !important;
+	border-color: #1677ff !important;
+	text-shadow: none;
+}

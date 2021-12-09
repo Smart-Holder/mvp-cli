@@ -4,10 +4,10 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_set_screen_img.scss';
 import * as device from '../models/device';
-import models,{NFT} from '../models';
-import {renderNft} from '../util/media';
+import models, { NFT } from '../models';
+import { renderNft } from '../util/media';
 
-export default class extends NavPage<device.Device&{type: 'single' | 'multi' | 'video'}> {
+export default class extends NavPage<device.Device & { type: 'single' | 'multi' | 'video' }> {
 
 	title = '选择轮播项目';
 
@@ -15,17 +15,19 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 
 	get_cls(nft: NFT) {
 		var save = this.state.save;
-		var ok = save.data?.find(e=>(e.token==nft.token&&e.tokenId==nft.tokenId));
-		return `item ${ok ? 'on': ''}`;
+		var ok = save.data?.find(e => (e.token == nft.token && e.tokenId == nft.tokenId));
+		return `item ${ok ? 'on' : ''}`;
 	}
 
 	async triggerLoad() {
+		console.log(this.params.address, this.params.type, "this.params.address, this.params.type");
+
 		this.setState({ save: await device.get_screen_save(this.params.address, this.params.type) });
-		var list = await models.nft.methods.getNFTByOwner({owner:this.params.address}) as NFT[];
+		var list = await models.nft.methods.getNFTByOwner({ owner: this.params.address }) as NFT[];
 
 		list = this.params.type == 'video' ?
-			list.filter(e=>e.media.match(/\.mp4/i)): 
-			list.filter(e=>!e.media.match(/\.mp4/i));
+			list.filter(e => e.media.match(/\.mp4/i)) :
+			list.filter(e => !e.media.match(/\.mp4/i));
 
 		this.setState({ list });
 	}
@@ -35,7 +37,7 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 		var save = this.state.save;
 
 		if (type == 'multi') {
-			var data = save.data.filter(e=>!(e.token==nft.token&&e.tokenId==nft.tokenId))
+			var data = save.data.filter(e => !(e.token == nft.token && e.tokenId == nft.tokenId))
 			if (data.length == save.data.length) {
 				save.data.push(nft);
 			} else {
@@ -44,8 +46,9 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 		} else {
 			save.data = [nft];
 		}
+		console.log(save, "save");
 
-		this.setState({save});
+		this.setState({ save });
 
 		await device.set_screen_save(this.params.address, { ...save }, type);
 
@@ -61,8 +64,8 @@ export default class extends NavPage<device.Device&{type: 'single' | 'multi' | '
 				<Header title="选择轮播项目" page={this} />
 
 				<div className="list">
-					{list.map((e,j)=>
-						<div className={this.get_cls(e)} key={j} onClick={()=>this._Handle(e)}>
+					{list.map((e, j) =>
+						<div className={this.get_cls(e)} key={j} onClick={() => this._Handle(e)}>
 							<div className="img">
 								{renderNft(e, true)}
 							</div>

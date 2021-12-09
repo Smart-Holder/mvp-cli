@@ -15,7 +15,7 @@ const NftCard = (props: INftCardProps) => {
 	return <div className="nft_card">
 		<div className="nft_info_box">
 			<div className="nft_img_box">
-				<img src={nft.image} alt="" />
+				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
 			</div>
 
 			<div className="nft_address_box">

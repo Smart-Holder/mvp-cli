@@ -26,7 +26,7 @@ const btnIcon = {
 };
 
 const Button = (props: IBottomBtnProps) => {
-	let { onClick, children, className, ghost, disabled = false, btnType, notLoading = false, ...rest } = props;
+	let { onClick, children, className, ghost, disabled = false, btnType, notLoading = false, loading: atLoading, ...rest } = props;
 
 	const [loading, setloading] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ const Button = (props: IBottomBtnProps) => {
 	};
 
 	const button = (
-		<AtButton type={btnType ? "primary" : props.type} disabled={loading || disabled} loading={loading} className={`button_btn ${className} ${btnType}`} onClick={btnClick} {...rest}>
+		<AtButton type={btnType ? "primary" : props.type} disabled={Boolean(loading || atLoading || disabled)} loading={((loading || atLoading))} className={`button_btn ${className} ${btnType}`} onClick={btnClick} {...rest}>
 			{(btnType && btnIcon[btnType]) || children}
 		</AtButton>
 	);

@@ -9,6 +9,11 @@ export default [
 		page: () => import('./pages/nft'),
 	},
 	{
+		path: '/device_set_carousel',
+		page: () => import('./pages/device_set_carousel'),
+	},
+
+	{
 		path: '/my',
 		page: () => import('./pages/my'),
 	},

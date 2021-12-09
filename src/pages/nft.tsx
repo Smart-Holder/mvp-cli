@@ -1,13 +1,14 @@
 
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
-import Header from '../util/header';
-import '../css/index.scss';
-import models, { Device, NFT } from '../models';
-import chain, { encodeParameters } from '../chain';
+import { Device, NFT } from '../models';
+import { encodeParameters } from '../chain';
 import { devices } from '../models/device';
-import { Spin, Button } from 'antd';
+import { Spin } from 'antd';
 import { DeviceItem } from '../components/deviceItem';
+import { Carousel, Modal } from 'antd-mobile';
+import IconFont from '../components/icon_font';
+import '../css/index.scss';
 
 export default class extends NavPage {
 
@@ -21,7 +22,7 @@ export default class extends NavPage {
 		this.pushPage({ url: `/nft_details`, params: { id: e.id } });
 	}
 
-	state = { nft: [] as NFT[], device: [] as Device[], loading: true };
+	state = { nft: [] as NFT[], device: [] as Device[], loading: true, visible: false };
 
 	async triggerLoad() {
 		var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
@@ -40,6 +41,11 @@ export default class extends NavPage {
 		this.setState({ device, loading: false });
 	}
 
+	// 添加设备
+	async addDevice() {
+		this.setState({ visible: true });
+	}
+
 	render() {
 		const { device, loading } = this.state;
 		return (
@@ -49,20 +55,41 @@ export default class extends NavPage {
 				<div className="device_list">
 					<div className="list_title">全部设备</div>
 					<div className="list_top_extra">
-						<div className="bind_device_btn">
+						<div className="bind_device_btn" onClick={this.addDevice.bind(this)}>
 							<img className="add_icon" src={require('../assets/add_icon.png')} alt="+" /> 绑定新设备
 						</div>
 					</div>
 					<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} />
 					{device.map(item => {
-						return <DeviceItem deviceInfo={item} onClick={() => {
+						return <DeviceItem key={item.sn} deviceInfo={item} onClick={() => {
 							this.pushPage({ url: `/device_info`, params: { ...item } });
 						}} />
 					})}
-
-
-
 				</div>
+
+				<Modal visible={this.state.visible}
+					transparent
+					title='扫码绑定设备'
+					footer={[{ text: '我知道了', onPress: () => this.setState({ visible: false }) }]}
+				>
+					<Carousel className="add_device_carousel" dotActiveStyle={{ backgroundColor: "#1677FF" }}>
+						<div className="setp_box">
+							<div className="setp_title">第一步：请点击左上角“<IconFont type="icon-danchuangicon1" />”选择“<IconFont type="icon-danchuangicon2" />”</div>
+							<img style={{ width: '100%', objectFit: "contain", maxHeight: 300 }} src={require('../assets/step_1.png')} alt="" />
+						</div>
+
+						<div className="setp_box">
+							<div className="setp_title">第二步：进入钱包后请点击右上角 <br />
+								“<IconFont type="icon-danchuangicon3" />”按钮</div>
+							<img style={{ width: '100%' }} src={require('../assets/step_2.png')} alt="" />
+						</div>
+
+						<div className="setp_box">
+							<div className="setp_title">第三步：扫码绑定成功</div>
+							<img style={{ width: '100%' }} src={require('../assets/step_3.png')} alt="" />
+						</div>
+					</Carousel>
+				</Modal>
 
 				{/* <div className="list">
 					{this.state.nft.map((e, j) =>

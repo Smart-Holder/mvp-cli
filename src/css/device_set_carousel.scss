@@ -1,0 +1,206 @@
+.device_set_carousel_page {
+	background-color: #f5f5f5;
+
+	.device_set_carousel_page_content {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+	.set_carousel {
+		height: 100%;
+		padding: 0.24rem 0.3rem 0.24rem;
+		overflow: hidden;
+		transition: 0.3s all;
+
+		.am-tabs-default-bar {
+			width: 70%;
+		}
+		.am-tabs-pane-wrap {
+			overflow: hidden;
+		}
+
+		.am-tabs-tab-bar-wrap {
+			border-bottom: 1px solid #eee;
+		}
+
+		.am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
+			display: none;
+		}
+		// .am-tabs-default-bar-tab-active {
+		// 	color: #1677ff;
+		// }
+		// .am-tabs-default-bar-underline {
+		// 	border-color: #1677ff;
+		// }
+		.set_carousel_card {
+			background-color: #fefffe;
+			border-radius: 0.16rem;
+			overflow: hidden;
+			height: 100%;
+			.item_page {
+				padding: 0.3rem;
+				// padding-bottom: 3.5rem;
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+			}
+
+			.radio_box {
+				display: flex;
+				flex-wrap: wrap;
+				.radio_item {
+					border-radius: 0.38rem;
+					background-color: #f5f5f5;
+					color: #999;
+					padding: 0.08rem 0.22rem;
+					margin-right: 0.2rem;
+					border: 1px solid transparent;
+					transition: 0.3s all;
+					white-space: nowrap;
+					font-size: 0.26rem;
+					margin-bottom: 0.3rem;
+				}
+				.active {
+					background-color: #f2f7ff;
+					color: #1677ff;
+					border: 1px solid #1677ff;
+					box-sizing: border-box;
+				}
+			}
+			.nft_list {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				overflow: auto;
+				.left_box,
+				.right_box {
+					width: 47.5%;
+				}
+				.nft_item {
+					// width: 48%;
+					margin-bottom: 0.3rem;
+					border-radius: 0.16rem;
+					overflow: hidden;
+					position: relative;
+					img,
+					video {
+						object-fit: contain;
+						width: 100%;
+					}
+					video {
+						border-radius: 0.16rem;
+					}
+					.select_btn {
+						width: 0.32rem;
+						height: 0.32rem;
+						background-color: rgba(254, 255, 254, 0.564);
+						border: 1px solid #fefffe;
+						border-radius: 50%;
+						position: absolute;
+						top: 0.1rem;
+						right: 0.1rem;
+						transition: 0.3s all;
+					}
+					.active {
+						border-color: #1677ff;
+						background-color: #1677ff;
+					}
+				}
+			}
+
+			.item_page2 {
+				.time_box {
+					display: flex;
+					align-items: center;
+					padding: 0.3rem 0.24rem;
+					justify-content: space-between;
+					font-size: 0.32rem;
+					color: #999;
+					.time_item {
+						border: 0.02rem solid #f5f5f5;
+						background-color: #f5f5f5;
+						border-radius: 0.08rem;
+						padding: 0.35rem 0.32rem;
+						transition: 0.3s all;
+					}
+					.active {
+						border-color: #1677ff;
+						color: #1677ff;
+						background-color: #f2f7ff;
+					}
+				}
+			}
+		}
+
+		.item_page2_action {
+			margin-top: 0.8rem;
+			display: flex;
+			justify-content: space-between;
+			padding: 0 0.24rem;
+			.ant-btn {
+				width: 2.4rem;
+				border-radius: 0.08rem;
+				font-size: 0.32rem;
+				padding: 0.12rem 0;
+				height: auto;
+			}
+		}
+	}
+
+	.bottom_modal_box {
+		bottom: 0;
+		position: absolute;
+		width: 100%;
+		padding: 0.16rem 0.3rem;
+		background-color: #fff;
+		.top_part {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 0.2rem;
+			.ant-btn {
+				letter-spacing: -1px;
+				// padding: 0.12rem 0.24rem;
+				// height: auto;
+				// line-height: normal;
+			}
+		}
+
+		.bottom_part {
+			// display: flex;
+			white-space: nowrap;
+			padding: 0 0.24rem;
+			overflow-x: auto;
+			padding-top: 0.18rem;
+
+			.selected_nft_item {
+				width: 1.23rem;
+				height: 1.23rem;
+				position: relative;
+				margin-right: 0.2rem;
+				display: inline-block;
+
+				.nft_img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					border-radius: 0.08rem;
+				}
+				.close_btn {
+					background-color: rgba(0, 0, 0, 0.701);
+					border-radius: 50%;
+					position: absolute;
+					width: 0.36rem;
+					height: 0.36rem;
+					right: -0.18rem;
+					top: -0.18rem;
+					display: flex;
+					img {
+						width: 100%;
+						object-fit: contain;
+					}
+				}
+			}
+		}
+	}
+}

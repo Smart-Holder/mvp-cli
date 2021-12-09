@@ -24,11 +24,17 @@ body {
 	// display: none;
 	position: relative;
 	height: auto;
+	padding: 0.56rem 0.32rem 0;
+	background-color: transparent;
 }
 
 ._mini_app ._title ._b {
 	height: auto;
 	line-height: initial;
+	text-align: left;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
 }
 
 ._mini_app ._title {
@@ -36,10 +42,19 @@ body {
 
 ._mini_app ._title ._b > div:first-child {
 	display: none;
+	position: static;
+	width: auto;
+	padding: 0;
+	margin-bottom: 0.05rem;
 }
 
 ._mini_app > div {
 	padding-top: 0;
+}
+
+._main ._title ._b > div:before {
+	font-size: 0.4rem;
+	line-height: normal;
 }
 
 ._btn {
@@ -123,7 +138,16 @@ body {
 	word-break: break-all;
 }
 
-.dialog .btns > div,
+// .dialog .btns > div,
 .dialog .btns .ok {
 	color: #1677ff;
+}
+
+.dialog .default {
+	border-radius: 0.16rem;
+}
+#bind_device {
+	.b {
+		color: #333;
+	}
 }

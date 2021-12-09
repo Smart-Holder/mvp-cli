@@ -4,6 +4,7 @@ import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 import "./tools.scss"
 import { NFT } from '../models';
+import { INftItem } from '../pages/my';
 
 export default class extends ViewController<{ nav: () => Nav }> {
 	state = {
@@ -43,11 +44,50 @@ export default class extends ViewController<{ nav: () => Nav }> {
 export type IDisabledType = 'draw' | 'transfer';
 
 // 设置记录当前nft 存入设备操作时间
-export const setNftDisabledTime = (nft: NFT, type: IDisabledType) => {
-	let nftDisabledTimeStr = localStorage.getItem('nftDisabledTime');
-	let nftDisabledTime: { [key: string]: { date: string, type: IDisabledType } } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
-	nftDisabledTime[nft.tokenId] = { date: String(Date.now()), type };
-	localStorage.setItem('nftDisabledTime', JSON.stringify(nftDisabledTime));
+export const setNftDisabledTime = (nft: NFT, storageType: string, getList: () => void) => {
+	let nftDisabledTimeStr = localStorage.getItem(storageType);
+	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	nftDisabledTime[nft.tokenId] = String(Date.now());
+	let dsq_id = setTimeout(() => {
+		removeNftDisabledTimeItem(nft, storageType);
+		getList();
+		console.log('定时器执行', dsq_id);
+	}, 180000);
+	localStorage.setItem(storageType, JSON.stringify(nftDisabledTime));
+	localStorage.setItem(nft.tokenId, String(dsq_id));
+}
+
+// 删除操作nft时间
+export const removeNftDisabledTimeItem = (nft: NFT, storageType: string) => {
+	let nftDisabledTimeStr = localStorage.getItem(storageType);
+	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	let dsq_id = Number(localStorage.getItem(nft.tokenId));
+	delete nftDisabledTime[nft.tokenId];
+	console.log('删除nft操作时间', storageType, '清除定时器>', dsq_id);
+	localStorage.setItem(storageType, JSON.stringify(nftDisabledTime));
+	localStorage.removeItem(nft.tokenId);
+	clearTimeout(dsq_id);
+}
+
+// 设置nft操作按钮loading
+export const setNftActionLoading = (nftList: INftItem[], storageType: string) => {
+	let nftDisabledTimeStr = localStorage.getItem(storageType);
+	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+
+	nftList.forEach(item => {
+		let nftSaveTime = Number(nftDisabledTime[item.tokenId]);
+		item.btn_disabled = nftSaveTime && (Date.now() - nftSaveTime) < 180000 ? true : false;
+	});
+	return nftList;
 }
 
 
+// 数组变对象
+export function ArrayToObj<T>(arr: T[], key: string, key2?: string): { [key: string]: T } {
+	let objArr: { [key: string]: T } = {};
+	arr.forEach((item: any, index) => {
+		let id = (item[key] as string) || (item as any)[key2 || index] || "empty-" + index;
+		objArr[id] = item;
+	});
+	return objArr;
+}
