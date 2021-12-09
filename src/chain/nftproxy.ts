@@ -1,13 +1,13 @@
 
 import somes from 'somes';
-import { Address, Uint256, Bytes} from 'web3z/solidity_types';
+import { Address, Uint256, Bytes } from 'web3z/solidity_types';
 import artifacts from './artifacts';
 import NFTProxy, { TransferTx } from './artifacts/NFTProxy';
 import HappyContract from 'web3z/happy';
-import {contracts} from '../../config';
+import { contracts } from '../../config';
 import * as device from '../models/device';
-import index, {encodeParameters} from '.';
-import buffer, {IBuffer} from 'somes/buffer';
+import index, { encodeParameters } from '.';
+import buffer, { IBuffer } from 'somes/buffer';
 
 var tx_sign = require('crypto-tx/sign');
 var crypto_tx = require('crypto-tx');
@@ -66,6 +66,7 @@ export default class ApiIMPL {
 	}
 
 	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
+
 		var tx = await this._tx(from, to, token, tokenId, amount, data);
 		// var count = await this._artifacts.api.balanceOf(token, tokenId, from).call();
 		await this._artifacts.api.withdrawFrom(tx).call();
@@ -84,7 +85,7 @@ export default class ApiIMPL {
 		var hex = await mask.request({
 			method: 'personal_sign',
 			// method: 'eth_sign',
-			params: [ '0x' + buf.toString('hex'), from ],
+			params: ['0x' + buf.toString('hex'), from],
 		}) as string;
 		return buffer.from(hex.slice(2), 'hex');
 	}

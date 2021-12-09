@@ -81,6 +81,7 @@ export default class extends NavPage {
 			}
 
 		} catch (error: any) {
+			removeNftDisabledTimeItem(currNFT, "nftDisabledTime");
 			let errorText = error;
 			newNftItem.btn_disabled = false;
 			newNftList[index] = newNftItem;

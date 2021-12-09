@@ -84,6 +84,7 @@ export default class extends NavPage<Device> {
 					.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 				resolve(nft);
 			} catch (err: any) {
+				removeNftDisabledTimeItem(nft, "drawNftDisabledTime");
 				console.error(err);
 				if (env == 'dev') alert(err.message);
 				reject('取出到钱包失败');
