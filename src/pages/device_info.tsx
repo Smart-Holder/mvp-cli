@@ -14,7 +14,6 @@ import { alert, show } from 'webpkit/lib/dialog';
 import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
-import { CloseOutlined } from '@ant-design/icons';
 import '../css/device_info.scss';
 
 
@@ -98,7 +97,6 @@ export default class extends NavPage<Device> {
 
 	// 解绑设备
 	async onUnbindDevice() {
-		this.setState({ loading: true });
 		// let instance = await show({
 		// 	id: 'bind_device', title: <div>是否解绑设备 <CloseOutlined onClick={() => { instance?.close(); this.setState({ loading: false });}} /> </div>, text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
 		// 		'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
@@ -118,10 +116,11 @@ export default class extends NavPage<Device> {
 			id: 'bind_device', title: "是否解绑设备", text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
 				'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
 					try {
+						this.setState({ loading: true });
 						await device.unbind(this.state.deviceInfo.address);
 						alert('解绑设备成功', () => window.history.back());
 					} catch (error: any) {
-						alert(error.message)
+						alert(error.message);
 					} finally {
 						this.setState({ loading: false });
 					}
@@ -146,7 +145,7 @@ export default class extends NavPage<Device> {
 				</div>
 
 
-				{nftList.map(item => <NftCard key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item)} nft={item} btnText="取出到钱包" btnLoadingText="取出中" />)}
+				{nftList.map(item => <NftCard key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item)} nft={item} btnText="取出到钱包" btnLoadingText="正在取出到钱包" />)}
 
 				{/* <div className="nft_box">
 						<div className="nft_info_box">

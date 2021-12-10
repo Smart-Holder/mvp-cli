@@ -2,7 +2,6 @@ import { Device } from "../../models"
 import * as device from '../../models/device';
 import Button from "../button";
 import { React } from 'webpkit/mobile';
-import { Button as AtButton } from "antd";
 import { show, alert } from "../../../deps/webpkit/lib/dialog";
 import "./index.scss";
 

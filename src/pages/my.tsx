@@ -165,7 +165,7 @@ export default class extends NavPage {
 
 			<div className="my_page_content">
 
-				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText="存入到设备" btnLoadingText="存储中" />)}
+				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText="存入到设备" btnLoadingText="正在存入设备中" />)}
 
 				{!nft.length && <Empty style={{ marginTop: '30%' }} image={Empty.PRESENTED_IMAGE_SIMPLE} description='暂无NFT数据' />}
 			</div>
