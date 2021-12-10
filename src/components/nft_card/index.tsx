@@ -1,6 +1,7 @@
 import { React } from 'webpkit/mobile';
 import { INftItem } from '../../pages/my';
 import Button from '../button';
+import { Image } from 'antd';
 import "./index.scss";
 
 interface INftCardProps {
@@ -15,7 +16,13 @@ const NftCard = (props: INftCardProps) => {
 	return <div className="nft_card">
 		<div className="nft_info_box">
 			<div className="nft_img_box">
-				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
+				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="" placeholder={
+					<Image
+						preview={false}
+						src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
+						width='100%'
+					/>
+				} />}
 			</div>
 
 			<div className="nft_address_box">

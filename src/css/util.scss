@@ -145,7 +145,20 @@ body {
 
 .dialog .default {
 	border-radius: 0.16rem;
+	.a {
+		.anticon {
+			position: absolute;
+			right: 0.2rem;
+			top: 0.2rem;
+			// font-size: 0.3rem;
+			color: #888;
+		}
+	}
 }
+.dialog .core {
+	position: relative;
+}
+
 #bind_device {
 	.b {
 		color: #333;

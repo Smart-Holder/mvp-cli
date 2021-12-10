@@ -88,7 +88,7 @@ export class Web3IMPL extends Web3Z {
 
 	async initialize() {
 		var retry = 5;
-		while(retry--) {
+		while (retry--) {
 			if (await isSupport()) {
 				await this.getDefaultAccount(); return;
 			}

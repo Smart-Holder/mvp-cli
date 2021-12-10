@@ -11,10 +11,10 @@ import { contracts, env } from '../../config';
 import nft_proxy from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
 import { alert, show } from 'webpkit/lib/dialog';
-import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
+import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
-
+import { CloseOutlined } from '@ant-design/icons';
 import '../css/device_info.scss';
 
 
@@ -97,9 +97,24 @@ export default class extends NavPage<Device> {
 	};
 
 	// 解绑设备
-	onUnbindDevice() {
+	async onUnbindDevice() {
 		this.setState({ loading: true });
-		show({
+		// let instance = await show({
+		// 	id: 'bind_device', title: <div>是否解绑设备 <CloseOutlined onClick={() => { instance?.close(); this.setState({ loading: false });}} /> </div>, text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
+		// 		'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
+		// 			try {
+		// 				await device.unbind(this.state.deviceInfo.address);
+		// 				alert('解绑设备成功', () => window.history.back());
+		// 			} catch (error: any) {
+		// 				alert(error.message)
+		// 			} finally {
+		// 				this.setState({ loading: false });
+		// 			}
+
+		// 		}
+		// 	}
+		// });
+		showModal({
 			id: 'bind_device', title: "是否解绑设备", text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
 				'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
 					try {
@@ -113,7 +128,7 @@ export default class extends NavPage<Device> {
 
 				}
 			}
-		});
+		})
 	}
 
 	render() {

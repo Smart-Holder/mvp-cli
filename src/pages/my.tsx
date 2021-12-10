@@ -170,6 +170,10 @@ export default class extends NavPage {
 				{!nft.length && <Empty style={{ marginTop: '30%' }} image={Empty.PRESENTED_IMAGE_SIMPLE} description='暂无NFT数据' />}
 			</div>
 			<Modal
+				onClose={() => {
+					this.setState({ visible: false });
+				}}
+				closable
 				visible={visible}
 				transparent
 				title="选择设备"

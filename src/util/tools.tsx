@@ -2,9 +2,12 @@
 import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
-import "./tools.scss"
 import { NFT } from '../models';
 import { INftItem } from '../pages/my';
+import { DefaultOptions, DialogStack, show } from '../../deps/webpkit/lib/dialog';
+import { CloseOutlined } from '@ant-design/icons';
+
+import "./tools.scss";
 
 export default class extends ViewController<{ nav: () => Nav }> {
 	state = {
@@ -29,12 +32,12 @@ export default class extends ViewController<{ nav: () => Nav }> {
 				<div className="btn" onClick={this.m_click_1}>
 					{/* <div className="icon a"></div> */}
 					{(current === 0 && location.pathname.startsWith("/device")) ? <IconFont type="icon-shouyexuanzhong" /> : <IconFont type="icon-shouye" />}
-					<div className="txt">首页</div>
+					<div className={`txt ${(current === 0 && location.pathname.startsWith("/device")) && 'active'}`}>首页</div>
 				</div>
 				<div className="btn" onClick={this.m_click_2}>
 					{/* <div className="icon b"></div> */}
 					{(current === 1 || location.pathname.startsWith("/my")) ? <IconFont type="icon-wodexuanzhong" /> : <IconFont type="icon-wode" />}
-					<div className="txt">我的</div>
+					<div className={`txt ${(current === 1 || location.pathname.startsWith("/my")) && 'active'}`}>我的</div>
 				</div>
 			</div>
 		);
@@ -90,4 +93,31 @@ export function ArrayToObj<T>(arr: T[], key: string, key2?: string): { [key: str
 		objArr[id] = item;
 	});
 	return objArr;
+}
+
+interface IShowModalProps extends DefaultOptions {
+	onClose?: () => {
+
+	}
+}
+
+export const showModal = async (opts: IShowModalProps,) => {
+	let instance = await show({
+		...opts,
+		title: <div>{opts.title} <CloseOutlined onClick={(e: any) => {
+			let btnKeys = Object.keys(opts.buttons || {});
+			opts?.buttons && opts?.buttons[btnKeys[0]](e);
+			instance?.close();
+		}} /> </div>, buttons:
+			opts.buttons && Object.keys(opts.buttons).reduce((prebtnTitle: {}, btnTitle: string, index: number) => {
+				return {
+					...prebtnTitle, [btnTitle]: (e: any) => {
+						if (opts?.buttons) {
+							opts?.buttons[btnTitle](e);
+							!index && instance?.close();
+						}
+					}
+				}
+			}, {})
+	});
 }

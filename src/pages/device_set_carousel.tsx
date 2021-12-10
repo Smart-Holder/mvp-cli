@@ -11,8 +11,8 @@ import { alert } from '../../deps/webpkit/lib/dialog';
 import '../css/device_set_carousel.scss';
 
 
-const tabs = [
-	{ title: '轮播图片选择' }, { title: '轮播时间间隔' }
+const tabsConfig = [
+	{ title: '轮播图片选择', index: 0 }, { title: '轮播时间间隔', index: 1 }
 ];
 
 const intervalTimeConfig = [
@@ -34,7 +34,8 @@ export default class extends NavPage<Device> {
 		videoNftList: [] as NFT[],
 		selectedList: {} as { [key: string]: NFT },
 		carouselIntervalTime: 5,
-		carouselConfig: {} as device.DeviceScreenSave
+		carouselConfig: {} as device.DeviceScreenSave,
+		tabs: tabsConfig
 	}
 
 	async triggerLoad() {
@@ -80,13 +81,17 @@ export default class extends NavPage<Device> {
 
 	// 单选按钮事件
 	async setRadioValue(radioValue: CarouselType) {
-		let { videoNftList, nft, carouselConfig } = this.state;
+		let { videoNftList, nft, carouselConfig, tabsCurrent } = this.state;
+		let tabs = tabsConfig;
 		// 仅显示视频nft数据
 		radioValue === CarouselType.video ? this.getNftList(videoNftList, radioValue) : this.getNftList(nft, radioValue);
+		radioValue === CarouselType.multi && (tabsCurrent = 0);
 		let selectedList = {};
+		// console.log(tabsCurrent, "tabsCurrent");
+
 		// 选中之前选择的项
 		if (radioValue === carouselConfig.type) selectedList = await this.getNewSelectedList();
-		this.setState({ radioValue, isShowAbbreviation: false, selectedList });
+		this.setState({ radioValue, isShowAbbreviation: false, selectedList, tabs, tabsCurrent });
 	}
 
 	// nft列表项点击事件
@@ -115,7 +120,9 @@ export default class extends NavPage<Device> {
 
 	// 标签tab切换事件
 	onTabsChange(tabs: any, tabsCurrent: number) {
-		const { carouselConfig } = this.state;
+		const { carouselConfig, radioValue } = this.state;
+		// 不是多选时 取消选中间隔设置
+		radioValue !== CarouselType.multi && (tabsCurrent = 0);
 		this.setState({ isShowAbbreviation: false, tabsCurrent, carouselIntervalTime: carouselConfig.time });
 	}
 
@@ -137,10 +144,13 @@ export default class extends NavPage<Device> {
 	async saveCarousel() {
 		let { address } = this.params;
 		let { carouselConfig, radioValue, selectedList } = this.state;
+
+
 		let newCarouselConfig = { ...carouselConfig, type: radioValue, data: Object.keys(selectedList).map(key => selectedList[key]) };
+		if (radioValue === CarouselType.multi && newCarouselConfig.data.length < 2) return alert('请选择至少两张图片');
+
 		try {
 			await device.set_screen_save(address, { ...newCarouselConfig }, radioValue);
-			console.log(newCarouselConfig, "newCarouselConfig");
 			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
 			alert('轮播图设置完成!');
 		} catch (error: any) {
@@ -168,7 +178,7 @@ export default class extends NavPage<Device> {
 
 	render() {
 
-		const { radioValue, isShowAbbreviation, leftNftList, rightNftList, selectedList, tabsCurrent, carouselIntervalTime } = this.state;
+		const { radioValue, isShowAbbreviation, leftNftList, rightNftList, selectedList, tabsCurrent, carouselIntervalTime, tabs } = this.state;
 
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -179,7 +189,13 @@ export default class extends NavPage<Device> {
 					<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 						<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
 							initialPage={0}
+							page={tabsCurrent}
 							onChange={this.onTabsChange.bind(this)}
+							renderTab={(item) => <div onClick={() => {
+								if (radioValue === CarouselType.multi && item.index === 1) {
+									this.setState({ tabsCurrent: 1 })
+								}
+							}} className={`${(radioValue !== CarouselType.multi && item.index === 1) && 'disabledTab'} `}>{item.title}</div>}
 						// onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
 						>
 							<div className="item_page" >

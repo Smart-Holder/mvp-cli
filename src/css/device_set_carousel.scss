@@ -32,6 +32,9 @@
 			border-radius: 0.16rem;
 			overflow: hidden;
 			height: 100%;
+			.disabledTab {
+				color: #ccc;
+			}
 			.item_page {
 				padding: 0.3rem;
 				// padding-bottom: 3.5rem;
