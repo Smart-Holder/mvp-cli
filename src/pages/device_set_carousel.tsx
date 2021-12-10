@@ -161,7 +161,7 @@ export default class extends NavPage<Device> {
 			this.setState({ carouselConfig: newCarouselConfig });
 			alert('轮播图时间间隔设置完成!');
 		} catch (error: any) {
-			alert(error);
+			alert(error.message);
 		}
 
 	}
