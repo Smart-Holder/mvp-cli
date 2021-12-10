@@ -56,38 +56,46 @@ export default class extends NavPage {
 
 	// 存入设备按钮点击
 	async saveNftOfDeviceClick(nft: NFT) {
-		let deviceList = await devices() as Device[];
-		this.setState({ device: deviceList, visible: true, currNFT: nft });
+		let device = await devices() as Device[];
+		let visible = true;
+		if (device.length === 1) {
+			visible = false;
+			this.selectDeviceModalok(device[0], nft);
+		}
+		this.setState({ device, visible, currNFT: nft });
 	}
 
 	// 选择设备弹框确认按钮点击事件
-	async selectDeviceModalok() {
+	async selectDeviceModalok(deviceItem?: Device, nftItem?: NFT) {
 		let { currDevice, currNFT, nft } = this.state;
+		// 进行存入操作的设备
+		let device = deviceItem || currDevice;
+		// 进行操作的nft
+		let nftInfo = nftItem || currNFT;
 
-		let index = nft.findIndex((item) => item.tokenId === currNFT.tokenId);
+		let index = nft.findIndex((item) => item.tokenId === nftInfo.tokenId);
 		let newNftItem = { ...nft[index] };
 		let newNftList = [...nft];
 		newNftItem.btn_disabled = true;
 		newNftList[index] = newNftItem;
 
-
+		var l = await Loading.show(' ');
 		try {
-			if (currDevice?.address) {
-				var l = await Loading.show('正在存入到设备');
-
+			if (device?.address) {
 				this.setState({ visible: false, nft: newNftList });
-				await this._transferToDevice(currDevice.address, currNFT);
-				l.close();
+				await this._transferToDevice(device.address, nftInfo);
 			}
 
 		} catch (error: any) {
-			removeNftDisabledTimeItem(currNFT, "nftDisabledTime");
+			removeNftDisabledTimeItem(nftInfo, "nftDisabledTime");
 			let errorText = error;
 			newNftItem.btn_disabled = false;
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList });
 			if (error?.code == 4001) errorText = '已取消存储操作';
 			show({ text: String(errorText), buttons: { '我知道了': () => { } } });
+		} finally {
+			l.close();
 		}
 
 		this.setState({ visible: false });

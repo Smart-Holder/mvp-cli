@@ -77,7 +77,7 @@ export default class extends NavPage<Device> {
 		somes.assert(nft.owner == contracts.ERC721Proxy ||
 			nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
-		var l = await Loading.show('正在取出到钱包');
+		var l = await Loading.show(' ');
 		return new Promise(async (resolve, reject) => {
 			try {
 				await nft_proxy.New(nft.owner as string)
@@ -86,8 +86,9 @@ export default class extends NavPage<Device> {
 			} catch (err: any) {
 				removeNftDisabledTimeItem(nft, "drawNftDisabledTime");
 				console.error(err);
-				if (env == 'dev') alert(err.message);
-				reject('取出到钱包失败');
+
+				// if (env == 'dev') alert(err.message);
+				reject('已取消取出到钱包');
 			} finally {
 				l.close();
 			}

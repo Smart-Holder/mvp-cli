@@ -39,6 +39,7 @@ import utils from 'somes';
 import errnoHandles from './handle';
 import Tools from './util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
+import { env } from '../config';
 
 utils.onUncaughtException.on((e) => errnoHandles(e.data));
 utils.onUnhandledRejection.on((e) => errnoHandles(e.data.reason));
@@ -55,7 +56,9 @@ class MyRoot<P> extends Root<P> {
 			await initialize();
 			// console.log(await sdk.nft.methods.getNFTByOwner({owner:'0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'}));
 		} catch (err: any) {
-			dialog.alert(err.message + ', ' + err.code + ',' + err.stack);
+			let errStr = err.message;
+			// if (env === 'dev') errStr = err.message + ', ' + err.code + ',' + err.stack;
+			dialog.alert(errStr);
 			throw err;
 		}
 	}

@@ -52,7 +52,8 @@ export class Web3IMPL extends Web3Z {
 			// check _metaMask
 			if (!this._metaMask) {
 				// history.push('/install');
-				throw Error.new('Matemask wallet needs to be installed');
+				// throw Error.new('Matemask wallet needs to be installed');
+				throw Error.new('请在Dapp浏览器中打开链接,并确认当前是否创建了钱包');
 			}
 			var currentChainId = this._metaMask.chainId;
 			console.log('currentChainId', currentChainId);
