@@ -28,6 +28,7 @@
  * 
  * ***** END LICENSE BLOCK ***** */
 
+import somes from 'somes';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
@@ -85,8 +86,12 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	async initialize() {
-		if (await isSupport()) {
-			await this.getDefaultAccount();
+		var retry = 5;
+		while(retry--) {
+			if (await isSupport()) {
+				await this.getDefaultAccount(); return;
+			}
+			await somes.sleep(5e2); // 500ms 等待钱包初始化
 		}
 	}
 
