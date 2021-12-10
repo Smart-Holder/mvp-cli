@@ -116,24 +116,22 @@ export default class extends NavPage {
 			try {
 
 				if (nft.type == AssetType.ERC721) { // erc721
-					var buf = encodeParameters(['address'], [device_address]);
 					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
-						await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
+						await nftproxy.proxy721.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
-						await erc721.safeTransferFrom( // 转移给代理协约
-							nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
+						await erc721.safeTransferToProxy( // 转移给代理协约
+							nft.token, [device_address], BigInt(nft.tokenId), contracts.ERC721Proxy);
 					}
 					showTip();
 					resolve(nft);
 				} else if (nft.type == AssetType.ERC1155) {
-					var buf = encodeParameters(['address'], [device_address]);
 					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
-						await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+						await nftproxy.proxy1155.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
-						await erc1155.safeTransferFrom( // 转移给代理协约
-							nft.token, from, contracts.ERC1155Proxy, BigInt(nft.tokenId), BigInt(nft.count), buf);
+						await erc1155.safeTransferToProxy( // 转移给代理协约
+							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), contracts.ERC1155Proxy);
 					}
 					showTip();
 					resolve(nft);

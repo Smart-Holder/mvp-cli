@@ -47,7 +47,7 @@ export function displayVideo(target: string, token: string, tokenId: string) {
 	return call(target, 'displayVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
 }
 
-export function sign(target: string, msg: IBuffer) {
+export function sign(target: string, msg: IBuffer): Promise<{ signer: string, sign: string }[]> {
 	return call(target, 'sign', { message: msg.toString('base64') });
 }
 

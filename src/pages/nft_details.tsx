@@ -29,24 +29,22 @@ export default class extends NavPage<{id:number}> {
 	}
 
 	private async _transferToDevice(device_address: string, nft: NFT) {
-		var from = this.state.from;
+		//var from = this.state.from;
 		if (nft.type == AssetType.ERC721) { // erc721
-			var buf = encodeParameters(['address'], [device_address]);
 			if (nft.ownerBase) {
-				await nftproxy.proxy721.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(1));
+				await nftproxy.proxy721.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1), BigInt(1));
 			} else {
-				await erc721.safeTransferFrom( // 转移给代理协约
-					nft.token, from, contracts.ERC721Proxy, BigInt(nft.tokenId), buf);
+				await erc721.safeTransferToProxy( // 转移给代理协约
+					nft.token, [device_address],  BigInt(nft.tokenId), contracts.ERC721Proxy);
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} else if (nft.type == AssetType.ERC1155) {
-			var buf = encodeParameters(['address'], [device_address]);
 			if (nft.ownerBase) {
-				await nftproxy.proxy1155.transfer(device_address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+				await nftproxy.proxy1155.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count), BigInt(1));
 			} else {
-				await erc1155.safeTransferFrom( // 转移给代理协约
-					nft.token, from, contracts.ERC1155Proxy, BigInt(nft.tokenId), BigInt(nft.count), buf);
+				await erc1155.safeTransferToProxy( // 转移给代理协约
+					nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), contracts.ERC1155Proxy);
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
@@ -76,10 +74,10 @@ export default class extends NavPage<{id:number}> {
 
 	_Handle = async ()=>{
 		this.pushPage({url: '/device', params: {type: 'back' }})
-		// var [nft] = this.state.NFTs;
-		// var from = this.state.from;
-		// await nft_proxy.New(nft.owner as string)
-		// 	.test_withdrawFrom(from, from, nft.token, BigInt(nft.tokenId), BigInt(1));
+		var [nft] = this.state.NFTs;
+		var from = this.state.from;
+		// await nftproxy.New(nft.owner as string);
+		//nftproxy.proxy1155.test_withdraw(from, [from], nft.token, BigInt(nft.tokenId), BigInt(1));
 	}
 
 	render() {

@@ -50,17 +50,16 @@ export default class extends NavPage<{ type?: 'back' }> {
 						</div>
 					)}
 
-					{/* 0xcfcc6d9e1bac7c4a8bae4a968ec122c3f35716eb&c=7658 */}
+					{/* 0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=7658 */}
 					{/* test */}
-					{location.href.indexOf('__test') != -1 ?
-						<div className="b" onClick={e => this._DeviceNft({
-							sn: '012018116A93CC7946', address: '0x0754e61471d40Bb0209A4A8994315f9F1a9B90f4'
-						})}>
-							<div className="more">More...</div>
-							<div className="txt1">SN: 012018116A93CC7946</div>
-							<div className="txt2">Address：0xcfcc6d9e1bac7c4a8bae4a968ec122c3f35716eb</div>
-							<div className="txt3">04<br /><span>NFT</span></div>
-						</div> : null}
+					{location.href.indexOf('__test')!=-1?
+					<div className="b" onClick={e=>this._DeviceNft({
+						sn: '012018116A93CC7946', address: '0x137C59F4eb2BcfE409dad6C467Af90459383FA3A', user: ''})}>
+						<div className="more">More...</div>
+						<div className="txt1">SN: 012018116A93CC7946</div>
+						<div className="txt2">Address：0x137C59F4eb2BcfE409dad6C467Af90459383FA3A</div>
+						<div className="txt3">04<br/><span>NFT</span></div>
+					</div>:null}
 
 				</div>
 			</div>
