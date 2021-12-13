@@ -9,6 +9,7 @@ import * as device from '../models/device';
 import { alert } from '../../deps/webpkit/lib/dialog';
 
 import '../css/device_set_carousel.scss';
+import { ArrayToObj } from '../util/tools';
 
 
 const tabsConfig = [
@@ -41,8 +42,8 @@ export default class extends NavPage<Device> {
 	async triggerLoad() {
 		let carouselConfig = await device.get_screen_save(this.params.address);
 
-		this.getNftList(undefined, carouselConfig.type as CarouselType);
-		let newselectedList = await this.getNewSelectedList();
+		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
+		let newselectedList = await this.getNewSelectedList(nftList);
 		console.log(carouselConfig, "carouselConfig");
 		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time });
 	}
@@ -67,14 +68,19 @@ export default class extends NavPage<Device> {
 		type !== CarouselType.video && (newState.nft = nftList);
 
 		this.setState({ ...newState });
+		return nftList;
 	}
 
 	// 根据之前保存的配置 获取新的选中项
-	async getNewSelectedList() {
+	async getNewSelectedList(nftList?: NFT[]) {
 		let carouselConfig = await device.get_screen_save(this.params.address);
+		let nftListObj = ArrayToObj(nftList || [] as any, 'tokenId');
+		console.log(nftListObj, "nftListObj");
+
 		let newselectedList: { [key: string]: NFT } = {};
 		carouselConfig.data.forEach(item => {
-			newselectedList[item.tokenId] = item as NFT;
+			if (nftListObj[item.tokenId]) newselectedList[item.tokenId] = item as NFT;;
+
 		});
 		return newselectedList;
 	}
@@ -90,7 +96,7 @@ export default class extends NavPage<Device> {
 		// console.log(tabsCurrent, "tabsCurrent");
 
 		// 选中之前选择的项
-		if (radioValue === carouselConfig.type) selectedList = await this.getNewSelectedList();
+		if (radioValue === carouselConfig.type) selectedList = await this.getNewSelectedList(nft);
 		this.setState({ radioValue, isShowAbbreviation: false, selectedList, tabs, tabsCurrent });
 	}
 

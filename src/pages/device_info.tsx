@@ -62,9 +62,9 @@ export default class extends NavPage<Device> {
 		try {
 			setNftDisabledTime(nft, "drawNftDisabledTime", this.getNFTList.bind(this, this.params.address));
 			await this._Withdraw(nft);
-			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示', () => this.getNFTList(this.params.address));
+			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> 取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.</div> }, () => this.getNFTList(this.params.address));
 		} catch (error) {
-			alert(String(error));
+			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(error)}</div> });
 
 		}
 	}

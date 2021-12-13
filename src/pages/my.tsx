@@ -39,6 +39,7 @@ export default class extends NavPage {
 				this.getNFTList(owner);
 			}
 		}, this);
+
 	}
 
 	triggerRemove() {
@@ -88,12 +89,12 @@ export default class extends NavPage {
 
 		} catch (error: any) {
 			removeNftDisabledTimeItem(nftInfo, "nftDisabledTime");
-			let errorText = error;
+			// let errorText = error;
 			newNftItem.btn_disabled = false;
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList });
-			if (error?.code == 4001) errorText = '已取消存储操作';
-			show({ text: String(errorText), buttons: { '我知道了': () => { } } });
+			// if (error?.code == 4001) errorText = '已取消存储操作';
+			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> 已取消存储操作</div>, buttons: { '我知道了': () => { } } });
 		} finally {
 			l.close();
 		}
@@ -167,7 +168,7 @@ export default class extends NavPage {
 
 				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText="存入到设备" btnLoadingText="正在存入设备中" />)}
 
-				{!nft.length && <Empty style={{ marginTop: '30%' }} image={Empty.PRESENTED_IMAGE_SIMPLE} description='暂无NFT数据' />}
+				{!nft.length && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description='暂无NFT，请添加NFT至钱包' />}
 			</div>
 			<Modal
 				onClose={() => {

@@ -145,6 +145,16 @@ body {
 
 .dialog .default {
 	border-radius: 0.16rem;
+	.tip_box {
+		position: relative;
+		.tip_icon {
+			margin-top: 1px;
+			position: absolute;
+			margin-left: -0.5rem;
+			width: 0.4rem;
+			margin-right: 0.05rem;
+		}
+	}
 	.a {
 		.anticon {
 			position: absolute;
