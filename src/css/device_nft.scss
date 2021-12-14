@@ -1,9 +1,8 @@
-
 .device_nft {
 	.list {
 		margin: 0.45rem auto 0.2rem;
 		width: 6.5rem;
-		background-color: #F9F9F9;
+		background-color: #f9f9f9;
 		border: solid 0.01rem #979797;
 		border-radius: 0.17rem;
 		.list_header {
@@ -19,18 +18,18 @@
 			}
 			.txt1.txt1_1 {
 				padding-bottom: 0.16rem;
-				border-bottom: solid 0.01rem #2D2D2D;
+				border-bottom: solid 0.01rem #2d2d2d;
 			}
 			.btn_p {
 				text-align: center;
 				padding: 0.25rem 0 0.4rem 0;
 				> div {
 					font-size: 0.32rem;
-					background-color: #D8D8D8;
+					background-color: #d8d8d8;
 					line-height: 0.77rem;
 					width: 2.76rem;
 					text-align: center;
-					color: #2A2A30;
+					color: #2a2a30;
 					margin: 0 0.19rem;
 					display: inline-block;
 					border-radius: 0.08rem;
@@ -51,7 +50,7 @@
 			margin: 0.42rem auto 0;
 			padding-top: 0.26rem;
 			.img {
-				width: 5.50rem;
+				width: 5.5rem;
 				height: 4.06rem;
 				margin: auto;
 				// background-color: #979797;
@@ -62,7 +61,7 @@
 			.txt1 {
 				padding: 0.24rem 0.34rem 0;
 				line-height: 0.37rem;
-				color: #2A2A30;
+				color: #2a2a30;
 				font-size: 0.26rem;
 			}
 			.txt2 {
@@ -70,14 +69,14 @@
 				height: 0.33rem;
 				padding: 0 0.34rem;
 				font-size: 0.24rem;
-				color: #2A2A30;
+				color: #2a2a30;
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
 			.btn_p {
 				padding: 0.48rem 0.3rem 0.16rem;
 				text-align: right;
-				> div{
+				> div {
 					width: 2.36rem;
 					line-height: 0.64rem;
 					text-align: center;
@@ -87,7 +86,7 @@
 					color: #fff;
 					border-radius: 0.08rem;
 				}
-				> div:active{
+				> div:active {
 					opacity: 0.5;
 				}
 			}
@@ -99,5 +98,14 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.loading_box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		// letter-spacing: 2px;
+		text-indent: 0.2rem;
 	}
 }

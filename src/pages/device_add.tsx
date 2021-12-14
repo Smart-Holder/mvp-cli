@@ -4,12 +4,13 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_nft.scss';
 import * as device from '../models/device';
-import {alert} from 'webpkit/lib/dialog';
-import {URL} from 'somes/path';
+import { alert } from 'webpkit/lib/dialog';
+import { URL } from 'somes/path';
+import { Spin } from 'antd';
 
 const crypto_tx = require('crypto-tx');
 
-export default class extends NavPage<{a?: string; c?: string; v?: string;}> {
+export default class extends NavPage<{ a?: string; c?: string; v?: string; }> {
 
 	title = '添加设备';
 
@@ -25,9 +26,9 @@ export default class extends NavPage<{a?: string; c?: string; v?: string;}> {
 	async _AddDevice(target: string, code: string, check?: string) {
 		try {
 			await device.bind(target, code, check);
-			alert('绑定设备成功', ()=>this._back());
-		} catch(err: any) {
-			alert(err.message, ()=>this._back());
+			alert('绑定设备成功', () => this._back());
+		} catch (err: any) {
+			alert(err.message, () => this._back());
 		}
 	}
 
@@ -35,15 +36,19 @@ export default class extends NavPage<{a?: string; c?: string; v?: string;}> {
 		if (this.params.a && this.params.c && this.params.v) {
 			await this._AddDevice(crypto_tx.checksumAddress(this.params.a), this.params.c, this.params.v);
 		} else {
-			alert('请使用钱包扫码功能扫描设备屏幕二维码', ()=>this._back());
+			alert('请使用钱包扫码功能扫描设备屏幕二维码', () => this._back());
 		}
 	}
 
 	render() {
 		return (
 			<div className="device_nft">
-				<Header title="添加设备" page={this} />
-				<div className="bind">绑定设备中...</div>
+				{/* <Header title="添加设备" page={this} /> */}
+				{/* <div className="bind">绑定设备中...</div> */}
+				<div className="loading_box">
+					<Spin delay={500} className="device_list_loading" spinning={true} tip={'绑定设备中...'} />
+				</div>
+
 			</div>
 		);
 	}
