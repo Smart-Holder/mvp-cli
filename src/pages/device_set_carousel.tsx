@@ -160,7 +160,7 @@ export default class extends NavPage<Device> {
 			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
 			alert('轮播图设置完成!');
 		} catch (error: any) {
-			alert(error);
+			alert(error?.message);
 		}
 	}
 

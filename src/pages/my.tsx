@@ -33,8 +33,8 @@ export default class extends NavPage {
 
 		models.msg.addEventListener('UpdateNFT', (e) => {
 			let data: NFT = e.data;
-			console.log(e.data, "--------ws-------");
 			if (!data.ownerBase) {
+				console.log(e.data, "--------ws-------");
 				removeNftDisabledTimeItem(data, "nftDisabledTime");
 				this.getNFTList(owner);
 			}
