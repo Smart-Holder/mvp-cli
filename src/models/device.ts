@@ -52,13 +52,18 @@ export function sign(target: string, msg: IBuffer): Promise<{ signer: string, si
 }
 
 export async function bind(target: string, authCode: string, vCheck?: string) {
-	var sn = await call(target, 'bind', {
+	var o = await call(target, 'bind', {
 		name: key.authName(),
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
 		addressOrigin: await chain.getDefaultAccount(),
-	}, vCheck);
-	await sdk.user.methods.addDevice({ address: target, sn: sn || target, vCheck });
+	}, vCheck) as { sn: string, screen: number };
+
+	if (typeof o == 'string') {
+		o = { sn: o, screen: 0 };
+	}
+
+	await sdk.user.methods.addDevice({ address: target, sn: o.sn || target, vCheck, screen: o.screen });
 }
 
 export async function unbind(target: string) {
