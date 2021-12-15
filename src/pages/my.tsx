@@ -14,12 +14,11 @@ import { Empty } from 'antd';
 import { removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
 import '../css/my.scss';
 import Loading from '../../deps/webpkit/lib/loading';
+import { INftItem } from './interface';
 
 
 
-export interface INftItem extends NFT {
-	btn_disabled?: boolean
-}
+
 
 export default class extends NavPage {
 

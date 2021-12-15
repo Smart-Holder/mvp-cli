@@ -1,8 +1,8 @@
 import { React } from 'webpkit/mobile';
-import { INftItem } from '../../pages/my';
 import Button from '../button';
 import { Image } from 'antd';
 import "./index.scss";
+import { INftItem } from '../../pages/interface';
 
 interface INftCardProps {
 	nft: INftItem;

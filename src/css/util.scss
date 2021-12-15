@@ -85,6 +85,10 @@ body {
 // .ant-image-preview-mask {
 // 	z-index: 9999 !important;
 // }
+
+.ant-image-preview-mask {
+	background-color: #000 !important;
+}
 ._tools {
 	position: fixed;
 	height: 1.35rem;

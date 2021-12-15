@@ -4,7 +4,6 @@ import { DeviceItem } from '../components/deviceItem';
 import { Device, devices } from '../models/device';
 import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
-import { INftItem } from './my';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
 import { contracts, env } from '../../config';
@@ -15,6 +14,7 @@ import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisab
 import Header from '../util/header';
 import * as device from '../models/device';
 import '../css/device_info.scss';
+import { INftItem } from './interface';
 
 
 export default class extends NavPage<Device> {
@@ -117,9 +117,14 @@ export default class extends NavPage<Device> {
 				'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
 					try {
 						this.setState({ loading: true });
-						await device.unbind(this.state.deviceInfo.address);
+						const address = this.state.deviceInfo.address;
+						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single');
+						await device.unbind(address);
+
 						alert('解绑设备成功', () => window.history.back());
 					} catch (error: any) {
+						console.log(error);
+
 						alert(error.message);
 					} finally {
 						this.setState({ loading: false });

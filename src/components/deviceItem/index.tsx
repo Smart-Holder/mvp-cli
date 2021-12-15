@@ -6,7 +6,7 @@ import { show, alert } from "../../../deps/webpkit/lib/dialog";
 import "./index.scss";
 
 interface IDeviceItemProps {
-	deviceInfo: any;
+	deviceInfo: Device;
 	showArrow?: boolean;
 	showActionBtn?: boolean
 	onClick?: () => void;

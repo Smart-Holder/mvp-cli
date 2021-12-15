@@ -3,11 +3,11 @@ import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 import { NFT } from '../models';
-import { INftItem } from '../pages/my.tsx';
 import { DefaultOptions, DialogStack, show } from '../../deps/webpkit/lib/dialog';
 import { CloseOutlined } from '@ant-design/icons';
 
 import "./tools.scss";
+import { INftItem } from '../pages/interface';
 
 export default class extends ViewController<{ nav: () => Nav }> {
 	state = {
