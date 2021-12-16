@@ -13,8 +13,8 @@ import { alert, show } from 'webpkit/lib/dialog';
 import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
-import '../css/device_info.scss';
 import { INftItem } from './interface';
+import '../css/device_info.scss';
 
 
 export default class extends NavPage<Device> {
@@ -76,7 +76,7 @@ export default class extends NavPage<Device> {
 		somes.assert(nft.owner == contracts.ERC721Proxy ||
 			nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
-		var l = await Loading.show(' ');
+		var l = await Loading.show('正在取出到您的钱包中,请勿操作');
 		return new Promise(async (resolve, reject) => {
 			try {
 				await nft_proxy.New(nft.owner as string)

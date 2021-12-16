@@ -16,6 +16,7 @@ const NftCard = (props: INftCardProps) => {
 	return <div className="nft_card">
 		<div className="nft_info_box">
 			<div className="nft_img_box">
+				{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
 				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="" placeholder={
 					<Image
 						preview={false}

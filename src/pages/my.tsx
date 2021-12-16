@@ -79,7 +79,7 @@ export default class extends NavPage {
 		newNftItem.btn_disabled = true;
 		newNftList[index] = newNftItem;
 
-		var l = await Loading.show(' ');
+		var l = await Loading.show('正在存入到您的设备中,请勿操作');
 		try {
 			if (device?.address) {
 				this.setState({ visible: false, nft: newNftList });
