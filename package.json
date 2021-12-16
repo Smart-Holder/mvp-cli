@@ -17,5 +17,8 @@
 		"web3z": "file:deps/web3z",
 		"webpkit": "file:deps/webpkit",
 		"mvp-cli-tools": "file:tools"
+	},
+	"dependencies": {
+		"typescipt": "^1.0.0"
 	}
 }
