@@ -18,9 +18,6 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 
 
-
-
-
 class My extends NavPage {
 
 	state = { nft: [] as INftItem[], device: [] as Device[], loading: true, currNFT: {} as NFT, currDevice: {} as Device, visible: false, from: '', };
