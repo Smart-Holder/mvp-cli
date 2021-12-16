@@ -19,7 +19,11 @@
 		"mvp-cli-tools": "file:tools"
 	},
 	"dependencies": {
+<<<<<<< HEAD
+		"typescipt": "^1.0.0"
+=======
 		"i18next": "^21.6.0",
 		"react-i18next": "^11.15.1"
+>>>>>>> b04a47eb79bfab10c1abdfd638a3d67292984c89
 	}
 }
