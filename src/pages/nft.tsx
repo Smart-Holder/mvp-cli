@@ -8,7 +8,7 @@ import { Spin } from 'antd';
 import { DeviceItem } from '../components/deviceItem';
 import { Carousel, Modal } from 'antd-mobile';
 import IconFont from '../components/icon_font';
-import { changeLanguage } from '../util/i18next';
+// import { changeLanguage } from '../util/i18next';
 import { withTranslation } from 'react-i18next';
 import '../css/index.scss';
 // const { t } = Translation(); //把使用方法结构
