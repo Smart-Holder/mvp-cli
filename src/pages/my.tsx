@@ -15,12 +15,13 @@ import { removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } fr
 import '../css/my.scss';
 import Loading from '../../deps/webpkit/lib/loading';
 import { INftItem } from './interface';
+import { withTranslation } from 'react-i18next';
 
 
 
 
 
-export default class extends NavPage {
+class My extends NavPage {
 
 	state = { nft: [] as INftItem[], device: [] as Device[], loading: true, currNFT: {} as NFT, currDevice: {} as Device, visible: false, from: '', };
 
@@ -160,7 +161,6 @@ export default class extends NavPage {
 		let { nft, currDevice, visible, device } = this.state;
 
 		return <div className="my_page">
-
 			<div className="my_page_title">我的NFT</div>
 
 			<div className="my_page_content">
@@ -212,3 +212,5 @@ export default class extends NavPage {
 
 	}
 }
+
+export default withTranslation('translations')(My);

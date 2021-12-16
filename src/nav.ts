@@ -1,6 +1,6 @@
 
 // import somes from 'somes';
-import {NavPage as NavPageBase} from 'webpkit/mobile';
+import { NavPage as NavPageBase } from 'webpkit/mobile';
 
 export default class NavPage<P = {}> extends NavPageBase<P> {
 

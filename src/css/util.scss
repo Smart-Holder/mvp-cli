@@ -40,8 +40,19 @@ body {
 ._mini_app ._title {
 }
 
+.g_loading {
+	justify-content: none;
+	align-items: none;
+}
+
 .g_loading .text {
-	color: #1677ff;
+	top: 0;
+	color: #fff;
+	position: absolute;
+	background-color: #7cadf2;
+	padding: 8px 16px;
+	width: 100%;
+	text-align: center;
 }
 
 ._mini_app ._title ._b > div:first-child {

@@ -17,5 +17,9 @@
 		"web3z": "file:deps/web3z",
 		"webpkit": "file:deps/webpkit",
 		"mvp-cli-tools": "file:tools"
+	},
+	"dependencies": {
+		"i18next": "^21.6.0",
+		"react-i18next": "^11.15.1"
 	}
 }

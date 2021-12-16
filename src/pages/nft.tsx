@@ -8,9 +8,11 @@ import { Spin } from 'antd';
 import { DeviceItem } from '../components/deviceItem';
 import { Carousel, Modal } from 'antd-mobile';
 import IconFont from '../components/icon_font';
+import { changeLanguage } from '../util/i18next';
+import { withTranslation } from 'react-i18next';
 import '../css/index.scss';
-
-export default class extends NavPage {
+// const { t } = Translation(); //把使用方法结构
+class DeviceList extends NavPage {
 
 	title = '我的NFT';
 
@@ -30,6 +32,8 @@ export default class extends NavPage {
 		// var owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		// this.setState({ nft: await models.nft.methods.getNFTByOwner({ owner }) });
 		this.getDeviceList();
+		// changeLanguage('EN');
+
 	}
 
 	async triggerShow() {
@@ -107,3 +111,5 @@ export default class extends NavPage {
 	}
 
 }
+
+export default withTranslation('translations')(DeviceList);
