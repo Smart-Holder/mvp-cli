@@ -3,6 +3,7 @@ import Button from '../button';
 import { Image } from 'antd';
 import "./index.scss";
 import { INftItem } from '../../pages/interface';
+import { getSubStr } from '../../util/tools';
 
 interface INftCardProps {
 	nft: INftItem;
@@ -28,12 +29,12 @@ const NftCard = (props: INftCardProps) => {
 
 			<div className="nft_address_box">
 				<div className="nft_address_title">Address</div>
-				<div className="nft_address textNoWrap">{nft.token}</div>
+				<div className="nft_address textNoWrap">{getSubStr(nft.token, 18)}</div>
 			</div>
 
 			<div className="nft_hash_box">
 				<div className="nft_hash_title">Hash</div>
-				<div className="nft_hash textNoWrap">{nft.tokenId}</div>
+				<div className="nft_hash textNoWrap">{getSubStr(nft.tokenId, 18)}</div>
 			</div>
 		</div>
 

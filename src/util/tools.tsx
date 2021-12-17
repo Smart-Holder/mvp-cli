@@ -121,3 +121,11 @@ export const showModal = async (opts: IShowModalProps,) => {
 			}, {})
 	});
 }
+
+//截取字符串中间用省略号显示
+export function getSubStr(str: string, substrlen: number = 11, startLen?: number) {
+	var subStr1 = str.substr(0, startLen || substrlen);
+	var subStr2 = str.substr(str.length - substrlen, str.length);
+	var subStr = subStr1 + "..." + subStr2;
+	return subStr;
+}

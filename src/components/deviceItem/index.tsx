@@ -4,6 +4,7 @@ import Button from "../button";
 import { React } from 'webpkit/mobile';
 import { show, alert } from "../../../deps/webpkit/lib/dialog";
 import "./index.scss";
+import { getSubStr } from "../../util/tools";
 
 interface IDeviceItemProps {
 	deviceInfo: Device;
@@ -45,11 +46,11 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 				<div className="right_box">
 					<div className="sn_box">
 						<div className="sn_title">SN</div>
-						<div className="sn">{deviceInfo.sn}</div>
+						<div className="sn">{(deviceInfo.sn)}</div>
 					</div>
 					<div className="address_box">
 						<div className="address_title">Address</div>
-						<div className="address">{deviceInfo.address}</div>
+						<div className="address">{getSubStr(deviceInfo.address)}</div>
 					</div>
 				</div>
 			</div>

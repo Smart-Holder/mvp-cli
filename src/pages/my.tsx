@@ -210,4 +210,4 @@ class My extends NavPage {
 	}
 }
 
-export default withTranslation('translations')(My);
+export default withTranslation('translations', { withRef: true })(My);
