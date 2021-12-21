@@ -8,23 +8,27 @@ import { Empty } from 'antd';
 import * as device from '../models/device';
 import { alert } from '../../deps/webpkit/lib/dialog';
 
-import '../css/device_set_carousel.scss';
 import { ArrayToObj } from '../util/tools';
+import { withTranslation } from 'react-i18next';
+import '../css/device_set_carousel.scss';
 
 
-const tabsConfig = [
-	{ title: '轮播图片选择', index: 0 }, { title: '轮播时间间隔', index: 1 }
-];
+
 
 const intervalTimeConfig = [
-	{ label: "5秒", value: 5 },
-	{ label: "10秒", value: 10 },
-	{ label: "15秒", value: 15 },
-	{ label: "20秒", value: 20 },
+	{ label: "5s", value: 5 },
+	{ label: "10s", value: 10 },
+	{ label: "15s", value: 15 },
+	{ label: "20s", value: 20 },
 ];
 enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
 
-export default class extends NavPage<Device> {
+class DeviceSetCarousel extends NavPage<Device> {
+
+	tabsConfig = [
+		{ title: this.t('轮播图片选择'), index: 0 }, { title: this.t('轮播时间间隔'), index: 1 }
+	];
+
 	state = {
 		isShowAbbreviation: false,
 		radioValue: 'single' as CarouselType,
@@ -36,7 +40,7 @@ export default class extends NavPage<Device> {
 		selectedList: {} as { [key: string]: NFT },
 		carouselIntervalTime: 5,
 		carouselConfig: {} as device.DeviceScreenSave,
-		tabs: tabsConfig
+		tabs: this.tabsConfig
 	}
 
 	async triggerLoad() {
@@ -88,7 +92,7 @@ export default class extends NavPage<Device> {
 	// 单选按钮事件
 	async setRadioValue(radioValue: CarouselType) {
 		let { videoNftList, nft, carouselConfig, tabsCurrent } = this.state;
-		let tabs = tabsConfig;
+		let tabs = this.tabsConfig;
 		// 仅显示视频nft数据
 		radioValue === CarouselType.video ? this.getNftList(videoNftList, radioValue) : this.getNftList(nft, radioValue);
 		radioValue === CarouselType.multi && (tabsCurrent = 0);
@@ -148,17 +152,16 @@ export default class extends NavPage<Device> {
 
 	// 保存轮播图配置
 	async saveCarousel() {
+		let { t } = this;
 		let { address } = this.params;
 		let { carouselConfig, radioValue, selectedList } = this.state;
-
-
 		let newCarouselConfig = { ...carouselConfig, type: radioValue, data: Object.keys(selectedList).map(key => selectedList[key]) };
-		if (radioValue === CarouselType.multi && newCarouselConfig.data.length < 2) return alert('请选择至少两张图片');
+		if (radioValue === CarouselType.multi && newCarouselConfig.data.length < 2) return alert(t('请选择至少两张图片'));
 
 		try {
 			await device.set_screen_save(address, { ...newCarouselConfig }, radioValue);
 			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
-			alert('轮播图设置完成!');
+			alert(t('轮播图设置完成!'));
 		} catch (error: any) {
 			alert(error?.message);
 		}
@@ -166,6 +169,7 @@ export default class extends NavPage<Device> {
 
 	// 保存轮播时间间隔
 	async saveCarouselIntervalTime() {
+		let { t } = this;
 		const { address } = this.params;
 		const { carouselConfig, radioValue, carouselIntervalTime } = this.state;
 		// 修改当前选择的时间间隔
@@ -175,7 +179,7 @@ export default class extends NavPage<Device> {
 			await device.set_screen_save(address, { time: carouselIntervalTime }, radioValue);
 			console.log(newCarouselConfig, "newCarouselConfig");
 			this.setState({ carouselConfig: newCarouselConfig });
-			alert('轮播图时间间隔设置完成!');
+			alert(t('轮播图时间间隔设置完成!'));
 		} catch (error: any) {
 			alert(error.message);
 		}
@@ -185,10 +189,10 @@ export default class extends NavPage<Device> {
 	render() {
 
 		const { radioValue, isShowAbbreviation, leftNftList, rightNftList, selectedList, tabsCurrent, carouselIntervalTime, tabs } = this.state;
-
+		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
-				<Header title="设置" page={this} />
+				<Header title={t("设置")} page={this} />
 
 
 				<div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
@@ -206,9 +210,9 @@ export default class extends NavPage<Device> {
 						>
 							<div className="item_page" >
 								<div className="radio_box">
-									<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>单张NFT</div>
-									<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>多张轮播NFT</div>
-									<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>选择视频NFT</div>
+									<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张NFT')}</div>
+									<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播NFT')}</div>
+									<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频NFT')}</div>
 								</div>
 
 								{leftNftList.length ? <div className="nft_list">
@@ -219,7 +223,7 @@ export default class extends NavPage<Device> {
 									<div className="right_box">
 										{rightNftList.map(item => this.rendNftItem(item))}
 									</div>
-								</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description="暂无NFT，请添加NFT至钱包" />}
+								</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
 							</div>
 							<div className="item_page2" >
 								<div className="time_box">
@@ -230,15 +234,15 @@ export default class extends NavPage<Device> {
 					</div>
 
 					{Boolean(tabsCurrent === 1) && <div className="item_page2_action">
-						<Button className="ant-btn-background-ghost" type="primary" onClick={() => this.popPage()}>取消</Button>
-						<Button type="primary" onClick={this.saveCarouselIntervalTime.bind(this)}>保存</Button>
+						<Button className="ant-btn-background-ghost" type="primary" onClick={() => this.popPage()}>{t('取消')}</Button>
+						<Button type="primary" onClick={this.saveCarouselIntervalTime.bind(this)}>{t('保存')}</Button>
 					</div>}
 				</div>
 
 				{isShowAbbreviation && <div className="bottom_modal_box">
 					<div className="top_part">
-						<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>取消</Button>
-						<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>确定 ( {Object.keys(selectedList).length} )</Button>
+						<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>{t('取消')}</Button>
+						<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {Object.keys(selectedList).length} )</Button>
 					</div>
 					<div className="bottom_part">
 						{Object.keys(selectedList).map(key => {
@@ -257,3 +261,5 @@ export default class extends NavPage<Device> {
 		</div>
 	}
 }
+
+export default withTranslation('translations', { withRef: true })(DeviceSetCarousel);

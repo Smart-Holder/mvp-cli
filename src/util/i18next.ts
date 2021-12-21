@@ -1,8 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-const defaultLanguage: LanguageType = localStorage.getItem('language') as LanguageType || 'ZH'; //默认英语
+let locLanguage = navigator.language || localStorage.getItem('language');
+if (locLanguage === 'zh-CN') locLanguage = 'zh';
+const defaultLanguage: LanguageType = locLanguage?.toLocaleUpperCase() as LanguageType || 'EN'; //默认英语
 
-type LanguageType = 'ZH' | 'EN';
+export type LanguageType = 'ZH' | 'EN' | 'DE';
 
 i18n
 	.use(initReactI18next) //使用
@@ -10,10 +12,13 @@ i18n
 		// resources: languages,
 		resources: {
 			EN: {
-				translations: require("./en-US.json"),
+				translations: require("./localization/en-US.json"),
 			},
-			CN: {
-				translations: require("./zh-CN.json"),
+			DE: {
+				translations: require("./localization/de.json"),
+			},
+			ZH: {
+				translations: require("./localization/zh-CN.json"),
 			},
 		},
 		lng: defaultLanguage,
@@ -23,12 +28,10 @@ i18n
 		interpolation: {
 			escapeValue: false,
 		},
-		react: {
-			wait: true,
-		},
+
 	})
 	.then(t => {
-		console.log('18n ready');
+		console.log('18n ready', defaultLanguage);
 	});
 
 const changeLanguage = (lng: LanguageType) => { //定义多语言的change

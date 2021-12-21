@@ -6,18 +6,19 @@ import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
-import { contracts, env } from '../../config';
+import { contracts } from '../../config';
 import nft_proxy from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-import { alert, show } from 'webpkit/lib/dialog';
+import { alert } from 'webpkit/lib/dialog';
 import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
 import '../css/device_info.scss';
+import { withTranslation } from 'react-i18next';
 
 
-export default class extends NavPage<Device> {
+class DeviceInfo extends NavPage<Device> {
 
 	state = {
 		nftList: [] as INftItem[],
@@ -59,10 +60,11 @@ export default class extends NavPage<Device> {
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT) {
+		const { t } = this;
 		try {
 			setNftDisabledTime(nft, "drawNftDisabledTime", this.getNFTList.bind(this, this.params.address));
 			await this._Withdraw(nft);
-			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> 取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.</div> }, () => this.getNFTList(this.params.address));
+			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => this.getNFTList(this.params.address));
 		} catch (error) {
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(error)}</div> });
 
@@ -70,13 +72,14 @@ export default class extends NavPage<Device> {
 	}
 
 	_Withdraw = async (nft: NFT) => {
+		const { t } = this;
 		var to = await chain.getDefaultAccount();
 		var from = nft.ownerBase || '';
 		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
 		somes.assert(nft.owner == contracts.ERC721Proxy ||
 			nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
-		var l = await Loading.show('正在取出到您的钱包中,请勿操作');
+		var l = await Loading.show(t('正在取出到您的钱包中,请勿操作'));
 		return new Promise(async (resolve, reject) => {
 			try {
 				await nft_proxy.New(nft.owner as string)
@@ -87,7 +90,7 @@ export default class extends NavPage<Device> {
 				console.error(err);
 
 				// if (env == 'dev') alert(err.message);
-				reject('已取消取出到钱包');
+				reject(t('已取消取出到钱包'));
 			} finally {
 				l.close();
 			}
@@ -97,31 +100,19 @@ export default class extends NavPage<Device> {
 
 	// 解绑设备
 	async onUnbindDevice() {
-		// let instance = await show({
-		// 	id: 'bind_device', title: <div>是否解绑设备 <CloseOutlined onClick={() => { instance?.close(); this.setState({ loading: false });}} /> </div>, text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
-		// 		'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
-		// 			try {
-		// 				await device.unbind(this.state.deviceInfo.address);
-		// 				alert('解绑设备成功', () => window.history.back());
-		// 			} catch (error: any) {
-		// 				alert(error.message)
-		// 			} finally {
-		// 				this.setState({ loading: false });
-		// 			}
-
-		// 		}
-		// 	}
-		// });
+		const { t } = this;
+		let cancel = t('取消');
+		let confim = t('确认解绑');
 		showModal({
-			id: 'bind_device', title: "是否解绑设备", text: "请确认是否解绑设备，确认则解除对设备解绑。", buttons: {
-				'取消': () => this.setState({ loading: false }), '@确认解绑': async () => {
+			id: 'bind_device', title: t("是否解绑设备"), text: t("请确认是否解绑设备，确认则解除对设备解绑。"), buttons: {
+				[cancel]: () => this.setState({ loading: false }), ['@' + confim]: async () => {
 					try {
 						this.setState({ loading: true });
 						const address = this.state.deviceInfo.address;
 						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single');
 						await device.unbind(address);
 
-						alert('解绑设备成功', () => window.history.back());
+						alert(t('解绑设备成功'), () => window.history.back());
 					} catch (error: any) {
 						console.log(error);
 
@@ -137,9 +128,11 @@ export default class extends NavPage<Device> {
 
 	render() {
 		let { nftList, loading } = this.state;
+		const { t } = this;
+
 		return <div className="device_info_page">
 			{/* <div className="device_info_page_title">设备列表</div> */}
-			<Header title="设备列表" page={this} />
+			<Header title={t("设备列表")} page={this} />
 
 
 			<div className="device_info_page_content">
@@ -150,32 +143,11 @@ export default class extends NavPage<Device> {
 				</div>
 
 
-				{nftList.map(item => <NftCard key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item)} nft={item} btnText="取出到钱包" btnLoadingText="正在取出到钱包" />)}
-
-				{/* <div className="nft_box">
-						<div className="nft_info_box">
-							<div className="nft_img_box">
-								<img src={require('../assets/home_bg.png')} alt="" />
-							</div>
-
-							<div className="nft_address_box">
-								<div className="nft_address_title">Address</div>
-								<div className="nft_address textNoWrap">12as1d32as21da3s2d1a3s1d3212as1d32as21da3s2d1a3s1d32</div>
-							</div>
-
-							<div className="nft_hash_box">
-								<div className="nft_hash_title">Hash</div>
-								<div className="nft_hash textNoWrap">12as1d32as21da3s2d1a3s1d3212as1d32as21da3s2d1a3s1d32</div>
-							</div>
-						</div>
-
-						<div className="action_btn_box">
-							<Button type="primary">取出到钱包</Button>
-						</div>
-
-					</div> */}
+				{nftList.map(item => <NftCard key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("正在取出到钱包")} />)}
 			</div>
 
 		</div>
 	}
 }
+
+export default withTranslation('translations', { withRef: true })(DeviceInfo);
