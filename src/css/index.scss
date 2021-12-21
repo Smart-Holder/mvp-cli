@@ -64,9 +64,23 @@
 .device_list_page {
 	padding: 0 0.3rem;
 	background-color: #f5f5f5;
-	background-image: url("../assets/home_bg.png");
+	background-image: url("../assets/home_bg2.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
+	.page_title {
+		// font-size: ;
+		z-index: 107;
+		overflow-wrap: break-word;
+		color: rgba(255, 255, 255, 1);
+		font-size: 0.36rem;
+		letter-spacing: 0.24rem;
+		font-family: PingFangSC-Regular;
+		white-space: nowrap;
+		text-align: left;
+		margin-top: 1.25rem;
+		margin-left: 0.24rem;
+		position: absolute;
+	}
 }
 
 .device_list {

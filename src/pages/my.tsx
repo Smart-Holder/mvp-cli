@@ -71,13 +71,15 @@ class My extends NavPage {
 		// 进行操作的nft
 		let nftInfo = nftItem || currNFT;
 
+		const { t } = this;
+
 		let index = nft.findIndex((item) => item.tokenId === nftInfo.tokenId);
 		let newNftItem = { ...nft[index] };
 		let newNftList = [...nft];
 		newNftItem.btn_disabled = true;
 		newNftList[index] = newNftItem;
 
-		var l = await Loading.show('正在存入到您的设备中,请勿操作');
+		var l = await Loading.show(t('正在存入到您的设备中,请勿操作'));
 		try {
 			if (device?.address) {
 				this.setState({ visible: false, nft: newNftList });
@@ -90,8 +92,9 @@ class My extends NavPage {
 			newNftItem.btn_disabled = false;
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList });
+			let btnText = t('我知道了');
 			// if (error?.code == 4001) errorText = '已取消存储操作';
-			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> 已取消存储操作</div>, buttons: { '我知道了': () => { } } });
+			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {t('已取消存储操作')}</div>, buttons: { [btnText]: () => { } } });
 		} finally {
 			l.close();
 		}
@@ -102,16 +105,17 @@ class My extends NavPage {
 	// 将nft存入设备
 	private async _transferToDevice(device_address: string, nft: NFT) {
 		var from = this.state.from;
+		const { t } = this;
+		let btnText = t('我知道了');
+
 		let showTip = () => show({
-			buttons: { '我知道了': this.getNFTList.bind(this, from) },
-			title: 'NFT存入已发起申请', text: <div className="transferToDeviceTipBox">
-				<div>请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。</div>
+			buttons: { [btnText]: this.getNFTList.bind(this, from) },
+			title: t('NFT存入已发起申请'), text: <div className="transferToDeviceTipBox">
+				<div>{t('请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。')}</div>
 				<div className="tip_img_box">
 
-					<div className="tip_img_box_text">请点击页面右下角“…”
-						找到   “重新加载”更新
-						该页面</div>
-					<img src={require("../assets/ref_bg.png")} alt="" />
+					<div className="tip_img_box_text">{t('请点击页面右下角“…”找到“重新加载”更新该页面')}</div>
+					<img src={localStorage.getItem('language') === 'ZH' ? require("../assets/ref_bg.png") : require("../assets/ref_bg_en.jpg")} alt="" />
 				</div>
 			</div>
 		});
@@ -142,7 +146,7 @@ class My extends NavPage {
 					showTip();
 					resolve(nft);
 				} else {
-					reject('暂时不支持这种类型的NFT存入到设备');
+					reject(t('暂时不支持这种类型的NFT存入到设备'));
 				}
 			} catch (error) {
 				reject(error);
@@ -156,15 +160,15 @@ class My extends NavPage {
 
 	render() {
 		let { nft, currDevice, visible, device } = this.state;
-
+		const { t } = this;
 		return <div className="my_page">
-			<div className="my_page_title">我的NFT</div>
+			<div className="my_page_title">{t('我的NFT')}</div>
 
 			<div className="my_page_content">
 
-				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText="存入到设备" btnLoadingText="正在存入设备中" />)}
+				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("正在存入设备中")} />)}
 
-				{!nft.length && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description='暂无NFT，请添加NFT至钱包' />}
+				{!nft.length && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />}
 			</div>
 			<Modal
 				onClose={() => {
@@ -173,8 +177,8 @@ class My extends NavPage {
 				closable
 				visible={visible}
 				transparent
-				title="选择设备"
-				footer={[{ text: '确定', onPress: this.selectDeviceModalok.bind(this) }]}
+				title={t("选择设备")}
+				footer={[{ text: t('确定'), onPress: this.selectDeviceModalok.bind(this) }]}
 				className="select_device"
 			>
 				<div style={{ maxHeight: '7rem', overflow: 'scroll' }}>
@@ -186,7 +190,7 @@ class My extends NavPage {
 								this.setState({ currDevice: currDevice.sn === item.sn ? {} : item });
 							}}>
 								<div className="left_box">
-									<img src={require('../assets/test_device.png')} alt="" />
+									<img src={(item as any).screen <= 1 ? require('../assets/screen_icon.jpg') : require('../assets/test_device.png')} alt="" />
 								</div>
 
 								<div className="right_box">

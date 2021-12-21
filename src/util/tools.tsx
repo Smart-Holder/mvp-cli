@@ -3,13 +3,19 @@ import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 import { NFT } from '../models';
-import { DefaultOptions, DialogStack, show } from '../../deps/webpkit/lib/dialog';
+import { DefaultOptions, show } from '../../deps/webpkit/lib/dialog';
 import { CloseOutlined } from '@ant-design/icons';
-
-import "./tools.scss";
+import { withTranslation } from 'react-i18next';
 import { INftItem } from '../pages/interface';
+import { changeLanguage, LanguageType } from '../util/i18next';
+import "./tools.scss";
 
-export default class extends ViewController<{ nav: () => Nav }> {
+class Tab extends ViewController<{ nav: () => Nav }> {
+	triggerLoad() {
+		let locLanguage = navigator.language || localStorage.getItem('language');
+		if (locLanguage === 'zh-CN') locLanguage = 'zh';
+		changeLanguage(locLanguage?.toLocaleUpperCase() as LanguageType || 'ZH');
+	}
 	state = {
 		current: 0
 	}
@@ -27,22 +33,25 @@ export default class extends ViewController<{ nav: () => Nav }> {
 	render() {
 		// console.log(location.pathname, "this.props");
 		let { current } = this.state;
+		let { t } = this.props as any;
+
 		return (
 			<div className="_tools">
 				<div className="btn" onClick={this.m_click_1}>
-					{/* <div className="icon a"></div> */}
 					{(current === 0 && location.pathname.startsWith("/device")) ? <IconFont type="icon-shouyexuanzhong" /> : <IconFont type="icon-shouye" />}
-					<div className={`txt ${(current === 0 && location.pathname.startsWith("/device")) && 'active'}`}>首页</div>
+					<div className={`txt ${(current === 0 && location.pathname.startsWith("/device")) && 'active'}`}>{t("首页")}</div>
 				</div>
 				<div className="btn" onClick={this.m_click_2}>
-					{/* <div className="icon b"></div> */}
 					{(current === 1 || location.pathname.startsWith("/my")) ? <IconFont type="icon-wodexuanzhong" /> : <IconFont type="icon-wode" />}
-					<div className={`txt ${(current === 1 || location.pathname.startsWith("/my")) && 'active'}`}>我的</div>
+					<div className={`txt ${(current === 1 || location.pathname.startsWith("/my")) && 'active'}`}>{t("我的")}</div>
 				</div>
 			</div>
 		);
 	}
 }
+
+export default withTranslation('translations', { withRef: true })(Tab);
+
 
 export type IDisabledType = 'draw' | 'transfer';
 

@@ -11,25 +11,11 @@ import IconFont from '../components/icon_font';
 // import { changeLanguage } from '../util/i18next';
 import { withTranslation } from 'react-i18next';
 import '../css/index.scss';
+import { changeLanguage } from '../util/i18next';
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 
 
-const carouselSetupType = {
-	TokenPocket: [
-		{ title: '第一步：点击右上角扫一扫', img: require('../assets/tp_setp_1.jpg') },
-		{ title: <div>第二步：扫码绑定成功</div>, img: require('../assets/step_3.png') },
-	],
-	MateMask: [
-		{ title: <div>第一步：请点击左上角“<IconFont type="icon-danchuangicon1" />”选择“<IconFont type="icon-danchuangicon2" />”</div>, img: require('../assets/step_1.png') },
-		{ title: <div>第二步：进入钱包后请点击右上角 <br />“<IconFont type="icon-danchuangicon3" />”按钮</div>, img: require('../assets/step_2.png') },
-		{ title: <div>第三步：扫码绑定成功</div>, img: require('../assets/step_3.png') },
-	],
-	imToken: [
-		{ title: '第一步：点击右上角扫一扫', img: require('../assets/imtoken_setp_1.1.jpg') },
-		{ title: <div>第二步：扫码绑定成功</div>, img: require('../assets/step_3.png') },
-	],
-};
 
 class DeviceList extends NavPage {
 
@@ -77,16 +63,35 @@ class DeviceList extends NavPage {
 		this.setState({ visible: true, carouselType });
 	}
 
+	carouselSetupType = {
+		TokenPocket: [
+			{ title: this.t('第一步：点击右上角扫一扫'), img: require('../assets/tp_setp_1.jpg') },
+			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
+		],
+		MateMask: [
+			{ title: <div>{this.t('第一步：请点击左上角')}“<IconFont type="icon-danchuangicon1" />”{this.t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require('../assets/step_1.png') },
+			{ title: <div>{this.t('第二步：进入钱包后请点击右上角')} <br />“<IconFont type="icon-danchuangicon3" />”{this.t('按钮')}</div>, img: require('../assets/step_2.png') },
+			{ title: <div>{this.t('第三步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
+		],
+		imToken: [
+			{ title: this.t('第一步：点击右上角扫一扫'), img: require('../assets/imtoken_setp_1.1.jpg') },
+			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
+		],
+	};
+
+
 	render() {
 		const { device, loading, carouselType } = this.state;
+		const { t } = this;
 		return (
 			<div className="index device_list_page">
 				{/* <Header title="我的NFT" page={this} /> */}
+				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏品')}</div>
 				<div className="device_list">
-					<div className="list_title">全部设备</div>
+					<div className="list_title" >{t("全部设备")}</div>
 					<div className="list_top_extra">
 						<div className="bind_device_btn" onClick={this.addDevice.bind(this)}>
-							<img className="add_icon" src={require('../assets/add_icon.png')} alt="+" /> 绑定新设备
+							<img className="add_icon" src={require('../assets/add_icon.png')} alt="+" /> {t("绑定新设备")}
 						</div>
 					</div>
 					<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} />
@@ -99,12 +104,12 @@ class DeviceList extends NavPage {
 
 				<Modal visible={this.state.visible}
 					transparent
-					title='扫码绑定设备'
-					footer={[{ text: '我知道了', onPress: () => this.setState({ visible: false }) }]}
+					title={t("扫码绑定设备")}
+					footer={[{ text: t('我知道了'), onPress: () => this.setState({ visible: false }) }]}
 				>
 					<Carousel className="add_device_carousel" dotActiveStyle={{ backgroundColor: "#1677FF" }}>
 
-						{carouselSetupType[carouselType]?.map((item, key) => {
+						{this.carouselSetupType[carouselType]?.map((item, key) => {
 							return <div key={key} className="setp_box">
 								<div className="setp_title">{item.title}</div>
 								<img style={{ width: '100%' }} src={(item.img)} alt="" />
