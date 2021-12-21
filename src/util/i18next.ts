@@ -28,9 +28,7 @@ i18n
 		interpolation: {
 			escapeValue: false,
 		},
-		react: {
-			wait: true,
-		},
+
 	})
 	.then(t => {
 		console.log('18n ready', defaultLanguage);

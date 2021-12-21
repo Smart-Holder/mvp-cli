@@ -1,6 +1,6 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
-import chain, { encodeParameters } from '../chain';
+import chain from '../chain';
 import models, { AssetType, Device, NFT } from '../models';
 import NftCard from '../components/nft_card';
 import { show } from 'webpkit/lib/dialog';
@@ -10,7 +10,7 @@ import * as nftproxy from '../chain/nftproxy';
 import erc721 from '../chain/erc721';
 import { contracts } from '../../config';
 import erc1155 from '../chain/erc1155';
-import { Empty } from 'antd';
+import { Empty, Spin } from 'antd';
 import { removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
 import '../css/my.scss';
 import Loading from '../../deps/webpkit/lib/loading';
@@ -20,7 +20,7 @@ import { withTranslation } from 'react-i18next';
 
 class My extends NavPage {
 
-	state = { nft: [] as INftItem[], device: [] as Device[], loading: true, currNFT: {} as NFT, currDevice: {} as Device, visible: false, from: '', };
+	state = { nft: [] as INftItem[], device: [] as Device[], loading: true, currNFT: {} as NFT, currDevice: {} as Device, visible: false, from: '' };
 
 
 	async triggerLoad() {
@@ -45,11 +45,12 @@ class My extends NavPage {
 
 	// 获取nft列表
 	async getNFTList(owner: string) {
+		this.setState({ loading: true })
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 
 		nftList = setNftActionLoading(nftList, "nftDisabledTime");
 
-		this.setState({ nft: nftList });
+		this.setState({ nft: nftList, loading: false });
 	}
 
 	// 存入设备按钮点击
@@ -159,17 +160,20 @@ class My extends NavPage {
 
 
 	render() {
-		let { nft, currDevice, visible, device } = this.state;
+		let { nft, currDevice, visible, device, loading } = this.state;
 		const { t } = this;
 		return <div className="my_page">
-			<div className="my_page_title">{t('我的NFT')}</div>
+			<Spin style={{ maxHeight: 'none', height: "100%", }} spinning={loading} tip='正在加载中' delay={500}>
 
-			<div className="my_page_content">
+				<div className="my_page_title">{t('我的NFT')}</div>
 
-				{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("正在存入设备中")} />)}
+				<div className="my_page_content">
 
-				{!nft.length && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />}
-			</div>
+					{nft.map(item => <NftCard key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("正在存入设备中")} />)}
+
+					{(!nft.length && !loading) && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />}
+				</div>
+			</Spin>
 			<Modal
 				onClose={() => {
 					this.setState({ visible: false });
@@ -190,7 +194,7 @@ class My extends NavPage {
 								this.setState({ currDevice: currDevice.sn === item.sn ? {} : item });
 							}}>
 								<div className="left_box">
-									<img src={(item as any).screen <= 1 ? require('../assets/screen_icon.jpg') : require('../assets/test_device.png')} alt="" />
+									<img src={(item).screen <= 1 ? require('../assets/screen_icon.jpg') : require('../assets/test_device.png')} alt="" />
 								</div>
 
 								<div className="right_box">

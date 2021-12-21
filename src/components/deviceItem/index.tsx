@@ -44,7 +44,7 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 		<div className="device_desc_box" >
 			<div className="top_part">
 				<div className="left_box">
-					<img src={(deviceInfo as any).screen <= 1 ? require('../../assets/screen_icon.jpg') : require('../../assets/test_device.png')} alt="" />
+					<img src={(deviceInfo).screen <= 1 ? require('../../assets/screen_icon.jpg') : require('../../assets/test_device.png')} alt="" />
 				</div>
 				<div className="right_box">
 					<div className="sn_box">
