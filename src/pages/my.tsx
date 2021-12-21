@@ -163,7 +163,7 @@ class My extends NavPage {
 		let { nft, currDevice, visible, device, loading } = this.state;
 		const { t } = this;
 		return <div className="my_page">
-			<Spin style={{ maxHeight: 'none', height: "100%", }} spinning={loading} tip='正在加载中' delay={500}>
+			<Spin style={{ maxHeight: 'none', height: "100%", }} spinning={loading} tip='loading' delay={500}>
 
 				<div className="my_page_title">{t('我的NFT')}</div>
 

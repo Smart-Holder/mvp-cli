@@ -65,7 +65,7 @@ class DeviceList extends NavPage {
 
 	carouselSetupType = {
 		TokenPocket: [
-			{ title: this.t('第一步：点击右上角扫一扫'), img: require('../assets/tp_setp_1.jpg') },
+			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/tp_setp_1.jpg') },
 			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
 		],
 		MateMask: [
@@ -74,7 +74,7 @@ class DeviceList extends NavPage {
 			{ title: <div>{this.t('第三步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
 		],
 		imToken: [
-			{ title: this.t('第一步：点击右上角扫一扫'), img: require('../assets/imtoken_setp_1.1.jpg') },
+			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/imtoken_setp_1.1.jpg') },
 			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
 		],
 	};
