@@ -6,7 +6,7 @@ import '../css/nft_details.scss';
 import models, { NFT, AssetType } from '../models';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
-import * as nftproxy from '../chain/nftproxy';
+import nftproxy, {proxyAddress} from '../chain/nftproxy';
 import chain, {encodeParameters} from '../chain';
 import {alert} from 'webpkit/lib/dialog';
 import Loading from 'webpkit/lib/loading';
@@ -32,19 +32,21 @@ export default class extends NavPage<{id:number}> {
 		//var from = this.state.from;
 		if (nft.type == AssetType.ERC721) { // erc721
 			if (nft.ownerBase) {
-				await nftproxy.proxy721.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1), BigInt(1));
+				await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1), BigInt(1));
 			} else {
+				chain.assetChain(nft.contract?.chain);
 				await erc721.safeTransferToProxy( // 转移给代理协约
-					nft.token, [device_address],  BigInt(nft.tokenId), contracts.ERC721Proxy);
+					nft.token, [device_address],  BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.contract?.chain));
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} else if (nft.type == AssetType.ERC1155) {
 			if (nft.ownerBase) {
-				await nftproxy.proxy1155.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count), BigInt(1));
+				await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count), BigInt(1));
 			} else {
+				chain.assetChain(nft.contract?.chain);
 				await erc1155.safeTransferToProxy( // 转移给代理协约
-					nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), contracts.ERC1155Proxy);
+					nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), proxyAddress(AssetType.ERC1155Proxy, nft.contract?.chain));
 			}
 			alert('存入到设备成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();

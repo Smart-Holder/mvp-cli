@@ -6,7 +6,7 @@ import NftCard from '../components/nft_card';
 import { show } from 'webpkit/lib/dialog';
 import { devices } from '../models/device';
 import { Modal } from 'antd-mobile';
-import * as nftproxy from '../chain/nftproxy';
+import nftproxy, {proxyAddress} from '../chain/nftproxy';
 import erc721 from '../chain/erc721';
 import { contracts } from '../../config';
 import erc1155 from '../chain/erc1155';
@@ -120,24 +120,25 @@ class My extends NavPage {
 
 			if (!nft.type) { nft.type = (nft as any).mode + 1 };
 			try {
-
 				if (nft.type == AssetType.ERC721) { // erc721
 					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
-						await nftproxy.proxy721.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
+						await nftproxy.New(nft.owner, nft.contract?.chain) .transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
+						chain.assetChain(nft.contract?.chain);
 						await erc721.safeTransferToProxy( // 转移给代理协约
-							nft.token, [device_address], BigInt(nft.tokenId), contracts.ERC721Proxy);
+							nft.token, [device_address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.contract?.chain));
 					}
 					showTip();
 					resolve(nft);
 				} else if (nft.type == AssetType.ERC1155) {
 					setNftDisabledTime(nft, "nftDisabledTime", this.getNFTList.bind(this, from));
 					if (nft.ownerBase) {
-						await nftproxy.proxy1155.transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+						await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
+						chain.assetChain(nft.contract?.chain);
 						await erc1155.safeTransferToProxy( // 转移给代理协约
-							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), contracts.ERC1155Proxy);
+							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), proxyAddress(AssetType.ERC1155Proxy, nft.contract?.chain));
 					}
 					showTip();
 					resolve(nft);

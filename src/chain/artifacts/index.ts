@@ -13,7 +13,9 @@ import * as NFTProxy from './NFTProxy';
 const ex_ = {
 	erc721(address: string = ERC721.contractAddress) { return Happy.instance<ERC721.default>({...ERC721, contractAddress: address}, web3, address) },
 	erc1155(address: string = ERC1155.contractAddress) { return Happy.instance<ERC1155.default>({...ERC1155, contractAddress: address}, web3, address) },
-	nft_proxy(address: string) { return Happy.instance<NFTProxy.default>({...NFTProxy, contractAddress: address}, web3, address) },
+	nft_proxy(address: string) {
+		return Happy.instance<NFTProxy.default>({...NFTProxy, contractAddress: address}, web3, address)
+	},
 }
 
 export default ex_;

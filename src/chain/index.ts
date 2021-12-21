@@ -32,6 +32,7 @@ import somes from 'somes';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
+import {ChainType} from '../models';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
@@ -46,6 +47,15 @@ export class Web3IMPL extends Web3Z {
 	private _metaMask: any;
 	private _txQueue: TransactionQueue = new TransactionQueue(this);
 	private _defaultAccount?: string;
+	private _chain: ChainType = ChainType.UNKNOWN;
+
+	get chain() {
+		return this._chain;
+	}
+
+	assetChain(chain?: ChainType, msg?: string) {
+		somes.assert(chain == this._chain, 100400, msg || 'chain is valid match wallet');
+	}
 
 	get metaMask() {
 		if (!this._metaMask) {
@@ -82,6 +92,19 @@ export class Web3IMPL extends Web3Z {
 			}
 			this._defaultAccount = (from || '') as string;
 			this.setDefaultAccount(this._defaultAccount);
+
+			var id = await this.web3.eth.getChainId();
+			var chains: Dict<ChainType> = {
+				'1': ChainType.ETHEREUM, // mainnet
+				'3': ChainType.ETHEREUM, // Ropsten Test Network
+				'4': ChainType.ETHEREUM, // Rinkeby Test Network
+				'5': ChainType.ETHEREUM, // Goerli Test Network
+				'42': ChainType.ETHEREUM, // Kovan Test Network
+				'137': ChainType.MATIC, // mainnet matic
+				'80001': ChainType.MATIC, // test matic
+			};
+
+			this._chain = chains[id] || ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
 	}

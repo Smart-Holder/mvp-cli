@@ -8,20 +8,23 @@ import { contracts } from '../../config';
 import * as device from '../models/device';
 import index, { encodeParameters } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
+import { ChainType, AssetType } from '../models';
 
 var tx_sign = require('crypto-tx/sign');
 var crypto_tx = require('crypto-tx');
 
-export default class ApiIMPL {
+export default class ProxyAPI {
 
 	private _artifacts: HappyContract<NFTProxy>;
 
-	static New(contractAddress: string): ApiIMPL {
-		return new ApiIMPL(contractAddress);
+	static New(contractAddress: string, chain?: ChainType): ProxyAPI {
+		return new ProxyAPI(contractAddress, chain);
 	}
 
-	constructor(_contractAddress: string) {
+	constructor(_contractAddress: string, chain?: ChainType) {
 		this._artifacts = artifacts.nft_proxy(_contractAddress);
+		somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
+		index.assetChain(chain);
 	}
 
 	get contractAddress() { return this._artifacts.address }
@@ -164,5 +167,30 @@ export default class ApiIMPL {
 
 }
 
-export const proxy721 = ApiIMPL.New(contracts.ERC721Proxy);
-export const proxy1155 = ApiIMPL.New(contracts.ERC1155Proxy);
+export const proxy721_eth = ProxyAPI.New(contracts.ERC721Proxy, ChainType.ETHEREUM);
+export const proxy1155_eth = ProxyAPI.New(contracts.ERC1155Proxy, ChainType.ETHEREUM);
+
+export const proxy721_matic = ProxyAPI.New(contracts.ERC721Proxy_MATIC, ChainType.MATIC);
+export const proxy1155_matic = ProxyAPI.New(contracts.ERC1155Proxy_MATIC, ChainType.MATIC);
+
+export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string) {
+	somes.assert(chain_, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
+	var chain = chain_ as ChainType;
+
+	if (type == AssetType.ERC721) {
+		if (chain == ChainType.ETHEREUM) {
+			return contracts.ERC721Proxy;
+		} else if (chain == ChainType.MATIC) {
+			return contracts.ERC721Proxy_MATIC;
+		}
+	}
+	else if (type == AssetType.ERC1155) {
+		if (chain == ChainType.ETHEREUM) {
+			return contracts.ERC1155Proxy;
+		} else if (chain == ChainType.MATIC) {
+			return contracts.ERC1155Proxy_MATIC;
+		}
+	}
+
+	throw new Error(msg || 'Configuration proxy not found');
+}

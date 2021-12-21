@@ -7,7 +7,7 @@ import * as device from '../models/device';
 import { alert } from 'webpkit/lib/dialog';
 import models, { NFT } from '../models';
 import { renderNft } from '../util/media';
-import nft_proxy from '../chain/nftproxy';
+import nft_proxy, {proxyAddress} from '../chain/nftproxy';
 import somes from 'somes';
 import { contracts, env } from '../../config';
 import Loading from 'webpkit/lib/loading';
@@ -35,12 +35,13 @@ export default class extends NavPage<Device> {
 		var to = await chain.getDefaultAccount();
 		var from = nft.ownerBase || '';
 		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
-		somes.assert(nft.owner == contracts.ERC721Proxy ||
-			nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
+		// somes.assert(nft.owner == contracts.ERC721Proxy ||
+		// 	nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
+		proxyAddress(nft.type, nft.contract?.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
 		var l = await Loading.show('正在取出到钱包');
 		try {
-			var proxy = nft_proxy.New(nft.owner as string);
+			var proxy = nft_proxy.New(nft.owner as string, nft.contract?.chain);
 			// var val = await proxy.balanceOf(nft.token, BigInt(nft.tokenId), from);
 			// var val1 = await artifacts.erc1155(nft.token).api.balanceOf('0xb02cbeD3aC823085CfB1A667Fb1C73E19E724657', BigInt(nft.tokenId)).call();
 			// console.log(val, val1);
