@@ -54,7 +54,7 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	assetChain(chain?: ChainType, msg?: string) {
-		somes.assert(chain == this._chain, 100400, msg || 'chain is valid match wallet');
+		somes.assert(chain == this._chain, [100400, msg || 'chain is valid match wallet']);
 	}
 
 	get metaMask() {
