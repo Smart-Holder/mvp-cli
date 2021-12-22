@@ -10,7 +10,7 @@ import { contracts } from '../../config';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
 import { alert } from 'webpkit/lib/dialog';
-import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
+import { ArrayToObj, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
@@ -62,25 +62,47 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	// 转出nft按钮点击
-	async transferBtnClick(nft: NFT) {
+	async transferBtnClick(nftItem: NFT) {
 		tp.invokeQRScanner().then((res: string) => {
-			this.takeAwayNftOfDeviceClick(nft, res);
+			this.takeAwayNftOfDeviceClick(nftItem, res);
+
+
 		});
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
 		const { t } = this;
 		const getNFTList = this.getNFTList.bind(this, this.params.address, Boolean(toAddress))
+		const { nftList } = this.state;
+
+		let newNftList = [...nftList];
+
+		let index = nftList.findIndex((item) => item.tokenId === nft.tokenId);
+		let newNftItem = { ...nftList[index] };
+
+		let disabledKey: IDisabledKey = toAddress ? 'transfer_btn_disabled' : 'btn_disabled';
+
 		try {
+			newNftItem[disabledKey] = true;
+			newNftList[index] = newNftItem;
+
+			this.setState({ nftList: newNftList });
+
 			let to = toAddress || await chain.getDefaultAccount();
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
 			await this._Withdraw(nft, to);
+
 			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => getNFTList());
 		} catch (error: any) {
 			let errorText = error;
 			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消取出到钱包');
 			if (error?.errno == 100400) errorText = error.description;
+			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
+
+		} finally {
+			newNftList[index] = newNftItem;
+			this.setState({ nftList: newNftList });
 
 		}
 	}
