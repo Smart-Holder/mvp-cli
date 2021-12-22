@@ -137,8 +137,6 @@ class My extends NavPage {
 		} catch (error: any) {
 			removeNftDisabledTimeItem(nftInfo, "nftDisabledTime");
 			newNftItem[disabledKey] = false;
-			// alert(disabledKey + '');
-
 
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList, ...this.getDistinguishNftList(newNftList) });

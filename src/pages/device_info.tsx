@@ -29,13 +29,13 @@ class DeviceInfo extends NavPage<Device> {
 
 	async triggerLoad() {
 		let owner = this.params.address;
-		this.getNFTList(owner);
+		this.getNFTList(owner, false);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
 			if (data.ownerBase === owner) {
 				console.log(e, "--------ws-------");
 				removeNftDisabledTimeItem(data, "drawNftDisabledTime");
-				this.getNFTList(owner);
+				this.getNFTList(owner, false);
 			}
 		}, this);
 	}
@@ -53,10 +53,10 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	// 获取nft列表
-	async getNFTList(owner: string) {
+	async getNFTList(owner: string, isOtherWallets: boolean) {
 
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
-		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
+		nftList = setNftActionLoading(nftList, "drawNftDisabledTime", isOtherWallets);
 		this.setState({ nftList });
 		this.getDeviceInfo(owner);
 	}
@@ -70,11 +70,12 @@ class DeviceInfo extends NavPage<Device> {
 
 	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
 		const { t } = this;
+		const getNFTList = this.getNFTList.bind(this, this.params.address, Boolean(toAddress))
 		try {
 			let to = toAddress || await chain.getDefaultAccount();
-			setNftDisabledTime(nft, "drawNftDisabledTime", this.getNFTList.bind(this, this.params.address));
+			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
 			await this._Withdraw(nft, to);
-			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => this.getNFTList(this.params.address));
+			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => getNFTList());
 		} catch (error: any) {
 			let errorText = error;
 			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消取出到钱包');
