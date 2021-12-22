@@ -8,7 +8,7 @@ import { contracts } from '../../config';
 import * as device from '../models/device';
 import index, { encodeParameters } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
-import { ChainType, AssetType } from '../models';
+import { ChainType, AssetType } from '../models/def';
 
 var tx_sign = require('crypto-tx/sign');
 var crypto_tx = require('crypto-tx');
@@ -55,7 +55,7 @@ export default class ProxyAPI {
 		var hex = await mask.request({
 			method: 'personal_sign',
 			// method: 'eth_sign',
-			params: [ '0x' + buf.toString('hex'), from ],
+			params: ['0x' + buf.toString('hex'), from],
 		}) as string;
 		return hex;//buffer.from(hex.slice(2), 'hex');
 	}
@@ -68,7 +68,7 @@ export default class ProxyAPI {
 		data = data || '0x';
 
 		var tx: TransferTx = {
-			token, tokenId, from, to, amount, 
+			token, tokenId, from, to, amount,
 			data, expiry: BigInt(expiry), signCount: BigInt(signCount),
 			signer: [],
 			rsv: [],
@@ -79,7 +79,7 @@ export default class ProxyAPI {
 		);
 		var msg = buffer.from(crypto_tx.keccak(buf).data);
 		var my = await index.getDefaultAccount();
-		
+
 		var owners = await this.ownersOf(token, tokenId, from);
 		//var buf_hex = await this.encodePacked(tx)
 		console.log(msg.toString('hex'));
@@ -99,18 +99,18 @@ export default class ProxyAPI {
 		}
 
 		for (var sign of device_sign) {
-			if (sign.sign.slice(0,2) == '0x') {
+			if (sign.sign.slice(0, 2) == '0x') {
 				sign.sign = sign.sign.slice(2);
 			}
 		}
 
-		tx.signer = device_sign.map(e=>e.signer);
-		tx.rsv = device_sign.map(e=>{
+		tx.signer = device_sign.map(e => e.signer);
+		tx.rsv = device_sign.map(e => {
 			var buf = buffer.from(e.sign, 'hex');
 			return {
 				r: '0x' + buf.slice(0, 32).toString('hex'),
 				s: '0x' + buf.slice(32, 64).toString('hex'),
-				v: buf[64] >= 27 ? buf[64]: buf[64] + 27,
+				v: buf[64] >= 27 ? buf[64] : buf[64] + 27,
 			}
 		});
 
@@ -167,11 +167,11 @@ export default class ProxyAPI {
 
 }
 
-export const proxy721_eth = ProxyAPI.New(contracts.ERC721Proxy, ChainType.ETHEREUM);
-export const proxy1155_eth = ProxyAPI.New(contracts.ERC1155Proxy, ChainType.ETHEREUM);
+// export const proxy721_eth = ProxyAPI.New(contracts.ERC721Proxy, ChainType.ETHEREUM);
+// export const proxy1155_eth = ProxyAPI.New(contracts.ERC1155Proxy, ChainType.ETHEREUM);
 
-export const proxy721_matic = ProxyAPI.New(contracts.ERC721Proxy_MATIC, ChainType.MATIC);
-export const proxy1155_matic = ProxyAPI.New(contracts.ERC1155Proxy_MATIC, ChainType.MATIC);
+// export const proxy721_matic = ProxyAPI.New(contracts.ERC721Proxy_MATIC, ChainType.MATIC);
+// export const proxy1155_matic = ProxyAPI.New(contracts.ERC1155Proxy_MATIC, ChainType.MATIC);
 
 export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string) {
 	somes.assert(chain_, `ProxyAPI.constructor() "chain" parameter cannot be empty`);

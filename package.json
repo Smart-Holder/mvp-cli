@@ -20,6 +20,7 @@
 	},
 	"dependencies": {
 		"i18next": "^21.6.0",
-		"react-i18next": "^11.15.1"
+		"react-i18next": "^11.15.1",
+		"tp-js-sdk": "^3.7.1"
 	}
 }

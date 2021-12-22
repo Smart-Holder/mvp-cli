@@ -79,7 +79,8 @@
 		text-align: left;
 		margin-top: 1.25rem;
 		margin-left: 0.24rem;
-		position: absolute;
+		position: fixed;
+		z-index: 2;
 	}
 }
 
@@ -88,6 +89,8 @@
 	background-color: rgba(254, 255, 254, 0.639);
 	border-radius: 0.32rem;
 	margin-top: 2.12rem;
+	z-index: 9;
+	position: relative;
 	.list_title {
 		font-size: 0.36rem;
 		color: #333;
@@ -114,14 +117,3 @@
 	}
 }
 
-.add_device_carousel {
-	color: #333;
-	font-size: 0.26rem;
-
-	.setp_title {
-		margin-bottom: 0.24rem;
-	}
-	.setp_box {
-		max-height: 3.2rem;
-	}
-}

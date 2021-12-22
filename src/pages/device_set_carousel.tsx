@@ -206,7 +206,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 									this.setState({ tabsCurrent: 1 })
 								}
 							}} className={`${(radioValue !== CarouselType.multi && item.index === 1) && 'disabledTab'} `}>{item.title}</div>}
-						// onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
 						>
 							<div className="item_page" >
 								<div className="radio_box">

@@ -12,6 +12,7 @@ import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
 import '../css/index.scss';
 import { changeLanguage } from '../util/i18next';
+import { BindDeviceCarousel } from '../components/carousel';
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 
@@ -107,15 +108,7 @@ class DeviceList extends NavPage {
 					title={t("扫码绑定设备")}
 					footer={[{ text: t('我知道了'), onPress: () => this.setState({ visible: false }) }]}
 				>
-					<Carousel className="add_device_carousel" dotActiveStyle={{ backgroundColor: "#1677FF" }}>
-
-						{this.carouselSetupType[carouselType]?.map((item, key) => {
-							return <div key={key} className="setp_box">
-								<div className="setp_title">{item.title}</div>
-								<img style={{ width: '100%' }} src={(item.img)} alt="" />
-							</div>
-						})}
-					</Carousel>
+					<BindDeviceCarousel />
 				</Modal>
 
 			</div>

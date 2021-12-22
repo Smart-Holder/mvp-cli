@@ -1,14 +1,46 @@
 .my_page {
-	padding: 0 0.3rem;
 	background-color: #f5f5f5;
 	display: flex;
 	flex-direction: column;
 	.ant-spin-nested-loading {
 		height: 100%;
-
+	}
+	.am-notice-bar {
+		line-height: normal;
+		overflow: initial;
+		z-index: 99;
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+	.ant-spin {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		margin-left: -0.3rem;
+		width: 100%;
 	}
 	.my_page_content {
 		overflow: auto;
+		padding: 0 0.3rem;
+		// padding-top: 0.66rem;
+
+		.am-tabs {
+		}
+
+		.am-tabs-pane-wrap {
+			height: 100%;
+			overflow: hidden;
+		}
+		.list_box {
+			height: 100%;
+			overflow: auto;
+			flex: 1;
+			margin-top: 0.12rem;
+			// background-color: pink;
+		}
 	}
 
 	.my_page_title {

@@ -7,15 +7,16 @@ import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
 import { contracts } from '../../config';
-import nft_proxy from '../chain/nftproxy';
+import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
 import { alert } from 'webpkit/lib/dialog';
 import { ArrayToObj, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
-import '../css/device_info.scss';
 import { withTranslation } from 'react-i18next';
+import '../css/device_info.scss';
+const tp = require('tp-js-sdk');
 
 
 class DeviceInfo extends NavPage<Device> {
@@ -53,44 +54,54 @@ class DeviceInfo extends NavPage<Device> {
 
 	// 获取nft列表
 	async getNFTList(owner: string) {
+
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
 		this.setState({ nftList });
 		this.getDeviceInfo(owner);
 	}
 
-	async takeAwayNftOfDeviceClick(nft: NFT) {
+	// 转出nft按钮点击
+	async transferBtnClick(nft: NFT) {
+		tp.invokeQRScanner().then((res: string) => {
+			this.takeAwayNftOfDeviceClick(nft, res);
+		});
+	}
+
+	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
 		const { t } = this;
 		try {
+			let to = toAddress || await chain.getDefaultAccount();
 			setNftDisabledTime(nft, "drawNftDisabledTime", this.getNFTList.bind(this, this.params.address));
-			await this._Withdraw(nft);
+			await this._Withdraw(nft, to);
 			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => this.getNFTList(this.params.address));
-		} catch (error) {
-			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(error)}</div> });
+		} catch (error: any) {
+			let errorText = error;
+			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消取出到钱包');
+			if (error?.errno == 100400) errorText = error.description;
+			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
 
 		}
 	}
 
-	_Withdraw = async (nft: NFT) => {
+	_Withdraw = async (nft: NFT, to: string) => {
+
 		const { t } = this;
-		var to = await chain.getDefaultAccount();
 		var from = nft.ownerBase || '';
 		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
-		somes.assert(nft.owner == contracts.ERC721Proxy ||
-			nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
+		proxyAddress(nft.type, nft.contract?.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
 		var l = await Loading.show(t('正在取出到您的钱包中,请勿操作'));
 		return new Promise(async (resolve, reject) => {
 			try {
-				await nft_proxy.New(nft.owner as string)
+				chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
+				await nft_proxy.New(nft.owner, nft.contract?.chain)
 					.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 				resolve(nft);
 			} catch (err: any) {
 				removeNftDisabledTimeItem(nft, "drawNftDisabledTime");
 				console.error(err);
-
-				// if (env == 'dev') alert(err.message);
-				reject(t('已取消取出到钱包'));
+				reject(err);
 			} finally {
 				l.close();
 			}
@@ -142,8 +153,7 @@ class DeviceInfo extends NavPage<Device> {
 					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
 
-
-				{nftList.map(item => <NftCard key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("正在取出到钱包")} />)}
+				{nftList.map(item => <NftCard key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)}
 			</div>
 
 		</div>

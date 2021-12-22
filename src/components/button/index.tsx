@@ -42,7 +42,7 @@ const Button = (props: IBottomBtnProps) => {
 	};
 
 	const button = (
-		<AtButton type={btnType ? "primary" : props.type} disabled={Boolean(loading || atLoading || disabled)} loading={((loading || atLoading))} className={`button_btn ${className} ${btnType}`} onClick={btnClick} {...rest}>
+		<AtButton type={btnType ? "primary" : props.type} disabled={Boolean(loading || atLoading || disabled)} loading={((loading || atLoading))} className={`button_btn ${className} ${props.ghost && 'ant-btn-background-ghost'} ${btnType}`} onClick={btnClick} {...rest}>
 			{(btnType && btnIcon[btnType]) || children}
 		</AtButton>
 	);

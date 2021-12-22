@@ -32,7 +32,7 @@ import somes from 'somes';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
-import {ChainType} from '../models';
+import { ChainType } from '../models/def';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
