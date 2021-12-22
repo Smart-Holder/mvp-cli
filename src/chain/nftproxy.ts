@@ -181,14 +181,14 @@ export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string):
 		if (chain == ChainType.ETHEREUM) {
 			return contracts.ERC721Proxy;
 		} else if (chain == ChainType.MATIC) {
-			return contracts.ERC721Proxy_MATIC;
+			return contracts.ERC721Proxy_MATIC as any;
 		}
 	}
 	else if (type == AssetType.ERC1155) {
 		if (chain == ChainType.ETHEREUM) {
 			return contracts.ERC1155Proxy;
 		} else if (chain == ChainType.MATIC) {
-			return contracts.ERC1155Proxy_MATIC;
+			return contracts.ERC1155Proxy_MATIC as any;
 		}
 	}
 
