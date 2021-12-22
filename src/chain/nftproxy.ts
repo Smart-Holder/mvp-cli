@@ -173,7 +173,7 @@ export default class ProxyAPI {
 // export const proxy721_matic = ProxyAPI.New(contracts.ERC721Proxy_MATIC, ChainType.MATIC);
 // export const proxy1155_matic = ProxyAPI.New(contracts.ERC1155Proxy_MATIC, ChainType.MATIC);
 
-export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string) {
+export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string): any {
 	somes.assert(chain_, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 	var chain = chain_ as ChainType;
 
