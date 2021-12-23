@@ -172,13 +172,13 @@ class My extends NavPage {
 			buttons: {
 				[btnText]: async () => {
 					await getNFTList();
-					let dsq_id = setInterval(async () => {
+					let dsq_id = setTimeout(async () => {
 						let { alert_id } = this.state;
 						(alert_id as any).close && (alert_id as any).close();
 						console.log(alert_id, dsq_id);
 						let l = await alert('数据正在运行中，请耐心等待...', getNFTList);
 						this.setState({ alert_id: l });
-					}, 5000);
+					}, 20000);
 					this.setState({ dsq_id });
 				}
 			},

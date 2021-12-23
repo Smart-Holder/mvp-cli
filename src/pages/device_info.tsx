@@ -95,13 +95,13 @@ class DeviceInfo extends NavPage<Device> {
 
 			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, async () => {
 				await getNFTList();
-				let dsq_id = setInterval(async () => {
+				let dsq_id = setTimeout(async () => {
 					let alert_id = this.state.alert_id as any;
 					alert_id.close && alert_id.close();
 					console.log(alert_id, dsq_id);
 					let l = await alert('数据正在运行中，请耐心等待...', getNFTList);
 					this.setState({ alert_id: l });
-				}, 5000);
+				}, 20000);
 				this.setState({ dsq_id });
 			});
 		} catch (error: any) {
