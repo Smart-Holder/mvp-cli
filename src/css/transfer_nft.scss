@@ -1,0 +1,39 @@
+.transfer_nft_page {
+	background-color: #f5f5f5;
+}
+.transfer_nft_page_content {
+	padding: 0 0.3rem;
+
+	.transfer_input_card {
+		padding: 0.6rem 0.3rem;
+		background-color: #fff;
+		border-radius: 0.16rem;
+		margin-top: 0.2rem;
+		.input_box {
+			display: flex;
+			align-items: center;
+			img {
+				width: 0.5rem;
+				margin-left: 0.2rem;
+			}
+			.label {
+				white-space: nowrap;
+				margin-right: 0.2rem;
+			}
+		}
+	}
+
+	.nft_card_part {
+		margin-top: 0.2rem;
+		.nft_card_part_title {
+			font-size: 0.35rem;
+			font-weight: 500;
+			margin-bottom: 0.2rem;
+		}
+	}
+
+	.ant-input-affix-wrapper-textarea-with-clear-btn .ant-input-clear-icon {
+		top: 50%;
+		transform: translate(0%, -50%);
+	}
+}

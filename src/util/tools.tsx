@@ -56,17 +56,26 @@ export default withTranslation('translations', { withRef: true })(Tab);
 
 
 export type IDisabledType = 'drawNftDisabledTime' | 'nftDisabledTime';
+export type IActionType = 'toWallets' | 'toDevice';
+
+interface INftDisabledTimeProps {
+	[key: string]: {
+		actionTime: string;
+		actionType: 'toWallets' | 'toDevice';
+	}
+}
 
 // 设置记录当前nft 存入设备操作时间
-export const setNftDisabledTime = (nft: NFT, storageType: IDisabledType, getList: () => void) => {
+export const setNftDisabledTime = (nft: NFT, storageType: IDisabledType, getList?: () => void, actionType: IActionType = 'toDevice') => {
 	let nftDisabledTimeStr = localStorage.getItem(storageType);
-	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
-	nftDisabledTime[nft.tokenId] = String(Date.now());
+	let nftDisabledTime: INftDisabledTimeProps = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	nftDisabledTime[nft.tokenId] = { actionTime: String(Date.now()), actionType };
+
 	let dsq_id = setTimeout(() => {
 		removeNftDisabledTimeItem(nft, storageType);
-		getList();
+		getList && getList();
 		console.log('定时器执行', dsq_id);
-	}, 180000);
+	}, 100000);
 	localStorage.setItem(storageType, JSON.stringify(nftDisabledTime));
 	localStorage.setItem(nft.tokenId, String(dsq_id));
 }
@@ -74,7 +83,7 @@ export const setNftDisabledTime = (nft: NFT, storageType: IDisabledType, getList
 // 删除操作nft时间
 export const removeNftDisabledTimeItem = (nft: NFT, storageType: IDisabledType) => {
 	let nftDisabledTimeStr = localStorage.getItem(storageType);
-	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	let nftDisabledTime: INftDisabledTimeProps = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
 	let dsq_id = Number(localStorage.getItem(nft.tokenId));
 	delete nftDisabledTime[nft.tokenId];
 	console.log('删除nft操作时间', storageType, '清除定时器>', dsq_id);
@@ -84,21 +93,27 @@ export const removeNftDisabledTimeItem = (nft: NFT, storageType: IDisabledType) 
 }
 
 // 设置nft操作按钮loading
-export const setNftActionLoading = (nftList: INftItem[], storageType: IDisabledType, isWithdraw?: boolean) => {
+export const setNftActionLoading = (nftList: INftItem[], storageType: IDisabledType) => {
+
+
 	let nftDisabledTimeStr = localStorage.getItem(storageType);
-	let nftDisabledTime: { [key: string]: string } = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
+	let nftDisabledTime: INftDisabledTimeProps = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
 
 	let otherType: IDisabledType = storageType == "drawNftDisabledTime" ? "nftDisabledTime" : "drawNftDisabledTime";
 	let otherDisabledTimeStr = localStorage.getItem(otherType);
-	let otherDisabledTime: { [key: string]: string } = otherDisabledTimeStr ? JSON.parse(otherDisabledTimeStr) : {};
+	let otherDisabledTime: INftDisabledTimeProps = otherDisabledTimeStr ? JSON.parse(otherDisabledTimeStr) : {};
+
+
 
 	nftList.forEach(item => {
-		let nftSaveTime = Number(nftDisabledTime[item.tokenId]);
+		let nftDisabledTimeItem = nftDisabledTime[item.tokenId];
+		let nftSaveTime = Number(nftDisabledTimeItem?.actionTime);
+		const isWithdraw = nftDisabledTimeItem?.actionType === 'toWallets';
+
 		let disabled = nftSaveTime && (Date.now() - nftSaveTime) < 180000 ? true : false;
 		let disabledKey: IDisabledKey = isWithdraw ? 'transfer_btn_disabled' : 'btn_disabled';
 
 		item[disabledKey] = disabled;
-
 
 		if (otherDisabledTime[item.tokenId]) removeNftDisabledTimeItem(item, otherType);
 	});

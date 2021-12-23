@@ -171,6 +171,23 @@ body {
 	color: #1677ff;
 }
 
+.transferToDeviceTipBox {
+	color: #333;
+	font-size: 0.28rem;
+	.tip_img_box {
+		margin-top: 0.27rem;
+		.tip_img_box_text {
+			position: absolute;
+			width: 50%;
+			color: #333;
+			text-align: left;
+		}
+	}
+	img {
+		width: 100%;
+	}
+}
+
 .dialog .default {
 	border-radius: 0.16rem;
 	.tip_box {

@@ -29,13 +29,13 @@ class DeviceInfo extends NavPage<Device> {
 
 	async triggerLoad() {
 		let owner = this.params.address;
-		this.getNFTList(owner, false);
+		this.getNFTList(owner);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
 			if (data.ownerBase === owner) {
 				console.log(e, "--------ws-------");
 				removeNftDisabledTimeItem(data, "drawNftDisabledTime");
-				this.getNFTList(owner, false);
+				this.getNFTList(owner);
 			}
 		}, this);
 	}
@@ -53,10 +53,9 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	// 获取nft列表
-	async getNFTList(owner: string, isOtherWallets: boolean) {
-
+	async getNFTList(owner: string) {
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
-		nftList = setNftActionLoading(nftList, "drawNftDisabledTime", isOtherWallets);
+		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
 		this.setState({ nftList });
 		this.getDeviceInfo(owner);
 	}
@@ -65,14 +64,12 @@ class DeviceInfo extends NavPage<Device> {
 	async transferBtnClick(nftItem: NFT) {
 		tp.invokeQRScanner().then((res: string) => {
 			this.takeAwayNftOfDeviceClick(nftItem, res);
-
-
 		});
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
 		const { t } = this;
-		const getNFTList = this.getNFTList.bind(this, this.params.address, Boolean(toAddress))
+		const getNFTList = this.getNFTList.bind(this, this.params.address)
 		const { nftList } = this.state;
 
 		let newNftList = [...nftList];
@@ -176,7 +173,7 @@ class DeviceInfo extends NavPage<Device> {
 					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
 
-				{nftList.map(item => <NftCard key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)}
+				{nftList.map(item => <NftCard showTransferBtn={false} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)}
 			</div>
 
 		</div>

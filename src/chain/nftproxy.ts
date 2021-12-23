@@ -40,7 +40,7 @@ export default class ProxyAPI {
 		return this._artifacts.api.ownersOf(token, tokenId, owner).call();
 	}
 
-	async withdraw(to: Address, token: Address, tokenId: Uint256, amount: Uint256, data: Bytes) {
+	async withdraw(to: Address, token: Address, tokenId: Uint256, amount: Uint256, data: Bytes = '0x') {
 		await this._artifacts.api.withdraw(to, token, tokenId, amount, data).call();
 		await this._artifacts.api.withdraw(to, token, tokenId, amount, data).post();
 	}

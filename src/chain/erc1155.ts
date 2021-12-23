@@ -1,7 +1,7 @@
 
 import buffer from 'somes/buffer'
 import artifacts from './artifacts';
-import chain, {encodeParameters} from '.';
+import chain, { encodeParameters } from '.';
 
 export class ApiIMPL {
 
@@ -13,7 +13,7 @@ export class ApiIMPL {
 	// 安全转移资产
 	async safeTransferFrom(token: string, from: string, to: string, tokenId: bigint, amount: bigint, data?: Uint8Array) {
 		var nft = artifacts.erc1155(token);
-		var data_ = data ? '0x' + buffer.from(data).toString('hex'): '0x0';
+		var data_ = data ? '0x' + buffer.from(data).toString('hex') : '0x0';
 		// var uri = await nft.api.tokenURI(tokenId).call();
 		// console.log(uri);
 		await nft.api.safeTransferFrom(from, to, tokenId, amount, data_).call();

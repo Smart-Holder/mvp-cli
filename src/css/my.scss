@@ -26,8 +26,9 @@
 		overflow: auto;
 		padding: 0 0.3rem;
 		// padding-top: 0.66rem;
-
+		height: 100%;
 		.am-tabs {
+			// background-color: pink;
 		}
 
 		.am-tabs-pane-wrap {
@@ -48,23 +49,6 @@
 		margin-bottom: 0.24rem;
 		margin-top: 0.5rem;
 		margin-left: 0.02rem;
-	}
-}
-
-.transferToDeviceTipBox {
-	color: #333;
-	font-size: 0.28rem;
-	.tip_img_box {
-		margin-top: 0.27rem;
-		.tip_img_box_text {
-			position: absolute;
-			width: 50%;
-			color: #333;
-			text-align: left;
-		}
-	}
-	img {
-		width: 100%;
 	}
 }
 

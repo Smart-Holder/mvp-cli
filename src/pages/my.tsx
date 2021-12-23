@@ -19,7 +19,6 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/my.scss';
-const tp = require('tp-js-sdk');
 
 
 class My extends NavPage {
@@ -40,7 +39,7 @@ class My extends NavPage {
 	};
 
 
-	async triggerLoad() {
+	async triggerShow() {
 		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ from: owner });
 		this.getNFTList(owner);
@@ -65,7 +64,7 @@ class My extends NavPage {
 		this.setState({ loading: true })
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 
-		nftList = setNftActionLoading(nftList, "nftDisabledTime", isWithdraw);
+		nftList = setNftActionLoading(nftList, "nftDisabledTime");
 
 		let { nftList1, nftList2 } = this.getDistinguishNftList(nftList);
 
@@ -103,9 +102,11 @@ class My extends NavPage {
 
 	// 转出nft按钮点击
 	async transferBtnClick(nft: NFT) {
-		tp.invokeQRScanner().then((address: string) => {
-			this.selectDeviceModalok({ address }, nft, true);
-		});
+		// tp.invokeQRScanner().then((address: string) => {
+		// 	this.selectDeviceModalok({ address }, nft, true);
+		// });
+		let { token, tokenId } = nft;
+		this.pushPage({ url: '/transfer_nft', params: { token, tokenId } })
 	}
 
 	// 选择设备弹框确认按钮点击事件
@@ -182,7 +183,6 @@ class My extends NavPage {
 					if (nft.ownerBase) {
 						await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
-
 						chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
 						await erc721.safeTransferToProxy( // 转移给代理协约
 							nft.token, [device_address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.contract?.chain));
