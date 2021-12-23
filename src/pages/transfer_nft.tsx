@@ -50,7 +50,7 @@ class TransferNft extends NavPage<INftItem> {
 
 	async transferAction(nft: INftItem, address: string) {
 		const { t } = this;
-		var l = await Loading.show(t('正在取出到您的钱包中,请勿操作'));
+		var l = await Loading.show(t('正在转移,请勿操作'));
 		try {
 			if (address && address?.startsWith("0x")) {
 				setNftDisabledTime(nft, "nftDisabledTime", undefined, 'toWallets');

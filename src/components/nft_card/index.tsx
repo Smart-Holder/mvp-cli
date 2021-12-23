@@ -3,14 +3,8 @@ import Button from '../button';
 import { Image } from 'antd';
 import { INftItem } from '../../pages/interface';
 import { getSubStr } from '../../util/tools';
-import erc721 from '../../chain/erc721';
-import erc1155 from '../../chain/erc1155';
-import { AssetType } from '../../models';
-import chain from '../../chain';
 
 import "./index.scss";
-
-const tp = require('tp-js-sdk');
 
 interface INftCardProps {
 	nft: INftItem;

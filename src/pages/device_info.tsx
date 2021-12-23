@@ -24,7 +24,9 @@ class DeviceInfo extends NavPage<Device> {
 	state = {
 		nftList: [] as INftItem[],
 		deviceInfo: this.params,
-		loading: false
+		loading: false,
+		alert_id: {},
+		dsq_id: 0
 	}
 
 	async triggerLoad() {
@@ -42,6 +44,7 @@ class DeviceInfo extends NavPage<Device> {
 
 
 	triggerRemove() {
+		clearInterval(this.state.dsq_id);
 		models.msg.removeEventListenerWithScope(this);
 	}
 
@@ -56,6 +59,7 @@ class DeviceInfo extends NavPage<Device> {
 	async getNFTList(owner: string) {
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
+		clearInterval(this.state.dsq_id);
 		this.setState({ nftList });
 		this.getDeviceInfo(owner);
 	}
@@ -89,11 +93,23 @@ class DeviceInfo extends NavPage<Device> {
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
 			await this._Withdraw(nft, to);
 
-			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, () => getNFTList());
+			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, async () => {
+				await getNFTList();
+				let dsq_id = setInterval(async () => {
+					let alert_id = this.state.alert_id as any;
+					alert_id.close && alert_id.close();
+					console.log(alert_id, dsq_id);
+					let l = await alert('数据正在运行中，请耐心等待...', getNFTList);
+					this.setState({ alert_id: l });
+				}, 5000);
+				this.setState({ dsq_id });
+			});
 		} catch (error: any) {
 			let errorText = error;
 			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消取出到钱包');
-			if (error?.errno == 100400) errorText = error.description;
+			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
+			// window.alert((Object.keys(error)));
+
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
 

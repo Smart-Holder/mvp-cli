@@ -5,14 +5,14 @@ import models, { AssetType, Device, NFT } from '../models';
 
 import chain from '../chain';
 import NftCard from '../components/nft_card';
-import { show } from 'webpkit/lib/dialog';
+import { show, alert } from 'webpkit/lib/dialog';
 import { devices } from '../models/device';
 import { Modal } from 'antd-mobile';
 import nftproxy, { proxyAddress } from '../chain/nftproxy';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import { Empty, Spin } from 'antd';
-import { Tabs, NoticeBar, Carousel } from 'antd-mobile';
+import { Tabs, NoticeBar } from 'antd-mobile';
 import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
 import Loading from '../../deps/webpkit/lib/loading';
 import { INftItem } from './interface';
@@ -35,7 +35,9 @@ class My extends NavPage {
 		visible: false,
 		from: '',
 		bindDeviceTipVisible: false,
-		carouselIndex: 0
+		carouselIndex: 0,
+		dsq_id: 0,
+		alert_id: {}
 	};
 
 
@@ -56,6 +58,9 @@ class My extends NavPage {
 	}
 
 	triggerRemove() {
+		console.log('清除clearInterval' + this.state.dsq_id);
+
+		clearInterval(this.state.dsq_id);
 		models.msg.removeEventListenerWithScope(this);
 	}
 
@@ -69,6 +74,7 @@ class My extends NavPage {
 		let { nftList1, nftList2 } = this.getDistinguishNftList(nftList);
 
 		this.setState({ nft: nftList, nftList1, nftList2, loading: false });
+		clearInterval(this.state.dsq_id);
 	}
 
 	// 获取根据当前钱包链 区分开的数据
@@ -163,7 +169,19 @@ class My extends NavPage {
 		let btnText = t('我知道了');
 
 		let showTip = () => show({
-			buttons: { [btnText]: getNFTList },
+			buttons: {
+				[btnText]: async () => {
+					await getNFTList();
+					let dsq_id = setInterval(async () => {
+						let { alert_id } = this.state;
+						(alert_id as any).close && (alert_id as any).close();
+						console.log(alert_id, dsq_id);
+						let l = await alert('数据正在运行中，请耐心等待...', getNFTList);
+						this.setState({ alert_id: l });
+					}, 5000);
+					this.setState({ dsq_id });
+				}
+			},
 			title: t('NFT存入已发起申请'), text: <div className="transferToDeviceTipBox">
 				<div>{t('请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。')}</div>
 				<div className="tip_img_box">
@@ -203,6 +221,7 @@ class My extends NavPage {
 				} else {
 					reject(t('暂时不支持这种类型的NFT存入到设备'));
 				}
+
 			} catch (error) {
 				reject(error);
 			}
