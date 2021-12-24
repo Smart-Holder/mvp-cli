@@ -41,8 +41,14 @@ import Tools from './util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
 import { env } from '../config';
 
-utils.onUncaughtException.on((e) => errnoHandles(e.data));
-utils.onUnhandledRejection.on((e) => errnoHandles(e.data.reason));
+utils.onUncaughtException.on((e) => {
+	console.log(e.data.message);
+	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
+	errnoHandles(e.data)
+});
+utils.onUnhandledRejection.on((e) => {
+	errnoHandles(e.data.reason)
+});
 
 Nav.platform = '_mini_app';
 

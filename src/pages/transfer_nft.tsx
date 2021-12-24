@@ -68,7 +68,11 @@ class TransferNft extends NavPage<INftItem> {
 						</div>
 					</div>
 				});
-				this.popPage();
+				if (this.nav.length > 1) {
+					this.popPage();
+				} else {
+					this.replacePage('/my');
+				}
 			}
 
 		} catch (error: any) {
@@ -80,7 +84,7 @@ class TransferNft extends NavPage<INftItem> {
 			if (error?.errno == 100400) errorText = error.description;
 
 			let btnText = t('我知道了');
-			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {(errorText)}</div>, buttons: { [btnText]: () => { } } });
+			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {t(errorText)}</div>, buttons: { [btnText]: () => { } } });
 		} finally {
 			l.close();
 		}
@@ -127,23 +131,23 @@ class TransferNft extends NavPage<INftItem> {
 		const { nftItem, inputToken } = this.state;
 
 		return <div className="transfer_nft_page">
-			<Header title={"转移NFT"} page={this} />
+			<Header title={t("转移NFT")} page={this} />
 
 			<div className="transfer_nft_page_content">
 				<div className="transfer_input_card">
 					<div className='input_box'>
-						<div className="label" >转移到: </div>
+						<div className="label" >{t("转移到")}: </div>
 						<Input.TextArea value={inputToken} onChange={(e) => {
 							this.setState({ inputToken: e.target.value });
-						}} placeholder="钱包地址" allowClear />
+						}} placeholder={t("请复制或扫码输入钱包地址")} allowClear />
 						<div><img onClick={this.transfer_nft.bind(this)} src={require('../assets/qr_icon.png')} /> </div>
 					</div>
 				</div>
 
 				<div className="nft_card_part">
-					<div className="nft_card_part_title">转移内容</div>
+					<div className="nft_card_part_title">{t('转移内容')}</div>
 
-					<NftCard showTransferBtn={false} key={nftItem.id} btnClick={this.transferAction.bind(this, nftItem, inputToken)} nft={nftItem} btnText={"下一步"} btnLoadingText={"下一步"} />
+					<NftCard showTransferBtn={false} key={nftItem.id} btnClick={this.transferAction.bind(this, nftItem, inputToken)} nft={nftItem} btnText={t("下一步")} />
 				</div>
 			</div>
 
