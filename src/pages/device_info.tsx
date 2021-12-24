@@ -99,7 +99,7 @@ class DeviceInfo extends NavPage<Device> {
 					let alert_id = this.state.alert_id as any;
 					alert_id.close && alert_id.close();
 					console.log(alert_id, dsq_id);
-					let l = await alert('数据正在运行中，请耐心等待...', getNFTList);
+					let l = await alert(t('数据正在运行中，请耐心等待...'), getNFTList);
 					this.setState({ alert_id: l });
 				}, 20000);
 				this.setState({ dsq_id });

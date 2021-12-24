@@ -14,11 +14,14 @@ import erc1155 from '../chain/erc1155';
 import '../css/transfer_nft.scss';
 import { withTranslation } from 'react-i18next';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
+import { TextAreaRef } from 'antd/lib/input/TextArea';
 
 const tp = require('tp-js-sdk');
 
 class TransferNft extends NavPage<INftItem> {
 	state = { nftItem: this.props.params as INftItem, owner: "", inputToken: '' }
+
+	inputRef = React.createRef<TextAreaRef>();
 
 	async triggerLoad() {
 		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
@@ -73,6 +76,8 @@ class TransferNft extends NavPage<INftItem> {
 				} else {
 					this.replacePage('/my');
 				}
+			} else {
+				alert(t('请复制或扫码输入钱包地址'), () => this.inputRef.current?.focus());
 			}
 
 		} catch (error: any) {
@@ -137,7 +142,7 @@ class TransferNft extends NavPage<INftItem> {
 				<div className="transfer_input_card">
 					<div className='input_box'>
 						<div className="label" >{t("转移到")}: </div>
-						<Input.TextArea value={inputToken} onChange={(e) => {
+						<Input.TextArea ref={this.inputRef} required value={inputToken} onChange={(e) => {
 							this.setState({ inputToken: e.target.value });
 						}} placeholder={t("请复制或扫码输入钱包地址")} allowClear />
 						<div><img onClick={this.transfer_nft.bind(this)} src={require('../assets/qr_icon.png')} /> </div>

@@ -63,5 +63,6 @@
 	"绑定设备中": "Binding device",
 	"请使用钱包扫码功能扫描设备屏幕二维码": "Please use the wallet scanning function to scan the QR code on the device screen",
 	"您还未绑定任何设备，请右翻查看绑定设备操作步骤": "You haven't bound any devices yet. Please turn right to view the operation steps of binding devices",
-	"未绑定设备": "Unbound device"
+	"未绑定设备": "Unbound device",
+	"数据正在运行中，请耐心等待...": "The data is running, please wait patiently..."
 }
