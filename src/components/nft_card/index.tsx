@@ -4,6 +4,7 @@ import { Image } from 'antd';
 import { INftItem } from '../../pages/interface';
 import { getSubStr } from '../../util/tools';
 import { useTranslation } from 'react-i18next';
+
 import "./index.scss";
 
 interface INftCardProps {
