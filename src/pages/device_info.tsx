@@ -156,7 +156,7 @@ class DeviceInfo extends NavPage<Device> {
 					try {
 						this.setState({ loading: true });
 						const address = this.state.deviceInfo.address;
-						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single');
+						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single', true);
 						await device.unbind(address);
 
 						alert(t('解绑设备成功'), () => window.history.back());

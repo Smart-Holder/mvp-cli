@@ -10,9 +10,8 @@ import { Carousel, Modal } from 'antd-mobile';
 import IconFont from '../components/icon_font';
 // import { changeLanguage } from '../util/i18next';
 import { withTranslation } from 'react-i18next';
-import '../css/index.scss';
-import { changeLanguage } from '../util/i18next';
 import { BindDeviceCarousel } from '../components/carousel';
+import '../css/index.scss';
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 

@@ -78,7 +78,7 @@ export async function get_screen_save(address: string, _type?: 'single' | 'multi
 }
 
 export async function set_screen_save(address: string,
-	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video') {
+	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video', isNotCall?: boolean) {
 	var ss = Object.assign(await get_screen_save(address, type), pss);
 	var nfts = await index.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
 	var nfts_set = new Set();
@@ -100,7 +100,7 @@ export async function set_screen_save(address: string,
 	if (pss.data) {
 		if (type == 'single') {
 			somes.assert(pss.data.length, 'Bad param for call displaySingleImage()');
-			await displaySingleImage(address, pss.data[0].token, pss.data[0].tokenId);
+			!isNotCall && await displaySingleImage(address, pss.data[0].token, pss.data[0].tokenId);
 		} else if (type == 'multi') {
 			await displayMultiImage(address, ss.time, pss.data);
 		} else {
