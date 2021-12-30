@@ -10,7 +10,7 @@ import {contracts} from '../../../config';
 
 export const abi = json.abi;
 export const contractName = json.contractName;
-export const contractAddress = contracts.ERC1155;
+//export const contractAddress = contracts.ERC1155;
 
 export default interface ERC1155 {
 	balanceOf(from: Address, tokenId: Uint256): Result<Uint256>;

@@ -10,7 +10,7 @@ import {contracts} from '../../../config';
 
 export const abi = json.abi;
 export const contractName = 'NFTProxy';//json.contractName;
-export const contractAddress = contracts.ERC721Proxy;// '0x7322ee767aaD2dEf9e3527Dc1230fB5f09ead682';
+//export const contractAddress = contracts.ERC721Proxy;// '0x7322ee767aaD2dEf9e3527Dc1230fB5f09ead682';
 
 export interface Owners {
 	balances: Uint256; // token 数量

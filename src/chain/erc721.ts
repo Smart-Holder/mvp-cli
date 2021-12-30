@@ -6,8 +6,6 @@ import chain, {encodeParameters} from '.';
 
 export class ApiIMPL {
 
-	get contractAddress() { return '' }
-
 	async balanceOf(token: string, from: string) {
 		var nft = artifacts.erc721(token);
 		return await nft.api.balanceOf(from).call();

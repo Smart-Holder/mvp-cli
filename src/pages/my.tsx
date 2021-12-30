@@ -83,7 +83,7 @@ class My extends NavPage {
 		let nftList2: INftItem[] = [];
 
 		nftList.forEach(item => {
-			(item.contract?.chain == chain.chain) ? nftList1.push(item) : nftList2.push(item);
+			(item.chain == chain.chain) ? nftList1.push(item) : nftList2.push(item);
 		});
 		return { nftList1, nftList2 };
 	}
@@ -199,22 +199,22 @@ class My extends NavPage {
 				if (nft.type == AssetType.ERC721) { // erc721
 					setNftDisabledTime(nft, "nftDisabledTime", getNFTList);
 					if (nft.ownerBase) {
-						await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
+						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
-						chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
+						chain.assetChain(nft.chain, '请切换至对应链的钱包');
 						await erc721.safeTransferToProxy( // 转移给代理协约
-							nft.token, [device_address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.contract?.chain));
+							nft.token, [device_address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.chain));
 					}
 					showTip();
 					resolve(nft);
 				} else if (nft.type == AssetType.ERC1155) {
 					setNftDisabledTime(nft, "nftDisabledTime", getNFTList);
 					if (nft.ownerBase) {
-						await nftproxy.New(nft.owner, nft.contract?.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
-						chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
+						chain.assetChain(nft.chain, '请切换至对应链的钱包');
 						await erc1155.safeTransferToProxy( // 转移给代理协约
-							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), proxyAddress(AssetType.ERC1155, nft.contract?.chain));
+							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), proxyAddress(AssetType.ERC1155, nft.chain));
 					}
 					showTip();
 					resolve(nft);
@@ -251,13 +251,13 @@ class My extends NavPage {
 					initialPage={0}
 				>
 					<div className="list_box">
-						{(nftList1.length) ? nftList1.map(item => <NftCard showChain={chain.chain !== item.contract?.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						{(nftList1.length) ? nftList1.map(item => <NftCard showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
 					</div>
 					<div className="list_box">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
 							{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备")}
 						</NoticeBar>}
-						{(nftList2.length) ? nftList2.map(item => <NftCard showChain={chain.chain !== item.contract?.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						{(nftList2.length) ? nftList2.map(item => <NftCard showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
 					</div>
 				</Tabs>
 

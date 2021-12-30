@@ -167,30 +167,18 @@ export default class ProxyAPI {
 
 }
 
-// export const proxy721_eth = ProxyAPI.New(contracts.ERC721Proxy, ChainType.ETHEREUM);
-// export const proxy1155_eth = ProxyAPI.New(contracts.ERC1155Proxy, ChainType.ETHEREUM);
+export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): any {
+	somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 
-// export const proxy721_matic = ProxyAPI.New(contracts.ERC721Proxy_MATIC, ChainType.MATIC);
-// export const proxy1155_matic = ProxyAPI.New(contracts.ERC1155Proxy_MATIC, ChainType.MATIC);
-
-export function proxyAddress(type: AssetType, chain_?: ChainType, msg?: string): any {
-	somes.assert(chain_, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
-	var chain = chain_ as ChainType;
-
-	if (type == AssetType.ERC721) {
-		if (chain == ChainType.ETHEREUM) {
-			return contracts.ERC721Proxy;
-		} else if (chain == ChainType.MATIC) {
-			return contracts.ERC721Proxy_MATIC as any;
-		}
-	}
-	else if (type == AssetType.ERC1155) {
-		if (chain == ChainType.ETHEREUM) {
-			return contracts.ERC1155Proxy;
-		} else if (chain == ChainType.MATIC) {
-			return contracts.ERC1155Proxy_MATIC as any;
-		}
+	if (type < 256) {
+		type <<= 8;
 	}
 
-	throw new Error(msg || 'Configuration proxy not found');
+	var _contracts = contracts as Dict<string>;
+	var key = `${ChainType[chain]}_${AssetType[type]}`;
+	var address = _contracts[key];
+
+	somes.assert(address, msg || `Configuration proxy not found key=${key}`);
+
+	return address;
 }
