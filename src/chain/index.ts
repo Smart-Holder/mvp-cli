@@ -94,17 +94,8 @@ export class Web3IMPL extends Web3Z {
 			this.setDefaultAccount(this._defaultAccount);
 
 			var id = await this.web3.eth.getChainId();
-			var chains: Dict<ChainType> = {
-				'1': ChainType.ETHEREUM, // mainnet
-				'3': ChainType.ETHEREUM, // Ropsten Test Network
-				'4': ChainType.ETHEREUM, // Rinkeby Test Network
-				'5': ChainType.ETHEREUM, // Goerli Test Network
-				'42': ChainType.ETHEREUM, // Kovan Test Network
-				'137': ChainType.MATIC, // mainnet matic
-				'80001': ChainType.MATIC, // test matic
-			};
 
-			this._chain = chains[id] || ChainType.UNKNOWN;
+			this._chain = ChainType[id] ? id: ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
 	}

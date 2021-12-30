@@ -103,18 +103,18 @@ class TransferNft extends NavPage<INftItem> {
 
 			try {
 				if (nft.type == AssetType.ERC721) { // erc721
-					chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
+					chain.assetChain(nft.chain, '请切换至对应链的钱包');
 					if (ownerBase) {
 						await erc721.safeTransferToProxy( // 转移给代理协约
-							nft.token, [address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.contract?.chain));
+							nft.token, [address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.chain));
 					} else {
 						await erc721.safeTransferFrom(token, owner, address, BigInt(tokenId));
 					}
 					resolve('');
 				} else if (nft.type == AssetType.ERC1155) {
-					chain.assetChain(nft.contract?.chain, '请切换至对应链的钱包');
+					chain.assetChain(nft.chain, '请切换至对应链的钱包');
 					if (ownerBase) {
-						await nft_proxy.New(nft.owner, nft.contract?.chain)
+						await nft_proxy.New(nft.owner, nft.chain)
 							.withdraw(address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
 						await erc1155.safeTransferFrom(token, owner, address, BigInt(tokenId), BigInt(nft.count));
