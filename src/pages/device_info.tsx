@@ -86,7 +86,6 @@ class DeviceInfo extends NavPage<Device> {
 		try {
 			newNftItem[disabledKey] = true;
 			newNftList[index] = newNftItem;
-
 			this.setState({ nftList: newNftList });
 
 			let to = toAddress || await chain.getDefaultAccount();
@@ -121,15 +120,16 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	_Withdraw = async (nft: NFT, to: string) => {
-
 		const { t } = this;
 		var from = nft.ownerBase || '';
-		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
-		proxyAddress(nft.type, nft.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
-
 		var l = await Loading.show(t('正在取出到您的钱包中,请勿操作'));
 		return new Promise(async (resolve, reject) => {
 			try {
+
+				somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
+				// debugger
+				proxyAddress(nft.type, nft.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
+
 				chain.assetChain(nft.chain, '请切换至对应链的钱包');
 				await nft_proxy.New(nft.owner, nft.chain)
 					.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个

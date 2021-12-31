@@ -171,7 +171,7 @@ export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): a
 	somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 
 	if (type < 256) {
-		type <<= 8;
+		type += (1 << 8);
 	}
 
 	var _contracts = contracts as Dict<string>;
