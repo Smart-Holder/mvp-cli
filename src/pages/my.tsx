@@ -102,6 +102,7 @@ class My extends NavPage {
 			visible = false;
 
 		}
+		// alert(nft);
 		this.setState({ device, visible, currNFT: nft, bindDeviceTipVisible });
 	}
 
@@ -280,8 +281,8 @@ class My extends NavPage {
 					<div style={{ width: "100%", }}>
 
 						{device.map(item => {
-							return <div key={item.sn} className={`alert_device_list ${currDevice.sn === item.sn && 'active_item'}`} onClick={() => {
-								this.setState({ currDevice: currDevice.sn === item.sn ? {} : item });
+							return <div key={item.address} className={`alert_device_list ${currDevice.address === item.address && 'active_item'}`} onClick={() => {
+								this.setState({ currDevice: currDevice.address === item.address ? {} : item });
 							}}>
 								<div className="left_box">
 									<img src={(item).screen <= 1 ? require('../assets/screen_icon.jpg') : require('../assets/test_device.png')} alt="" />
