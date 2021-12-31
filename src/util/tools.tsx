@@ -11,6 +11,7 @@ import { changeLanguage, LanguageType } from '../util/i18next';
 export type IDisabledKey = 'transfer_btn_disabled' | 'btn_disabled';
 
 import "./tools.scss";
+import chain from '../chain';
 
 class Tab extends ViewController<{ nav: () => Nav }> {
 	triggerLoad() {
@@ -164,4 +165,15 @@ export function getSubStr(str: string, substrlen: number = 11, startLen?: number
 	var subStr2 = str.substr(str.length - substrlen, str.length);
 	var subStr = subStr1 + "..." + subStr2;
 	return subStr;
+}
+
+// 获取根据当前钱包链 区分开的数据
+export const getDistinguishNftList = (nftList: INftItem[]) => {
+	let nftList1: INftItem[] = [];
+	let nftList2: INftItem[] = [];
+
+	nftList.forEach(item => {
+		(item.chain == chain.chain) ? nftList1.push(item) : nftList2.push(item);
+	});
+	return { nftList1, nftList2 };
 }

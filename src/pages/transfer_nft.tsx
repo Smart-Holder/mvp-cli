@@ -55,6 +55,7 @@ class TransferNft extends NavPage<INftItem> {
 		const { t } = this;
 		var l = await Loading.show(t('正在转移,请勿操作'));
 		try {
+			if (address.includes(':')) address = address.split(':')[1];
 			if (address && address?.startsWith("0x")) {
 				setNftDisabledTime(nft, "nftDisabledTime", undefined, 'toWallets');
 				await this._transferToWallets(nft, address);
@@ -145,7 +146,7 @@ class TransferNft extends NavPage<INftItem> {
 						<Input.TextArea ref={this.inputRef} required value={inputToken} onChange={(e) => {
 							this.setState({ inputToken: e.target.value });
 						}} placeholder={t("请复制或扫码输入钱包地址")} allowClear />
-						<div><img onClick={this.transfer_nft.bind(this)} src={require('../assets/qr_icon.png')} /> </div>
+						<div><img onClick={this.transfer_nft.bind(this)} src={require('../assets/qr_icon2.png')} /> </div>
 					</div>
 				</div>
 

@@ -6,16 +6,19 @@ import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
-import { contracts } from '../../config';
+import { CloseOutlined } from '@ant-design/icons';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
 import { alert } from 'webpkit/lib/dialog';
-import { ArrayToObj, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
+import { ArrayToObj, getDistinguishNftList, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
+import { Tabs, NoticeBar } from 'antd-mobile';
+
 import '../css/device_info.scss';
+import { Empty } from 'antd';
 const tp = require('tp-js-sdk');
 
 
@@ -23,6 +26,9 @@ class DeviceInfo extends NavPage<Device> {
 
 	state = {
 		nftList: [] as INftItem[],
+		nftList1: [] as INftItem[],
+		nftList2: [] as INftItem[],
+		tabIndex: 0,
 		deviceInfo: this.params,
 		loading: false,
 		alert_id: {},
@@ -59,8 +65,10 @@ class DeviceInfo extends NavPage<Device> {
 	async getNFTList(owner: string) {
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
+		let { nftList1, nftList2 } = getDistinguishNftList(nftList);
+
 		clearInterval(this.state.dsq_id);
-		this.setState({ nftList });
+		this.setState({ nftList, nftList1, nftList2 });
 		this.getDeviceInfo(owner);
 	}
 
@@ -174,7 +182,7 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	render() {
-		let { nftList, loading } = this.state;
+		let { nftList, loading, nftList1, nftList2, tabIndex } = this.state;
 		const { t } = this;
 
 		return <div className="device_info_page">
@@ -189,7 +197,27 @@ class DeviceInfo extends NavPage<Device> {
 					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
 
-				{nftList.map(item => <NftCard showTransferBtn={false} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)}
+
+				<Tabs tabBarUnderlineStyle={{ backgroundColor: '#1677ff', color: '#1677ff', borderColor: '#1677ff' }} tabBarBackgroundColor={'#f5f5f5'} tabBarActiveTextColor={'#1677ff'} tabs={
+					[{ title: this.t('本网络NFT'), index: 0 }, { title: this.t('其他网络NFT'), index: 1 }]
+				}
+					onChange={(item, index) => {
+						this.setState({ tabIndex: index })
+					}}
+					initialPage={0}
+				>
+					<div className="list_box">
+						{(nftList1.length) ? nftList1.map(item => <NftCard showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+					</div>
+					<div className="list_box">
+						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
+							{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备")}
+						</NoticeBar>}
+						{(nftList2.length) ? nftList2.map(item => <NftCard showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+					</div>
+				</Tabs>
+
+				{/* {nftList.map(item => <NftCard showTransferBtn={false} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)} */}
 			</div>
 
 		</div>

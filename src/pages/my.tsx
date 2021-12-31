@@ -13,7 +13,7 @@ import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import { Empty, Spin } from 'antd';
 import { Tabs, NoticeBar } from 'antd-mobile';
-import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime } from '../util/tools';
+import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, getDistinguishNftList } from '../util/tools';
 import Loading from '../../deps/webpkit/lib/loading';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
@@ -71,22 +71,12 @@ class My extends NavPage {
 
 		nftList = setNftActionLoading(nftList, "nftDisabledTime");
 
-		let { nftList1, nftList2 } = this.getDistinguishNftList(nftList);
+		let { nftList1, nftList2 } = getDistinguishNftList(nftList);
 
 		this.setState({ nft: nftList, nftList1, nftList2, loading: false });
 		clearInterval(this.state.dsq_id);
 	}
 
-	// 获取根据当前钱包链 区分开的数据
-	getDistinguishNftList(nftList: INftItem[]) {
-		let nftList1: INftItem[] = [];
-		let nftList2: INftItem[] = [];
-
-		nftList.forEach(item => {
-			(item.chain == chain.chain) ? nftList1.push(item) : nftList2.push(item);
-		});
-		return { nftList1, nftList2 };
-	}
 
 	// 存入设备按钮点击
 	async saveNftOfDeviceClick(nft: NFT) {
@@ -109,9 +99,6 @@ class My extends NavPage {
 
 	// 转出nft按钮点击
 	async transferBtnClick(nft: NFT) {
-		// tp.invokeQRScanner().then((address: string) => {
-		// 	this.selectDeviceModalok({ address }, nft, true);
-		// });
 		let { token, tokenId } = nft;
 		this.pushPage({ url: '/transfer_nft', params: { token, tokenId } })
 	}
@@ -138,7 +125,7 @@ class My extends NavPage {
 		var l = await Loading.show(isWithdraw ? t('正在取出到您的钱包中,请勿操作') : t('正在存入到您的设备中,请勿操作'));
 		try {
 			if (device?.address) {
-				this.setState({ visible: false, nft: newNftList, ...this.getDistinguishNftList(newNftList) });
+				this.setState({ visible: false, nft: newNftList, ...getDistinguishNftList(newNftList) });
 				await this._transferToDevice(device.address, nftInfo, isWithdraw);
 			}
 
@@ -147,7 +134,7 @@ class My extends NavPage {
 			newNftItem[disabledKey] = false;
 
 			newNftList[index] = newNftItem;
-			this.setState({ nft: newNftList, ...this.getDistinguishNftList(newNftList) });
+			this.setState({ nft: newNftList, ...getDistinguishNftList(newNftList) });
 			let errorText = error;
 			if (error?.code == 4001 || error.errno == -30000) errorText = '已取消存储操作';
 			if (error?.errno == 100400) errorText = error.description;
