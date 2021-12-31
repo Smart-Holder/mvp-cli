@@ -137,9 +137,9 @@ class My extends NavPage {
 			this.setState({ nft: newNftList, ...getDistinguishNftList(newNftList) });
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
-			if (error?.code == 4001 || error.errno == -30000) { errorText = '已取消存储操作' } else {
-				errorText + errorCode;
-			};
+			if (error?.code == 4001 || error.errno == -30000) { errorText = '已取消存储操作' }
+			(error?.code != 4001 && errorCode !== 'cancel') && (errorText += errorCode);
+
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
