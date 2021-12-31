@@ -18,7 +18,7 @@
 		display: flex;
 		.right_box {
 			margin-left: 0.18rem;
-			overflow: hidden;
+			// overflow: hidden;
 		}
 		.sn_title,
 		.address_title {
@@ -30,7 +30,7 @@
 		.address {
 			font-size: 0.28rem;
 			white-space: nowrap;
-			overflow: hidden;
+			// overflow: hidden;
 			text-overflow: ellipsis;
 			word-break: break-all;
 		}

@@ -12,6 +12,9 @@ import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/index.scss';
+
+const tp = require('tp-js-sdk');
+
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 
@@ -51,12 +54,20 @@ class DeviceList extends NavPage {
 
 	// 添加设备
 	async addDevice() {
+
+
 		let carouselType = '';
 		let userAgent = navigator.userAgent
+		// if ()
 		if (userAgent.includes('imToken')) {
 			carouselType = 'imToken';
 		} else if (userAgent.includes('TokenPocket')) {
 			carouselType = 'TokenPocket';
+
+			tp.invokeQRScanner().then((href: string) => {
+				if (href.startsWith('http')) location.href = href;
+			});
+			return
 		} else {
 			carouselType = 'MateMask';
 		}
