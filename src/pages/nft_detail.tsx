@@ -30,7 +30,6 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 		let { token, tokenId } = this.params;
 		let data = await index.nft.methods.getNFT({ token, tokenId });
 		let orderData = await index.utils.methods.assetOrders({ token, tokenId });
-
 		this.setState({ nft: data[0], nftOrderList: orderData, loading: false });
 
 	}
@@ -46,7 +45,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 					<div className="nft_detail_page_card">
 						<div className="nft_card">
 							<div className="nft_info_box">
-								<div className="nft_img_box">
+								{Boolean(nft.tokenId) && <div className="nft_img_box">
 									{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
 									{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="加载中" placeholder={
 										<Image
@@ -55,9 +54,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 											width='100%'
 										/>
 									} />}
-								</div>
-
-
+								</div>}
 
 								<Tabs tabBarActiveTextColor={'#1677ff'} tabs={this.tabsConfig}
 									initialPage={0}

@@ -404,8 +404,11 @@ class DeviceSetCarousel extends NavPage<Device> {
 	// 抽屉项点击事件
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
 		if ([SettingDarwerType.wifi, SettingDarwerType.version].includes(currSettingIndex)) {
-			let data = await checkVersion(this.params.address);
-			if (data.upgrading) return alert('设备升级中...');
+			let data = { hasNew: false, upgrading: false };
+			if (SettingDarwerType.version === currSettingIndex) {
+				data = await checkVersion(this.params.address);
+				if (data.upgrading) return alert('设备升级中...');
+			}
 			this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, hasNew: data.hasNew });
 		} else {
 			this.setState({ currSettingIndex, });
@@ -423,7 +426,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			if (hasNew) {
 				await upgradeVersion(address, true);
 			} else {
-				upgradeVersion(this.params.address, false);
+				upgradeVersion(address, false);
 			}
 			this.setState({ settingModalVisible: false });
 		}
