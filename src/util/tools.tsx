@@ -2,7 +2,7 @@
 import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
-import { NFT } from '../models';
+import { ChainType, NFT } from '../models';
 import { DefaultOptions, show } from '../../deps/webpkit/lib/dialog';
 import { CloseOutlined } from '@ant-design/icons';
 import { withTranslation } from 'react-i18next';
@@ -161,6 +161,7 @@ export const showModal = async (opts: IShowModalProps,) => {
 
 //截取字符串中间用省略号显示
 export function getSubStr(str: string, substrlen: number = 11, startLen?: number) {
+	if (!str) return;
 	var subStr1 = str.substr(0, startLen || substrlen);
 	var subStr2 = str.substr(str.length - substrlen, str.length);
 	var subStr = subStr1 + "..." + subStr2;
@@ -176,4 +177,20 @@ export const getDistinguishNftList = (nftList: INftItem[]) => {
 		(item.chain == chain.chain) ? nftList1.push(item) : nftList2.push(item);
 	});
 	return { nftList1, nftList2 };
+}
+
+export const unitLabel: { [key: string]: any } = {
+	'1': "ETH",
+	0: "UNKNOWN",
+	137: "MATIC",
+	8217: "KLAYTN",
+	100: "XDAI",
+	56: "BSC",
+	'-2': "FLOW",
+	'-1': "LOCAL",
+	4: "RINKEBY",
+	80001: "MUMBAI",
+	1001: "BAOBAB",
+	97: "BSC_TESTNET",
+	5: "GOERLI",
 }

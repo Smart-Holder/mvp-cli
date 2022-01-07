@@ -13,6 +13,11 @@ export default [
 		page: () => import('./pages/transfer_nft'),
 	},
 	{
+		path: '/nft_detail',
+		page: () => import('./pages/nft_detail'),
+	},
+
+	{
 		path: '/device_set_carousel',
 		page: () => import('./pages/device_set_carousel'),
 	},

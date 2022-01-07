@@ -14,6 +14,8 @@ body {
 ._main ._title {
 	// background: none;
 	// display: none;
+	display: flex;
+	justify-content: space-between;
 }
 
 ._main ._title ._b:after {

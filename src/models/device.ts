@@ -24,15 +24,80 @@ export async function call(target: string, method: string, args?: any, vCheck?: 
 	var hash = await index.mbx.methods.call({
 		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
 	}) as string;
+	let r = await post(hash);
+	return JSON.parse(r);
+}
+
+export async function send(target: string, event: string, args?: any): Promise<any> {
+	var hash = await index.mbx.methods.send({
+		target, event, args: { errno: 0, message: '', data: JSON.stringify(args) }
+	}) as string;
+	await post(hash);
+}
+
+export async function post(hash: string) {
 	var msg = buffer.from(hash, 'base64');
 	var { signature, recovery } = key.sign(msg);
 	var sign = buffer.concat([signature, [recovery]]).toString('base64');
 	var r = await index.mbx.methods.post({ hash, signature: sign });
-	return JSON.parse(r);
+	return r;
 }
 
 export async function ping(target: string) {
 	await index.mbx.methods.ping({ target });
+}
+
+// 设置音量
+export function screenVolume(target: string, volume: number) {
+	return send(target, 'screenVolume', { volume });
+}
+
+// 设置亮度
+export function screenLight(target: string, light: number) {
+	return send(target, 'screenLight', { light });
+}
+
+// 设置唤起wifi
+export function screenWiFi(target: string) {
+	return send(target, 'screenWiFi');
+}
+
+// 设置唤起检查更新
+export function checkVersion(target: string) {
+	return call(target, 'checkVersion');
+}
+
+// 设置开始更新设备
+export function upgradeVersion(target: string, upgrade: boolean) {
+	return call(target, 'upgradeVersion', { upgrade });
+}
+
+
+// 获取屏幕设置
+export function getScreenSettings(target: string) {
+	return call(target, 'getScreenSettings');
+}
+
+// 设置屏幕背景颜色
+export function screenColor(target: string, color: string) {
+	return send(target, 'screenColor', { color });
+}
+
+// 开关：显示/隐藏NFT信息和详情二维码
+export function switchDetails(target: string, show: boolean) {
+	return send(target, 'switchDetails', { show });
+}
+
+// 设置屏幕角度
+export function screenOrientation(target: string, orientation: string) {
+	return send(target, 'screenOrientation', { orientation });
+}
+
+
+// /files/res/apk/nftmvp_apk_upgrade.json
+
+export function nftmvp_apk_upgrade() {
+	return index.mbx.methods.post('/files/res/apk/nftmvp_apk_upgrade.json');
 }
 
 export function displaySingleImage(target: string, token: string, tokenId: string) {

@@ -2,10 +2,11 @@ import { React } from 'webpkit/mobile';
 import Button from '../button';
 import { Image } from 'antd';
 import { INftItem } from '../../pages/interface';
-import { getSubStr } from '../../util/tools';
+import { getSubStr, unitLabel } from '../../util/tools';
 import { useTranslation } from 'react-i18next';
 
 import "./index.scss";
+import NavPage from '../../nav';
 
 interface INftCardProps {
 	nft: INftItem;
@@ -15,6 +16,7 @@ interface INftCardProps {
 	showChain?: boolean;
 	showTransferBtn?: boolean;
 	transferBtnClick?: () => void;
+	page?: NavPage
 }
 
 const NftCard = (props: INftCardProps) => {
@@ -36,21 +38,24 @@ const NftCard = (props: INftCardProps) => {
 					/>
 				} />}
 			</div>
+			<div onClick={() => props.page?.pushPage(`/nft_detail?token=${nft.token}&tokenId=${nft.tokenId}`)}>
 
-			<div className="nft_address_box">
-				<div className="nft_address_title">Address</div>
-				<div className="nft_address textNoWrap">{getSubStr(nft.token, 18)}</div>
+				<div className="nft_address_box">
+					<div className="nft_address_title">Address</div>
+					<div className="nft_address textNoWrap">{getSubStr(nft.token, 18)}</div>
+				</div>
+
+				<div className="nft_address_box">
+					<div className="nft_hash_title">Hash</div>
+					<div className="nft_hash textNoWrap">{getSubStr(nft.tokenId, 18)}</div>
+				</div>
+
+				{showChain && <div className="nft_hash_box">
+					<div className="nft_hash_title">{t('网络')}</div>
+					<div className="nft_hash textNoWrap">{unitLabel[String(nft?.chain)]}</div>
+				</div>}
 			</div>
 
-			<div className="nft_address_box">
-				<div className="nft_hash_title">Hash</div>
-				<div className="nft_hash textNoWrap">{getSubStr(nft.tokenId, 18)}</div>
-			</div>
-
-			{showChain && <div className="nft_hash_box">
-				<div className="nft_hash_title">{t('网络')}</div>
-				<div className="nft_hash textNoWrap">{nft.contract?.chain}</div>
-			</div>}
 		</div>
 
 		{!showChain && <div className={`action_btn_box ${showTransferBtn && 'btn_list'}`}>

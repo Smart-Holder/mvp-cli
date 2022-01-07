@@ -40,6 +40,7 @@ import errnoHandles from './handle';
 import Tools from './util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
 import { env } from '../config';
+import * as moment from 'moment';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
@@ -51,6 +52,7 @@ utils.onUnhandledRejection.on((e) => {
 });
 
 Nav.platform = '_mini_app';
+moment.locale('zh-cn');
 
 class MyRoot<P> extends Root<P> {
 

@@ -6,7 +6,7 @@ import { IconFontProps } from '@ant-design/icons/lib/components/IconFont'
 const IconFontCN = createFromIconfontCN({
 	// scriptUrl: '//at.alicdn.com/t/font_2717960_zvh1qlvpq7.js',
 	//at.alicdn.com/t/font_2717960_4tyhyvdxrd.js
-	scriptUrl: '//at.alicdn.com/t/font_2968355_h8wn0t41uhc.js'
+	scriptUrl: '//at.alicdn.com/t/font_2968355_rfhib0qz1rt.js'
 });
 
 
