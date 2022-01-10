@@ -91,7 +91,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 		volume: 0,
 		light: 0,
 		dsq_id: 0,
-		hasNew: false
+		hasNew: false,
+		hasNewLoading: true
 	}
 
 	dsqRef = React.createRef();
@@ -408,15 +409,19 @@ class DeviceSetCarousel extends NavPage<Device> {
 	// 抽屉项点击事件
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
 		if ([SettingDarwerType.wifi, SettingDarwerType.version].includes(currSettingIndex)) {
-			let data = { hasNew: false, upgrading: false };
+			this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, });
 			if (SettingDarwerType.version === currSettingIndex) {
-				data = await checkVersion(this.params.address);
-				if (data.upgrading) {
-					this.setState({ drawerVisible: false });
-					return alert('设备升级中...');
-				};
+				// data = await checkVersion(this.params.address);
+				// if (data.upgrading) {
+				// 	this.setState({ drawerVisible: false });
+				// 	return alert('设备升级中...');
+				// };
+				checkVersion(this.params.address).then((res) => {
+					this.setState({ drawerVisible: false, hasNew: res.hasNew, hasNewLoading: false });
+					res.upgrading && alert('设备升级中...');
+					return
+				});
 			}
-			this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, hasNew: data.hasNew });
 		} else {
 			this.setState({ currSettingIndex, });
 		}
@@ -443,7 +448,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	render() {
 
-		const { isShowAbbreviation, selectedList, currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew } = this.state;
+		const { isShowAbbreviation, selectedList, currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading } = this.state;
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -496,7 +501,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			>
 				<div style={{ height: '1.6rem', display: "flex", alignItems: "center", justifyContent: 'center' }}>
 					{currcallDeviceIndex === 'version' ?
-						<Button className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button>
+						<Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button>
 						: <Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {t(callDeviceConfig[currcallDeviceIndex]?.btnText)}</Button>
 					}
 				</div>

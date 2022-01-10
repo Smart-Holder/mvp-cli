@@ -59,7 +59,7 @@ export function screenLight(target: string, light: number) {
 
 // 设置唤起wifi
 export function screenWiFi(target: string) {
-	return send(target, 'screenWiFi');
+	return call(target, 'screenWiFi');
 }
 
 // 设置唤起检查更新
@@ -90,7 +90,7 @@ export function switchDetails(target: string, show: boolean) {
 
 // 设置屏幕角度
 export function screenOrientation(target: string, orientation: string) {
-	return send(target, 'screenOrientation', { orientation });
+	return call(target, 'screenOrientation', { orientation });
 }
 
 
