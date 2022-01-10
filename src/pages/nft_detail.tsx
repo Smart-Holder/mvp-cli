@@ -35,9 +35,10 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 	}
 
 	render() {
+		let { t } = this;
 		let { nft, nftOrderList, loading } = this.state;
 		return <div className='nft_detail_page'>
-			<Header title="NFT详情" page={this} />
+			<Header title={t("NFT详情")} page={this} />
 
 			<div className="nft_detail_page_card_box">
 				<Spin spinning={loading}>
@@ -47,7 +48,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 							<div className="nft_info_box">
 								{Boolean(nft.tokenId) && <div className="nft_img_box">
 									{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
-									{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="加载中" placeholder={
+									{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="loading" placeholder={
 										<Image
 											preview={false}
 											src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
@@ -71,7 +72,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 										</div>
 
 										<div className="nft_address_box">
-											<div className="nft_hash_title">元数据</div>
+											<div className="nft_hash_title">{t("元数据")}</div>
 											<div className="nft_hash textNoWrap">{getSubStr(nft.uri, 22)}</div>
 										</div>
 
@@ -84,27 +85,27 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 											return <div className="order_item" key={item.id}>
 
 												<div className='order_row'>
-													<div className="label">事&nbsp; &nbsp;&nbsp;件</div>
-													<div className="value">{fromAddres ? "购买" : "上架"}</div>
+													<div className="label letter_space">{t("事件")}</div>
+													<div className="value">{t(fromAddres ? "购买" : "上架")}</div>
 												</div>
 
 												<div className='order_row'>
-													<div className="label">价&nbsp; &nbsp;&nbsp;格</div>
+													<div className="label letter_space">{t("价格")}</div>
 													<div className="value">{Number(value) / Math.pow(10, 18)} {unit}</div>
 												</div>
 
 												<div className='order_row'>
-													<div className="label">发送方</div>
+													<div className="label">{t("发送方")}</div>
 													<div className="value textNoWrap">{fromAddres}</div>
 												</div>
 
 												<div className='order_row'>
-													<div className="label">接收方</div>
+													<div className="label">{t("接收方")}</div>
 													<div className="value textNoWrap">{toAddress}</div>
 												</div>
 
 												<div className='order_row'>
-													<div className="label">日&nbsp; &nbsp;&nbsp;期</div>
+													<div className="label letter_space">{t("日期")}</div>
 													<div className="value">{moment(date).fromNow()}</div>
 												</div>
 											</div>

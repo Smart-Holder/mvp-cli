@@ -18,12 +18,15 @@ export default class extends ViewController<{ page: NavPage; title: string; back
 		return (
 			<div className="_title">
 				{/* <div className="_a"></div> */}
-				<div className="_b">
-					{nav.length > 1 || this.props.back ?
-						<div style={nav.length > 1 || this.props.back ? { display: "block" } : {}} onClick={this.m_handleClick_1}></div> : null}{this.props.title || ''}
+				<div className="title_box">
+
+					<div className="_b">
+						{nav.length > 1 || this.props.back ?
+							<div style={nav.length > 1 || this.props.back ? { display: "block" } : {}} onClick={this.m_handleClick_1}></div> : null}{this.props.title || ''}
+					</div>
+					{this.props.children}
+					{actionBtn}
 				</div>
-				{this.props.children}
-				{actionBtn}
 
 			</div>
 		);
