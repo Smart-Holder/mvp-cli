@@ -1,0 +1,17 @@
+.login_page {
+	height: 100%;
+	.top_part {
+		padding: 2.45rem 0.3rem 1.34rem;
+		background-image: url("../../../assets/login_bg.png");
+		background-size: 100% 100%;
+
+		.title {
+			font-size: 0.6rem;
+			font-weight: 600;
+		}
+		.desc {
+			font-size: 0.36rem;
+			font-weight: 300;
+		}
+	}
+}
