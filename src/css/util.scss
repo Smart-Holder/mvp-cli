@@ -13,8 +13,11 @@ body {
 
 ._main ._title {
 	// background: none;
-	// display: none;
 	display: block;
+}
+
+._main .title_box {
+	display: flex;
 	justify-content: space-between;
 }
 

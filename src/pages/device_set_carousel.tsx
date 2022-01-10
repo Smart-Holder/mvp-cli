@@ -98,7 +98,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	async triggerLoad() {
 		let { address } = this.params;
-		let l = await Loading.show('正在加载屏幕设置');
+		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
 		getScreenSettings(address).then(({ switchDetails, volume, light, color }) => {
 			this.setState({ switchValue: switchDetails, volume, light, currColor: color });
@@ -271,18 +271,20 @@ class DeviceSetCarousel extends NavPage<Device> {
 	}
 
 	audioCard() {
+		let { t } = this;
 		let { volume, light } = this.state;
 		return <div className='setting_card_box'>
-			<div>调整音量</div>
+			<div>{t("调整音量")}</div>
 			<Slider max={5} min={0} defaultValue={volume / 3} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.audio)} />
 
-			<div style={{ marginTop: '.2rem' }}>调整亮度</div>
+			<div style={{ marginTop: '.2rem' }}>{t("调整亮度")}</div>
 			<Slider max={5} min={0} defaultValue={light} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.brightness)} />
 		</div>
 	}
 
 	rotationCard() {
 		let { currRotation } = this.state;
+		let { t } = this;
 		return <div className='setting_card_box rotation_card'>
 			<div className="rotation_action_box">
 
@@ -297,14 +299,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 			</div>
 
 			<Button ghost type="primary" onClick={async () => {
-				confirm('调整屏幕角度将会重启设备,请确认.', async (isok) => {
+				confirm(t('调整屏幕角度将会重启设备,请确认.'), async (isok) => {
 					isok && await screenOrientation(this.params.address, currRotation);
 				})
-			}}>确认</Button>
+			}}>{t('确认')}</Button>
 		</div>
 	}
 
 	colorCard() {
+		let { t } = this;
 		let { currColor } = this.state;
 		return <div className='setting_card_box color_card'>
 			{colorListConfig.map(item => {
@@ -313,7 +316,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 					if (item.color !== currColor) await screenColor(this.params.address, item.color);
 				}}>
 					<div className="color_bg_item" style={{ backgroundColor: item.color }}></div>
-					<div className="color_text">{item.label}</div>
+					<div className="color_text">{t(item.label)}</div>
 					<div className={`select_btn ${currColor === item.color && 'select_btn_active'}`} />
 				</div>
 			})}
@@ -322,14 +325,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	// nft信息是否显示
 	nftDetailCard() {
+		let { t } = this;
 		let { switchValue, switchLoading } = this.state;
 		return <div className="setting_card_box">
-			<div style={{ marginBottom: '.2rem' }}>开关：显示/隐藏NFT信息和详情二维码</div>
+			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏NFT信息和详情二维码')}</div>
 			<Switch onChange={async (e) => {
 				this.setState({ switchValue: e, switchLoading: true });
 				await switchDetails(this.params.address, e);
 				this.setState({ switchLoading: false });
-			}} loading={switchLoading} checked={switchValue} checkedChildren="开启" unCheckedChildren="关闭" />
+			}} loading={switchLoading} checked={switchValue} checkedChildren={t("开启")} unCheckedChildren={t("关闭")} />
 		</div>
 	}
 
@@ -407,7 +411,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 			let data = { hasNew: false, upgrading: false };
 			if (SettingDarwerType.version === currSettingIndex) {
 				data = await checkVersion(this.params.address);
-				if (data.upgrading) return alert('设备升级中...');
+				if (data.upgrading) {
+					this.setState({ drawerVisible: false });
+					return alert('设备升级中...');
+				};
 			}
 			this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, hasNew: data.hasNew });
 		} else {
@@ -467,7 +474,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 			<Drawer
 				className='setting-drawer'
-				title="更多设置"
+				title={t("更多设置")}
 				closable={false}
 				visible={drawerVisible}
 				width='5rem'
@@ -475,7 +482,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont type={item.icon} /> {item.label}</p>
+					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont type={item.icon} /> {t(item.label)}</p>
 				})}
 			</Drawer>
 
@@ -484,13 +491,13 @@ class DeviceSetCarousel extends NavPage<Device> {
 				visible={this.state.settingModalVisible}
 				transparent
 				onClose={() => { this.setState({ settingModalVisible: false }); upgradeVersion(this.params.address, false); }}
-				title={callDeviceConfig[currcallDeviceIndex]?.title}
+				title={t(callDeviceConfig[currcallDeviceIndex]?.title)}
 				closable
 			>
 				<div style={{ height: '1.6rem', display: "flex", alignItems: "center", justifyContent: 'center' }}>
 					{currcallDeviceIndex === 'version' ?
-						<Button className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? '发现新版本' : '已经是最新版本了'}</Button>
-						: <Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {callDeviceConfig[currcallDeviceIndex]?.btnText}</Button>
+						<Button className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button>
+						: <Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {t(callDeviceConfig[currcallDeviceIndex]?.btnText)}</Button>
 					}
 				</div>
 			</Modal>
