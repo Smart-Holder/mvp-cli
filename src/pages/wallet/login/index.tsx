@@ -8,6 +8,10 @@ class Login extends NavPage {
 				<div className="title">价值圈</div>
 				<div className="desc">精准链接，资源聚合</div>
 			</div>
+
+			<div className="mid_part">
+
+			</div>
 		</div>
 	}
 }
