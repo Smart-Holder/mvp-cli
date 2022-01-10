@@ -5,7 +5,7 @@ import index, { AssetOrder, chainTraits, NFT } from '../models';
 import { Image, Spin } from 'antd';
 import { Tabs } from 'antd-mobile';
 
-import { getSubStr, unitLabel } from '../util/tools';
+import { copyText, getSubStr, unitLabel } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 // import moment from "moment";
 
@@ -63,17 +63,23 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 									<div className="item_page" >
 										<div className="nft_address_box">
 											<div className="nft_address_title">Token ID</div>
-											<div className="nft_address textNoWrap">{getSubStr(nft.tokenId, 18)}</div>
+											<div className="nft_address textNoWrap" onClick={() => {
+												copyText(nft.tokenId);
+											}}>{getSubStr(nft.tokenId, 18)}</div>
 										</div>
 
 										<div className="nft_address_box">
 											<div className="nft_hash_title">Address</div>
-											<div className="nft_hash textNoWrap">{getSubStr(nft.token, 18)}</div>
+											<div className="nft_hash textNoWrap" onClick={() => {
+												copyText(nft.token);
+											}}>{getSubStr(nft.token, 18)}</div>
 										</div>
 
 										<div className="nft_address_box">
 											<div className="nft_hash_title">{t("元数据")}</div>
-											<div className="nft_hash textNoWrap">{getSubStr(nft.uri, 22)}</div>
+											<div className="nft_hash textNoWrap" onClick={() => {
+												copyText(nft.uri);
+											}}>{getSubStr(nft.uri, 22)}</div>
 										</div>
 
 									</div>
