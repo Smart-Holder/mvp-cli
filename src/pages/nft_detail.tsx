@@ -103,7 +103,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 													<div className="value textNoWrap">{toAddress}</div>
 												</div>
 
-												<div className='order_row' style={{ marginBottom: '.2rem' }}>
+												<div className='order_row'>
 													<div className="label">日&nbsp; &nbsp;&nbsp;期</div>
 													<div className="value">{moment(date).fromNow()}</div>
 												</div>
