@@ -14,7 +14,7 @@ body {
 ._main ._title {
 	// background: none;
 	// display: none;
-	display: flex;
+	display: block;
 	justify-content: space-between;
 }
 
@@ -25,14 +25,17 @@ body {
 ._mini_app ._title {
 	// display: none;
 	position: relative;
-	height: auto;
+	// height: auto;
 	padding: 0.56rem 0.32rem 0;
 	background-color: transparent;
+	// background-color: pink;
+	// overflow: hidden;
+	box-sizing: border-box;
 }
 
 ._mini_app ._title ._b {
 	height: auto;
-	line-height: initial;
+	line-height: normal;
 	text-align: left;
 	font-weight: 500;
 	display: flex;
