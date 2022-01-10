@@ -5,6 +5,10 @@ export default [
 		page: () => import('./pages/nft'),
 	},
 	{
+		path: '/login',
+		page: () => import('./pages/wallet/login'),
+	},
+	{
 		path: '/device',
 		page: () => import('./pages/nft'),
 	},
