@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface NSURLFile: NSURLProtocol
++(void)setNSURLFile;
 @end
 

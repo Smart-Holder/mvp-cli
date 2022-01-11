@@ -14,24 +14,11 @@
 
 @implementation AppDelegate
 
--(void)setNSURLProtocolLocal{
-	//注册
-	[NSURLProtocol registerClass:[NSURLFile class]];
-	//实现拦截功能，这个是核心
-	Class cls = NSClassFromString(@"WKBrowsingContextController");
-	SEL sel = NSSelectorFromString(@"registerSchemeForCustomProtocol:");
-	if ([(id)cls respondsToSelector:sel]) {
-		#pragma clang diagnostic push
-		#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-		[(id)cls performSelector:sel withObject:@"http"];
-		[(id)cls performSelector:sel withObject:@"https"];
-		#pragma clang diagnostic pop
-	}
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
-	[self setNSURLProtocolLocal];
+
+	[NSURLFile setNSURLFile];
+
 	return YES;
 }
 

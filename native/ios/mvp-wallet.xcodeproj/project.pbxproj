@@ -17,6 +17,11 @@
 		BF229BEA278C3A8C00FDFC96 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BE9278C3A8C00FDFC96 /* UIKit.framework */; };
 		BF229BEC278C3ABD00FDFC96 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BEB278C3ABD00FDFC96 /* WebKit.framework */; };
 		BF229BF8278C59AA00FDFC96 /* NSURLFile.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BF7278C59AA00FDFC96 /* NSURLFile.m */; };
+		BF229C14278D8C0100FDFC96 /* AVCaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */; };
+		BF229C15278D8C0100FDFC96 /* UIImage+ZZYQRImageExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */; };
+		BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C0B278D890400FDFC96 /* QRScan.m */; };
+		BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */; };
+		BF229C26278D9BD700FDFC96 /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C24278D9BD700FDFC96 /* Alert.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +41,16 @@
 		BF229BEB278C3ABD00FDFC96 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BF229BF7278C59AA00FDFC96 /* NSURLFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSURLFile.m; sourceTree = "<group>"; };
 		BF229BF9278C59FC00FDFC96 /* NSURLFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLFile.h; sourceTree = "<group>"; };
+		BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVCaptureSessionManager.m; sourceTree = "<group>"; };
+		BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZZYQRImageExtension.m"; sourceTree = "<group>"; };
+		BF229C02278D87F900FDFC96 /* AVCaptureSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVCaptureSessionManager.h; sourceTree = "<group>"; };
+		BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZZYQRCode.bundle; sourceTree = "<group>"; };
+		BF229C04278D87F900FDFC96 /* ZZYQRCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZYQRCode.h; sourceTree = "<group>"; };
+		BF229C05278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZZYQRImageExtension.h"; sourceTree = "<group>"; };
+		BF229C0A278D890400FDFC96 /* QRScan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QRScan.h; sourceTree = "<group>"; };
+		BF229C0B278D890400FDFC96 /* QRScan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QRScan.m; sourceTree = "<group>"; };
+		BF229C24278D9BD700FDFC96 /* Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
+		BF229C25278D9BD700FDFC96 /* Alert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,19 +86,24 @@
 		BF229BCE278C388000FDFC96 /* mvp-wallet */ = {
 			isa = PBXGroup;
 			children = (
+				BF229BFF278D87F900FDFC96 /* qrcode */,
 				BF229BCF278C388000FDFC96 /* AppDelegate.h */,
 				BF229BD0278C388000FDFC96 /* AppDelegate.m */,
 				BF229BD2278C388000FDFC96 /* SceneDelegate.h */,
 				BF229BD3278C388000FDFC96 /* SceneDelegate.m */,
 				BF229BD5278C388000FDFC96 /* ViewController.h */,
 				BF229BD6278C388000FDFC96 /* ViewController.m */,
-				BF229BD8278C388000FDFC96 /* Main.storyboard */,
+				BF229C0A278D890400FDFC96 /* QRScan.h */,
+				BF229C0B278D890400FDFC96 /* QRScan.m */,
 				BF229BDB278C388300FDFC96 /* Assets.xcassets */,
+				BF229BD8278C388000FDFC96 /* Main.storyboard */,
 				BF229BDD278C388300FDFC96 /* LaunchScreen.storyboard */,
 				BF229BE0278C388300FDFC96 /* Info.plist */,
 				BF229BE1278C388300FDFC96 /* main.m */,
 				BF229BF7278C59AA00FDFC96 /* NSURLFile.m */,
 				BF229BF9278C59FC00FDFC96 /* NSURLFile.h */,
+				BF229C25278D9BD700FDFC96 /* Alert.h */,
+				BF229C24278D9BD700FDFC96 /* Alert.m */,
 			);
 			path = "mvp-wallet";
 			sourceTree = "<group>";
@@ -95,6 +115,19 @@
 				BF229BE9278C3A8C00FDFC96 /* UIKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF229BFF278D87F900FDFC96 /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */,
+				BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */,
+				BF229C02278D87F900FDFC96 /* AVCaptureSessionManager.h */,
+				BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */,
+				BF229C04278D87F900FDFC96 /* ZZYQRCode.h */,
+				BF229C05278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.h */,
+			);
+			path = qrcode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,8 +187,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF229BDF278C388300FDFC96 /* LaunchScreen.storyboard in Resources */,
+				BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */,
 				BF229BDC278C388300FDFC96 /* Assets.xcassets in Resources */,
+				BF229BDF278C388300FDFC96 /* LaunchScreen.storyboard in Resources */,
 				BF229BDA278C388000FDFC96 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,6 +201,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */,
+				BF229C26278D9BD700FDFC96 /* Alert.m in Sources */,
+				BF229C14278D8C0100FDFC96 /* AVCaptureSessionManager.m in Sources */,
+				BF229C15278D8C0100FDFC96 /* UIImage+ZZYQRImageExtension.m in Sources */,
 				BF229BD7278C388000FDFC96 /* ViewController.m in Sources */,
 				BF229BD1278C388000FDFC96 /* AppDelegate.m in Sources */,
 				BF229BE2278C388300FDFC96 /* main.m in Sources */,
@@ -319,9 +357,13 @@
 				DEVELOPMENT_TEAM = NLZ66TWKTM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "mvp-wallet/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -347,9 +389,13 @@
 				DEVELOPMENT_TEAM = NLZ66TWKTM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "mvp-wallet/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
