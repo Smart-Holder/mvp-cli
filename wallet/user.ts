@@ -56,9 +56,9 @@ async function useLoginState(state: LoginState) {
 	}
 }
 
-async function tryLogin(state: LoginState, key2?: string) { // test access permission
+async function tryLogin(state: LoginState, key2?: string, ref?: string) { // test access permission
 	try {
-		await sdk.user.methods.setUser({ key2 }, {signer: new MySigner(state)}); // check access and set key2
+		await sdk.user.methods.setUser({ key2, ref }, {signer: new MySigner(state)}); // check access and set key2
 	} catch(err: any) { // ILLEGAL ACCESS
 		if (err.errno == errno.ERR_ILLEGAL_ACCESS[0]) {
 			return false;
@@ -91,11 +91,11 @@ export function logout() {
 	}
 }
 
-export async function login(name: string, {verify,pwd}: {verify?: string, pwd?: string}) {
+export async function login(name: string, {verify,pwd,ref}: {verify?: string, pwd?: string, ref?: string}) {
 	if (verify) {
 		var priv2 = buffer.from(crypto_tx.genPrivateKey()); // random gen session key
 		var key2 = '0x' + crypto_tx.getPublic(priv2, true).toString('hex');
-		await sdk.user.methods.loginFromPhone({ phone: name, verify, key2 }); // 验证码登录只能使用key2临时会话
+		await sdk.user.methods.loginFromPhone({ phone: name, verify, key2, ref }); // 验证码登录只能使用key2临时会话
 		await useLoginState({ name, key: key2, priv: '0x' + priv2.toString('hex') });
 	} else {
 		somes.assert(pwd, 'PWD cannot be empty');
@@ -103,20 +103,20 @@ export async function login(name: string, {verify,pwd}: {verify?: string, pwd?: 
 		if (IS_USE_SESSION_AUTH) {
 			var priv2 = buffer.from(crypto_tx.genPrivateKey()); // random gen session key
 			var key2 = '0x' + crypto_tx.getPublic(priv2, true).toString('hex');
-			await tryLogin(state, key2);
+			await tryLogin(state, key2, ref);
 			state.priv = '0x' + priv2.toString('hex');
 			state.key = key2; // use key2 as session, 这里使用临时key2来进行会话授权
 		} else {
-			await tryLogin(state); // 使用密码pkey授权访问,可能存在安全问题
+			await tryLogin(state, undefined, ref); // 使用密码pkey授权访问,可能存在安全问题
 		}
 		await useLoginState(state);
 	}
 }
 
-export async function register(name: string, pwd: string, verify: string) {
+export async function register(name: string, pwd: string, verify: string, ref?: string) {
 	var state = genLoginState(name, pwd);
 	await sdk.user.methods.registerFromPhone({name, pkey: state.key, verify});
-	await login(name, {pwd}); // is login ?
+	await login(name, {pwd,ref}); // is login ?
 }
 
 export async function changePwd(name: string, pwd: string) {
