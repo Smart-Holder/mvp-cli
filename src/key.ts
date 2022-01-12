@@ -54,7 +54,7 @@ export function address() {
 }
 
 export function authName() {
-	return somes.hash(_AuthName || address());
+	return _AuthName || somes.hash(address());
 }
 
 export function sign(msg: IBuffer, priv?: IBuffer) {
