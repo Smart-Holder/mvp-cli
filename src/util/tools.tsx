@@ -9,7 +9,7 @@ import { withTranslation } from 'react-i18next';
 import { INftItem } from '../pages/interface';
 import { changeLanguage, LanguageType } from '../util/i18next';
 export type IDisabledKey = 'transfer_btn_disabled' | 'btn_disabled';
-
+import { Toast } from 'antd-mobile';
 import "./tools.scss";
 import chain from '../chain';
 
@@ -178,6 +178,19 @@ export const getDistinguishNftList = (nftList: INftItem[]) => {
 	});
 	return { nftList1, nftList2 };
 }
+
+// 复制文字
+export const copyText = (text: string) => {
+	var tag = document.createElement('input');
+	tag.setAttribute('id', 'cp_hgz_input');
+	tag.value = text;
+	document.getElementsByTagName('body')[0].appendChild(tag);
+	(document?.getElementById('cp_hgz_input') as any).select();
+	document.execCommand('copy');
+	(document.getElementById('cp_hgz_input') as any).remove();
+	Toast.show("复制完成!")
+};
+
 
 export const unitLabel: { [key: string]: any } = {
 	'1': "ETH",

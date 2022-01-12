@@ -11,10 +11,10 @@ import { show, alert } from '../../deps/webpkit/lib/dialog';
 import { removeNftDisabledTimeItem, setNftDisabledTime } from '../util/tools';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
-import '../css/transfer_nft.scss';
 import { withTranslation } from 'react-i18next';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
+import '../css/transfer_nft.scss';
 
 const tp = require('tp-js-sdk');
 

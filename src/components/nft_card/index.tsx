@@ -5,8 +5,8 @@ import { INftItem } from '../../pages/interface';
 import { getSubStr, unitLabel } from '../../util/tools';
 import { useTranslation } from 'react-i18next';
 
-import "./index.scss";
 import NavPage from '../../nav';
+import "./index.scss";
 
 interface INftCardProps {
 	nft: INftItem;

@@ -1,0 +1,50 @@
+.login_page {
+	height: 100%;
+	.top_part {
+		padding: 2.45rem 0.3rem 1.34rem;
+		background-image: url("../../../assets/login_bg.png");
+		background-size: 100% 100%;
+
+		.title {
+			font-size: 0.6rem;
+			font-weight: 600;
+		}
+		.desc {
+			font-size: 0.36rem;
+			font-weight: 300;
+		}
+	}
+
+	.mid_part {
+		padding: 0 0.38rem;
+		.login_methods {
+			display: flex;
+			font-size: 0.28rem;
+			align-items: baseline;
+			transition: all 0.5s;
+			.vcode_login {
+				margin-right: 0.4rem;
+			}
+			div {
+				transition: all 0.5s;
+			}
+		}
+
+		.active {
+			font-size: 0.36rem;
+			color: #1677ff;
+			position: relative;
+			&::after {
+				content: "";
+				width: 0.5rem;
+				height: 2px;
+				border-radius: 0.2rem;
+				background-color: #1677ff;
+				position: absolute;
+				bottom: -2px;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
+	}
+}
