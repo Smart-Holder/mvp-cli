@@ -83,9 +83,10 @@ export function genLoginState(name: string, pwd: string) {
 	};
 }
 
-export async function check() {debugger
+export async function check() {
 	var state = await storage.get('loginState') as LoginState;
 	if (!state || !await test(state)) { // login ok
+		await somes.sleep(1e2);
 		return logout();
 	}
 	await login(state);

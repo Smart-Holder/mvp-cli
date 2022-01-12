@@ -14,7 +14,7 @@
 
 //NSString *loadURL = @"https://mvp-dev.stars-mine.com";
 //NSString *loadURL = @"http://127.0.0.1:8001";
-NSString *loadURL = @"http://192.168.204.16:8080";
+NSString *loadURL = @"http://192.168.204.16:8080?a";
 //NSString *loadURL = @"https://baidu.com";
 //NSString *loadURL = @"https://apple.com";
 

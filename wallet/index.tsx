@@ -31,8 +31,8 @@
 import { React, Root, ReactDom, Nav, dialog } from 'webpkit/mobile';
 import _404 from '../src/pages/404';
 import routes from './router';
-import '../css/util.scss';
-import './index.css';
+import '../src/css/util.scss';
+import '../src/index.css';
 import { initialize } from './sdk';
 import {initialize as initializeWeb3} from './web3';
 import utils from 'somes';
@@ -57,7 +57,7 @@ class MyRoot<P> extends Root<P> {
 
 	isHashRoutes = false;
 
-	async triggerLoad() {debugger
+	async triggerLoad() {
 		await super.triggerLoad();
 		try {
 			await initialize();
@@ -75,8 +75,6 @@ class MyRoot<P> extends Root<P> {
 		return <Tools nav={this._nav} />;
 	}
 }
-
-debugger
 
 initializeWeb3().then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
