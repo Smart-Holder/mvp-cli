@@ -1,0 +1,438 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF229BD1278C388000FDFC96 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BD0278C388000FDFC96 /* AppDelegate.m */; };
+		BF229BD4278C388000FDFC96 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BD3278C388000FDFC96 /* SceneDelegate.m */; };
+		BF229BD7278C388000FDFC96 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BD6278C388000FDFC96 /* ViewController.m */; };
+		BF229BDA278C388000FDFC96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF229BD8278C388000FDFC96 /* Main.storyboard */; };
+		BF229BDC278C388300FDFC96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF229BDB278C388300FDFC96 /* Assets.xcassets */; };
+		BF229BDF278C388300FDFC96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF229BDD278C388300FDFC96 /* LaunchScreen.storyboard */; };
+		BF229BE2278C388300FDFC96 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BE1278C388300FDFC96 /* main.m */; };
+		BF229BEA278C3A8C00FDFC96 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BE9278C3A8C00FDFC96 /* UIKit.framework */; };
+		BF229BEC278C3ABD00FDFC96 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BEB278C3ABD00FDFC96 /* WebKit.framework */; };
+		BF229BF8278C59AA00FDFC96 /* NSURLFile.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BF7278C59AA00FDFC96 /* NSURLFile.m */; };
+		BF229C14278D8C0100FDFC96 /* AVCaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */; };
+		BF229C15278D8C0100FDFC96 /* UIImage+ZZYQRImageExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */; };
+		BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C0B278D890400FDFC96 /* QRScan.m */; };
+		BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */; };
+		BF229C26278D9BD700FDFC96 /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C24278D9BD700FDFC96 /* Alert.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BF229BCC278C388000FDFC96 /* mvp-wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mvp-wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF229BCF278C388000FDFC96 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BF229BD0278C388000FDFC96 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BF229BD2278C388000FDFC96 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		BF229BD3278C388000FDFC96 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		BF229BD5278C388000FDFC96 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BF229BD6278C388000FDFC96 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BF229BD9278C388000FDFC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BF229BDB278C388300FDFC96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BF229BDE278C388300FDFC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BF229BE0278C388300FDFC96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF229BE1278C388300FDFC96 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BF229BE9278C3A8C00FDFC96 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BF229BEB278C3ABD00FDFC96 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		BF229BF7278C59AA00FDFC96 /* NSURLFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSURLFile.m; sourceTree = "<group>"; };
+		BF229BF9278C59FC00FDFC96 /* NSURLFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLFile.h; sourceTree = "<group>"; };
+		BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVCaptureSessionManager.m; sourceTree = "<group>"; };
+		BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZZYQRImageExtension.m"; sourceTree = "<group>"; };
+		BF229C02278D87F900FDFC96 /* AVCaptureSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVCaptureSessionManager.h; sourceTree = "<group>"; };
+		BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZZYQRCode.bundle; sourceTree = "<group>"; };
+		BF229C04278D87F900FDFC96 /* ZZYQRCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZYQRCode.h; sourceTree = "<group>"; };
+		BF229C05278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZZYQRImageExtension.h"; sourceTree = "<group>"; };
+		BF229C0A278D890400FDFC96 /* QRScan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QRScan.h; sourceTree = "<group>"; };
+		BF229C0B278D890400FDFC96 /* QRScan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QRScan.m; sourceTree = "<group>"; };
+		BF229C24278D9BD700FDFC96 /* Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
+		BF229C25278D9BD700FDFC96 /* Alert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BF229BC9278C388000FDFC96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF229BEC278C3ABD00FDFC96 /* WebKit.framework in Frameworks */,
+				BF229BEA278C3A8C00FDFC96 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BF229BC3278C388000FDFC96 = {
+			isa = PBXGroup;
+			children = (
+				BF229BCE278C388000FDFC96 /* mvp-wallet */,
+				BF229BCD278C388000FDFC96 /* Products */,
+				BF229BE8278C3A8C00FDFC96 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BF229BCD278C388000FDFC96 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF229BCC278C388000FDFC96 /* mvp-wallet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BF229BCE278C388000FDFC96 /* mvp-wallet */ = {
+			isa = PBXGroup;
+			children = (
+				BF229BFF278D87F900FDFC96 /* qrcode */,
+				BF229BCF278C388000FDFC96 /* AppDelegate.h */,
+				BF229BD0278C388000FDFC96 /* AppDelegate.m */,
+				BF229BD2278C388000FDFC96 /* SceneDelegate.h */,
+				BF229BD3278C388000FDFC96 /* SceneDelegate.m */,
+				BF229BD5278C388000FDFC96 /* ViewController.h */,
+				BF229BD6278C388000FDFC96 /* ViewController.m */,
+				BF229C0A278D890400FDFC96 /* QRScan.h */,
+				BF229C0B278D890400FDFC96 /* QRScan.m */,
+				BF229BDB278C388300FDFC96 /* Assets.xcassets */,
+				BF229BD8278C388000FDFC96 /* Main.storyboard */,
+				BF229BDD278C388300FDFC96 /* LaunchScreen.storyboard */,
+				BF229BE0278C388300FDFC96 /* Info.plist */,
+				BF229BE1278C388300FDFC96 /* main.m */,
+				BF229BF7278C59AA00FDFC96 /* NSURLFile.m */,
+				BF229BF9278C59FC00FDFC96 /* NSURLFile.h */,
+				BF229C25278D9BD700FDFC96 /* Alert.h */,
+				BF229C24278D9BD700FDFC96 /* Alert.m */,
+			);
+			path = "mvp-wallet";
+			sourceTree = "<group>";
+		};
+		BF229BE8278C3A8C00FDFC96 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF229BEB278C3ABD00FDFC96 /* WebKit.framework */,
+				BF229BE9278C3A8C00FDFC96 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF229BFF278D87F900FDFC96 /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */,
+				BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */,
+				BF229C02278D87F900FDFC96 /* AVCaptureSessionManager.h */,
+				BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */,
+				BF229C04278D87F900FDFC96 /* ZZYQRCode.h */,
+				BF229C05278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.h */,
+			);
+			path = qrcode;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BF229BCB278C388000FDFC96 /* mvp-wallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF229BE5278C388300FDFC96 /* Build configuration list for PBXNativeTarget "mvp-wallet" */;
+			buildPhases = (
+				BF229BC8278C388000FDFC96 /* Sources */,
+				BF229BC9278C388000FDFC96 /* Frameworks */,
+				BF229BCA278C388000FDFC96 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mvp-wallet";
+			productName = "mvp-wallet";
+			productReference = BF229BCC278C388000FDFC96 /* mvp-wallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BF229BC4278C388000FDFC96 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					BF229BCB278C388000FDFC96 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+				};
+			};
+			buildConfigurationList = BF229BC7278C388000FDFC96 /* Build configuration list for PBXProject "mvp-wallet" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BF229BC3278C388000FDFC96;
+			productRefGroup = BF229BCD278C388000FDFC96 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF229BCB278C388000FDFC96 /* mvp-wallet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BF229BCA278C388000FDFC96 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */,
+				BF229BDC278C388300FDFC96 /* Assets.xcassets in Resources */,
+				BF229BDF278C388300FDFC96 /* LaunchScreen.storyboard in Resources */,
+				BF229BDA278C388000FDFC96 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BF229BC8278C388000FDFC96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */,
+				BF229C26278D9BD700FDFC96 /* Alert.m in Sources */,
+				BF229C14278D8C0100FDFC96 /* AVCaptureSessionManager.m in Sources */,
+				BF229C15278D8C0100FDFC96 /* UIImage+ZZYQRImageExtension.m in Sources */,
+				BF229BD7278C388000FDFC96 /* ViewController.m in Sources */,
+				BF229BD1278C388000FDFC96 /* AppDelegate.m in Sources */,
+				BF229BE2278C388300FDFC96 /* main.m in Sources */,
+				BF229BF8278C59AA00FDFC96 /* NSURLFile.m in Sources */,
+				BF229BD4278C388000FDFC96 /* SceneDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BF229BD8278C388000FDFC96 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF229BD9278C388000FDFC96 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BF229BDD278C388300FDFC96 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF229BDE278C388300FDFC96 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BF229BE3278C388300FDFC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BF229BE4278C388300FDFC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BF229BE6278C388300FDFC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NLZ66TWKTM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mvp-wallet/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet.stars-mine.com";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BF229BE7278C388300FDFC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NLZ66TWKTM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mvp-wallet/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet.stars-mine.com";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BF229BC7278C388000FDFC96 /* Build configuration list for PBXProject "mvp-wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF229BE3278C388300FDFC96 /* Debug */,
+				BF229BE4278C388300FDFC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF229BE5278C388300FDFC96 /* Build configuration list for PBXNativeTarget "mvp-wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF229BE6278C388300FDFC96 /* Debug */,
+				BF229BE7278C388300FDFC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BF229BC4278C388000FDFC96 /* Project object */;
+}

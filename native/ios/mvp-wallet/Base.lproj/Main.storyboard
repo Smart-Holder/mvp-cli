@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kt5-aq-sIa">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="NOV-hD-5gv">
+            <objects>
+                <navigationController id="kt5-aq-sIa" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ANk-Kw-ktV">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="j2w-sK-FXz" kind="relationship" relationship="rootViewController" id="vOV-oA-v9q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8bV-wF-yjT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1977" y="101"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Gul-TV-rsV">
+            <objects>
+                <viewController id="j2w-sK-FXz" userLabel="View Controller" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Oqr-d8-NdQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="MN6-hz-pRG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6rt-JX-14L">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bX6-G9-ikF">
+                                <rect key="frame" x="176" y="433" width="62" height="30"/>
+                                <state key="normal" title="点击扫码"/>
+                                <connections>
+                                    <action selector="pushCon:" destination="j2w-sK-FXz" eventType="touchUpInside" id="c3o-gS-765"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="YPp-W1-UXB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bX6-G9-ikF" firstAttribute="centerY" secondItem="6rt-JX-14L" secondAttribute="centerY" id="Fc4-vq-xpy"/>
+                            <constraint firstItem="bX6-G9-ikF" firstAttribute="centerX" secondItem="6rt-JX-14L" secondAttribute="centerX" id="vKB-U2-ALu"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="xCX-nJ-4rO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MgK-VC-U1B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1186" y="100"/>
+        </scene>
+        <!--Scan-->
+        <scene sceneID="SqO-de-8Le">
+            <objects>
+                <viewController storyboardIdentifier="qrScan" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VZn-GS-uZ9" userLabel="Scan" customClass="QRScan" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6Xt-KE-y8n"/>
+                        <viewControllerLayoutGuide type="bottom" id="7hS-e6-z2a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="e1Y-ME-HJX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVp-PF-3e3">
+                                <rect key="frame" x="107" y="348" width="200" height="200"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="qrcode_border" translatesAutoresizingMaskIntoConstraints="NO" id="pwq-0L-c9S">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="qrcode_scanline_qrcode" translatesAutoresizingMaskIntoConstraints="NO" id="vC2-id-DD4">
+                                        <rect key="frame" x="0.0" y="-170" width="200" height="170"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="170" id="dua-CJ-czr"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="pwq-0L-c9S" firstAttribute="top" secondItem="HVp-PF-3e3" secondAttribute="top" id="8EF-xV-muR"/>
+                                    <constraint firstAttribute="trailing" secondItem="pwq-0L-c9S" secondAttribute="trailing" id="JkF-yx-SGp"/>
+                                    <constraint firstAttribute="height" constant="200" id="ToO-Og-G1M"/>
+                                    <constraint firstAttribute="top" secondItem="vC2-id-DD4" secondAttribute="top" constant="170" id="VeI-I5-ykM"/>
+                                    <constraint firstAttribute="bottom" secondItem="pwq-0L-c9S" secondAttribute="bottom" id="bYp-OB-gwL"/>
+                                    <constraint firstAttribute="width" constant="200" id="eHS-OR-1cp"/>
+                                    <constraint firstItem="pwq-0L-c9S" firstAttribute="leading" secondItem="HVp-PF-3e3" secondAttribute="leading" id="nSO-lX-m5B"/>
+                                    <constraint firstItem="vC2-id-DD4" firstAttribute="leading" secondItem="HVp-PF-3e3" secondAttribute="leading" id="qdy-xp-dtm"/>
+                                    <constraint firstAttribute="trailing" secondItem="vC2-id-DD4" secondAttribute="trailing" id="ySa-T3-AYK"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJd-iF-qCV">
+                                <rect key="frame" x="161" y="578" width="92" height="34"/>
+                                <state key="normal" title="打开闪光灯"/>
+                                <connections>
+                                    <action selector="changeTorchState:" destination="VZn-GS-uZ9" eventType="touchUpInside" id="uzq-NP-65V"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="EUH-fh-Xpp"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="HVp-PF-3e3" secondAttribute="centerX" id="BWa-Jb-3PY"/>
+                            <constraint firstItem="nJd-iF-qCV" firstAttribute="centerX" secondItem="e1Y-ME-HJX" secondAttribute="centerX" id="DT7-8b-Hdn"/>
+                            <constraint firstItem="nJd-iF-qCV" firstAttribute="top" secondItem="HVp-PF-3e3" secondAttribute="bottom" constant="30" id="QY3-pb-PDp"/>
+                            <constraint firstAttribute="centerY" secondItem="HVp-PF-3e3" secondAttribute="centerY" id="jpz-yL-Srl"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="scan(扫描)" id="yC6-Dm-2iA"/>
+                    <connections>
+                        <outlet property="scanTop" destination="VeI-I5-ykM" id="acH-SO-xBV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3ws-RI-z7h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-397" y="100"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="qrcode_border" width="50.5" height="50.5"/>
+        <image name="qrcode_scanline_qrcode" width="218" height="170"/>
+    </resources>
+</document>
