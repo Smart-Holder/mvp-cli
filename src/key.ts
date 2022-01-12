@@ -10,6 +10,7 @@ import hash from 'somes/hash';
 const crypto_tx = require('crypto-tx');
 
 var _PrivateKey: IBuffer | null = null;
+var _AuthName: string = '';
 
 export async function genPrivateKey() {
 	if (!_PrivateKey) {
@@ -34,6 +35,11 @@ export async function genPrivateKey() {
 	}
 }
 
+export function writePrivateKey(priv: IBuffer, authName?: string) {
+	_PrivateKey = priv;
+	_AuthName = authName || '';
+}
+
 function privateKey() {
 	somes.assert(_PrivateKey, 'not init call genPrivateKey()');
 	return _PrivateKey as IBuffer;
@@ -48,11 +54,11 @@ export function address() {
 }
 
 export function authName() {
-	return somes.hash(address());
+	return somes.hash(_AuthName || address());
 }
 
-export function sign(msg: IBuffer) {
-	var signature = crypto_tx.sign(msg, privateKey());
+export function sign(msg: IBuffer, priv?: IBuffer) {
+	var signature = crypto_tx.sign(msg, priv || privateKey());
 	return {
 		signature: buffer.from(signature.signature), 
 		recovery: signature.recovery as number,
@@ -61,10 +67,12 @@ export function sign(msg: IBuffer) {
 
 export class SDKSigner implements Signer {
 
-	private _authName: string;
+	authName() {
+		return authName();
+	}
 
-	constructor() {
-		this._authName = authName();
+	privateKey() {
+		return privateKey()
 	}
 
 	sign(path: string, data: string) {
@@ -73,13 +81,13 @@ export class SDKSigner implements Signer {
 		var msg = (data) + st + key;
 		var hash = sha256(msg);
 
-		var signature = sign(hash);
+		var signature = sign(hash, this.privateKey());
 		var sign_ = buffer.concat([signature.signature, [signature.recovery]]).toString('base64');
 
 		return {
 			st: String(st),
 			sign: sign_,
-			'auth-name': this._authName,
+			'auth-name': this.authName(),
 		};
 	}
 }

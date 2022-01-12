@@ -5,10 +5,6 @@ export default [
 		page: () => import('./pages/nft'),
 	},
 	{
-		path: '/login',
-		page: () => import('./pages/wallet/login'),
-	},
-	{
 		path: '/device',
 		page: () => import('./pages/nft'),
 	},
@@ -20,12 +16,10 @@ export default [
 		path: '/nft_detail',
 		page: () => import('./pages/nft_detail'),
 	},
-
 	{
 		path: '/device_set_carousel',
 		page: () => import('./pages/device_set_carousel'),
 	},
-
 	{
 		path: '/my',
 		page: () => import('./pages/my'),
