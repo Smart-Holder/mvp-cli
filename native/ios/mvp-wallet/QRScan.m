@@ -20,7 +20,7 @@
 
 @implementation QRScan
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
 	[super viewDidLoad];
 	[self createRightBtn];
 	
@@ -40,7 +40,6 @@
 	[self.session showPreviewLayerInView:self.view];
     
 }
-
 
 // 在页面将要显示的时候添加定时器
 - (void)viewWillAppear:(BOOL)animated{
@@ -97,7 +96,11 @@ didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
 }
 
 - (void)showResult:(NSString *)result {
-	[Alert alert:@"扫描结果" message:result callback:nil];
+	if (_callback) {
+		_callback(result);
+	} else {
+		[Alert alert:@"扫描结果" message:result callback:nil];
+	}
 }
 
 // 扫描效果
