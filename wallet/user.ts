@@ -6,7 +6,8 @@ import errno from 'somes/errno';
 import { Root, Nav } from 'webpkit/mobile';
 import hash from 'somes/hash';
 import somes from 'somes';
-import sdk from './sdk';
+import {WSConversation} from 'somes/ws/conv';
+import sdk, {store} from './sdk';
 
 const crypto_tx = require('crypto-tx');
 
@@ -38,6 +39,9 @@ export function logout() {
 	storage.delete('loginState');
 	var nav = Root.current.refs.nav as Nav;
 	nav.replace('/login', false, 0); // to login page
+	if (store.conv) {
+		store.conv.autoReconnect = 3e4;
+	}
 }
 
 export async function login(state: LoginState) {
@@ -45,6 +49,10 @@ export async function login(state: LoginState) {
 	await storage.set('loginState', state);
 	state.priv = undefined;
 	_LoginState = state;
+	if (store.conv) {
+		store.conv.autoReconnect = 50;
+		store.conv.connect();
+	}
 }
 
 export async function test(state: LoginState) { // test access permission
