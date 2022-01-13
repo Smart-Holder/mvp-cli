@@ -11,3 +11,5 @@ var
 nifty
 .openzeppelin
 yarn.lock
+native/ios/mvp-wallet.xcodeproj/project.xcworkspace
+native/ios/mvp-wallet.xcodeproj/xcuserdata

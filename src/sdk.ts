@@ -6,6 +6,7 @@ import { SDKSigner, authName, publicKey, genPrivateKey } from './key';
 import chain from './chain';
 
 export const store = new Store('mvp/cli');
+
 export async function initialize() {
 	await genPrivateKey();
 	await make({ url: config.sdk, store, signer: new SDKSigner() });
