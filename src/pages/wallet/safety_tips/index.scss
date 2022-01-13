@@ -1,0 +1,31 @@
+@import "../index.scss";
+
+.safety_tips_page.safety_tips {
+	background-color: #fefefe;
+	.top_tips {
+		padding: 0.23rem 0.3rem;
+		background-color: rgba(255, 162, 31, 0.201);
+		color: #ffa31f;
+		font-size: 0.28rem;
+	}
+
+	.safety_tips_content {
+		margin-top: 0.6rem;
+	}
+
+	.safety_tips_item {
+		display: flex;
+		align-items: center;
+		padding: 0 0.3rem;
+		margin-bottom: 0.5rem;
+		img {
+			width: 1.6rem;
+			margin-right: 0.17rem;
+		}
+	}
+
+	.import_btn {
+		padding: 0 0.3rem;
+		margin-top: 1.6rem;
+	}
+}

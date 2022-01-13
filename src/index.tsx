@@ -52,7 +52,7 @@ utils.onUnhandledRejection.on((e) => {
 });
 
 Nav.platform = '_mini_app';
-moment.locale(navigator.language || 'zh-cn');
+moment.locale('zh-cn');
 
 class MyRoot<P> extends Root<P> {
 

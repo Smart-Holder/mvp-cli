@@ -12,6 +12,7 @@ import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/index.scss';
+import { initialize } from '../sdk';
 
 const tp = require('tp-js-sdk');
 
@@ -35,6 +36,7 @@ class DeviceList extends NavPage {
 	state = { nft: [] as NFT[], device: [] as Device[], loading: true, visible: false, carouselType: 'MateMask' as ICarouselType };
 
 	async triggerLoad() {
+		// await initialize();
 		var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
 		console.log(hex);
 		// var owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'

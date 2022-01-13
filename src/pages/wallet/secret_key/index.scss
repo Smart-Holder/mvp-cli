@@ -1,0 +1,33 @@
+.secret_key_page {
+	background-color: #f5f5f5;
+
+	color: #333;
+
+	.secret_key_bg {
+		width: 100%;
+	}
+
+	.select_box {
+		padding: 0 0.3rem;
+		font-size: 0.28rem;
+		margin-top: -2rem;
+		position: relative;
+	}
+	.import_secret_key_item {
+		display: flex;
+		padding: 0.4rem 0.2rem;
+		background-color: #fff;
+		border-radius: 0.16rem;
+		justify-content: space-between;
+		.left_box {
+			display: flex;
+			.content {
+				margin-left: 0.16rem;
+			}
+		}
+		svg {
+			width: 0.48rem;
+			height: 0.48rem;
+		}
+	}
+}

@@ -207,3 +207,24 @@ export const unitLabel: { [key: string]: any } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 }
+
+
+// 忽略属性
+export function omit<T>(obj: T, omitKeys: string[] | string) {
+	// let keys = Object.keys(obj);
+	let newObj: any = { ...obj };
+	if (Array.isArray(omitKeys)) {
+		for (var i = 0; i < omitKeys.length; i++) {
+			let key = omitKeys[i];
+			delete newObj[key];
+		}
+	} else {
+		delete newObj[omitKeys];
+	}
+	return newObj;
+}
+
+// 验证手机号正则
+export const verificationPhone = (str: string) => {
+	return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(str);
+};

@@ -1,0 +1,29 @@
+$mainColor: #1677ff;
+.ant-btn-link {
+	color: $mainColor;
+}
+.button_btn.ant-btn-primary[disabled],
+.button_btn.ant-btn-background-ghost.ant-btn-primary[disabled] {
+	background-color: #1677ff68 !important;
+	color: #fff !important;
+	border: none !important;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused {
+	box-shadow: none;
+}
+
+div {
+	color: #333;
+}
+.width_btn {
+	width: 100%;
+	padding: 0.2rem 0;
+	height: auto;
+	border-radius: 0.16rem;
+	font-size: 0.34rem;
+	line-height: initial;
+}

@@ -8,6 +8,8 @@ body {
 
 ._main > div {
 	padding-bottom: 1.35rem;
+	// background-color: #f5f5f5;
+	color: #333;
 }
 
 ._main ._title {
@@ -28,8 +30,8 @@ body {
 	// display: none;
 	position: relative;
 	// height: auto;
-	padding: 0.56rem 0.32rem 0;
-	background-color: transparent;
+	padding: 0.3rem 0;
+	background-color: #fff;
 	// background-color: pink;
 	// overflow: hidden;
 	box-sizing: border-box;
@@ -42,6 +44,8 @@ body {
 	font-weight: 500;
 	display: flex;
 	align-items: center;
+	width: 100%;
+	justify-content: space-between;
 }
 
 ._mini_app ._title {
