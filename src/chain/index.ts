@@ -95,9 +95,14 @@ export class Web3IMPL extends Web3Z {
 
 			var id = await this.web3.eth.getChainId();
 
-			this._chain = ChainType[id] ? id: ChainType.UNKNOWN;
+			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
+
+	}
+
+	async getBalance(address: string) {
+		await this.eth.getBalance(address);
 	}
 
 	async initialize() {
