@@ -96,7 +96,7 @@ class DeviceInfo extends NavPage<Device> {
 			newNftList[index] = newNftItem;
 			this.setState({ nftList: newNftList });
 
-			let to = toAddress || await chain.getDefaultAccount();
+			let to = toAddress || await chain.defaultAccount();
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
 			await this._Withdraw(nft, to);
 

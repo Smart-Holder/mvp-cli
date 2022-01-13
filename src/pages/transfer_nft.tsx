@@ -24,7 +24,7 @@ class TransferNft extends NavPage<INftItem> {
 	inputRef = React.createRef<TextAreaRef>();
 
 	async triggerLoad() {
-		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
+		let owner = await chain.defaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.getNFTInfo(owner);
 		this.setState({ owner });
 

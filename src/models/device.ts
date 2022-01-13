@@ -121,7 +121,7 @@ export async function bind(target: string, authCode: string, vCheck?: string) {
 		name: key.authName(),
 		address: key.address(),
 		publicKey: key.publicKey(), authCode: authCode,
-		addressOrigin: await chain.getDefaultAccount(),
+		addressOrigin: await chain.defaultAccount(),
 	}, vCheck) as { sn: string, screen: number };
 
 	if (typeof o == 'string') {

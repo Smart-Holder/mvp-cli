@@ -14,7 +14,7 @@ var _AuthName: string = '';
 
 export async function genPrivateKey() {
 	if (!_PrivateKey) {
-		var from = await chain.getDefaultAccount();
+		var from = await chain.defaultAccount();
 		var key = '__as1ahaasr_' + from;
 		if (await storage.has(key)) {
 			_PrivateKey = buffer.from(await storage.get(key), 'base64');

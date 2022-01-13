@@ -42,7 +42,7 @@ class My extends NavPage {
 
 
 	async triggerShow() {
-		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
+		let owner = await chain.defaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ from: owner });
 		this.getNFTList(owner);
 

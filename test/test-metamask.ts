@@ -37,7 +37,7 @@ export default async function() {
 	var [from] = await mask.request({ method: 'eth_requestAccounts' });
 
 	console.log('eth_requestAccounts', from);
-	console.log('currentProvider', web3.currentProvider);
+	console.log('provider', web3.provider);
 
 	console.log('web3.getBlockNumber', await web3.eth.getBlockNumber());
 

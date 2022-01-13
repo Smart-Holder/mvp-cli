@@ -21,7 +21,7 @@ export default class extends NavPage<{ id: number }> {
 	state = { NFTs: [] as NFT[], from: '' };
 
 	async triggerLoad() {
-		var from = await chain.getDefaultAccount();
+		var from = await chain.defaultAccount();
 		this.setState({
 			from,
 			NFTs: await models.nft.methods.getNFTById({ id: this.params.id, owner: from }),

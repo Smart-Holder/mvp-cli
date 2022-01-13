@@ -40,12 +40,14 @@ import errnoHandles from '../src/handle';
 import Tools from '../src/util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
+import wallet from './wallet';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
 	errnoHandles(e.data);
 });
+
 utils.onUnhandledRejection.on((e) => {
 	errnoHandles(e.data.reason);
 });
@@ -76,7 +78,7 @@ class MyRoot<P> extends Root<P> {
 	}
 }
 
-initializeWeb3().then(() => {
+initializeWeb3(wallet).then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 	if (process.env.NODE_ENV == 'development') {

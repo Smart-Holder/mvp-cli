@@ -32,7 +32,7 @@ export default class extends NavPage<Device> {
 	// _Withdraw
 
 	_Withdraw = async (nft: NFT) => {
-		var to = await chain.getDefaultAccount();
+		var to = await chain.defaultAccount();
 		var from = nft.ownerBase || '';
 		somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
 		// somes.assert(nft.owner == contracts.ERC721Proxy ||

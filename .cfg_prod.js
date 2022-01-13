@@ -14,4 +14,8 @@ module.exports = {
 		RINKEBY_ERC721Proxy: '0xD7697b54A2285F859b373a6A7990e1B89810DC4B',
 		RINKEBY_ERC1155Proxy: '0x23e58Cef10Fdd4CAb805F167b8FC64fedc27F6BE',
 	},
+	app: {
+		name: "mvp-cli",
+		displayName: "MVP Dapp",
+	},
 }
