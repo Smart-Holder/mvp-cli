@@ -84,8 +84,8 @@ didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
 		[self.session start];
 		[self.session scanPhotoWith:[info objectForKey:@"UIImagePickerControllerOriginalImage"]
 									 successBlock:^(NSString *reuslt) {
-			NSString *str = reuslt!= nil ? reuslt : @"没有识别到二维码";
-			[self showResult:str];
+			// NSString *str = reuslt!= nil ? reuslt : @"没有识别到二维码";
+			[self showResult:reuslt?:@""];
 		}];
 	}];
 }

@@ -14,7 +14,7 @@
 
 //NSString *loadURL = @"https://mvp-dev.stars-mine.com";
 //NSString *loadURL = @"http://127.0.0.1:8001";
-NSString *loadURL = @"http://192.168.204.16:8080?a";
+NSString *loadURL = @"http://192.168.204.16:8080";
 //NSString *loadURL = @"https://baidu.com";
 //NSString *loadURL = @"https://apple.com";
 
@@ -34,8 +34,9 @@ NSString *loadURL = @"http://192.168.204.16:8080?a";
 
 -(id) init:(ViewController*)host {
 	self = [super init];
+	self.host = host;
 
-	WKUserContentController * api = [WKUserContentController new];
+	WKUserContentController * api = host.webview.configuration.userContentController;
 
 	[api addScriptMessageHandler:self name:@"scan"];
 	[api addScriptMessageHandler:self name:@"getKeysName"];
@@ -43,8 +44,6 @@ NSString *loadURL = @"http://192.168.204.16:8080?a";
 	[api addScriptMessageHandler:self name:@"setKey"];
 	[api addScriptMessageHandler:self name:@"deleteKey"];
 
-	host.webview.configuration.userContentController = api;
-	
 	//NSData* data = [NSJSONSerialization dataWithJSONObject:@{@"a": @"AZAA", @"b": @"AZAA", @"c": @[@"Test"], @"d": @1} options:0 error:nil];
 
 	//id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -77,25 +76,25 @@ NSString *loadURL = @"http://192.168.204.16:8080?a";
 	NSString* id = [body objectForKey:@"id"];
 	NSArray* args = [body objectForKey:@"args"];
 	
-	if (![id isKindOfClass: NSString.class] || ![args isKindOfClass: NSString.class]) {
+	if (![id isKindOfClass: NSString.class] || ![args isKindOfClass: NSArray.class]) {
 		return;
 	}
 
-	if ([name compare:@"scan"]) {
+	if ([name isEqualToString:@"scan"]) {
 		[self.host scan:^(NSString* result) {
 			[self callback:id error:nil result:result];
 		}];
-	} else if ([name compare:@"getKeysName"]) {
+	} else if ([name isEqualToString:@"getKeysName"]) {
 		[self callback:id error:nil result:[self getKeysName]];
-	} else if ([name compare:@"getKey"]) {
+	} else if ([name isEqualToString:@"getKey"]) {
 		[self callback:id error:nil result:[self getKey:[args objectAtIndex:0]]];
-	} else if ([name compare:@"setKey"]) {
+	} else if ([name isEqualToString:@"setKey"]) {
 		if ([self setKey:[args objectAtIndex:0] data:[args objectAtIndex:1]]) {
 			[self callback:id error:nil result:nil];
 		} else {
 			[self callback:id error:@"setKey fail" result:nil];
 		}
-	} else if ([name compare:@"deleteKey"]) {
+	} else if ([name isEqualToString:@"deleteKey"]) {
 		[self deleteKey:[args objectAtIndex:0]];
 		[self callback:id error:@"setKey fail" result:nil];
 	} else {
@@ -256,6 +255,8 @@ NSString *loadURL = @"http://192.168.204.16:8080?a";
 	}
 
 	self.api = [[JSAPI alloc] init:self];
+	
+	loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
 	
 	NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
 	
