@@ -1,5 +1,6 @@
 @import "../index.scss";
 .create_account_page {
+	background-color: #f5f5f5;
 	.create_account_page_content {
 		padding: 0.32rem 0.3rem 0;
 
@@ -17,7 +18,7 @@
 				border: none;
 				padding: 0;
 				font-size: 0.32rem;
-			}
+			}	
 		}
 
 		.secret_key_pwd_box {

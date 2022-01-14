@@ -69,7 +69,11 @@ async function tryLogin(state: LoginState, key2?: string, ref?: string) { // tes
 }
 
 function genLoginState(name: string, pwd: string) {
-	var priv = hash.sha256(name + pwd + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a');
+	var priv = hash.sha256(name + pwd + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
+	// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a new
+	// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a old
+	console.log(priv.toString('base64'), '0x' + priv.toString('hex'));
+	
 	return {
 		name: name,
 		priv: '0x' + priv.toString('hex'),
@@ -89,6 +93,10 @@ export function logout() {
 	if (store.conv) {
 		store.conv.autoReconnect = 3e4;
 	}
+}
+
+export const sendPhoneVerify = async (phone:string) => {
+	return sdk.user.methods.sendPhoneVerify({phone});
 }
 
 export async function login(name: string, {verify,pwd,ref}: {verify?: string, pwd?: string, ref?: string}) {
@@ -115,7 +123,7 @@ export async function login(name: string, {verify,pwd,ref}: {verify?: string, pw
 
 export async function register(name: string, pwd: string, verify: string, ref?: string) {
 	var state = genLoginState(name, pwd);
-	await sdk.user.methods.registerFromPhone({name, pkey: state.key, verify});
+	await sdk.user.methods.registerFromPhone({phone:name, pkey: state.key, verify});
 	await login(name, {pwd,ref}); // is login ?
 }
 

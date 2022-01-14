@@ -1,12 +1,14 @@
-import NavPage from '../../../nav';
+import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
-import Header from '../../../util/header';
-import Input from '../../../components/input';
-import IconFont from '../../../components/icon_font';
+import Header from '../../../src/util/header';
+import Input from '../../../src/components/input';
+import IconFont from '../../../src/components/icon_font';
 import { Checkbox } from 'antd';
-import Button from '../../../components/button';
+import Button from '../../../src/components/button';
+import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
-
+import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
+import native from '../../native'
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 
@@ -14,19 +16,45 @@ class ImportSecretKeyPage extends NavPage {
 
 	state = {
 		import_method: 'secret_key' as IimportMethodType,
-		secret_key_address: '',
+		address: '',
 		secret_key_name: '',
 		password: '',
-		confim_password: '',
+		confirm_password: '',
 	}
 
 	set_import_method(import_method: IimportMethodType) {
 		this.setState({ import_method });
 	}
 
+	// 导入钱包
+	async importWallet() {
+		let { address, secret_key_name, password, confirm_password } = this.state;
+		
+		if (confirm_password !== password) return alert("两次密码输入不一致!");
+
+		try {
+			let keyStore = await encryptPrivateKey('0x' + address, password);
+			await native.setKey(secret_key_name, JSON.stringify(keyStore));
+			alert('私钥导入成功!',() => this.pushPage('/home'));
+		} catch (error:any) {
+			alert(error);
+		}
+		// let data = await native.getKey(secret_key_name);
+
+		// let privateKey = await decryptPrivateKey(JSON.parse(String(data)), password);
+		// alert(String(data));
+		// console.log(privateKey.toString('hex'),data);
+	}
+
+	// 扫码获取私钥地址
+	async scan() {
+		let address = await native.scan();
+		this.setState({ address });
+	}
+
 	render() {
 
-		let { import_method, secret_key_address, secret_key_name, password, confim_password } = this.state;
+		let { import_method, address, secret_key_name, password, confirm_password } = this.state;
 		return <div className="import_secretkey_page">
 			<Header title="导入方式" page={this} />
 
@@ -37,10 +65,10 @@ class ImportSecretKeyPage extends NavPage {
 				</div>
 
 
-				<div className="card_box secret_key_address">
+				<div className="card_box address">
 					<div className="wallet_input_box">
-						<Input placeholder="输入密码或扫描二维码，注意大小写" value={secret_key_address} onChange={(e) => this.setState({ secret_key_address: e.target.value })} />
-						<IconFont className="qrcode_icon" type="icon-saoma" />
+						<Input placeholder="输入密码或扫描二维码，注意大小写" value={address} onChange={(e) => this.setState({ address: e.target.value })} />
+						<IconFont className="qrcode_icon" type="icon-saoma" onClick={this.scan.bind(this)} />
 					</div>
 				</div>
 
@@ -56,7 +84,7 @@ class ImportSecretKeyPage extends NavPage {
 					<div className="card_body">
 						<Input maxLength={25} inputType="password" className="password_input_item" placeholder="请输入至少8位密码" value={password} onChange={(e) => this.setState({ password: e.target.value })} />
 						<div className="line"></div>
-						<Input maxLength={25} inputType="password" placeholder="请重复输入密码" value={confim_password} onChange={(e) => this.setState({ confim_password: e.target.value })} />
+						<Input maxLength={25} inputType="password" placeholder="请重复输入密码" value={confirm_password} onChange={(e) => this.setState({ confirm_password: e.target.value })} />
 					</div>
 				</div>
 
@@ -68,7 +96,7 @@ class ImportSecretKeyPage extends NavPage {
 					</div>
 				</div>
 
-				<Button className="import_btn" type='primary' >导入账号</Button>
+				<Button disabled={!address || !password || !confirm_password || !secret_key_name} className="import_btn" type='primary' onClick={this.importWallet.bind(this)}>导入账号</Button>
 			</div>
 		</div>;
 	}

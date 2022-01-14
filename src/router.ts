@@ -1,35 +1,12 @@
 
 export default [
-	{
-		path: '/',
-		page: () => import('./pages/nft'),
-	},
-	{
-		path: '/login',
-		page: () => import('./pages/wallet/login'),
-	},
+	// {
+	// 	path: '/',
+	// 	page: () => import('./pages/nft'),
+	// },
 
-	{
-		path: '/safety_tips',
-		page: () => import('./pages/wallet/safety_tips'),
-	},
 
-	{
-		path: '/create_account',
-		page: () => import('./pages/wallet/create_account'),
-	},
-	{
-		path: '/secretkey',
-		page: () => import('./pages/wallet/secret_key'),
-	},
-	{
-		path: '/import_secret_key',
-		page: () => import('./pages/wallet/import_secret_key'),
-	},
-	{
-		path: '/register',
-		page: () => import('./pages/wallet/register'),
-	},
+	
 	{
 		path: '/device',
 		page: () => import('./pages/nft'),

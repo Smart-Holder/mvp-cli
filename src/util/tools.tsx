@@ -188,7 +188,7 @@ export const copyText = (text: string) => {
 	(document?.getElementById('cp_hgz_input') as any).select();
 	document.execCommand('copy');
 	(document.getElementById('cp_hgz_input') as any).remove();
-	Toast.show("复制完成!")
+	Toast.show(<span style={{color:'#fff'}}>复制完成!</span>)
 };
 
 
@@ -224,7 +224,3 @@ export function omit<T>(obj: T, omitKeys: string[] | string) {
 	return newObj;
 }
 
-// 验证手机号正则
-export const verificationPhone = (str: string) => {
-	return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(str);
-};

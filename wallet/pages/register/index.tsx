@@ -1,17 +1,14 @@
-import NavPage from '../../../nav';
+import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
 import { Col, Statistic } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import Input from '../../../components/input';
-import Button from '../../../components/button';
+import Input from '../../../src/components/input';
+import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
-import hash from 'somes/hash';
 
 import "./index.scss";
-import { store } from '../../../sdk';
-import { verificationPhone } from '../../../util/tools';
-import { registerFromPhone, sendPhoneVerify } from '../../../models/user';
-const crypto_tx = require('crypto-tx');
+import { verificationPhone } from '../../util/tools';
+import { changePwd, login, register, sendPhoneVerify } from '../../user';
 
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
@@ -35,6 +32,7 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 	// 登录事件
 	async login() {
 		let { username, v_code, password, confirm_password } = this.state;
+		let { pageType } = this.params;
 		if (!verificationPhone(username)) return alert('请输入正确格式的手机号!');
 		// let fromVal = await this.formRef.current?.validateFields();
 		if (confirm_password !== password) return alert("两次密码输入不一致!");
@@ -44,32 +42,41 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 			password,
 			confirm_password
 		};
-		let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
-		let publicKey = '0x' + crypto_tx.getPublic(privateKey, true).toString('hex');
 
 
 		// let privateKey = await genPrivateKeyForPhone(username, password);
 		// console.log(privateKey, "privateKey");
 
 		// registerFromPhone
-		try {
-			
-			let data = 	await registerFromPhone( username,  publicKey,  v_code );
-			alert("注册成功!",() => {
-				if (this.nav.length > 1) {
-					this.popPage();
-				} else {
-					this.replacePage('/login');
-				}
-			});
-			console.log(body, "body", data,"data");
-			console.log(privateKey, "privateKey", privateKey.toString('base64'));
-			console.log(publicKey, "publicKey");
-		} catch (error:any) {
-			if (error.errno == 100307) alert("该账号已被注册");
-			if (error.errno == 100319) alert("短信验证码无效!");
 
+		if (pageType == 'reset_password') {
+			try {
+				await login(username, { pwd: password, verify: v_code });
+				await changePwd(username, password);
+				alert('密码修改成功!', () => this.pushPage('/secretkey'));
+				
+			} catch (error:any) {
+				alert(error.message);
+			}
+		} else {
+			try {
+				let data = await register(username, password, v_code);
+				alert("注册成功!", () => {
+					if (this.nav.length > 1) {
+						this.popPage();
+					} else {
+						this.replacePage('/login');
+					}
+				});
+				console.log(body, "body", data, "data");
+			} catch (error: any) {
+				if (error.errno == 100307) alert("该账号已被注册");
+				if (error.errno == 100319) alert("短信验证码无效!");
+
+			}
 		}
+
+		
 
 	}
 
@@ -78,13 +85,11 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 		// console.log(e.target.value);
 		let val = e.target.value;
 		this.setState({ [key]: val });
-
-
 	}
 
 	async getVcode() {
-		this.setState({ isCountdown: true });
 		await sendPhoneVerify(this.state.username);
+		this.setState({ isCountdown: true });
 	}
 
 	render() {

@@ -1,14 +1,14 @@
-import NavPage from '../../../nav';
+import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
-import Header from '../../../util/header';
-import IconFont from '../../../components/icon_font';
+import Header from '../../../src/util/header';
+import IconFont from '../../../src/components/icon_font';
 import "./index.scss";
 class SecretKeyPage extends NavPage {
 	render() {
 		return <div className="secret_key_page">
 			<Header title="密钥" page={this} />
 
-			<img className="secret_key_bg" src={require('../../../assets/secret_key_bg.png')} alt="" />
+			<img className="secret_key_bg" src={require('../../../src/assets/secret_key_bg.png')} alt="" />
 
 			<div className="select_box">
 				<div className="import_secret_key_item" onClick={() => this.pushPage('/import_secret_key')}>

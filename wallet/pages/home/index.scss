@@ -1,0 +1,95 @@
+@import '../index.scss';
+
+.home_page {
+	height: 100%;
+	background-color: #F5F5F5;
+	.wallet_bg {
+		width: 100%;
+
+	}
+
+	.wallet_box {
+		padding: 0 .3rem;
+		margin-top: -3.8rem;
+		position: relative;
+		z-index: 99;
+
+		.add_wallet {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			margin-bottom: .3rem;
+			justify-content: flex-end;
+			span {
+				margin-left: .08rem;
+			}
+		}
+		.wallet_item {
+			display: flex;
+			flex-direction: column;
+			background-color: #fefefe;
+			border-radius: .16rem;
+			padding: .24rem;
+			margin-bottom: .3rem;
+		}
+
+		.top_part,
+		.mid_part,
+		.bottom_part {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.top_part {
+			margin-bottom: .3rem;
+		
+			.left_box{
+				border-left: 4px solid $mainColor;
+				border-radius: 1px;
+				font-size: .32rem;
+				height: .32rem;
+				line-height: .32rem;
+				padding-left: 0.08rem;
+			}
+		}
+
+		.mid_part {
+			flex-direction: column;
+			margin-bottom: .24rem;
+			.left_box {
+				font-size: .28rem;
+				color: #999;
+				font-weight: 400;
+			}
+
+			.right_box {
+				font-size: .56rem;
+				font-weight: 500;
+			}
+		}
+
+		.bottom_part {
+			align-items: center;
+			.dot1,.dot2 {
+				background-color: $mainColor;
+				width: .2rem;
+				height: .2rem;
+				border-radius: 50%;
+			}
+			.dot2 {
+				background-color: rgba(22, 119, 255, 0.701);
+				transform:translate(0.06rem, -0.286rem);
+				position: absolute;
+			}
+			.right_box {
+				.ant-btn {
+					border-radius: .08rem;
+					font-size: .24rem;
+					height: auto;
+				}
+			}
+		}
+
+
+	}
+}

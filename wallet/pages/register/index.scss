@@ -1,11 +1,10 @@
 @import "../index.scss";
 
-.login_page {
+.register_page {
 	height: 100%;
-	background-color: #fefefe;
 	.top_part {
 		padding: 2.45rem 0.3rem 1.34rem;
-		background-image: url("../../../assets/login_bg.png");
+		background-image: url("../../../src/assets/login_bg.png");
 		background-size: 100% 100%;
 
 		.title {
@@ -30,10 +29,8 @@
 			height: 0.5rem;
 			// margin-bottom: 0.3rem;
 			.vcode_login {
-				margin-right: 0.4rem;
-			}
-			div {
-				transition: all 0.2s;
+				font-size: 0.36rem;
+				font-weight: 500;
 			}
 		}
 
@@ -44,30 +41,12 @@
 			transform: translate(-15%, -50%);
 		}
 
-		.active {
-			font-size: 0.36rem;
-			color: $mainColor;
-			position: relative;
-			&::after {
-				content: "";
-				width: 0.5rem;
-				height: 2px;
-				border-radius: 0.2rem;
-				background-color: $mainColor;
-				position: absolute;
-				bottom: -2px;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			}
-		}
-
 		.login_input_box {
 			.ant-form-item {
 				margin: 0;
 			}
 			.input_item {
 				border: none;
-				background-color: #fefefe;
 			}
 			.v_code_col {
 				.input_item {
@@ -81,11 +60,11 @@
 				box-shadow: none;
 			}
 			.input_col {
-				border: 1px solid #ddd;
-				padding: 0.32rem;
+				border-bottom: 1px solid #ddd;
+				// padding: 0.32rem;
 				font-size: 0.32rem;
-				border-radius: 0.65rem;
-				margin-top: 0.32rem;
+				// border-radius: 0.65rem;
+				padding: 0.22rem 0;
 			}
 		}
 

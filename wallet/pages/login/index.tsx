@@ -1,13 +1,14 @@
-import NavPage from '../../../nav';
+import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
-import "./index.scss";
-import { Col, Form, Statistic } from 'antd';
+import { Col, Statistic, Spin} from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import Input from '../../../components/input';
-import Button from '../../../components/button';
-import hash from 'somes/hash';
-import { initialize } from '../../../sdk';
-import { devices } from '../../../models/device';
+import Input from '../../../src/components/input';
+import Button from '../../../src/components/button';
+import { login, sendPhoneVerify } from '../../user';
+import { alert } from 'webpkit/lib/dialog';
+import { verificationPhone } from '../../util/tools';
+
+import "./index.scss";
 
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
@@ -19,23 +20,46 @@ class Login extends NavPage {
 		isCountdown: false,
 		username: '',
 		v_code: '',
-		password: ''
+		password: '',
+		loading:false
 	}
 
 	formRef = React.createRef<FormInstance>();
 
-	loginMethodClick(login_method: IMethodType) {
+	async loginMethodClick(login_method: IMethodType) {
 		this.setState({ login_method });
+
+		// await native.setKey('test', '{name:"老六"}');
+		// let data = await native.getKey('test');
+		// alert(data);
 	}
 
 	// 登录事件
-	async login() {
-		let { username, password } = this.state;
+	async loginClick() {
+		this.setState({ loading: true });
+		let { username, password, login_method, v_code } = this.state;
+		
+		try {
+			if (login_method == 'vcode') {
+				await login(username, { pwd: password, verify: v_code });
+			} else {
+				await login(username, {pwd:password});
+			}
+
+			this.pushPage('/secretkey');
+		} catch (error:any) {
+			alert(error.message);
+		}
+		this.setState({ loading: false });
+
+		// let data = await _api.scan();
+		// alert(data);
 		// let fromVal = await this.formRef.current?.validateFields();
 		// console.log(fromVal, "fromVal");
 		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
 		// console.log(username, password );
 		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
+															// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a
 		// console.log(privateKey.toString('base64'));
 
 		// await devices();
@@ -52,9 +76,23 @@ class Login extends NavPage {
 
 	}
 
+	// 获取验证码
+	async getVcode() {
+		let { username } = this.state;
+		if (!verificationPhone(username)) return alert('请输入有效的手机号码');
+		try {
+			await sendPhoneVerify(username);
+			this.setState({ isCountdown: true });
+		} catch (error:any) {
+			alert(error.message);
+		}
+	}
+
 	render() {
-		let { login_method, isCountdown, username, v_code, password } = this.state;
+		let { login_method, isCountdown, username, v_code, password, loading } = this.state;
 		return <div className="login_page">
+			<Spin spinning={loading}>
+
 			<div className="top_part">
 				<div className="title">价值圈</div>
 				<div className="desc">精准链接，资源聚合</div>
@@ -78,7 +116,7 @@ class Login extends NavPage {
 						<div className="get_vcode_box">
 							{isCountdown ?
 								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
-								<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={() => this.setState({ isCountdown: true })}>获取验证码</Button>}
+								<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
 						</div>
 					</Col>}
 
@@ -97,8 +135,10 @@ class Login extends NavPage {
 			</div>
 
 			<div className="bottom_part">
-				<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.login.bind(this)}>登录</Button>
-			</div>
+				<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
+				</div>
+			</Spin>
+
 		</div>
 	}
 }

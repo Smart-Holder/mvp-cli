@@ -1,7 +1,7 @@
-import NavPage from '../../../nav';
+import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
-import Header from '../../../util/header';
-import Button from '../../../components/button';
+import Header from '../../../src/util/header';
+import Button from '../../../src/components/button';
 import { Modal } from 'antd-mobile';
 
 import './index.scss';
@@ -9,19 +9,19 @@ import './index.scss';
 const operation = Modal.operation;
 
 const SafetyTipsConfig = [{
-	img: require('../../../assets/safety_tips_1.png'),
+	img: require('../../../src/assets/safety_tips_1.png'),
 	text: '任何人只要持有你的私钥，助记词，即可将价值转移。'
 },
 {
-	img: require('../../../assets/safety_tips_2.png'),
+	img: require('../../../src/assets/safety_tips_2.png'),
 	text: '账号的密码仅用于私钥的加密和解密，密码只存储在手机上。'
 },
 {
-	img: require('../../../assets/safety_tips_3.png'),
+	img: require('../../../src/assets/safety_tips_3.png'),
 	text: '请勿对私钥,助记词,keystore做截图备份，避免被恶意软件截取。'
 },
 {
-	img: require('../../../assets/safety_tips_4.png'),
+	img: require('../../../src/assets/safety_tips_4.png'),
 	text: '请正确抄写并保存在安全的地方，勿进行网络传输或存储。'
 }
 ]
@@ -29,10 +29,11 @@ const SafetyTipsConfig = [{
 export default class extends NavPage {
 
 	onOk() {
-		operation([
-			{ text: '备份助记词', onPress: () => console.log('标为未读被点击了'), style: { textAlign: 'center' } },
-			{ text: '不备份助记词直接完成', onPress: () => console.log('置顶聊天被点击了'), style: { textAlign: 'center' } },
-		])
+		this.pushPage('/home');
+		// operation([
+		// 	{ text: '备份助记词', onPress: () => console.log('标为未读被点击了'), style: { textAlign: 'center' } },
+		// 	{ text: '不备份助记词直接完成', onPress: () => console.log('置顶聊天被点击了'), style: { textAlign: 'center' } },
+		// ]);
 	}
 
 	render() {

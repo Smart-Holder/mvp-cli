@@ -21,7 +21,7 @@ import { BindDeviceCarousel } from '../components/carousel';
 import '../css/my.scss';
 
 
-class My extends NavPage {
+class My extends NavPage<{address:string}> {
 
 	state = {
 		nft: [] as INftItem[],
@@ -42,7 +42,7 @@ class My extends NavPage {
 
 
 	async triggerShow() {
-		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
+		let owner = this.params.address || await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ from: owner });
 		this.getNFTList(owner);
 

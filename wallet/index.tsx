@@ -37,9 +37,9 @@ import { initialize } from './sdk';
 import {initialize as initializeWeb3} from './web3';
 import utils from 'somes';
 import errnoHandles from '../src/handle';
-import Tools from '../src/util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
+import {Tab} from './util/tools'
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
@@ -72,7 +72,9 @@ class MyRoot<P> extends Root<P> {
 	}
 
 	renderTools() {
-		return <Tools nav={this._nav} />;
+		let pathname = location.pathname;
+
+		return pathname.startsWith("/my") || pathname.startsWith("/home")  ? <Tab nav={this._nav} />: '';
 	}
 }
 
