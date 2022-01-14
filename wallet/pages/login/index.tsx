@@ -7,6 +7,8 @@ import Button from '../../../src/components/button';
 import { login, sendPhoneVerify } from '../../user';
 import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
+// import wallet from '../../wallet';
+import { Signature, providers, Web3 } from 'web3z';
 
 import "./index.scss";
 
@@ -28,7 +30,6 @@ class Login extends NavPage {
 
 	async loginMethodClick(login_method: IMethodType) {
 		this.setState({ login_method });
-
 		// await native.setKey('test', '{name:"老六"}');
 		// let data = await native.getKey('test');
 		// alert(data);

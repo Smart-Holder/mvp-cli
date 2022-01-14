@@ -3,6 +3,7 @@ import {RLPEncodedTransaction, TransactionConfig,AbstractProvider,RequestArgumen
 import buffer, { IBuffer } from 'somes/buffer';
 import { Signature, providers, Web3 } from 'web3z';
 import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
+import native from './native';
 
 var cryptoTx = require('crypto-tx');
 
@@ -245,8 +246,9 @@ export abstract class WalletManagerAbstract implements WalletManager {
 export class UIWalletManager extends WalletManagerAbstract {
 
 	//private _provider: AbstractProvider = (globalThis as any).ethereum;
-	private _provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
-
+	private _provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
+	// https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
+	// https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13
 	onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void {
 		this._provider.send(payload, callback);
 	}
@@ -257,10 +259,17 @@ export class UIWalletManager extends WalletManagerAbstract {
 	}
 
 	async onAccounts(user: WalletUser): Promise<string[]> {
-		await this.checkPermission(user);
+		// await this.checkPermission(user);
 		// TODO ...
-
-		return [];
+		let keysNameArr = await native.getKeysName() || [];
+		let addressList = keysNameArr.map(async (key) => {
+			let data = await native.getKey(key);
+			let address = '0x' + JSON.parse(String(data)).address
+			return address;
+		});
+		// console.log(addressList,"addressList");
+		let newAddressList = await Promise.all(addressList);
+		return [...newAddressList];
 	}
 
 	async onSign(user: WalletUser, text: string, hash: IBuffer, from: string, pwd?: string): Promise<string> {

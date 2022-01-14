@@ -73,7 +73,9 @@ class Home extends NavPage {
 			<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
 			
 			<div className="wallet_box">
-				<div className="add_wallet" >
+				<div className="add_wallet" onClick={() => {
+					
+				}}>
 					<IconFont type='icon-chuangjianguanlimiyue' style={{ width: '.48rem', height: '.48rem' }} />
 					<span>管理密钥</span>
 				</div>

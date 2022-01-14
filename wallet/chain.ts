@@ -43,6 +43,6 @@ export class DAppUser implements AbstractProvider, WalletUser {
 
 export async function initialize(wallet: WalletRPC) {
 	var dapp = new DAppUser(cfg.app.displayName, wallet);
-	// (globalThis as any).ethereum = dapp; // meta mask plugin
+	(globalThis as any).ethereum = dapp; // meta mask plugin
 	await chain.initialize();
 }
