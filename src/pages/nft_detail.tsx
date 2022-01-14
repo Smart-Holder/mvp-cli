@@ -31,7 +31,16 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 		let data = await index.nft.methods.getNFT({ token, tokenId });
 		let orderData = await index.utils.methods.assetOrders({ token, tokenId });
 		this.setState({ nft: data[0], nftOrderList: orderData, loading: false });
+	}
 
+	 getUri(item: NFT) {
+		let uri = item.uri
+		if (!uri) return '';
+		if (uri.indexOf('0x{id}')) {
+			uri = uri.replace('0x{id}', item.tokenId);
+		}
+		return uri;
+		
 	}
 
 	render() {
@@ -77,9 +86,9 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 
 										<div className="nft_address_box">
 											<div className="nft_hash_title">{t("元数据")}</div>
-											<div className="nft_hash textNoWrap" onClick={() => {
+											<div style={{ wordWrap: 'break-word', wordBreak: 'break-all'}} className="nft_hash" onClick={() => {
 												copyText(nft.uri);
-											}}>{getSubStr(nft.uri, 22)}</div>
+											}}>{this.getUri(nft)}</div>
 										</div>
 
 									</div>
