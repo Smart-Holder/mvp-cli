@@ -60,7 +60,7 @@ export class UIWalletManager extends WalletManagerAbstract {
 		this.provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
 	}
 
-	private async allKeys() {
+	async keys() {
 		if (!this._accounts) {
 			this._accounts = new Map();
 			var keysName = await native.getKeysName() || [];
@@ -78,19 +78,19 @@ export class UIWalletManager extends WalletManagerAbstract {
 	}
 
 	async addKey(name: string, key: ISecretKey) {
-		var accs = await this.allKeys();
+		var accs = await this.keys();
 		await native.setKey(name, JSON.stringify(key.keystore));
 		accs.set(name, key);
 	}
 
 	async getKey(name: string) {
-		var acc = (await this.allKeys()).get(name);
+		var acc = (await this.keys()).get(name);
 		return acc || null;
 	}
 
 	async keyFrom(address: string) {
 		address = cryptoTx.checksumAddress(address);
-		var keys = await this.allKeys();
+		var keys = await this.keys();
 		for (var [,v] of keys) {
 			if (v.address == address) {
 				return v;
@@ -101,7 +101,7 @@ export class UIWalletManager extends WalletManagerAbstract {
 
 	async onAccounts(user?: WalletUser): Promise<string[]> {
 		var l = [] as string[];
-		for (var [k,v] of await this.allKeys())
+		for (var [k,v] of await this.keys())
 			l.push(v.address);
 		return l;
 	}
