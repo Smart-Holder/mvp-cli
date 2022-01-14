@@ -45,7 +45,7 @@ export class SecretKey implements ISecretKey {
 
 export class UIWalletManager extends WalletManagerAbstract {
 
-	private _accounts?: Map<string, ISecretKey>;
+	private _accounts?: Dict<ISecretKey>;
 
 	// private _provider: AbstractProvider = (globalThis as any).ethereum;
 	provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
@@ -62,48 +62,43 @@ export class UIWalletManager extends WalletManagerAbstract {
 
 	async keys() {
 		if (!this._accounts) {
-			this._accounts = new Map();
+			this._accounts = {};
 			var keysName = await native.getKeysName() || [];
 			for (var name of keysName) {
 				var json = await native.getKey(name);
 				if (json) {
 					try {
 						var keystore = JSON.parse(json);
-						this._accounts.set(name, new SecretKey(keystore));
+						this._accounts[name] = new SecretKey(keystore);
 					} catch(err) {}
 				}
 			}
 		}
-		return this._accounts;
+		return {...this._accounts};
 	}
 
 	async addKey(name: string, key: ISecretKey) {
-		var accs = await this.keys();
+		await this.keys();
 		await native.setKey(name, JSON.stringify(key.keystore));
-		accs.set(name, key);
+		(this._accounts as any)[name] = key;
 	}
 
-	async getKey(name: string) {
-		var acc = (await this.keys()).get(name);
+	async getKey(name: string): Promise<ISecretKey | null> {
+		var acc = (await this.keys())[name];
 		return acc || null;
 	}
 
 	async keyFrom(address: string) {
 		address = cryptoTx.checksumAddress(address);
 		var keys = await this.keys();
-		for (var [,v] of keys) {
-			if (v.address == address) {
-				return v;
-			}
-		}
-		throw Error.new('Key not found');
+		var key = Object.values(keys).find(e=>e.address==address);
+		if (!key)
+			throw Error.new('Key not found');
+		return key;
 	}
 
 	async onAccounts(user?: WalletUser): Promise<string[]> {
-		var l = [] as string[];
-		for (var [k,v] of await this.keys())
-			l.push(v.address);
-		return l;
+		return Object.values(await this.keys()).map(e=>e.address);
 	}
 
 	async onSign(user: WalletUser, text: string, hash: IBuffer, from: string, pwd?: string): Promise<string> {
