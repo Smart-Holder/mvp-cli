@@ -77,10 +77,10 @@ export class UIWalletManager extends WalletManagerAbstract {
 		return this._accounts;
 	}
 
-	async addKey(name: string, keystore: any) {
+	async addKey(name: string, key: SecretKey) {
 		var accs = await this.allKeys();
-		await native.setKey(name, JSON.stringify(keystore));
-		accs.set(name, new SecretKey(keystore));
+		await native.setKey(name, JSON.stringify(key.keystore));
+		accs.set(name, key);
 	}
 
 	async getKey(name: string) {
