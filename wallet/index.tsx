@@ -39,7 +39,7 @@ import utils from 'somes';
 import errnoHandles from '../src/handle';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
-import wallet from './ui_wallet';
+import wallet from './wallet_ui';
 import { Tab } from './util/tools';
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);

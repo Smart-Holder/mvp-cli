@@ -1,9 +1,9 @@
 
-import {RLPEncodedTransaction, TransactionConfig,AbstractProvider,RequestArguments} from 'web3-core';
+import {RLPEncodedTransaction, TransactionConfig,RequestArguments} from 'web3-core';
 import buffer, { IBuffer } from 'somes/buffer';
-import { Signature, providers, Web3 } from 'web3z';
+import { Signature } from 'web3z';
 import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
-import native from './native';
+import req from 'somes/request';
 
 var cryptoTx = require('crypto-tx');
 
@@ -11,22 +11,22 @@ export interface Transaction {
 	from: string;
 	to: string;
 	value: string;
-	gas: number;
-	gasLimit: number;
-	gasPrice: number;
 	data: string;
 	nonce: number;
 	chainId: number;
+	gas: number;
+	gasLimit: number;
+	gasPrice: number;
 }
 
 export interface WalletUser {
 	name(): Promise<string>; // app user name
 }
 
-export type SendCallback = (error: Error | null, result?: JsonRpcResponse)=>void;
+export type RpcCallback = (error: Error | null, result?: JsonRpcResponse)=>void;
 
 export interface WalletRPC {
-	send(user: WalletUser, payload: JsonRpcPayload, callback: SendCallback, chain?: number): void;
+	send(user: WalletUser, payload: JsonRpcPayload, callback: RpcCallback, chain?: number): void;
 	request<T = any>(user: WalletUser, args: RequestArguments, chain?: number): Promise<T>;
 }
 
@@ -55,23 +55,39 @@ export type BlockNumber = number | 'latest' | 'pending' | 'earliest' | 'genesis'
 
 export abstract class WalletManagerAbstract implements WalletManager {
 
-	private async _FormatTx(user: WalletUser, tx: TransactionConfig): Promise<Transaction> { // Transaction
-		debugger
+	async suggestedGasFees(chainId: number): Promise<any|null> {
+		try {
+			var {statusCode,data} = await req.get(`https://gas-api.metaswap.codefi.network/networks/${chainId}/suggestedGasFees`);
+			if (statusCode == 200) {
+				return JSON.parse(data + '');
+			}
+		} catch(err) {}
+		return null;
+	}
+
+	private async _FormatTx(user: WalletUser, _tx: TransactionConfig): Promise<Transaction> { // Transaction
+		var tx = _tx as Transaction;
+
 		tx.from = tx.from || (await this.accounts(user))[0];
-		tx.nonce = Number(tx.nonce || await this.getTransactionCount(tx.from as string));
-		tx.chainId = Number(tx.chainId || await this.getChainId());
-		tx.gas = Number(tx.gas || (tx as any).gas || 21000); // default 21000 gas
-		if (!(tx as any).gasLimit) {
-			(tx as any).gasLimit = parseInt(String(tx.gas * 1.2));
-		}
-		tx.gasPrice = Number(tx.gasPrice || await this.getGasPrice());
+		tx.nonce = tx.nonce || await this.getTransactionCount(tx.from as string);
+		tx.chainId = tx.chainId || await this.getChainId();
 		tx.value = tx.value || '0x0';
-		tx.data = tx.data || '0x0';
+		tx.data = tx.data || '0x';
+
+		if (!tx.gas)
+			tx.gas = await this.estimateGas(tx.from, tx.to, tx.value, tx.data, tx.nonce, tx.chainId);
+		if (!tx.gasLimit) // 程序运行时步数限制 default
+			tx.gasLimit = parseInt(String(tx.gas * 1.2)); // suggested gas limit
+
+		// var gas = await this.suggestedGasFees(tx.chainId);
+
+		if (!tx.gasPrice) // 程序运行单步的wei数量wei default
+			tx.gasPrice = await this.getGasPrice() || 1e5;
 
 		return tx as Transaction;
 	}
 
-	protected abstract onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void;
+	protected abstract onSend(payload: JsonRpcPayload, callback: RpcCallback, user?: WalletUser): void;
 
 	protected onRequest<T = any>(payload: RequestArguments, user?: WalletUser) {
 		return new Promise<T>((resolve, reject)=>{
@@ -170,6 +186,15 @@ export abstract class WalletManagerAbstract implements WalletManager {
 
 	async getTransactionCount(from: string, blockNum: BlockNumber = 'latest') {
 		var num = await this.onRequest<string>({method: 'eth_getTransactionCount', params: [from, blockNum]});
+		return Number(num);
+	}
+
+	async estimateGas(from: string, to: string, value: string, data: string, nonce: number, chainId: number) {
+		var num = await this.onRequest<string>({method: 'eth_estimateGas', params: [{
+			from, to, value, data,
+			nonce: '0x' + nonce.toString(16),
+			chainId: '0x' + chainId.toString(16),
+		}]});
 		return Number(num);
 	}
 

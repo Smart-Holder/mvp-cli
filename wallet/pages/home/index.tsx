@@ -9,7 +9,7 @@ import { decryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore
 import chain from "../../../src/chain"
 import { initialize } from '../../../src/sdk';
 import { writePrivateKey } from '../../../src/key';
-import wallet from '../../ui_wallet';
+import wallet from '../../wallet_ui';
 
 export interface IAddressListItemProps {
 	key: string;
