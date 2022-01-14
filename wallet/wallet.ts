@@ -244,11 +244,11 @@ export abstract class WalletManagerAbstract implements WalletManager {
 
 export class UIWalletManager extends WalletManagerAbstract {
 
-	private _metaMask: AbstractProvider = (globalThis as any).ethereum;
-	// private _provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
+	//private _provider: AbstractProvider = (globalThis as any).ethereum;
+	private _provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
 
 	onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void {
-		this._metaMask.sendAsync(payload, callback);
+		this._provider.send(payload, callback);
 	}
 
 	private async checkPermission(user: WalletUser) {
