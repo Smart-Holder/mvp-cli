@@ -56,10 +56,10 @@ export abstract class WalletManagerAbstract implements WalletManager {
 
 	private async _FormatTx(user: WalletUser, tx: TransactionConfig): Promise<Transaction> { // Transaction
 		tx.from = tx.from || (await this.accounts(user))[0];
-		tx.gasPrice = tx.gasPrice || await this.getGasPrice();
+		tx.gasPrice = Number(tx.gasPrice || await this.getGasPrice());
 		tx.nonce = tx.nonce || await this.getTransactionCount(tx.from as string);
 		tx.chainId = tx.chainId || await this.getChainId();
-		tx.gas = tx.gas || (tx as any).gasLimit || 1e8;
+		tx.gas = Number(tx.gas || (tx as any).gasLimit || 1e8);
 		(tx as any).gasLimit = tx.gas;
 		tx.value = tx.value || '0x0';
 		tx.data = tx.data || '0x0';
@@ -75,7 +75,7 @@ export abstract class WalletManagerAbstract implements WalletManager {
 				jsonrpc: '2.0',
 				method: payload.method,
 				params: payload.params || [], 
-				id: payload.id,
+				id: payload.id || 0,
 			}, (err: Error | null, result?: JsonRpcResponse)=>{
 				if (err || !result || result.error) {
 					reject(err || (result && result.error ? result.error : Error.new('err')));
@@ -159,8 +159,8 @@ export abstract class WalletManagerAbstract implements WalletManager {
 		return Number(num);
 	}
 
-	async getBalance(from: string) {
-		var num = await this.onRequest<string>({method: 'eth_getBalance'});
+	async getBalance(from: string, blockNum: BlockNumber = 'latest') {
+		var num = await this.onRequest<string>({ method: 'eth_getBalance', params: [from, blockNum]});
 		return BigInt(num);
 	}
 
@@ -243,72 +243,3 @@ export abstract class WalletManagerAbstract implements WalletManager {
 
 }
 
-export class UIWalletManager extends WalletManagerAbstract {
-
-	//private _provider: AbstractProvider = (globalThis as any).ethereum;
-	private _provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
-	// https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
-	// https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13
-	onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void {
-		this._provider.send(payload, callback);
-	}
-
-	private async checkPermission(user: WalletUser) {
-		// TODO check permission ...
-		throw 'Err';
-	}
-
-	async onAccounts(user: WalletUser): Promise<string[]> {
-		// await this.checkPermission(user);
-		// TODO ...
-		let keysNameArr = await native.getKeysName() || [];
-		let addressList = keysNameArr.map(async (key) => {
-			let data = await native.getKey(key);
-			let address = '0x' + JSON.parse(String(data)).address
-			return address;
-		});
-		// console.log(addressList,"addressList");
-		let newAddressList = await Promise.all(addressList);
-		return [...newAddressList];
-	}
-
-	async onSign(user: WalletUser, text: string, hash: IBuffer, from: string, pwd?: string): Promise<string> {
-		await this.checkPermission(user);
-
-		// TODO ...
-		var isAgree = true;
-		if (!isAgree) {
-			throw Error.new('reject sign');
-		}
-
-		// TODO sign from privateKey
-		var signature =
-			cryptoTx.signv(hash, buffer.from('767eb49d3734b4e3058486b583dbc9cdc6c78a75efc14117a07fec0b11f6476c', 'hex'));
-
-		return buffer.concat([signature.signature, [signature.recovery]]).toString('hex');
-	}
-
-	async onSignTransaction(user: WalletUser, tx: Transaction): Promise<RLPEncodedTransaction> {
-		await this.checkPermission(user);
-
-		// TODO ...
-		var isAgree = true;
-		if (!isAgree) {
-			throw Error.new('reject sign or send transaction');
-		}
-
-		var signTx = await this.signTx({
-			async sign(message: IBuffer): Promise<Signature> {
-				// TODO sign from privateKey
-				var signature = 
-					cryptoTx.sign(message, buffer.from('767eb49d3734b4e3058486b583dbc9cdc6c78a75efc14117a07fec0b11f6476c', 'hex'));
-				return signature;
-			}
-		}, tx);
-
-		return UIWalletManager.getRLPEncodedTransaction(tx, signTx);
-	}
-
-}
-
-export default new UIWalletManager();

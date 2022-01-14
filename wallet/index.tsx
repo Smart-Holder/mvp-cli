@@ -39,9 +39,8 @@ import utils from 'somes';
 import errnoHandles from '../src/handle';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
-import wallet from './wallet';
+import wallet from './ui_wallet';
 import { Tab } from './util/tools';
-
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;

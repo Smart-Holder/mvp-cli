@@ -9,6 +9,7 @@ import { decryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore
 import chain from "../../../src/chain"
 import { initialize } from '../../../src/sdk';
 import { writePrivateKey } from '../../../src/key';
+import wallet from '../../ui_wallet';
 
 export interface IAddressListItemProps {
 	key: string;
@@ -32,12 +33,12 @@ class Home extends NavPage {
 		let addressList = keysNameArr.map(async (key) => {
 			let data = await native.getKey(key);
 			let address = '0x' + JSON.parse(String(data)).address
-			let balance = await chain.getBalance(address);
+			let balance = Number( await wallet.getBalance(address)) / Math.pow(10, 18);
 			return { key, balance, address };
 		});
 		// console.log(addressList,"addressList");
 		let newAddressList =await Promise.all(addressList);
-		// console.log(newAddressList,"newAddressList");
+		console.log(newAddressList,"newAddressList");
 		
 		this.setState({ addressList: newAddressList });
 
@@ -74,7 +75,8 @@ class Home extends NavPage {
 			
 			<div className="wallet_box">
 				<div className="add_wallet" onClick={() => {
-					
+					wallet.setProvider();
+					console.log(wallet.provider);
 				}}>
 					<IconFont type='icon-chuangjianguanlimiyue' style={{ width: '.48rem', height: '.48rem' }} />
 					<span>管理密钥</span>
@@ -92,7 +94,7 @@ class Home extends NavPage {
 
 						<div className="mid_part">
 							<div className="left_box">POWER</div>
-							<div className="right_box"> 1000000 </div>
+								<div className="right_box"> {item.balance} </div>
 						</div>
 						</div>
 
