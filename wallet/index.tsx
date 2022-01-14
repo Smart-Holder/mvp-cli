@@ -34,7 +34,7 @@ import routes from './router';
 import '../src/css/util.scss';
 import '../src/index.css';
 import { initialize } from './sdk';
-import {initialize as initializeWeb3} from './web3';
+import {initialize as initializeChain} from './chain';
 import utils from 'somes';
 import errnoHandles from '../src/handle';
 import Tools from '../src/util/tools';
@@ -78,7 +78,7 @@ class MyRoot<P> extends Root<P> {
 	}
 }
 
-initializeWeb3(wallet).then(() => {
+initializeChain(wallet).then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 	if (process.env.NODE_ENV == 'development') {
