@@ -16,9 +16,7 @@ export async function genPrivateKey(address?: string) {
 	console.log(_PrivateKey?.toString('hex'),"_PrivateKey");
 	
 	if (!_PrivateKey) {
-		var from = address || await chain.getDefaultAccount();
-		console.log(from,"from");
-		
+		var from = await chain.defaultAccount();
 		var key = '__as1ahaasr_' + from;
 		if (await storage.has(key)) {
 			_PrivateKey = buffer.from(await storage.get(key), 'base64');

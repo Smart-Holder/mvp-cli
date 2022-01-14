@@ -9,7 +9,7 @@ export default async function () {
 
 	var proxy1155 = Proxy.New('0x36763175b209853D022F2BAfd64eef71D5DF8dCF', ChainType.ETHEREUM);
 
-	var my = await chain.getDefaultAccount();
+	var my = await chain.defaultAccount();
 	var lxy = '0xb02cbeD3aC823085CfB1A667Fb1C73E19E724657';
 	var token = '0x88B48F654c30e99bc2e4A1559b4Dcf1aD93FA656';
 	var tokenId = BigInt('0xb02cbed3ac823085cfb1a667fb1c73e19e724657000000000000080000000001');

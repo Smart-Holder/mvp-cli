@@ -78,7 +78,7 @@ export default class ProxyAPI {
 			[token, tokenId, from, to, amount, data, expiry, signCount],
 		);
 		var msg = buffer.from(crypto_tx.keccak(buf).data);
-		var my = await index.getDefaultAccount();
+		var my = await index.defaultAccount();
 
 		var owners = await this.ownersOf(token, tokenId, from);
 		//var buf_hex = await this.encodePacked(tx)

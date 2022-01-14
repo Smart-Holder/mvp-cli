@@ -34,18 +34,20 @@ import routes from './router';
 import '../src/css/util.scss';
 import '../src/index.css';
 import { initialize } from './sdk';
-import {initialize as initializeWeb3} from './web3';
+import {initialize as initializeChain} from './chain';
 import utils from 'somes';
 import errnoHandles from '../src/handle';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
-import {Tab} from './util/tools'
+import wallet from './wallet';
+import { Tab } from './util/tools';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
 	errnoHandles(e.data);
 });
+
 utils.onUnhandledRejection.on((e) => {
 	errnoHandles(e.data.reason);
 });
@@ -78,7 +80,7 @@ class MyRoot<P> extends Root<P> {
 	}
 }
 
-initializeWeb3().then(() => {
+initializeChain(wallet).then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 	if (process.env.NODE_ENV == 'development') {

@@ -74,7 +74,7 @@ export class ApiIMPL {
 	}
 
 	async safeTransferToProxy(token: string, to: string[], tokenId: bigint, proxy: string, signCount = 1) {
-		var from = await chain.getDefaultAccount();
+		var from = await chain.defaultAccount();
 		var buf = encodeParameters(['address[]', 'uint256'], [to, signCount]);
 		await this.safeTransferFrom(token, from, proxy, tokenId, buf);
 	}

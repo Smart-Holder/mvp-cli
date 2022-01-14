@@ -76,11 +76,11 @@ export class Web3IMPL extends Web3Z {
 		return this._txQueue;
 	}
 
-	getProvider() {
+	givenProvider() {
 		return this.metaMask;
 	}
 
-	async getDefaultAccount() {
+	async defaultAccount() {
 		if (!this._defaultAccount) {
 			var mask = this.metaMask;
 			var [from] = await mask.request({ method: 'eth_requestAccounts' });
@@ -91,7 +91,6 @@ export class Web3IMPL extends Web3Z {
 				from = '0x' + crypto_tx.toChecksumAddress(buffer.from(from.slice(2), 'hex'));
 			}
 			this._defaultAccount = (from || '') as string;
-			this.setDefaultAccount(this._defaultAccount);
 
 			var id = await this.web3.eth.getChainId();
 
@@ -109,7 +108,7 @@ export class Web3IMPL extends Web3Z {
 		var retry = 5;
 		while (retry--) {
 			if (await isSupport()) {
-				await this.getDefaultAccount(); return;
+				await this.defaultAccount(); return;
 			}
 			await somes.sleep(5e2); // 500ms 等待钱包初始化
 		}

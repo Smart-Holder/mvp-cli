@@ -12,7 +12,7 @@ export async function initialize(address?:string) {
 	await make({ url: config.sdk, store, signer: new SDKSigner() });
 	var user = await store.core.user.methods.authUser();
 	if (!user) {
-		await store.core.user.methods.register({ name: authName(), key: publicKey(), ref: await chain.getDefaultAccount() });
+		await store.core.user.methods.register({ name: authName(), key: publicKey(), ref: await chain.defaultAccount() });
 	}
 	console.log('auth.user', user);
 }
