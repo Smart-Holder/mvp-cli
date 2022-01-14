@@ -10,8 +10,9 @@ var cryptoTx = require('crypto-tx');
 
 export class UIWalletManager extends WalletManagerAbstract {
 
-	//private _provider: AbstractProvider = (globalThis as any).ethereum;
+	// private _provider: AbstractProvider = (globalThis as any).ethereum;
 	provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
+	//provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
 	// https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
 	// https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13
 	onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void {
@@ -19,7 +20,7 @@ export class UIWalletManager extends WalletManagerAbstract {
 	}
 
 	setProvider() {
-		this.provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
+		//this.provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
 	}
 
 	private async checkPermission(user: WalletUser) {
@@ -38,7 +39,7 @@ export class UIWalletManager extends WalletManagerAbstract {
 		});
 		// console.log(addressList,"addressList");
 		let newAddressList = await Promise.all(addressList);
-		return [newAddressList[1]];
+		return [newAddressList[0]];
 	}
 
 	async onSign(user: WalletUser, text: string, hash: IBuffer, from: string, pwd?: string): Promise<string> {

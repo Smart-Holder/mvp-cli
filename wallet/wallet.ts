@@ -11,6 +11,7 @@ export interface Transaction {
 	from: string;
 	to: string;
 	value: string;
+	gas: number;
 	gasLimit: number;
 	gasPrice: number;
 	data: string;
@@ -55,12 +56,15 @@ export type BlockNumber = number | 'latest' | 'pending' | 'earliest' | 'genesis'
 export abstract class WalletManagerAbstract implements WalletManager {
 
 	private async _FormatTx(user: WalletUser, tx: TransactionConfig): Promise<Transaction> { // Transaction
+		debugger
 		tx.from = tx.from || (await this.accounts(user))[0];
+		tx.nonce = Number(tx.nonce || await this.getTransactionCount(tx.from as string));
+		tx.chainId = Number(tx.chainId || await this.getChainId());
+		tx.gas = Number(tx.gas || (tx as any).gas || 21000); // default 21000 gas
+		if (!(tx as any).gasLimit) {
+			(tx as any).gasLimit = parseInt(String(tx.gas * 1.2));
+		}
 		tx.gasPrice = Number(tx.gasPrice || await this.getGasPrice());
-		tx.nonce = tx.nonce || await this.getTransactionCount(tx.from as string);
-		tx.chainId = tx.chainId || await this.getChainId();
-		tx.gas = Number(tx.gas || (tx as any).gasLimit || 1e8);
-		(tx as any).gasLimit = tx.gas;
 		tx.value = tx.value || '0x0';
 		tx.data = tx.data || '0x0';
 
@@ -136,7 +140,7 @@ export abstract class WalletManagerAbstract implements WalletManager {
 			raw: '0x' + signTx.signTx.toString('hex'),
 			tx: {
 				nonce: `0x${tx.nonce.toString(16)}`,
-				gas: `0x${tx.gasLimit.toString(16)}`,
+				gas: `0x${tx.gas.toString(16)}`,
 				gasPrice: `0x${tx.gasPrice.toString(16)}`,
 				to: tx.to,
 				value: tx.value,
