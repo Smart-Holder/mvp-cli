@@ -1,0 +1,28 @@
+.network_change_page {
+	background-color: #f5f5f5;
+	.network_box {
+		.network_item {
+			display: flex;
+			padding:.2rem .3rem;
+			background-color: #fff;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #ccc;
+			.left_box {
+				display: flex;
+				align-items: center;
+				font-size: .32rem;
+				.name {
+					margin-left: .2rem;
+				}
+			}
+		}
+
+		.active {
+			width: .2rem;
+			height: .2rem;
+			border-radius: 60%;
+			background-color: rgb(32, 220, 32);
+		}
+	}
+}

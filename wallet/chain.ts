@@ -1,8 +1,8 @@
 
 import chain from '../src/chain';
-import {AbstractProvider,RequestArguments} from 'web3-core';
+import { AbstractProvider, RequestArguments } from 'web3-core';
 import { JsonRpcPayload } from 'web3-core-helpers';
-import {WalletRPC, WalletUser, SendCallback} from './wallet';
+import { WalletRPC, WalletUser, SendCallback } from './wallet';
 import * as cfg from '../config';
 
 export default chain;
@@ -44,5 +44,6 @@ export class DAppUser implements AbstractProvider, WalletUser {
 export async function initialize(wallet: WalletRPC) {
 	var dapp = new DAppUser(cfg.app.displayName, wallet);
 	(globalThis as any).ethereum = dapp; // meta mask plugin
+	chain.provider = dapp;
 	await chain.initialize();
 }

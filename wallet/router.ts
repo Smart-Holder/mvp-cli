@@ -7,8 +7,20 @@ export default [
 		page: () => import('./pages/home'),
 	},
 	{
+		path: '/wallet_setting_password',
+		page: () => import('./pages/wallet_setting_password'),
+	},
+	{
+		path: '/change_network',
+		page: () => import('./pages/change_network'),
+	},
+	{
 		path: '/account',
 		page: () => import('./pages/account'),
+	},
+	{
+		path: '/wallet_setting',
+		page: () => import('./pages/wallet_setting'),
 	},
 	{
 		path: '/',

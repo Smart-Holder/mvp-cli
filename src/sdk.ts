@@ -7,8 +7,8 @@ import chain from './chain';
 
 export const store = new Store('mvp/cli');
 
-export async function initialize(address?:string) {
-	await genPrivateKey(address);
+export async function initialize() {
+	await genPrivateKey();
 	await make({ url: config.sdk, store, signer: new SDKSigner() });
 	var user = await store.core.user.methods.authUser();
 	if (!user) {

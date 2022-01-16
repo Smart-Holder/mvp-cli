@@ -34,13 +34,18 @@ import routes from './router';
 import '../src/css/util.scss';
 import '../src/index.css';
 import { initialize } from './sdk';
-import {initialize as initializeChain} from './chain';
+import { initialize as initializeChain } from './chain';
 import utils from 'somes';
 import errnoHandles from '../src/handle';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
 import wallet from './ui_wallet';
 import { Tab } from './util/tools';
+
+import storage from 'somes/storage';
+import { LoginState, privateKey } from './user';
+import { writePrivateKey } from '../src/key';
+
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
@@ -54,13 +59,16 @@ utils.onUnhandledRejection.on((e) => {
 Nav.platform = '_mini_app';
 moment.locale(navigator.language || 'zh-cn');
 
-class MyRoot<P> extends Root<P> {
+export class MyRoot<P> extends Root<P> {
 
 	isHashRoutes = false;
 
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
+			var state = await storage.get('loginState') as LoginState;
+			if (state) writePrivateKey(privateKey(state), state.name);
+
 			await initialize();
 		} catch (err: any) {
 			dialog.alert(err.message);
@@ -74,14 +82,20 @@ class MyRoot<P> extends Root<P> {
 
 	renderTools() {
 		let pathname = location.pathname;
+		// login
+		// safety_tips
+		// create_account
+		// secretkey
+		// import_secret_key
+		// register
+		// console.log(['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register',].includes(pathname), pathname);
 
-		return pathname.startsWith("/my") || pathname.startsWith("/home")  ? <Tab nav={this._nav} />: '';
+		return pathname.startsWith('/account') || pathname.startsWith('/home') ? <Tab nav={this._nav} /> : '';
 	}
 }
 
-initializeChain(wallet).then(() => {
+initializeChain(new wallet('')).then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
-
 	if (process.env.NODE_ENV == 'development') {
 		import('../test/test');
 	}

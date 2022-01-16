@@ -28,7 +28,7 @@ class MySigner extends SDKSigner {
 	}
 }
 
-function privateKey(state: LoginState) {
+export function privateKey(state: LoginState) {
 	somes.assert(state.priv, 'not privateKey');
 	var priv = state.priv as string;
 	return buffer.from(priv.slice(2), 'hex');

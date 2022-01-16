@@ -1,6 +1,6 @@
 import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
-import { Col, Statistic, Spin} from 'antd';
+import { Col, Statistic, Spin } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import Input from '../../../src/components/input';
 import Button from '../../../src/components/button';
@@ -9,8 +9,9 @@ import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
 // import wallet from '../../wallet';
 import { Signature, providers, Web3 } from 'web3z';
-
+import storage from 'somes/storage'
 import "./index.scss";
+import native from '../../native';
 
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
@@ -23,10 +24,15 @@ class Login extends NavPage {
 		username: '',
 		v_code: '',
 		password: '',
-		loading:false
+		loading: false
 	}
 
 	formRef = React.createRef<FormInstance>();
+
+	async triggerLoad() {
+		var state = await storage.get('loginState');
+		state && this.replacePage('/home');
+	}
 
 	async loginMethodClick(login_method: IMethodType) {
 		this.setState({ login_method });
@@ -39,16 +45,16 @@ class Login extends NavPage {
 	async loginClick() {
 		this.setState({ loading: true });
 		let { username, password, login_method, v_code } = this.state;
-		
+
 		try {
 			if (login_method == 'vcode') {
 				await login(username, { pwd: password, verify: v_code });
 			} else {
-				await login(username, {pwd:password});
+				await login(username, { pwd: password });
 			}
-
-			this.pushPage('/secretkey');
-		} catch (error:any) {
+			if (await (await native.getKeysName()).length) return this.replacePage('/home');
+			this.replacePage('/secretkey');
+		} catch (error: any) {
 			alert(error.message);
 		}
 		this.setState({ loading: false });
@@ -60,7 +66,7 @@ class Login extends NavPage {
 		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
 		// console.log(username, password );
 		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
-															// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a
+		// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a
 		// console.log(privateKey.toString('base64'));
 
 		// await devices();
@@ -84,7 +90,7 @@ class Login extends NavPage {
 		try {
 			await sendPhoneVerify(username);
 			this.setState({ isCountdown: true });
-		} catch (error:any) {
+		} catch (error: any) {
 			alert(error.message);
 		}
 	}
@@ -94,49 +100,49 @@ class Login extends NavPage {
 		return <div className="login_page">
 			<Spin spinning={loading}>
 
-			<div className="top_part">
-				<div className="title">价值圈</div>
-				<div className="desc">精准链接，资源聚合</div>
-			</div>
-
-			<div className="mid_part">
-				<div className="login_methods">
-					<div className={`vcode_login ${login_method == 'vcode' && 'active'}`} onClick={this.loginMethodClick.bind(this, 'vcode')}>验证码登录</div>
-					<div className={`pwdcode_login ${login_method == 'password' && 'active'}`} onClick={this.loginMethodClick.bind(this, 'password')}>密码登录</div>
+				<div className="top_part">
+					<div className="title">价值圈</div>
+					<div className="desc">精准链接，资源聚合</div>
 				</div>
 
-				<div className="login_input_box">
-					<Col className="input_col">
-						<Input value={username} onInput={this.inputChange.bind(this, 'username')} maxLength={11} className="input_item" placeholder='请输入手机号' />
-					</Col>
+				<div className="mid_part">
+					<div className="login_methods">
+						<div className={`vcode_login ${login_method == 'vcode' && 'active'}`} onClick={this.loginMethodClick.bind(this, 'vcode')}>验证码登录</div>
+						<div className={`pwdcode_login ${login_method == 'password' && 'active'}`} onClick={this.loginMethodClick.bind(this, 'password')}>密码登录</div>
+					</div>
+
+					<div className="login_input_box">
+						<Col className="input_col">
+							<Input value={username} onInput={this.inputChange.bind(this, 'username')} maxLength={11} className="input_item" placeholder='请输入手机号' />
+						</Col>
 
 
 
-					{login_method == 'vcode' && <Col className="input_col v_code_col">
-						<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
-						<div className="get_vcode_box">
-							{isCountdown ?
-								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
-								<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
+						{login_method == 'vcode' && <Col className="input_col v_code_col">
+							<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
+							<div className="get_vcode_box">
+								{isCountdown ?
+									<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
+									<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
+							</div>
+						</Col>}
+
+						{login_method == 'password' && <Col className="input_col">
+							<Input inputType="password" value={password} onInput={this.inputChange.bind(this, 'password')} maxLength={30} className="input_item" placeholder='请输入密码' />
+						</Col>}
+
+
+
+						<div className="more_login_action">
+							{login_method == 'vcode' && <div />}
+							<div className="register_btn"> <Button type="link" onClick={() => this.pushPage(`/register?pageType=register`)}>立即注册</Button></div>
+							{login_method == 'password' && <div className="forget_password"><Button onClick={() => this.pushPage(`/register?pageType=reset_password`)} type="link">忘记密码</Button></div>}
 						</div>
-					</Col>}
-
-					{login_method == 'password' && <Col className="input_col">
-						<Input inputType="password" value={password} onInput={this.inputChange.bind(this, 'password')} maxLength={30} className="input_item" placeholder='请输入密码' />
-					</Col>}
-
-
-
-					<div className="more_login_action">
-						{login_method == 'vcode' && <div />}
-						<div className="register_btn"> <Button type="link" onClick={() => this.pushPage(`/register?pageType=register`)}>立即注册</Button></div>
-						{login_method == 'password' && <div className="forget_password"><Button onClick={() => this.pushPage(`/register?pageType=reset_password`)} type="link">忘记密码</Button></div>}
 					</div>
 				</div>
-			</div>
 
-			<div className="bottom_part">
-				<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
+				<div className="bottom_part">
+					<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
 				</div>
 			</Spin>
 

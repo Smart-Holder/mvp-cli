@@ -58,17 +58,17 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	get metaMask() {
+		// if (!this._metaMask) {
+		this._metaMask = (globalThis as any).ethereum;
+		// check _metaMask
 		if (!this._metaMask) {
-			this._metaMask = (globalThis as any).ethereum;
-			// check _metaMask
-			if (!this._metaMask) {
-				// history.push('/install');
-				// throw Error.new('Matemask wallet needs to be installed');
-				throw Error.new('请在Dapp浏览器中打开链接,并确认当前是否创建了钱包');
-			}
-			// var currentChainId = this._metaMask.chainId;
-			// console.log('currentChainId', currentChainId);
+			// history.push('/install');
+			// throw Error.new('Matemask wallet needs to be installed');
+			throw Error.new('请在Dapp浏览器中打开链接,并确认当前是否创建了钱包');
 		}
+		// var currentChainId = this._metaMask.chainId;
+		// console.log('currentChainId', currentChainId);
+		// }
 		return this._metaMask;
 	}
 
@@ -81,21 +81,20 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	async defaultAccount() {
-		if (!this._defaultAccount) {
-			var mask = this.metaMask;
-			var [from] = await mask.request({ method: 'eth_requestAccounts' });
+		// if (!this._defaultAccount) {
+		var mask = this.metaMask;
+		var [from] = await mask.request({ method: 'eth_requestAccounts' });
 
-			console.log('eth_requestAccounts', from);
+		console.log('eth_requestAccounts', from);
 
-			if (from) {
-				from = '0x' + crypto_tx.toChecksumAddress(buffer.from(from.slice(2), 'hex'));
-			}
-			this._defaultAccount = (from || '') as string;
-
-			var id = await this.web3.eth.getChainId();
-
-			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
+		if (from) {
+			from = '0x' + crypto_tx.toChecksumAddress(buffer.from(from.slice(2), 'hex'));
 		}
+		this._defaultAccount = (from || '') as string;
+		var id = await this.web3.eth.getChainId();
+
+		this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
+		// }
 		return this._defaultAccount;
 
 	}

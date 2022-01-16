@@ -29,7 +29,7 @@ const SafetyTipsConfig = [{
 export default class extends NavPage {
 
 	onOk() {
-		this.pushPage('/home');
+		this.replacePage('/home');
 		// operation([
 		// 	{ text: '备份助记词', onPress: () => console.log('标为未读被点击了'), style: { textAlign: 'center' } },
 		// 	{ text: '不备份助记词直接完成', onPress: () => console.log('置顶聊天被点击了'), style: { textAlign: 'center' } },

@@ -4,7 +4,7 @@ import somes from 'somes';
 export abstract class NativeAPI {
 	abstract scan(): Promise<string>;
 	abstract getKeysName(): Promise<string[]>;
-	abstract getKey(name: string): Promise<string|undefined>;
+	abstract getKey(name: string): Promise<string | undefined>;
 	abstract setKey(name: string, value: any): Promise<void>;
 	abstract deleteKey(name: string): Promise<void>;
 }
@@ -31,7 +31,7 @@ class DefaultAPI extends NativeAPI {
 		return keys;
 	}
 
-	async getKey(name: string): Promise<string|undefined> {
+	async getKey(name: string): Promise<string | undefined> {
 		return localStorage[this._Key(name)];
 	}
 
@@ -40,14 +40,14 @@ class DefaultAPI extends NativeAPI {
 	}
 
 	async deleteKey(name: string): Promise<void> {
-		localStorage.deleteItem(this._Key(name));
+		localStorage.removeItem(this._Key(name));
 	}
 }
 
 abstract class APIIMPL extends NativeAPI {
-	protected _Calls: Dict<{reject: (e: any)=>void, resolve:(e:any)=>void}> = {}
+	protected _Calls: Dict<{ reject: (e: any) => void, resolve: (e: any) => void }> = {}
 
-	protected callback(id: string, {error, data}: { error?: any, data?: any }) {
+	protected callback(id: string, { error, data }: { error?: any, data?: any }) {
 		var promise = this._Calls[id];
 		if (promise) {
 			delete this._Calls[id];
@@ -59,8 +59,8 @@ abstract class APIIMPL extends NativeAPI {
 		}
 	}
 
-	protected call<T = any>(exec: (id: string)=>void) {
-		return new Promise<T>((resolve, reject)=>{
+	protected call<T = any>(exec: (id: string) => void) {
+		return new Promise<T>((resolve, reject) => {
 			var id = String(somes.getId());
 			this._Calls[id] = {
 				resolve, reject,
@@ -72,34 +72,34 @@ abstract class APIIMPL extends NativeAPI {
 
 class IOSAPI extends APIIMPL {
 	private _webkit = (window as any).webkit;
-	
+
 	async scan(): Promise<string> {
-		return this.call<string>((id: string)=>{
-			this._webkit.messageHandlers.scan.postMessage({id, args:[]});
+		return this.call<string>((id: string) => {
+			this._webkit.messageHandlers.scan.postMessage({ id, args: [] });
 		});
 	}
 
 	async getKeysName(): Promise<string[]> {
-		return this.call<string[]>((id: string)=>{
-			this._webkit.messageHandlers.getKeysName.postMessage({id, args:[]});
+		return this.call<string[]>((id: string) => {
+			this._webkit.messageHandlers.getKeysName.postMessage({ id, args: [] });
 		});
 	}
 
-	async getKey(name: string): Promise<string|undefined> {
-		return this.call<string|undefined>((id: string)=>{
-			this._webkit.messageHandlers.getKey.postMessage({id, args:[name]});
+	async getKey(name: string): Promise<string | undefined> {
+		return this.call<string | undefined>((id: string) => {
+			this._webkit.messageHandlers.getKey.postMessage({ id, args: [name] });
 		});
 	}
 
 	async setKey(name: string, value: any): Promise<void> {
-		return this.call<void>((id: string)=>{
-			this._webkit.messageHandlers.setKey.postMessage({id, args:[name, value]});
+		return this.call<void>((id: string) => {
+			this._webkit.messageHandlers.setKey.postMessage({ id, args: [name, value] });
 		});
 	}
 
 	async deleteKey(name: string): Promise<void> {
-		return this.call<void>((id: string)=>{
-			this._webkit.messageHandlers.setKey.deleteKey({id, args:[name]});
+		return this.call<void>((id: string) => {
+			this._webkit.messageHandlers.deleteKey.postMessage({ id, args: [name] });
 		});
 	}
 }
@@ -114,7 +114,7 @@ class AndroidAPI extends APIIMPL {
 		return [];
 	}
 
-	async getKey(name: string): Promise<string|undefined> {
+	async getKey(name: string): Promise<string | undefined> {
 		// TODO ...
 		return '';
 	}
@@ -128,9 +128,9 @@ class AndroidAPI extends APIIMPL {
 	}
 }
 
-const _api = 
-	somes.webFlags?.ios ? new IOSAPI(): 
-	somes.webFlags?.android ? new AndroidAPI(): new DefaultAPI();
+const _api =
+	somes.webFlags?.ios ? new IOSAPI() :
+		somes.webFlags?.android ? new AndroidAPI() : new DefaultAPI();
 
 (globalThis as any).__jsapi = _api;
 

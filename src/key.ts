@@ -12,11 +12,11 @@ const crypto_tx = require('crypto-tx');
 var _PrivateKey: IBuffer | null = null;
 var _AuthName: string = '';
 
-export async function genPrivateKey(address?: string) {
+export async function genPrivateKey() {
 	console.log(_PrivateKey?.toString('hex'),"_PrivateKey");
 	
 	if (!_PrivateKey) {
-		var from = address || await chain.defaultAccount();
+		var from = await chain.defaultAccount();
 		var key = '__as1ahaasr_' + from;
 		if (await storage.has(key)) {
 			_PrivateKey = buffer.from(await storage.get(key), 'base64');

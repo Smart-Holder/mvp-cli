@@ -29,8 +29,8 @@ export default class CreateAccount extends NavPage {
 		try {
 			let privateKey = genPrivateKey();
 			let keyStore = await encryptPrivateKey('0x' + privateKey.toString('hex'), password);
-			console.log(privateKey.toString('hex'),"privateKey");
-			
+			console.log(privateKey.toString('hex'), "privateKey");
+
 			await native.setKey(address_name, JSON.stringify(keyStore));
 			alert('私钥导入成功!', () => this.pushPage('/safety_tips'));
 		} catch (error: any) {
@@ -49,7 +49,7 @@ export default class CreateAccount extends NavPage {
 					<div className="card_title">管理密钥名称</div>
 					<div className="card_body">
 						<Input maxLength={25} placeholder="请输入管理密钥名称" value={address_name} onChange={(e) => this.setState({ address_name: e.target.value })} />
-					
+
 					</div>
 				</div>
 
@@ -62,13 +62,13 @@ export default class CreateAccount extends NavPage {
 					</div>
 				</div>
 
-				<div className="checkbox_part">
+				{/* <div className="checkbox_part">
 					<Checkbox style={{ marginRight: '.05rem', marginLeft: '.08rem' }} />
 					<div className="checkbox_label">
 						<span>我已仔细阅读并同意</span>
 						<a>《用户协议》</a>
 					</div>
-				</div>
+				</div> */}
 
 				<Button onClick={this.create.bind(this)} className="import_btn" type='primary' disabled={!address_name || password.length < 8 || confirm_password.length < 8} >创建账号</Button>
 			</div>

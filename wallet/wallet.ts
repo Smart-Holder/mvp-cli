@@ -1,9 +1,8 @@
 
-import {RLPEncodedTransaction, TransactionConfig,AbstractProvider,RequestArguments} from 'web3-core';
+import { RLPEncodedTransaction, TransactionConfig, AbstractProvider, RequestArguments } from 'web3-core';
 import buffer, { IBuffer } from 'somes/buffer';
 import { Signature, providers, Web3 } from 'web3z';
 import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
-import native from './native';
 
 var cryptoTx = require('crypto-tx');
 
@@ -22,7 +21,7 @@ export interface WalletUser {
 	name(): Promise<string>; // app user name
 }
 
-export type SendCallback = (error: Error | null, result?: JsonRpcResponse)=>void;
+export type SendCallback = (error: Error | null, result?: JsonRpcResponse) => void;
 
 export interface WalletRPC {
 	send(user: WalletUser, payload: JsonRpcPayload, callback: SendCallback, chain?: number): void;
@@ -70,13 +69,13 @@ export abstract class WalletManagerAbstract implements WalletManager {
 	protected abstract onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void;
 
 	protected onRequest<T = any>(payload: RequestArguments, user?: WalletUser) {
-		return new Promise<T>((resolve, reject)=>{
+		return new Promise<T>((resolve, reject) => {
 			this.onSend({
 				jsonrpc: '2.0',
 				method: payload.method,
-				params: payload.params || [], 
+				params: payload.params || [],
 				id: payload.id || 0,
-			}, (err: Error | null, result?: JsonRpcResponse)=>{
+			}, (err: Error | null, result?: JsonRpcResponse) => {
 				if (err || !result || result.error) {
 					reject(err || (result && result.error ? result.error : Error.new('err')));
 				} else {
@@ -87,7 +86,8 @@ export abstract class WalletManagerAbstract implements WalletManager {
 	}
 
 	request<T = any>(user: WalletUser, args: RequestArguments, chain?: number): Promise<any> {
-		var method = (this as any)[args.method] as (user: WalletUser, payload: JsonRpcPayload)=>Promise<any>;
+
+		var method = (this as any)[args.method] as (user: WalletUser, payload: JsonRpcPayload) => Promise<any>;
 		var payload: JsonRpcPayload = {
 			jsonrpc: '2.0',
 			method: args.method,
@@ -97,8 +97,8 @@ export abstract class WalletManagerAbstract implements WalletManager {
 		if (!!method) {
 			return method.call(this, user, payload);
 		} else {
-			return new Promise<T>((resolve, reject)=>{
-				this.onSend(payload, (error: Error | null, result?: JsonRpcResponse)=>{
+			return new Promise<T>((resolve, reject) => {
+				this.onSend(payload, (error: Error | null, result?: JsonRpcResponse) => {
 					if (error || !result || result.error) {
 						reject(error || (result && result.error ? result.error : Error.new('err')));
 					} else {
@@ -110,15 +110,15 @@ export abstract class WalletManagerAbstract implements WalletManager {
 	}
 
 	send(user: WalletUser, payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void, chain?: number) {
-		var method = (this as any)[payload.method] as (user: WalletUser, payload: JsonRpcPayload)=>Promise<any>;
+		var method = (this as any)[payload.method] as (user: WalletUser, payload: JsonRpcPayload) => Promise<any>;
 		if (!method) {
 			this.onSend(payload, callback, user);
 		} else {
-			method.call(this, user, payload).then(result=>callback(null, {
+			method.call(this, user, payload).then(result => callback(null, {
 				jsonrpc: payload.jsonrpc,
 				id: Number(payload.id) || 0,
 				result,
-			})).catch(error=>callback(error));
+			})).catch(error => callback(error));
 		}
 	}
 
@@ -150,22 +150,22 @@ export abstract class WalletManagerAbstract implements WalletManager {
 	}
 
 	async getChainId() {
-		var hex = await this.onRequest<string>({method: 'eth_chainId'});
+		var hex = await this.onRequest<string>({ method: 'eth_chainId' });
 		return Number(hex);
 	}
 
 	async getGasPrice() {
-		var num = await this.onRequest<string>({method: 'eth_gasPrice'});
+		var num = await this.onRequest<string>({ method: 'eth_gasPrice' });
 		return Number(num);
 	}
 
 	async getBalance(from: string, blockNum: BlockNumber = 'latest') {
-		var num = await this.onRequest<string>({ method: 'eth_getBalance', params: [from, blockNum]});
+		var num = await this.onRequest<string>({ method: 'eth_getBalance', params: [from, blockNum] });
 		return BigInt(num);
 	}
 
 	async getTransactionCount(from: string, blockNum: BlockNumber = 'latest') {
-		var num = await this.onRequest<string>({method: 'eth_getTransactionCount', params: [from, blockNum]});
+		var num = await this.onRequest<string>({ method: 'eth_getTransactionCount', params: [from, blockNum] });
 		return Number(num);
 	}
 
@@ -237,7 +237,7 @@ export abstract class WalletManagerAbstract implements WalletManager {
 		// 	params: [tx],
 		// });
 		var raw = await this.signTransaction(user, tx);
-		var r = await this.onRequest({method: 'eth_sendRawTransaction', params: [raw.raw]}, user);
+		var r = await this.onRequest({ method: 'eth_sendRawTransaction', params: [raw.raw] }, user);
 		return r;
 	}
 

@@ -33,7 +33,7 @@ div {
 }
 
 .ant-spin-nested-loading > div > .ant-spin {
-		max-height: none;
+	max-height: none;
 }
 
 .textNoWrap {
@@ -42,3 +42,13 @@ div {
 	text-overflow: ellipsis;
 	word-break: break-all;
 }
+
+.am-modal.am-modal-operation .am-modal-content .am-modal-button {
+	padding: 0;
+}
+
+// ._main > div {
+// 	padding-bottom: 0;
+// 	// background-color: #f5f5f5;
+// 	color: #333;
+// }
