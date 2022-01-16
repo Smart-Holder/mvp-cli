@@ -2,6 +2,8 @@ import { RpcCallback, Transaction, WalletManagerAbstract, WalletUser } from "./w
 import { JsonRpcPayload } from 'web3-core-helpers';
 import { Signature, providers } from 'web3z';
 import { RLPEncodedTransaction } from 'web3-core';
+import {DeviceSigner, getDeviceFormAddress} from '../src/models/device';
+import somes from 'somes';
 
 import native from "./native";
 import buffer, { IBuffer } from 'somes/buffer';
@@ -10,6 +12,7 @@ var cryptoTx = require('crypto-tx');
 
 export interface ISecretKey {
 	readonly address: string;
+	// readonly address: string;
 	readonly keystore: any;
 	unlock(pwd?: string): Promise<IBuffer>;
 	sign(message: IBuffer): Promise<Signature>;
@@ -43,9 +46,10 @@ export class SecretKey implements ISecretKey {
 
 }
 
-export class UIWalletManager extends WalletManagerAbstract {
+export class UIWalletManager extends WalletManagerAbstract implements DeviceSigner {
 
 	private _accounts?: Dict<ISecretKey>;
+	private _currentKey?: ISecretKey; // 当前选择的钱包
 
 	// private _provider: AbstractProvider = (globalThis as any).ethereum;
 	provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
@@ -60,6 +64,35 @@ export class UIWalletManager extends WalletManagerAbstract {
 		this.provider = new providers.HttpProvider('https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13');
 	}
 
+	async currentKey() {
+		await this.keys();
+		somes.assert(this._currentKey, 'No wallet available');
+		return this._currentKey as ISecretKey;
+	}
+
+	// ---------------------------------- impl DeviceSigner ----------------------------------
+	async availableOwner() {
+		var key = await this.currentKey();
+		return key.address;
+	}
+
+	async availablePublicKey() {
+		var key = await this.currentKey();
+		return key.address;
+	}
+
+	async signFrom(target: string, msg: IBuffer): Promise<Signature> {
+		var device = await getDeviceFormAddress(target);
+		if (device && device.owner) {
+			var key = await this.keyFrom(device.owner);
+		} else {
+			var key = await this.currentKey();
+		}
+		var sign = await key.sign(msg);
+		return sign;
+	}
+	// ---------------------------------- impl DeviceSigner end ----------------------------------
+
 	async keys() {
 		if (!this._accounts) {
 			this._accounts = {};
@@ -69,7 +102,11 @@ export class UIWalletManager extends WalletManagerAbstract {
 				if (json) {
 					try {
 						var keystore = JSON.parse(json);
-						this._accounts[name] = new SecretKey(keystore);
+						var key = new SecretKey(keystore);
+						this._accounts[name] = key;
+						if (!this._currentKey) {
+							this._currentKey = key; // The first wallet is selected by default
+						}
 					} catch(err) {}
 				}
 			}
@@ -98,7 +135,10 @@ export class UIWalletManager extends WalletManagerAbstract {
 	}
 
 	async onAccounts(user?: WalletUser): Promise<string[]> {
-		return Object.values(await this.keys()).map(e=>e.address);
+		var key = Object.values(await this.keys()).filter(e=>e!==this._currentKey);
+		if (this._currentKey)
+			key.unshift(this._currentKey);
+		return key.map(e=>e.address);
 	}
 
 	async onSign(user: WalletUser, text: string, hash: IBuffer, from: string, pwd?: string): Promise<string> {

@@ -61,7 +61,7 @@ class MyRoot<P> extends Root<P> {
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
-			await initialize();
+			await initialize(wallet);
 		} catch (err: any) {
 			dialog.alert(err.message);
 			throw err;
