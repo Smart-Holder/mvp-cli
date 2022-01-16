@@ -30,7 +30,7 @@ export interface DeviceSigner {
 var _Signer: DeviceSigner;
 var _Devices: Map<string, Device> = new Map();
 
-export function setSigner(signer: DeviceSigner) {
+export function setDeviceSigner(signer: DeviceSigner) {
 	somes.assert(!_Signer, 'Duplicate settings are not allowed');
 	_Signer = signer;
 }

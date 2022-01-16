@@ -10,7 +10,7 @@ import storage from 'somes/storage';
 import hash from 'somes/hash';
 import somes from 'somes';
 import {Signature} from 'web3z';
-import {setSigner} from './models/device';
+import {setDeviceSigner} from './models/device';
 
 export const store = new Store('mvp/cli');
 
@@ -103,7 +103,7 @@ export async function initialize() {
 	await make({ url: config.sdk, store, signer: new SDKSigner() });
 
 	// 使用随机生成的中心账号做为 `device signer`
-	setSigner({
+	setDeviceSigner({
 		async availableOwner() { return address() },
 		async availablePublicKey() { return publicKey() },
 		async signFrom(target: string, msg: IBuffer) { return sign(msg) },
