@@ -45,6 +45,7 @@ import { Tab } from './util/tools';
 import storage from 'somes/storage';
 import { LoginState, privateKey } from './user';
 import { writePrivateKey } from '../src/key';
+import { setPrivateKey } from '../src/sdk';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
@@ -66,8 +67,8 @@ export class MyRoot<P> extends Root<P> {
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
-			// var state = await storage.get('loginState') as LoginState;
-			// if (state) writePrivateKey(privateKey(state), state.name);
+			var state = await storage.get('loginState') as LoginState;
+			if (state) setPrivateKey(privateKey(state), state.name);
 			await initialize(wallet);
 		} catch (err: any) {
 			dialog.alert(err.message);

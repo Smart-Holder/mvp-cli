@@ -52,12 +52,12 @@ async function post(target: string, hash: string) {
 	var msg = buffer.from(hash, 'base64');
 	var { signature, recovery } = await _Signer.signFrom(target, msg);
 	var sign = buffer.concat([signature, [recovery]]).toString('base64');
-	var r = await index.mbx.methods.post({ hash, signature: sign });
+	var r = await sdk.mbx.methods.post({ hash, signature: sign });
 	return r;
 }
 
 export async function call(target: string, method: string, args?: any, vCheck?: string): Promise<any> {
-	var hash = await index.mbx.methods.call({
+	var hash = await sdk.mbx.methods.call({
 		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
 	}) as string;
 	let r = await post(target, hash);
@@ -65,14 +65,14 @@ export async function call(target: string, method: string, args?: any, vCheck?: 
 }
 
 export async function send(target: string, event: string, args?: any): Promise<any> {
-	var hash = await index.mbx.methods.send({
+	var hash = await sdk.mbx.methods.send({
 		target, event, args: { errno: 0, message: '', data: JSON.stringify(args) }
 	}) as string;
 	await post(target, hash);
 }
 
 export async function ping(target: string) {
-	await index.mbx.methods.ping({ target });
+	await sdk.mbx.methods.ping({ target });
 }
 
 // 设置音量
@@ -125,7 +125,7 @@ export function screenOrientation(target: string, orientation: string) {
 // /files/res/apk/nftmvp_apk_upgrade.json
 
 export function nftmvp_apk_upgrade() {
-	return index.mbx.methods.post('/files/res/apk/nftmvp_apk_upgrade.json');
+	return sdk.mbx.methods.post('/files/res/apk/nftmvp_apk_upgrade.json');
 }
 
 export function displaySingleImage(target: string, token: string, tokenId: string) {
@@ -183,7 +183,7 @@ export async function get_screen_save(address: string, _type?: 'single' | 'multi
 export async function set_screen_save(address: string,
 	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video', isNotCall?: boolean) {
 	var ss = Object.assign(await get_screen_save(address, type), pss);
-	var nfts = await index.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
+	var nfts = await sdk.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
 	var nfts_set = new Set();
 
 	for (var nft of nfts) {

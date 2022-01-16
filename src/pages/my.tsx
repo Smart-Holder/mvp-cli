@@ -1,6 +1,6 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
-import models, { AssetType, Device, NFT } from '../models';
+import  { AssetType, Device, NFT } from '../models';
 // import models from '../sdk';
 import { CloseOutlined } from '@ant-design/icons';
 import chain from '../chain';
@@ -18,6 +18,8 @@ import Loading from '../../deps/webpkit/lib/loading';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
+import models from '../sdk';
+
 import '../css/my.scss';
 
 

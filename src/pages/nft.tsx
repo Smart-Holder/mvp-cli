@@ -13,6 +13,7 @@ import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/index.scss';
 import { initialize } from '../sdk';
+import sdk, { authName } from '../sdk';
 
 const tp = require('tp-js-sdk');
 
@@ -50,6 +51,8 @@ class DeviceList extends NavPage {
 	}
 
 	async getDeviceList() {
+		console.log(sdk,"sdk");
+		
 		let device = await devices();
 		this.setState({ device, loading: false });
 	}

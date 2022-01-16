@@ -2,7 +2,7 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import { DeviceItem } from '../components/deviceItem';
 import { Device, devices } from '../models/device';
-import models, { NFT } from '../models';
+import  { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
@@ -16,7 +16,7 @@ import * as device from '../models/device';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { Tabs, NoticeBar } from 'antd-mobile';
-
+import models from '../sdk';
 import '../css/device_info.scss';
 import { Empty } from 'antd';
 const tp = require('tp-js-sdk');
