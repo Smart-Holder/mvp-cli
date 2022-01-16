@@ -78,6 +78,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 	async availablePublicKey() {
 		var key = await this.currentKey();
+		// 标准 keystore 在解密前只能取到地址,如果设备端验签必须要publicKey,那就只能在存keystore时把publicKey也存起来
 		return key.address;
 	}
 
