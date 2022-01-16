@@ -4,29 +4,26 @@ import Button from '../../../src/components/button';
 import IconFont from '../../../src/components/icon_font';
 import Header from '../../../src/util/header';
 import native from '../../native'
-import wallet from '../../ui_wallet';
+import wallet from '../../wallet_ui';
+import storage from 'somes/storage';
 import { Modal } from 'antd-mobile';
-import storage from "somes/storage";
-import { Root, ReactDom, Nav, dialog } from 'webpkit/mobile';
 import "./index.scss";
-import { MyRoot } from '../../index';
-import routes from '../../router';
-import _404 from '../../../src/pages/404';
+
 
 const operation = Modal.operation;
-
 export interface IAddressListItemProps {
 	key: string;
 	balance?: string;
 	address: string
 }
-ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+// ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 class Home extends NavPage {
 
 	state = {
 		addressList: [] as IAddressListItemProps[]
 	}
+
 
 	async triggerShow() {
 
@@ -35,11 +32,11 @@ class Home extends NavPage {
 		// console.log(balance,"balance");
 
 		let keysNameArr = await native.getKeysName() || [];
-		let new_wallet = new wallet();
+		// let new_wallet = new wallet();
 		let addressList = keysNameArr.map(async (key) => {
 			let data = await native.getKey(key);
 			let address = '0x' + JSON.parse(String(data)).address
-			let balance = Number(await new_wallet.getBalance(address)) / Math.pow(10, 18);
+			let balance = Number(await wallet.getBalance(address)) / Math.pow(10, 18);
 			return { key, balance, address };
 		});
 		// console.log(addressList,"addressList");

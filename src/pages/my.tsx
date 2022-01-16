@@ -21,7 +21,7 @@ import { BindDeviceCarousel } from '../components/carousel';
 import '../css/my.scss';
 
 
-class My extends NavPage<{address:string}> {
+class My extends NavPage<{ address: string }> {
 
 	state = {
 		nft: [] as INftItem[],

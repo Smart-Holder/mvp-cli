@@ -143,7 +143,7 @@ async function testRpc() {
 
 }
 
-export default async function() {
+async function testMetaMask() {
 
 	var mask = web3.metaMask;
 
@@ -168,4 +168,17 @@ export default async function() {
 	});
 
 	console.log(r);
+}
+
+async function testTx() {
+	var r = await chain.sendTransaction({
+		to: '0x83093cC3595Dd8E242407f5CF149762DF83A782F',
+		value: Math.pow(10, 17),
+	});
+
+	console.log(r);
+}
+
+export default async function() {
+	//await testTx();
 }

@@ -2,12 +2,12 @@
 import chain from '../src/chain';
 import { AbstractProvider, RequestArguments } from 'web3-core';
 import { JsonRpcPayload } from 'web3-core-helpers';
-import { WalletRPC, WalletUser, SendCallback } from './wallet';
+import { WalletRPC, WalletUser, RpcCallback } from './wallet';
 import * as cfg from '../config';
 
 export default chain;
 
-export class DAppUser implements AbstractProvider, WalletUser {
+export class Web3Provider implements AbstractProvider, WalletUser {
 	private _name: string;
 	private _wallet: WalletRPC;
 
@@ -28,11 +28,11 @@ export class DAppUser implements AbstractProvider, WalletUser {
 		return false;
 	}
 
-	sendAsync(payload: JsonRpcPayload, callback: SendCallback) {
+	sendAsync(payload: JsonRpcPayload, callback: RpcCallback) {
 		this._wallet.send(this, payload, callback);
 	}
 
-	send(payload: JsonRpcPayload, callback: SendCallback) {
+	send(payload: JsonRpcPayload, callback: RpcCallback) {
 		this._wallet.send(this, payload, callback);
 	}
 
@@ -42,8 +42,8 @@ export class DAppUser implements AbstractProvider, WalletUser {
 }
 
 export async function initialize(wallet: WalletRPC) {
-	var dapp = new DAppUser(cfg.app.displayName, wallet);
-	(globalThis as any).ethereum = dapp; // meta mask plugin
-	chain.provider = dapp;
+	var provider = new Web3Provider(cfg.app.displayName, wallet);
+	(globalThis as any).ethereum = provider; // meta mask plugin
+	chain.provider = provider;
 	await chain.initialize();
 }

@@ -39,7 +39,7 @@ import utils from 'somes';
 import errnoHandles from '../src/handle';
 import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
-import wallet from './ui_wallet';
+import wallet from './wallet_ui';
 import { Tab } from './util/tools';
 
 import storage from 'somes/storage';
@@ -66,10 +66,9 @@ export class MyRoot<P> extends Root<P> {
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
-			var state = await storage.get('loginState') as LoginState;
-			if (state) writePrivateKey(privateKey(state), state.name);
-
-			await initialize();
+			// var state = await storage.get('loginState') as LoginState;
+			// if (state) writePrivateKey(privateKey(state), state.name);
+			await initialize(wallet);
 		} catch (err: any) {
 			dialog.alert(err.message);
 			throw err;
@@ -94,7 +93,7 @@ export class MyRoot<P> extends Root<P> {
 	}
 }
 
-initializeChain(new wallet('')).then(() => {
+initializeChain(wallet).then(() => {
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 	if (process.env.NODE_ENV == 'development') {
 		import('../test/test');

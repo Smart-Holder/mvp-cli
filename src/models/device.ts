@@ -2,15 +2,14 @@
 import storage from 'somes/storage';
 import index, { NFT, Device } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
-import * as key from '../key';
 import somes from 'somes';
-import sdk from '../sdk';
+import sdk, { authName } from '../sdk';
 import chain from '../chain';
+import { Signature } from 'web3z';
 
 export { Device };
 
 export interface DeviceScreenSave {
-	address: string;
 	time: number;
 	type: 'single' | 'multi' | 'video';
 	data: { token: string; tokenId: string }[];
@@ -20,11 +19,48 @@ export function devices(): Promise<Device[]> {
 	return sdk.user.methods.devices();
 }
 
+export interface DeviceSigner {
+	// 这个的owner拥有目标设备的访问授权。
+	// 早期dapp版本中使用随机生成的中心账号做为owner,当使用钱包地址做为owner时,这个值为当前选择的钱包地址
+	availableOwner(): Promise<string>;
+	availablePublicKey(): Promise<string>; // owner的public key
+	signFrom(target: string, msg: IBuffer): Promise<Signature>;
+}
+
+var _Signer: DeviceSigner;
+var _Devices: Map<string, Device> = new Map();
+
+export function setDeviceSigner(signer: DeviceSigner) {
+	console.log(_Signer, !_Signer);
+	somes.assert(!_Signer, 'Duplicate settings are not allowed');
+	_Signer = signer;
+}
+
+export async function getDeviceFormAddress(target: string): Promise<Device | null> {
+	var device = _Devices.get(target);
+	if (!device) {
+		_Devices = new Map();
+		for (var i of await devices()) {
+			_Devices.set(i.address, i);
+		}
+		device = _Devices.get(target);
+	}
+	return device || null;
+}
+
+async function post(target: string, hash: string) {
+	var msg = buffer.from(hash, 'base64');
+	var { signature, recovery } = await _Signer.signFrom(target, msg);
+	var sign = buffer.concat([signature, [recovery]]).toString('base64');
+	var r = await index.mbx.methods.post({ hash, signature: sign });
+	return r;
+}
+
 export async function call(target: string, method: string, args?: any, vCheck?: string): Promise<any> {
 	var hash = await index.mbx.methods.call({
 		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
 	}) as string;
-	let r = await post(hash);
+	let r = await post(target, hash);
 	return JSON.parse(r);
 }
 
@@ -32,15 +68,7 @@ export async function send(target: string, event: string, args?: any): Promise<a
 	var hash = await index.mbx.methods.send({
 		target, event, args: { errno: 0, message: '', data: JSON.stringify(args) }
 	}) as string;
-	await post(hash);
-}
-
-export async function post(hash: string) {
-	var msg = buffer.from(hash, 'base64');
-	var { signature, recovery } = key.sign(msg);
-	var sign = buffer.concat([signature, [recovery]]).toString('base64');
-	var r = await index.mbx.methods.post({ hash, signature: sign });
-	return r;
+	await post(target, hash);
 }
 
 export async function ping(target: string) {
@@ -117,10 +145,14 @@ export function sign(target: string, msg: IBuffer): Promise<{ signer: string, si
 }
 
 export async function bind(target: string, authCode: string, vCheck?: string) {
+	var owner = await _Signer.availableOwner();
+	var publicKey = await _Signer.availablePublicKey();
+
 	var o = await call(target, 'bind', {
-		name: key.authName(),
-		address: key.address(),
-		publicKey: key.publicKey(), authCode: authCode,
+		name: authName(),
+		address: owner,
+		publicKey: publicKey,
+		authCode: authCode,
 		addressOrigin: await chain.defaultAccount(),
 	}, vCheck) as { sn: string, screen: number };
 
@@ -128,11 +160,17 @@ export async function bind(target: string, authCode: string, vCheck?: string) {
 		o = { sn: o, screen: 0 };
 	}
 
-	await sdk.user.methods.addDevice({ address: target, sn: o.sn || target, vCheck, screen: o.screen });
+	await sdk.user.methods.addDevice({
+		address: target,
+		owner: owner,
+		sn: o.sn || target,
+		vCheck: vCheck,
+		screen: o.screen,
+	});
 }
 
 export async function unbind(target: string) {
-	await call(target, 'unbind', { name: key.authName() });
+	await call(target, 'unbind', { name: authName() });
 	await sdk.user.methods.deleteDevice({ address: target });
 }
 

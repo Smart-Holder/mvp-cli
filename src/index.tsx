@@ -62,7 +62,7 @@ class MyRoot<P> extends Root<P> {
 		await super.triggerLoad();
 		try {
 			await initialize();
-			// console.log(await sdk.nft.methods.getNFTByOwner({owner:'0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'}));
+			// console.log(await sdk.nft.methods.getNFTByOwner({ owner: '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3' }));
 		} catch (err: any) {
 			let errStr = err.message;
 			// if (env === 'dev') errStr = err.message + ', ' + err.code + ',' + err.stack;

@@ -4,9 +4,9 @@ import api from './test-api';
 import proxy from './test-proxy';
 
 async function test() {
-	// await mask();
+	await mask();
 	// await api();
-	await proxy();
+	// await proxy();
 }
 
 test();

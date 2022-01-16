@@ -2,7 +2,7 @@ import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import IconFont from '../../../src/components/icon_font';
-import wallet from '../../ui_wallet';
+import wallet from '../../wallet_ui';
 import { initialize as initializeChain } from '../../chain';
 import storage from 'somes/storage'
 import { Spin } from 'antd';
@@ -37,9 +37,9 @@ class NetWorkChange extends NavPage {
 	async change(item: INetworkListItemProps) {
 		this.setState({ loading: true })
 		await storage.set('currNetwork', item.network);
-		let new_wallet = new wallet(item.network);
-
-		await initializeChain(new_wallet);
+		// let new_wallet = new wallet(item.network);
+		wallet.setProvider(item.network);
+		await initializeChain(wallet);
 		this.setState({ currNetworkIndex: item.chainId, loading: false, network: item.network });
 	}
 

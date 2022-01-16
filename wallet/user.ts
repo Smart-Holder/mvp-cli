@@ -1,5 +1,4 @@
 
-import { SDKSigner, writePrivateKey } from '../src/key';
 import storage from 'somes/storage';
 import buffer, {IBuffer} from 'somes/buffer';
 import errno from 'somes/errno';
@@ -7,6 +6,7 @@ import { Root, Nav } from 'webpkit/mobile';
 import hash from 'somes/hash';
 import somes from 'somes';
 import sdk, {store} from './sdk';
+import {SDKSigner,setPrivateKey} from '../src/sdk';
 
 const crypto_tx = require('crypto-tx');
 
@@ -36,7 +36,7 @@ export function privateKey(state: LoginState) {
 
 function useTouristState() {
 	var priv = buffer.from(crypto_tx.genPrivateKey());
-	writePrivateKey(priv, 'tourist'); // tourist user
+	setPrivateKey(priv, 'tourist'); // tourist user
 	return {
 		name: 'tourist',
 		key: '0x' + crypto_tx.getPublic(priv, true).toString('hex'),
@@ -46,7 +46,7 @@ function useTouristState() {
 var _LoginState: LoginState = useTouristState(); // current login state
 
 async function useLoginState(state: LoginState) {
-	writePrivateKey(privateKey(state), state.name);
+	setPrivateKey(privateKey(state), state.name);
 	await storage.set('loginState', state);
 	state.priv = undefined;
 	_LoginState = state;

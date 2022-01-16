@@ -1,4 +1,4 @@
-import { SendCallback, Transaction, WalletManagerAbstract, WalletUser } from "./wallet";
+import { Transaction, WalletManagerAbstract, WalletUser } from "./wallet";
 import { JsonRpcPayload } from 'web3-core-helpers';
 import { Signature, providers } from 'web3z';
 import { RLPEncodedTransaction, } from 'web3-core';
@@ -25,7 +25,7 @@ export class UIWalletManager extends WalletManagerAbstract {
 
 	// https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
 	// https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13
-	onSend(payload: JsonRpcPayload, callback: SendCallback, user?: WalletUser): void {
+	onSend(payload: JsonRpcPayload, callback: any, user?: WalletUser): void {
 		// window.alert(JSON.stringify(payload));
 		this.provider.send(payload, callback);
 	}
