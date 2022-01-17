@@ -88,6 +88,12 @@ export function switchDetails(target: string, show: boolean) {
 	return send(target, 'switchDetails', { show });
 }
 
+// 开关：显示/关闭 自动亮度
+export function switchAutoLight(target: string, auto: boolean) {
+	return send(target, 'switchAutoLight', { auto });
+}
+
+
 // 设置屏幕角度
 export function screenOrientation(target: string, orientation: string) {
 	return call(target, 'screenOrientation', { orientation });

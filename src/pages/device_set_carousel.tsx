@@ -10,7 +10,7 @@ import { alert, confirm } from '../../deps/webpkit/lib/dialog';
 import { ArrayToObj } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 import IconFont from '../components/icon_font';
-import { checkVersion, getScreenSettings, nftmvp_apk_upgrade, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchDetails, upgradeVersion } from '../models/device';
+import { checkVersion, getScreenSettings, nftmvp_apk_upgrade, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
 import Loading from '../../deps/webpkit/lib/loading';
 
 import '../css/device_set_carousel.scss';
@@ -25,14 +25,15 @@ const intervalTimeConfig = [
 	{ label: "20s", value: 20 },
 ];
 
-enum SettingDarwerType { audio = 'audio', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail' };
+enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail' };
 
 // enum CallDeviceType {wifi = 'wifi',  version = 'version' };
 
 
 const settingDarwerConfig = [
-	{ label: "音量", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
-	{ label: "亮度", value: SettingDarwerType.brightness, icon: 'icon-liangdu1' },
+	{ label: "音量/亮度", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
+	{ label: "自动调整亮度", value: SettingDarwerType.autoLight, icon: 'icon-sunliangdu' },
+	// { label: "亮度", value: SettingDarwerType.brightness, icon: 'icon-liangdu1' },
 	{ label: "WI-FI", value: SettingDarwerType.wifi, icon: 'icon-WIFI' },
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },
 	{ label: "更新检查", value: SettingDarwerType.version, icon: 'icon-banbengengxin' },
@@ -92,7 +93,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 		light: 0,
 		dsq_id: 0,
 		hasNew: false,
-		hasNewLoading: true
+		hasNewLoading: true,
+		autoLightLoading: false,
+		autoLight: false,
 	}
 
 	dsqRef = React.createRef();
@@ -101,8 +104,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ switchDetails, volume, light, color }) => {
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color });
+		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight }) => {
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight });
 		}).finally(() => l.close());
 		this.getCarouselConfig();
 
@@ -387,6 +390,20 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	}
 
+	// 设置自动亮度
+	autoLight() {
+		let { t } = this;
+		let { autoLight, autoLightLoading } = this.state;
+		return <div className="setting_card_box">
+			<div style={{ marginBottom: '.2rem' }}>{t('开关：开启/关闭自动调整屏幕亮度')}</div>
+			<Switch onChange={async (e) => {
+				this.setState({ autoLight: e, autoLightLoading: true });
+				await switchAutoLight(this.params.address, e);
+				this.setState({ autoLightLoading: false });
+			}} loading={autoLightLoading} checked={autoLight} checkedChildren={t("开启")} unCheckedChildren={t("关闭")} />
+		</div>
+	}
+
 	getCurrPageContent() {
 		const { currSettingIndex } = this.state;
 		switch (currSettingIndex) {
@@ -400,6 +417,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.colorCard();
 			case SettingDarwerType.detail:
 				return this.nftDetailCard();
+			case SettingDarwerType.autoLight:
+				return this.autoLight();
 
 			default:
 				return this.imageCard();
