@@ -44,7 +44,6 @@ import { Tab } from './util/tools';
 
 import storage from 'somes/storage';
 import { LoginState, privateKey } from './user';
-import { writePrivateKey } from '../src/key';
 import { setPrivateKey } from '../src/sdk';
 
 utils.onUncaughtException.on((e) => {
