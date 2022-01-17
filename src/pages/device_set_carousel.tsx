@@ -467,7 +467,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			} else {
 				upgradeVersion(address, false);
 			}
-			this.setState({ settingModalVisible: false });
+			this.setState({ settingModalVisible: false, hasNewAction: false });
 		}
 		// currcallDeviceIndex === SettingDarwerType.wifi ? await screenWiFi(address) : hasNew ? await checkVersion(address) : this.setState({ settingModalVisible: false });
 	}
