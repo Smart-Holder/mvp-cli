@@ -277,6 +277,17 @@
 	.am-modal-header {
 		border-bottom: 1px solid #ccc;
 	}
+
+	.label_item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+	.label {
+		white-space: nowrap;
+		margin-right: 0.2rem;
+	}
 }
 
 .hasNew::after {

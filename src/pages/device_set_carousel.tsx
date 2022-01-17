@@ -31,9 +31,9 @@ enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 
 
 
 const settingDarwerConfig = [
-	{ label: "音量/亮度", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
-	{ label: "自动调整亮度", value: SettingDarwerType.autoLight, icon: 'icon-sunliangdu' },
-	// { label: "亮度", value: SettingDarwerType.brightness, icon: 'icon-liangdu1' },
+	{ label: "音量", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
+	// { label: "自动调整亮度", value: SettingDarwerType.autoLight, icon: 'icon-sunliangdu' },
+	{ label: "亮度", value: SettingDarwerType.brightness, icon: 'icon-liangdu1' },
 	{ label: "WI-FI", value: SettingDarwerType.wifi, icon: 'icon-WIFI' },
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },
 	{ label: "更新检查", value: SettingDarwerType.version, icon: 'icon-banbengengxin' },
@@ -81,7 +81,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		carouselIntervalTime: 5,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
-		currSettingIndex: 'image',
+		currSettingIndex: 'imgage',
 		drawerVisible: false,
 		settingModalVisible: false,
 		currcallDeviceIndex: 'wifi',
@@ -93,7 +93,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 		light: 0,
 		dsq_id: 0,
 		hasNew: false,
-		hasNewLoading: true,
+		hasNewLoading: false,
+		hasNewAction: false,
 		autoLightLoading: false,
 		autoLight: false,
 	}
@@ -105,6 +106,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
 		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight }) => {
+			if (light > 100) light = 100;
+			light = parseInt(String(light / 20));
+			volume = volume / 3;
 			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight });
 		}).finally(() => l.close());
 		this.getCarouselConfig();
@@ -268,21 +272,21 @@ class DeviceSetCarousel extends NavPage<Device> {
 			type === SettingDarwerType.brightness ? screenLight(address, light) : screenVolume(address, volume);
 		}, 500);
 		if (type === SettingDarwerType.brightness) {
-			this.setState({ light, dsq_id: newDsqId });
+			this.setState({ light: e, dsq_id: newDsqId });
 		} else {
-			this.setState({ volume, dsq_id: newDsqId });
+			this.setState({ volume: e, dsq_id: newDsqId });
 		}
 	}
 
 	audioCard() {
 		let { t } = this;
-		let { volume, light } = this.state;
+		let { volume } = this.state;
 		return <div className='setting_card_box'>
 			<div>{t("调整音量")}</div>
-			<Slider max={5} min={0} defaultValue={volume / 3} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.audio)} />
+			<Slider max={5} min={0} value={volume} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.audio)} />
 
-			<div style={{ marginTop: '.2rem' }}>{t("调整亮度")}</div>
-			<Slider max={5} min={0} defaultValue={light} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.brightness)} />
+			{/* <div style={{ marginTop: '.2rem' }}>{t("调整亮度")}</div> */}
+			{/* <Slider max={5} min={0} defaultValue={light} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.brightness)} /> */}
 		</div>
 	}
 
@@ -393,7 +397,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 	// 设置自动亮度
 	autoLight() {
 		let { t } = this;
-		let { autoLight, autoLightLoading } = this.state;
+		let { autoLight, autoLightLoading, light } = this.state;
+		// console.log(light, "light");
+
 		return <div className="setting_card_box">
 			<div style={{ marginBottom: '.2rem' }}>{t('开关：开启/关闭自动调整屏幕亮度')}</div>
 			<Switch onChange={async (e) => {
@@ -401,6 +407,12 @@ class DeviceSetCarousel extends NavPage<Device> {
 				await switchAutoLight(this.params.address, e);
 				this.setState({ autoLightLoading: false });
 			}} loading={autoLightLoading} checked={autoLight} checkedChildren={t("开启")} unCheckedChildren={t("关闭")} />
+
+			{<div style={{ visibility: autoLight ? 'hidden' : 'visible', width: '100%', textAlign: 'center', marginTop: '0.5rem' }}>
+				<div style={{ marginTop: '.2rem' }}>{t("调整亮度")}</div>
+				<Slider max={5} min={0} value={light} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.brightness)} />
+			</div>}
+
 		</div>
 	}
 
@@ -410,15 +422,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 			case SettingDarwerType.audio:
 				return this.audioCard();
 			case SettingDarwerType.brightness:
-				return this.audioCard();
+				return this.autoLight();
 			case SettingDarwerType.rotation:
 				return this.rotationCard();
 			case SettingDarwerType.color:
 				return this.colorCard();
 			case SettingDarwerType.detail:
 				return this.nftDetailCard();
-			case SettingDarwerType.autoLight:
-				return this.autoLight();
+			// case SettingDarwerType.autoLight:
+			// 	return this.autoLight();
 
 			default:
 				return this.imageCard();
@@ -429,18 +441,14 @@ class DeviceSetCarousel extends NavPage<Device> {
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
 		if ([SettingDarwerType.wifi, SettingDarwerType.version].includes(currSettingIndex)) {
 			this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, });
-			if (SettingDarwerType.version === currSettingIndex) {
-				// data = await checkVersion(this.params.address);
-				// if (data.upgrading) {
-				// 	this.setState({ drawerVisible: false });
-				// 	return alert('设备升级中...');
-				// };
-				checkVersion(this.params.address).then((res) => {
-					this.setState({ drawerVisible: false, hasNew: res.hasNew, hasNewLoading: false });
-					res.upgrading && alert('设备升级中...');
-					return
-				});
-			}
+			// if (SettingDarwerType.version === currSettingIndex) {
+
+			// 	checkVersion(this.params.address).then((res) => {
+			// 		this.setState({ drawerVisible: false, hasNew: res.hasNew, hasNewLoading: false });
+			// 		res.upgrading && alert('设备升级中...');
+			// 		return
+			// 	});
+			// }
 		} else {
 			this.setState({ currSettingIndex, });
 		}
@@ -464,10 +472,18 @@ class DeviceSetCarousel extends NavPage<Device> {
 		// currcallDeviceIndex === SettingDarwerType.wifi ? await screenWiFi(address) : hasNew ? await checkVersion(address) : this.setState({ settingModalVisible: false });
 	}
 
+	// 检查版本更新
+	async checkDeviceVersion() {
+		this.setState({ hasNewLoading: true });
+		checkVersion(this.params.address).then((res) => {
+			this.setState({ hasNewAction: true, hasNew: res.hasNew, hasNewLoading: false });
+			res.upgrading && alert('设备升级中...');
+		});
+	}
 
 	render() {
 
-		const { isShowAbbreviation, selectedList, currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading } = this.state;
+		const { isShowAbbreviation, selectedList, currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction } = this.state;
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -514,14 +530,25 @@ class DeviceSetCarousel extends NavPage<Device> {
 				className="settingModal"
 				visible={this.state.settingModalVisible}
 				transparent
-				onClose={() => { this.setState({ settingModalVisible: false }); upgradeVersion(this.params.address, false); }}
+				onClose={() => { this.setState({ settingModalVisible: false, hasNewAction: false, hasNewLoading: false, hasNew: false }); upgradeVersion(this.params.address, false); }}
 				title={t(callDeviceConfig[currcallDeviceIndex]?.title)}
 				closable
 			>
-				<div style={{ height: '1.6rem', display: "flex", alignItems: "center", justifyContent: 'center' }}>
+				<div style={{ height: '1.6rem', display: "flex", alignItems: "center", width: '100%' }}>
 					{currcallDeviceIndex === 'version' ?
-						<Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button>
-						: <Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {t(callDeviceConfig[currcallDeviceIndex]?.btnText)}</Button>
+						<div className='label_item'>
+							<div className="label">检测版本:</div>
+							{hasNewAction ?
+								<Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button> :
+								<Button loading={hasNewLoading} ghost type="primary" onClick={this.checkDeviceVersion.bind(this)} > 点击检查版本更新</Button>
+							}
+							{/* // <Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button> */}
+						</div>
+						:
+						<div className='label_item'>
+							<div className="label">WIFI设置:</div>
+							<Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {t(callDeviceConfig[currcallDeviceIndex]?.btnText)}</Button>
+						</div>
 					}
 				</div>
 			</Modal>
