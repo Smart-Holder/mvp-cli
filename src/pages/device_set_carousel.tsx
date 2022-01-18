@@ -88,7 +88,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		currColor: '#000000',
 		switchValue: false,
 		switchLoading: false,
-		currRotation: '',
+		currRotation: 'left',
 		volume: 0,
 		light: 0,
 		dsq_id: 0,
@@ -307,7 +307,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			</div>
 
 			<Button ghost type="primary" onClick={async () => {
-				confirm(t('调整屏幕角度将会重启设备,请确认.'), async (isok) => {
+				confirm(t('调整屏幕角度将重启设备，确定调整屏幕角度吗？'), async (isok) => {
 					isok && await screenOrientation(this.params.address, currRotation);
 				})
 			}}>{t('确认')}</Button>
