@@ -31,8 +31,9 @@ var _Signer: DeviceSigner;
 var _Devices: Map<string, Device> = new Map();
 
 export function setDeviceSigner(signer: DeviceSigner) {
-	console.log(_Signer, !_Signer);
-	somes.assert(!_Signer, 'Duplicate settings are not allowed');
+	// console.log(_Signer, !_Signer);
+	// debugger
+	// somes.assert(!_Signer, 'Duplicate settings are not allowed');
 	_Signer = signer;
 }
 
@@ -46,6 +47,11 @@ export async function getDeviceFormAddress(target: string): Promise<Device | nul
 		device = _Devices.get(target);
 	}
 	return device || null;
+}
+
+// 清除设备缓存
+export async function clearDeviceFormAddress() {
+	_Devices.clear();
 }
 
 async function post(target: string, hash: string) {
@@ -147,7 +153,7 @@ export function sign(target: string, msg: IBuffer): Promise<{ signer: string, si
 export async function bind(target: string, authCode: string, vCheck?: string) {
 	var owner = await _Signer.availableOwner();
 	var publicKey = await _Signer.availablePublicKey();
-
+	clearDeviceFormAddress();
 	var o = await call(target, 'bind', {
 		name: authName(),
 		address: owner,

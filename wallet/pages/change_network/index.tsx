@@ -30,13 +30,13 @@ class NetWorkChange extends NavPage {
 	}
 
 	async triggerLoad() {
-		let network = await storage.get('currNetwork') || config.defaultNetwork;
+		let network = localStorage.getItem('currNetwork') || config.defaultNetwork;
 		this.setState({ network });
 	}
 
 	async change(item: INetworkListItemProps) {
-		this.setState({ loading: true })
-		await storage.set('currNetwork', item.network);
+		this.setState({ loading: true });
+		localStorage.setItem('currNetwork', item.network);
 		// let new_wallet = new wallet(item.network);
 		wallet.setProvider(item.network);
 		await initializeChain(wallet);

@@ -42,10 +42,6 @@ import * as moment from 'moment';
 import wallet from './wallet_ui';
 import { Tab } from './util/tools';
 
-import storage from 'somes/storage';
-import { LoginState, privateKey } from './user';
-import { writePrivateKey } from '../src/key';
-import { setPrivateKey } from '../src/sdk';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
@@ -67,8 +63,6 @@ export class MyRoot<P> extends Root<P> {
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
-			var state = await storage.get('loginState') as LoginState;
-			if (state) setPrivateKey(privateKey(state), state.name);
 			await initialize(wallet);
 		} catch (err: any) {
 			dialog.alert(err.message);
@@ -90,7 +84,7 @@ export class MyRoot<P> extends Root<P> {
 		// register
 		// console.log(['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register',].includes(pathname), pathname);
 
-		return pathname.startsWith('/account') || pathname.startsWith('/home') ? <Tab nav={this._nav} /> : '';
+		return !['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register',].includes(pathname) ? <Tab nav={this._nav} /> : '';
 	}
 }
 

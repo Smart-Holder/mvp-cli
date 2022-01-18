@@ -11,7 +11,7 @@ import { withTranslation } from 'react-i18next';
 
 const crypto_tx = require('crypto-tx');
 
-class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
+class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; owner?: string }> {
 
 	title = '添加设备';
 

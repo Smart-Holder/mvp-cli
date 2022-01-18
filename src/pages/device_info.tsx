@@ -2,7 +2,7 @@ import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import { DeviceItem } from '../components/deviceItem';
 import { Device, devices } from '../models/device';
-import  { NFT } from '../models';
+import { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
@@ -170,8 +170,8 @@ class DeviceInfo extends NavPage<Device> {
 						const address = this.state.deviceInfo.address;
 						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single', true);
 						await device.unbind(address);
-
 						alert(t('解绑设备成功'), () => window.history.back());
+
 					} catch (error: any) {
 						console.log(error);
 

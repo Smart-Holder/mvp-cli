@@ -7,7 +7,6 @@ import Button from '../../../src/components/button';
 import native from '../../native';
 import { copyText } from '../../../src/util/tools';
 import { initialize } from '../../../src/sdk';
-import { writePrivateKey } from '../../../src/key';
 import { confirm } from 'webpkit/lib/dialog';
 
 import { IAddressListItemProps } from '../home';

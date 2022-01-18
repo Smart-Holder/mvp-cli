@@ -17,7 +17,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 
-	[NSURLFile setNSURLFile];
+//	[NSURLFile setNSURLFile];
 
 	return YES;
 }

@@ -1,13 +1,17 @@
 import NavPage from '../../../src/nav';
-import { React } from 'webpkit/mobile';
+import { React, ReactDom } from 'webpkit/mobile';
 import Button from '../../../src/components/button';
 import IconFont from '../../../src/components/icon_font';
 import Header from '../../../src/util/header';
 import native from '../../native'
 import wallet from '../../wallet_ui';
 import storage from 'somes/storage';
-import { Modal } from 'antd-mobile';
 import "./index.scss";
+import { Modal } from 'antd-mobile';
+import "../../util/wallet_ui.scss";
+import _404 from '../../../src/pages/404';
+import routes from '../../router';
+import { MyRoot } from '../..';
 
 
 const operation = Modal.operation;
@@ -16,7 +20,7 @@ export interface IAddressListItemProps {
 	balance?: string;
 	address: string
 }
-// ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 class Home extends NavPage {
 
@@ -51,7 +55,7 @@ class Home extends NavPage {
 	}
 
 	async deviceList(item: IAddressListItemProps) {
-		this.pushPage('/device');
+		this.pushPage(`/device?address=${item.address}&keyName=${item.key}`);
 	}
 
 
@@ -101,7 +105,7 @@ class Home extends NavPage {
 							</div>
 							<div className="right_box">
 								<Button size="small" type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
-								{/* <Button size="small" type="primary" onClick={this.deviceList.bind(this,item)}>设备管理</Button> */}
+								<Button size="small" type="primary" onClick={this.deviceList.bind(this, item)}>设备管理</Button>
 							</div>
 						</div>
 					</div>

@@ -42,3 +42,18 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 export const verificationPhone = (str: string) => {
 	return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(str);
 };
+
+// 获取路由中的参数
+export const getParams = (url:string) => {
+	var temp1 = url.split('?');
+	var pram = temp1[1];
+	var keyValue = pram.split('&');
+	var obj:{[key:string]:string} = {};
+	for (var i = 0; i < keyValue.length; i++) {
+		var item = keyValue[i].split('=');
+		var key = item[0];
+		var value = item[1];
+		obj[key] = value;
+	}
+	return obj;
+}
