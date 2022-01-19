@@ -22,16 +22,6 @@ export default class Account extends NavPage<{ key: string }> {
 	}
 
 
-	async myNft() {
-		// let { address } = this.state.addressInfo;
-		// console.log(address, 'address');
-		// try {
-		// 	this.pushPage(`/my?address=${address}`);
-		// } catch (error: any) {
-		// 	alert(error);
-		// }
-	}
-
 	async deviceList() {
 		this.pushPage('/device');
 	}
@@ -39,6 +29,11 @@ export default class Account extends NavPage<{ key: string }> {
 	// 变更网络
 	async changeNetwork() {
 		this.pushPage('/change_network');
+	}
+
+	// 跳转到密码修改
+	async goResetPassword() {
+		this.pushPage('/reset_password');
 	}
 
 	render() {
@@ -66,6 +61,11 @@ export default class Account extends NavPage<{ key: string }> {
 				<div className="setting_title">管理设备</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
+			<div className="setting_item" onClick={this.goResetPassword.bind(this)}>
+				<div className="setting_title">修改登录密码</div>
+				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
+			</div>
+
 			<div className="setting_item" style={{ marginBottom: '.3rem' }} onClick={this.changeNetwork.bind(this)}>
 				<div className="setting_title">网络切换</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>

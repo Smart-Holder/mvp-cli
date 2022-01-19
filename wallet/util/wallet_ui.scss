@@ -24,3 +24,53 @@
 	// 	background-color: #1677ff3e;
 	// }
 }
+
+.am-modal-popup {
+	.am-modal-header {
+		padding: 0.3rem 0;
+		border-bottom: 1px solid #ccc;
+	}
+	.am-modal-close {
+		top: 15px;
+	}
+
+	.pay_btn {
+		width: 100%;
+		margin-top: 0.6rem;
+		font-size: 0.32rem;
+		height: auto;
+		line-height: normal;
+		border-radius: 0.16rem;
+		padding: 0.2rem 0;
+	}
+	.value_box {
+		padding: 0.3rem 0;
+		width: 100%;
+		font-size: 0.36rem;
+		font-weight: 500;
+		color: #333;
+	}
+	.detail_box {
+		padding: 0.3rem;
+		padding-top: 0;
+		.label_item {
+			display: flex;
+			padding: 0.2rem 0;
+			font-size: 0.28rem;
+			border-bottom: 0.02rem solid #ccc;
+			.label {
+				width: 2rem;
+				color: rgb(148, 146, 146);
+			}
+			.value {
+				color: #333;
+				word-break: break-all;
+				text-align: left;
+			}
+			.sub_title {
+				font-size: 0.22rem;
+				color: rgb(148, 146, 146);
+			}
+		}
+	}
+}

@@ -19,6 +19,7 @@ import { Tabs, NoticeBar } from 'antd-mobile';
 import models from '../sdk';
 import '../css/device_info.scss';
 import { Empty } from 'antd';
+import native from '../../wallet/native';
 const tp = require('tp-js-sdk');
 
 
@@ -74,7 +75,7 @@ class DeviceInfo extends NavPage<Device> {
 
 	// 转出nft按钮点击
 	async transferBtnClick(nftItem: NFT) {
-		tp.invokeQRScanner().then((res: string) => {
+		native.scan().then((res: string) => {
 			this.takeAwayNftOfDeviceClick(nftItem, res);
 		});
 	}
@@ -174,7 +175,9 @@ class DeviceInfo extends NavPage<Device> {
 
 					} catch (error: any) {
 						console.log(error);
-
+						// Key derivation failed - possibly wrong password
+						if ('Key derivation failed - possibly wrong password' == error.message) return alert('密码输入错误');;
+						if (-30000 == error.errno) return;
 						alert(error.message);
 					} finally {
 						this.setState({ loading: false });

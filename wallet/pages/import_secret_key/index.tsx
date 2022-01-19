@@ -96,7 +96,7 @@ class ImportSecretKeyPage extends NavPage {
 					</div>
 				</div> */}
 
-				<Button disabled={!address || !password || !confirm_password || !secret_key_name} className="import_btn" type='primary' onClick={this.importWallet.bind(this)}>导入账号</Button>
+				<Button disabled={!address || !password || !confirm_password || !secret_key_name || password.length < 8 || confirm_password.length < 8} className="import_btn" type='primary' onClick={this.importWallet.bind(this)}>导入账号</Button>
 			</div>
 		</div>;
 	}

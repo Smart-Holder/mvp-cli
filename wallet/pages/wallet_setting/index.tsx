@@ -40,6 +40,7 @@ export default class Account extends NavPage<{ key: string }> {
 	async deleteAddress() {
 		confirm('确定删除当前密钥?', async (isOk) => {
 			if (isOk) {
+				// alert((this.popPage));
 				await native.deleteKey(this.params.key);
 				this.popPage();
 			};

@@ -13,7 +13,6 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
 
-
 const operation = Modal.operation;
 export interface IAddressListItemProps {
 	key: string;
@@ -30,10 +29,6 @@ class Home extends NavPage {
 
 
 	async triggerShow() {
-
-		// '0x' + '85657270cEa1B274b51e35527974dEb283e49cc7'
-		// let balance = await chain.getBalance('0x' + 'b02cbeD3aC823085CfB1A667Fb1C73E19E724657');
-		// console.log(balance,"balance");
 
 		let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
@@ -55,11 +50,13 @@ class Home extends NavPage {
 	}
 
 	async deviceList(item: IAddressListItemProps) {
+		wallet.setCurrentKey(item.key);
 		this.pushPage(`/device?address=${item.address}&keyName=${item.key}`);
 	}
 
 
 	async myNft(item: IAddressListItemProps) {
+		wallet.setCurrentKey(item.key);
 		await storage.set('currAccount', item.address);
 		this.pushPage(`/my?address=${item.address}`);
 	}
@@ -104,8 +101,8 @@ class Home extends NavPage {
 								<div className="dot2"></div>
 							</div>
 							<div className="right_box">
-								<Button size="small" type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
-								<Button size="small" type="primary" onClick={this.deviceList.bind(this, item)}>设备管理</Button>
+								<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
+								<Button type="primary" onClick={this.deviceList.bind(this, item)}>设备管理</Button>
 							</div>
 						</div>
 					</div>

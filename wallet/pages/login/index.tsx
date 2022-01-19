@@ -45,7 +45,6 @@ class Login extends NavPage {
 	async loginClick() {
 		this.setState({ loading: true });
 		let { username, password, login_method, v_code } = this.state;
-
 		try {
 			if (login_method == 'vcode') {
 				await login(username, { pwd: password, verify: v_code });

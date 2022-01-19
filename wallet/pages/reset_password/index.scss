@@ -1,0 +1,88 @@
+.reset_password_page {
+	// background-color: #f5f5f5;
+	.mid_part {
+		padding: 0 0.3rem;
+		margin-bottom: 1rem;
+
+		.login_methods {
+			display: flex;
+			font-size: 0.28rem;
+			align-items: baseline;
+			margin-left: 0.08rem;
+			height: 0.5rem;
+			// margin-bottom: 0.3rem;
+			.vcode_login {
+				font-size: 0.36rem;
+				font-weight: 500;
+			}
+		}
+
+		.get_vcode_box {
+			position: absolute;
+			right: 0;
+			top: 50%;
+			transform: translate(-15%, -50%);
+		}
+
+		.login_input_box {
+			.ant-form-item {
+				margin: 0;
+			}
+			.input_item {
+				border: none;
+			}
+			.v_code_col {
+				.input_item {
+					width: 80%;
+				}
+			}
+			.ant-input:focus,
+			.ant-input-focused,
+			.ant-input-affix-wrapper:focus,
+			.ant-input-affix-wrapper-focused {
+				box-shadow: none;
+			}
+			.input_col {
+				border-bottom: 1px solid #ddd;
+				// padding: 0.32rem;
+				font-size: 0.32rem;
+				// border-radius: 0.65rem;
+				padding: 0.22rem 0;
+			}
+		}
+
+		.more_login_action {
+			display: flex;
+			justify-content: space-between;
+			// .register_btn {
+			.ant-btn {
+				padding-right: 0;
+				padding-left: 0;
+			}
+			// }
+
+			.forget_password {
+				.ant-btn {
+					color: #333;
+				}
+			}
+		}
+	}
+
+	.get_vcode {
+		font-size: 0.28rem;
+		padding: 0;
+		height: auto;
+	}
+	.bottom_part {
+		padding: 0 0.3rem;
+		.login_btn {
+			width: 100%;
+			padding: 0.2rem 0;
+			height: auto;
+			border-radius: 0.16rem;
+			font-size: 0.34rem;
+			line-height: initial;
+		}
+	}
+}

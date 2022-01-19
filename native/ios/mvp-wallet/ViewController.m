@@ -92,12 +92,12 @@
 		}
 	} else if ([name isEqualToString:@"deleteKey"]) {
 		[self deleteKey:[args objectAtIndex:0]];
-		[self callback:id error:@"setKey fail" result:nil];
+		[self callback:id error:nil result:nil];
 	} else {
 		[self callback:id error:@"Method non-existent" result:nil];
 	}
 }
-
+    
 -(NSArray*)getKeysName {
 	return [self getKey:@"keysName" prefix:NO isArray:YES]?:@[];
 }
@@ -208,7 +208,7 @@
 }
 
 - (void) loadView {
-
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 	//创建网页配置对象
 	WKWebViewConfiguration *config = [WKWebViewConfiguration new];
 
@@ -350,11 +350,15 @@
 	[AVCaptureSessionManager checkAuthorizationStatusForCameraWithGrantBlock:^{
 		UIStoryboard *board = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 		QRScan *scan = [board instantiateViewControllerWithIdentifier:@"qrScan"];
+        
 		scan.callback = ^(NSString* result) {
+            
 			[self.navigationController popToViewController:self animated:YES];
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
 			cb(result);
 		};
 		[self.navigationController pushViewController:scan animated:YES];
+        [self.navigationController setNavigationBarHidden:NO animated:YES];// setHidden:NO];
 	} DeniedBlock:^{
 		[Alert alert:@"权限未开启" message:@"您未开启相机权限，点击确定跳转至系统设置开启" callback:^(){
 			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];

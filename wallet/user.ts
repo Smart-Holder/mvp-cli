@@ -61,7 +61,11 @@ async function tryLogin(state: LoginState, key2?: string, ref?: string) { // tes
 		await sdk.user.methods.setUser({ key2, ref }, { signer: new MySigner(state) }); // check access and set key2
 	} catch (err: any) { // ILLEGAL ACCESS
 		if (err.errno == errno.ERR_ILLEGAL_ACCESS[0]) {
-			return false;
+			if (location.pathname != '/login') {
+				logout();
+				throw new Error('身份验证过期!');
+			};
+			throw new Error('当前账号或密码输入错误!');
 		}
 		throw err;
 	}

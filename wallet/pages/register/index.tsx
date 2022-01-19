@@ -43,19 +43,13 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 			confirm_password
 		};
 
-
-		// let privateKey = await genPrivateKeyForPhone(username, password);
-		// console.log(privateKey, "privateKey");
-
-		// registerFromPhone
-
 		if (pageType == 'reset_password') {
 			try {
 				await login(username, { pwd: password, verify: v_code });
 				await changePwd(username, password);
 				alert('密码修改成功!', () => this.pushPage('/secretkey'));
-				
-			} catch (error:any) {
+
+			} catch (error: any) {
 				alert(error.message);
 			}
 		} else {
@@ -75,9 +69,6 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 
 			}
 		}
-
-		
-
 	}
 
 	// 输入框事件

@@ -16,6 +16,7 @@ import "../../wallet/util/wallet_ui.scss";
 import * as config from '../../config';
 import { getParams } from '../../wallet/util/tools';
 import * as device from '../models/device';
+import { alert } from 'webpkit/lib/dialog';
 
 const crypto_tx = require('crypto-tx');
 
@@ -110,16 +111,24 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, currKey: key });
 		try {
-			let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=5496&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=7534&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			console.log('start');
+			let href = await native.scan();
+
 			config.env == 'dev' && (href = href.replace('https://mvp-dev.stars-mine.com', config.host));
 			await wallet.setCurrentKey(key);
 			setDeviceSigner(wallet);
 			let { a, c, v } = getParams(href);
 			await device.bind(crypto_tx.checksumAddress(a), c, v);
 			this.getDeviceList();
-		} catch (error) {
-			this.setState({ loading: false })
+		} catch (error: any) {
+			console.log('end');
+			this.setState({ loading: false });
+			if ('Key derivation failed - possibly wrong password' == error.message) return alert('密码输入错误');;
+			alert(error.message);
 		}
+		console.log('other');
+
 	}
 
 

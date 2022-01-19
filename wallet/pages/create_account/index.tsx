@@ -6,9 +6,9 @@ import { Checkbox } from 'antd';
 import Button from '../../../src/components/button'
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
 import native from '../../native'
-import "./index.scss";
 import { genPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/account';
 import { alert } from 'webpkit/lib/dialog';
+import "./index.scss";
 
 
 export default class CreateAccount extends NavPage {
@@ -32,7 +32,7 @@ export default class CreateAccount extends NavPage {
 			console.log(privateKey.toString('hex'), "privateKey");
 
 			await native.setKey(address_name, JSON.stringify(keyStore));
-			alert('私钥导入成功!', () => this.pushPage('/safety_tips'));
+			alert('密钥创建成功!', () => this.replacePage('/safety_tips'));
 		} catch (error: any) {
 			alert(error);
 		}

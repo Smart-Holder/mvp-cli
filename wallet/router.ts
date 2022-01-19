@@ -26,6 +26,11 @@ export default [
 		path: '/',
 		page: () => import('./pages/login'),
 	},
+
+	{
+		path: '/reset_password',
+		page: () => import('./pages/reset_password'),
+	},
 	{
 		path: '/login',
 		page: () => import('./pages/login'),

@@ -42,10 +42,6 @@ import * as moment from 'moment';
 import wallet from './wallet_ui';
 import { Tab } from './util/tools';
 
-import storage from 'somes/storage';
-import { LoginState, privateKey } from './user';
-import { setPrivateKey } from '../src/sdk';
-
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;

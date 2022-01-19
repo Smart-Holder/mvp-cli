@@ -30,7 +30,7 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 					<div className={`txt ${(current === 0 && location.pathname.startsWith("/home")) && 'active'}`}>{("密钥")}</div>
 				</div>
 				<div className="btn" onClick={this.m_click_2}>
-					{(current === 1 || location.pathname.startsWith("/my")) ? <IconFont style={style} type="icon-wodexuanzhong" /> : <IconFont style={style} type="icon-wode" />}
+					{(current === 1 || location.pathname.startsWith("/account")) ? <IconFont style={style} type="icon-wodexuanzhong" /> : <IconFont style={style} type="icon-wode" />}
 					<div className={`txt ${(current === 1 || location.pathname.startsWith("/account")) && 'active'}`}>{("我的")}</div>
 				</div>
 			</div>
@@ -44,11 +44,11 @@ export const verificationPhone = (str: string) => {
 };
 
 // 获取路由中的参数
-export const getParams = (url:string) => {
+export const getParams = (url: string) => {
 	var temp1 = url.split('?');
 	var pram = temp1[1];
 	var keyValue = pram.split('&');
-	var obj:{[key:string]:string} = {};
+	var obj: { [key: string]: string } = {};
 	for (var i = 0; i < keyValue.length; i++) {
 		var item = keyValue[i].split('=');
 		var key = item[0];

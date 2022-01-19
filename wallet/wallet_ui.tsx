@@ -13,6 +13,10 @@ import { React } from 'webpkit/mobile';
 import IconFont from "../src/components/icon_font";
 import "./util/wallet_ui.scss";
 import Button from "../src/components/button";
+import { chainTraits } from "../src/models";
+import { unitLabel } from "../src/util/tools";
+import chain from "../src/chain";
+import { alert as dialogAlert } from 'webpkit/lib/dialog';
 
 var cryptoTx = require('crypto-tx');
 
@@ -43,7 +47,7 @@ export class SecretKey implements ISecretKey {
 				'请输入密钥解锁密码',
 				'',
 				[
-					{ text: '取消', onPress: () => reject('已取消') },
+					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -30000 }) },
 					{ text: '提交', onPress: password => resolve(password) },
 				],
 				'secure-text',
@@ -53,13 +57,11 @@ export class SecretKey implements ISecretKey {
 
 	async unlock() {
 		if (!this._key) {
-			// window.alert(JSON.stringify(this.keystore))
 			let pwd = await this.inputPasswordModal();
 			let priv = decryptPrivateKey(this.keystore, pwd);
 			this._key = buffer.from(priv);
 			return this._key;
 			// TODO ...
-			throw Error.new('Unlock keystore fail');
 		}
 		// buffer.from('', 'hex')
 		return this._key as IBuffer;
@@ -73,14 +75,13 @@ export class SecretKey implements ISecretKey {
 
 }
 
+
 export class UIWalletManager extends WalletManagerAbstract implements DeviceSigner {
 
 	private _accounts?: Dict<ISecretKey>;
 	private _currentKey?: ISecretKey; // 当前选择的钱包
 
-	// private _provider: AbstractProvider = (globalThis as any).ethereum;
 	provider = new providers.HttpProvider(localStorage.getItem('currNetwork') || config.defaultNetwork);
-	//provider = new providers.HttpProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
 	// https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
 	// https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13
 	onSend(payload: JsonRpcPayload, callback: RpcCallback, user?: WalletUser): void {
@@ -104,7 +105,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async setCurrentKey(keyName: string) {
 		var json = await native.getKey(keyName);
 		var keystore = JSON.parse(String(json));
-		var key = new SecretKey(keystore);
+		var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
 		this._currentKey = key; // The first wallet is selected by default
 		// window.alert(JSON.stringify(key))
 	}
@@ -218,25 +219,96 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		return buffer.concat([signature.signature, [signature.recovery]]).toString('hex');
 	}
 
-	async onSignTransaction(user: WalletUser, tx: Transaction): Promise<RLPEncodedTransaction> {
-		// console.log('onSignTransaction');
-		var from = tx.from;
-		var key = await this.keyFrom(from);
-		// TODO ...
+	async onSignTransaction(user: WalletUser, tx: Transaction): Promise<RLPEncodedTransaction | any> {
+		try {
+			var from = tx.from;
+			var key = await this.keyFrom(from);
+			var getSignature = async (message: IBuffer) => await key.sign(message);
 
-		var isAgree = true;
-		if (!isAgree) {
-			throw Error.new('reject sign or send transaction');
-		}
+			// TODO ...
 
-		var signTx = await this.signTx({
-			async sign(message: IBuffer): Promise<Signature> {
-				var signature = await key.sign(message);
-				return signature;
+			var isAgree = true;
+			if (!isAgree) {
+				throw Error.new('reject sign or send transaction');
 			}
-		}, tx);
 
-		return UIWalletManager.getRLPEncodedTransaction(tx, signTx);
+			var signTx = await this.signTx({
+				async sign(message: IBuffer): Promise<Signature> {
+					return getSignature(message);
+				}
+			}, tx);
+
+			tx = await this.getUserTx(tx);
+			console.log(tx, "tx");
+
+
+			return UIWalletManager.getRLPEncodedTransaction(tx, signTx);
+		} catch (error: any) {
+			if (error.errno == -30000) throw new Error('.');
+			dialogAlert(error.message);
+		}
+	}
+
+	async getUserTx(tx: Transaction): Promise<Transaction> {
+		let { from, to, gas, gasPrice, value } = tx;
+		let keysName = await native.getKeysName() || [];
+
+		let unit = (chainTraits as any)[unitLabel[String(chain.chain)]][2]
+		let walletName = keysName.find((key) => {
+			if (this._accounts) {
+				var json = (this._accounts)[key];
+				return json.address?.toUpperCase() == from?.toUpperCase();
+			}
+		});
+
+
+
+		return new Promise((resolve, reject) => {
+			let alertinterfas = alert('等待中', <div>
+				<Modal
+					title="交易详情"
+					popup
+					visible={true}
+					animationType="slide-up"
+					closable
+					bodyStyle={{ paddingBottom: '2rem' }}
+					onClose={() => { alertinterfas.close(); reject({ message: '已取消支付', errno: -90002 }); }}
+				>
+					<div className="detail_box">
+
+						<div className="value_box">
+							{Number(value)} {unit}
+						</div>
+
+						<div className="label_item">
+							<div className="label">付款地址</div>
+							<div className="value">
+								<div className="title">{from}</div>
+								<div className="sub_title">({walletName})</div>
+							</div>
+						</div>
+
+						<div className="label_item">
+							<div className="label">转入地址</div>
+							<div className="value">{to}</div>
+						</div>
+
+						<div className="label_item">
+							<div className="label">矿工费</div>
+							<div className="value">
+								<div className="title"> {(Number(gas) * Number(gasPrice)) / Math.pow(10, 18)} {unit}</div>
+								<div className="sub_title">≈ Gas({Number(gas)})*Gas Price({Number(gasPrice) / Math.pow(10, 9)}Gwei)</div>
+							</div>
+						</div>
+
+						<Button className="pay_btn" type="primary" onClick={() => {
+							alertinterfas.close();
+							resolve(tx);
+						}}>确认支付</Button>
+					</div>
+				</Modal>
+			</div>, []);
+		});
 	}
 
 }
