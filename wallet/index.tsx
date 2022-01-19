@@ -83,7 +83,7 @@ export class MyRoot<P> extends Root<P> {
 		// register
 		// console.log(['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register',].includes(pathname), pathname);
 
-		return !['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register',].includes(pathname) ? <Tab nav={this._nav} /> : '';
+		return !['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register', '/'].includes(pathname) ? <Tab nav={this._nav} /> : '';
 	}
 }
 

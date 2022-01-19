@@ -3,6 +3,10 @@ import router from '../src/router';
 
 export default [
 	{
+		path: '/',
+		page: () => import('./pages/login'),
+	},
+	{
 		path: '/home',
 		page: () => import('./pages/home'),
 	},
@@ -22,10 +26,7 @@ export default [
 		path: '/wallet_setting',
 		page: () => import('./pages/wallet_setting'),
 	},
-	{
-		path: '/',
-		page: () => import('./pages/login'),
-	},
+
 
 	{
 		path: '/reset_password',
