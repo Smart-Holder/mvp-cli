@@ -6,7 +6,7 @@ export default [
 	// },
 
 
-	
+
 	{
 		path: '/device',
 		page: () => import('./pages/nft'),

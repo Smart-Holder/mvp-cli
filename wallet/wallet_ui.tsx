@@ -294,7 +294,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 						</div>
 
 						<div className="label_item">
-							<div className="label">矿工费</div>
+							<div className="label">矿工费用</div>
 							<div className="value">
 								<div className="title"> {(Number(gas) * Number(gasPrice)) / Math.pow(10, 18)} {unit}</div>
 								<div className="sub_title">≈ Gas({Number(gas)})*Gas Price({Number(gasPrice) / Math.pow(10, 9)}Gwei)</div>

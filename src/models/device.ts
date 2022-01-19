@@ -81,6 +81,12 @@ export async function ping(target: string) {
 	await sdk.mbx.methods.ping({ target });
 }
 
+// 开关：显示/关闭 自动亮度
+export function switchAutoLight(target: string, auto: boolean) {
+	return send(target, 'switchAutoLight', { auto });
+}
+
+
 // 设置音量
 export function screenVolume(target: string, volume: number) {
 	return send(target, 'screenVolume', { volume });
