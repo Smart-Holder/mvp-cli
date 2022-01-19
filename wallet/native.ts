@@ -73,31 +73,31 @@ abstract class APIIMPL extends NativeAPI {
 class IOSAPI extends APIIMPL {
 	private _webkit = (window as any).webkit;
 
-	async scan(): Promise<string> {
+	scan(): Promise<string> {
 		return this.call<string>((id: string) => {
 			this._webkit.messageHandlers.scan.postMessage({ id, args: [] });
 		});
 	}
 
-	async getKeysName(): Promise<string[]> {
+	getKeysName(): Promise<string[]> {
 		return this.call<string[]>((id: string) => {
 			this._webkit.messageHandlers.getKeysName.postMessage({ id, args: [] });
 		});
 	}
 
-	async getKey(name: string): Promise<string | undefined> {
+	getKey(name: string): Promise<string | undefined> {
 		return this.call<string | undefined>((id: string) => {
 			this._webkit.messageHandlers.getKey.postMessage({ id, args: [name] });
 		});
 	}
 
-	async setKey(name: string, value: any): Promise<void> {
+	setKey(name: string, value: any): Promise<void> {
 		return this.call<void>((id: string) => {
 			this._webkit.messageHandlers.setKey.postMessage({ id, args: [name, value] });
 		});
 	}
 
-	async deleteKey(name: string): Promise<void> {
+	deleteKey(name: string): Promise<void> {
 		return this.call<void>((id: string) => {
 			this._webkit.messageHandlers.deleteKey.postMessage({ id, args: [name] });
 		});
@@ -106,25 +106,30 @@ class IOSAPI extends APIIMPL {
 
 class AndroidAPI extends APIIMPL {
 
-	async scan(): Promise<string> {
-		return '';
+	private _api: any = (globalThis as any).__android_api;
+	
+	scan(): Promise<string> {
+		return this.call<string>((id: string) => {
+			this._api.scan(id);
+		});
 	}
 
 	async getKeysName(): Promise<string[]> {
-		return [];
+		var json = this._api.getKeysName();
+		var keys = JSON.parse(json);
+		return keys;
 	}
 
 	async getKey(name: string): Promise<string | undefined> {
-		// TODO ...
-		return '';
+		return this._api.getKey(name);
 	}
 
 	async setKey(name: string, value: any): Promise<void> {
-		// TODO ...
+		this._api.setKey(name, value);
 	}
 
 	async deleteKey(name: string): Promise<void> {
-		// TODO ...
+		return this._api.deleteKey(name);
 	}
 }
 

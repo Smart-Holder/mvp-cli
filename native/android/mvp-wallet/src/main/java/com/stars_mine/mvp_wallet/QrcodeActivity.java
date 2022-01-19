@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView.OnQRCodeReadListener;
 
-public class DecoderActivity extends AppCompatActivity
+public class QrcodeActivity extends AppCompatActivity
     implements ActivityCompat.OnRequestPermissionsResultCallback, OnQRCodeReadListener {
 
   private static final int MY_PERMISSION_REQUEST_CAMERA = 0;
@@ -87,9 +87,9 @@ public class DecoderActivity extends AppCompatActivity
 
     hideStatusTitleBar();
 
-    setContentView(R.layout.content_decoder);
+    setContentView(R.layout.qrcode);
 
-    mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+    mainLayout = (ViewGroup) findViewById(R.id.qrcode_layout);
 
     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
         == PackageManager.PERMISSION_GRANTED) {
@@ -142,7 +142,7 @@ public class DecoderActivity extends AppCompatActivity
       Snackbar.make(mainLayout, "Camera access is required to display the camera preview.",
           Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
         @Override public void onClick(View view) {
-          ActivityCompat.requestPermissions(DecoderActivity.this, new String[] {
+          ActivityCompat.requestPermissions(QrcodeActivity.this, new String[] {
               Manifest.permission.CAMERA
           }, MY_PERMISSION_REQUEST_CAMERA);
         }
