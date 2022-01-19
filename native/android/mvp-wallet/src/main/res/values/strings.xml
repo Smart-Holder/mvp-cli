@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="app_name">QR-ReaderExample</string>
+  <string name="hello_world">Hello world!</string>
+  <string name="menu_settings">Settings</string>
+
+  <color name="transparent">#ffff0000</color>
+
+  <style name="Theme_MAP" parent="Theme.AppCompat.NoActionBar">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <!--item name="android:windowBackground">@color/transparent</item-->
+    <item name="windowActionBarOverlay">true</item>
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+  </style>
+
+</resources>
