@@ -29,7 +29,7 @@ class ImportSecretKeyPage extends NavPage {
 	// 导入钱包
 	async importWallet() {
 		let { address, secret_key_name, password, confirm_password } = this.state;
-
+		if (!address || address.length !== 64) return alert("请输入有效的私钥!");
 		if (confirm_password !== password) return alert("两次密码输入不一致!");
 
 		try {
@@ -67,7 +67,7 @@ class ImportSecretKeyPage extends NavPage {
 
 				<div className="card_box address">
 					<div className="wallet_input_box">
-						<Input placeholder="输入密码或扫描二维码，注意大小写" value={address} onChange={(e) => this.setState({ address: e.target.value })} />
+						<Input inputType='textarea' placeholder="输入密码或扫描二维码，注意大小写" value={address} onChange={(e) => this.setState({ address: e.target.value })} />
 						<IconFont className="qrcode_icon" type="icon-saoma" onClick={this.scan.bind(this)} />
 					</div>
 				</div>

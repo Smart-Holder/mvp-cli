@@ -116,8 +116,8 @@ class DeviceInfo extends NavPage<Device> {
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
 
-			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消取出到钱包');
-			(error?.code != 4001 && errorCode !== 'cancel') && (errorText += errorCode);
+			if (error.errno == -1) return;
+			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到钱包');
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
 			// window.alert((Object.keys(error)));
@@ -175,6 +175,7 @@ class DeviceInfo extends NavPage<Device> {
 
 					} catch (error: any) {
 						console.log(error);
+						if (error.errno == -1) return;
 						// Key derivation failed - possibly wrong password
 						if ('Key derivation failed - possibly wrong password' == error.message) return alert('密码输入错误');;
 						if (-30000 == error.errno) return;

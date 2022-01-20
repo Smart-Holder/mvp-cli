@@ -11,12 +11,12 @@ import { decryptPrivateKey } from "../deps/webpkit/deps/crypto-tx/keystore";
 import { Modal } from 'antd-mobile';
 import { React } from 'webpkit/mobile';
 import IconFont from "../src/components/icon_font";
-import "./util/wallet_ui.scss";
 import Button from "../src/components/button";
 import { chainTraits } from "../src/models";
 import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
 import { alert as dialogAlert } from 'webpkit/lib/dialog';
+import "./util/wallet_ui.scss";
 
 var cryptoTx = require('crypto-tx');
 
@@ -47,7 +47,7 @@ export class SecretKey implements ISecretKey {
 				'请输入密钥解锁密码',
 				'',
 				[
-					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -30000 }) },
+					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -1 }) },
 					{ text: '提交', onPress: password => resolve(password) },
 				],
 				'secure-text',
@@ -58,7 +58,12 @@ export class SecretKey implements ISecretKey {
 	async unlock() {
 		if (!this._key) {
 			let pwd = await this.inputPasswordModal();
-			let priv = decryptPrivateKey(this.keystore, pwd);
+			let priv = new Buffer('');
+			try {
+				priv = decryptPrivateKey(this.keystore, pwd);
+			} catch (error) {
+				throw new Error('密钥密码输入错误!')
+			}
 			this._key = buffer.from(priv);
 			return this._key;
 			// TODO ...
@@ -244,8 +249,11 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 			return UIWalletManager.getRLPEncodedTransaction(tx, signTx);
 		} catch (error: any) {
-			if (error.errno == -30000) throw new Error('.');
-			dialogAlert(error.message);
+			// if (error.errno == -30000) throw new Error('.');
+			let e = new Error(error);
+			if (error.errno) e = error;
+			throw e;
+			// dialogAlert(error.message);
 		}
 	}
 

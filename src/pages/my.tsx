@@ -1,6 +1,6 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
-import  { AssetType, Device, NFT } from '../models';
+import { AssetType, Device, NFT } from '../models';
 // import models from '../sdk';
 import { CloseOutlined } from '@ant-design/icons';
 import chain from '../chain';
@@ -134,14 +134,14 @@ class My extends NavPage<{ address: string }> {
 		} catch (error: any) {
 			removeNftDisabledTimeItem(nftInfo, "nftDisabledTime");
 			newNftItem[disabledKey] = false;
-
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList, ...getDistinguishNftList(newNftList) });
-			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
-			if (error?.code == 4001 || error.errno == -30000) { errorText = '已取消存储操作' }
-			(error?.code != 4001 && errorCode !== 'cancel') && (errorText += errorCode);
+			let errorText = error || errorCode;
 
+			if (error.errno == -1) return;
+
+			if (error?.code == 4001 || error.errno == -30000) { errorText = errorCode || '已取消存储操作' }
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
