@@ -1,0 +1,2 @@
+include ':mvp-wallet'
+include ':qrcode'
