@@ -30,13 +30,13 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android.camera;
+package com.stars_mine.camera;
 
 import android.annotation.SuppressLint;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 
-import com.dlazaro66.qrcodereaderview.SimpleLog;
+import com.stars_mine.qrcodereaderview.SimpleLog;
 
 import java.util.ArrayList;
 import java.util.Collection;

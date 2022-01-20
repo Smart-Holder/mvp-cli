@@ -1,9 +1,9 @@
-package com.dlazaro66.qrcodereaderview;
+package com.stars_mine.qrcodereaderview.qrcodereaderview;
 
 import android.graphics.Point;
 import android.graphics.PointF;
 
-import com.google.zxing.ResultPoint;
+import com.stars_mine.ResultPoint;
 
 public class QRToViewPointTransformer {
 

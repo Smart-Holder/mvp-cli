@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android.camera;
+package com.stars_mine.camera;
 
 import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
 
-import com.dlazaro66.qrcodereaderview.SimpleLog;
-import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.client.android.camera.open.OpenCamera;
-import com.google.zxing.client.android.camera.open.OpenCameraInterface;
+import com.stars_mine.qrcodereaderview.SimpleLog;
+import com.stars_mine.qrcodereaderview.PlanarYUVLuminanceSource;
+import com.stars_mine.camera.open.OpenCamera;
+import com.stars_mine.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
 

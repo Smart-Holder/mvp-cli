@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dlazaro66.qrcodereaderview;
+package com.stars_mine.qrcodereaderview;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

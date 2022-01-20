@@ -1,4 +1,4 @@
-package com.dlazaro66.qrcodereaderview;
+package com.stars_mine.qrcodereaderview;
 
 import android.util.Log;
 
