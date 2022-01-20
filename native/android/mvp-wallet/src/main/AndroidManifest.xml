@@ -45,7 +45,7 @@
 			android:name=".QrcodeActivity"
 			android:label=""
 			android:theme="@style/theme_qrcode"
-			android:configChanges="keyboardHidden|orientation|screenSize"
+
 			android:screenOrientation="portrait"
 			>
 			<intent-filter>

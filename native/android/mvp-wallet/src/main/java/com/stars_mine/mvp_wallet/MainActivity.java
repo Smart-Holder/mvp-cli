@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
+		//if (isDebugger())
+		//Debug.waitForDebugger();
 		super.onCreate(savedInstanceState);
 		hideStatusTitleBar();
 		setContentView(R.layout.main);
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 		_webview = (WebView) _mainLayout.findViewById(R.id.webview);
 		_cache = new Cache(this);
 		initWebview();
+
+		_jsapi.scan("1");
 	}
 
 	private void initWebview() {
