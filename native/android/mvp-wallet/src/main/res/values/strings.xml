@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">QR-ReaderExample</string>
+  <string name="app_name">MVP Wallet</string>
+	<string name="scan">QrScan</string>
   <string name="hello_world">Hello world!</string>
   <string name="menu_settings">Settings</string>
+	<string name="flashlight">开/关 手电筒</string>
 
-  <color name="transparent">#ffff0000</color>
+  <color name="transparent">#77000000</color>
 
-  <style name="Theme_MAP" parent="Theme.AppCompat.NoActionBar">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-    <!--item name="android:windowBackground">@color/transparent</item-->
-    <item name="windowActionBarOverlay">true</item>
+  <style name="theme_Main" parent="Theme.AppCompat">
+<!--    <item name="windowActionBar">false</item>-->
+<!--    <item name="windowNoTitle">true</item>-->
+    <item name="android:windowBackground">@color/transparent</item>
+		<item name="android:windowTitleBackgroundStyle">@color/transparent</item>
+    <item name="android:windowActionBarOverlay">true</item>
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
-  </style>
+  </style><!---->
+
+	<style name="theme_qrcode" parent="Theme.AppCompat">
+		<item name="colorPrimary">@color/transparent</item><!--这个设置标题栏的颜色-->
+		<!--item name="colorPrimaryDark">@color/transparent</item--><!--这个设置状态栏的颜色-->
+		<!--item name="colorAccent">@color/blue</item--><!--控制各个控件被选中时的颜色-->
+		<item name="android:windowActionBar">true</item><!--windowActionBar可以设置没有标题栏-->
+		<item name="windowNoTitle">false</item><!--windowNoTitle可以设置没有标题栏-->
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowTitleStyle">@color/transparent</item>
+		<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+	</style>
 
 </resources>

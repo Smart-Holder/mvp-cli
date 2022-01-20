@@ -2,6 +2,7 @@
 import somes from 'somes';
 
 export abstract class NativeAPI {
+	abstract getStatusBarHeight(): Promise<number>;
 	abstract scan(): Promise<string>;
 	abstract getKeysName(): Promise<string[]>;
 	abstract getKey(name: string): Promise<string | undefined>;
@@ -15,6 +16,10 @@ class DefaultAPI extends NativeAPI {
 
 	private _Key(name: string) {
 		return this._Prefix + name;
+	}
+
+	async getStatusBarHeight() {
+		return 0;
 	}
 
 	async scan(): Promise<string> {
@@ -73,6 +78,12 @@ abstract class APIIMPL extends NativeAPI {
 class IOSAPI extends APIIMPL {
 	private _webkit = (window as any).webkit;
 
+	getStatusBarHeight(): Promise<number> {
+		return this.call<number>((id: string) => {
+			this._webkit.messageHandlers.getStatusBarHeight.postMessage({ id, args: [] });
+		});
+	}
+
 	scan(): Promise<string> {
 		return this.call<string>((id: string) => {
 			this._webkit.messageHandlers.scan.postMessage({ id, args: [] });
@@ -107,6 +118,10 @@ class IOSAPI extends APIIMPL {
 class AndroidAPI extends APIIMPL {
 
 	private _api: any = (globalThis as any).__android_api;
+
+	async getStatusBarHeight(): Promise<number> {
+		return this._api.getStatusBarHeight();
+	}
 	
 	scan(): Promise<string> {
 		return this.call<string>((id: string) => {

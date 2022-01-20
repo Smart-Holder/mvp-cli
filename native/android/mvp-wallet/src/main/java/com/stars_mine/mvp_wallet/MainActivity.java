@@ -1,8 +1,7 @@
 package com.stars_mine.mvp_wallet;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -22,17 +20,15 @@ import android.app.AlertDialog;
 import android.webkit.WebViewClient;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ApplicationInfo;
-import org.json.JSONArray;
-import java.util.ArrayList;
-import java.util.List;
 
 import cfg.MvpCfg;
 
 public class MainActivity extends AppCompatActivity {
 
-	private ViewGroup mainLayout;
-	private WebView webview;
-	private Cache cache;
+	private ViewGroup _mainLayout;
+	private WebView _webview;
+	private Cache _cache;
+	private JSApi _jsapi;
 
 	private void hideStatusTitleBar() {
 		Window window = getWindow();
@@ -59,57 +55,19 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		hideStatusTitleBar();
 		setContentView(R.layout.main);
-		mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-		webview = (WebView) mainLayout.findViewById(R.id.webview);
-		cache = new Cache(this);
-		setWebview();
+		_mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+		_webview = (WebView) _mainLayout.findViewById(R.id.webview);
+		_cache = new Cache(this);
+		initWebview();
 	}
 
-	@JavascriptInterface
-	public int getStatusBarHeight() {
-		int result = 0;
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			result = getResources().getDimensionPixelSize(resourceId);
-		}
-		return result;
-	}
-
-	@JavascriptInterface
-	public String scan() {
-		return "";
-	}
-
-	@JavascriptInterface
-	public String getKeysName() {
-		//Log.d("Test", "getKeysName");
-		List<String> keys = new ArrayList<String>();
-		JSONArray jsonArray = new JSONArray(keys);
-		return jsonArray.toString();
-	}
-
-	@JavascriptInterface
-	public String getKey(String name) {
-		return null;
-	}
-
-	@JavascriptInterface
-	public void setKey(String name, String value) {
-		// TODO ...
-	}
-
-	@JavascriptInterface
-	public void deleteKey(String name) {
-		// TODO ...
-	}
-
-	private void setWebview() {
-		WebSettings settings = webview.getSettings();
+	private void initWebview() {
+		WebSettings settings = _webview.getSettings();
 
 		settings.setAppCacheEnabled(true); // set cache and storage
 		settings.setDomStorageEnabled(true);
 		settings.setAppCacheMaxSize(1024*1024*512); // 512MB
-		settings.setAppCachePath(getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath());
+		settings.setAppCachePath(getApplicationContext().getCacheDir().getPath());
 		settings.setAllowFileAccess(true);
 		settings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -117,15 +75,15 @@ public class MainActivity extends AppCompatActivity {
 		settings.setBuiltInZoomControls(false);
 		settings.setJavaScriptEnabled(true);
 
-		webview.requestFocusFromTouch();
-		webview.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+		_webview.requestFocusFromTouch();
+		_webview.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
 
 		if (isDebugger())
-			webview.setWebContentsDebuggingEnabled(true);
+			_webview.setWebContentsDebuggingEnabled(true);
 
-		webview.addJavascriptInterface(this, "__android_api");
+		_webview.addJavascriptInterface(_jsapi = new JSApi(this, _webview), "__android_api");
 
-		webview.setWebChromeClient(new WebChromeClient() {
+		_webview.setWebChromeClient(new WebChromeClient() {
 			@Override
 			public void onReachedMaxAppCacheSize(long requiredStorage, long quota, WebStorage.QuotaUpdater quotaUpdater) {
 				quotaUpdater.updateQuota(requiredStorage * 2);
@@ -136,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-		webview.setWebViewClient(new WebViewClient() {
+		_webview.setWebViewClient(new WebViewClient() {
 			//@Override
 			public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-				WebResourceResponse res = cache.loadResources(url);
+				WebResourceResponse res = _cache.loadResources(url);
 				if (res != null) { // local cache
 					return res;
 				} else {
@@ -168,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 		// host = "http://192.168.204.16:8080/test/test.html";
 		host += isDebugger() ? "?" + Math.random() : "";
 
-		webview.loadUrl(host);
+		_webview.loadUrl(host);
 	}
 
 	public void alert(
@@ -208,12 +166,20 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override protected void onResume() {
 		super.onResume();
-
 	}
 
 	@Override protected void onPause() {
 		super.onPause();
+	}
 
+	@Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == 101 && requestCode == 101) { // callback
+			 String cb = data.getStringExtra("cb");
+			 if (cb != null && !cb.isEmpty()) {
+				 _jsapi.callback(cb, data);
+			 }
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }

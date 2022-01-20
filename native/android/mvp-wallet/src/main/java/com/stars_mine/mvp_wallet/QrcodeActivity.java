@@ -1,6 +1,7 @@
 package com.stars_mine.mvp_wallet;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -9,7 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -20,6 +24,13 @@ import android.widget.TextView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView.OnQRCodeReadListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class QrcodeActivity extends AppCompatActivity
     implements ActivityCompat.OnRequestPermissionsResultCallback, OnQRCodeReadListener {
 
@@ -27,43 +38,37 @@ public class QrcodeActivity extends AppCompatActivity
 
   private ViewGroup mainLayout;
 
-  private TextView resultTextView;
   private QRCodeReaderView qrCodeReaderView;
   private CheckBox flashlightCheckBox;
-  private CheckBox enableDecodingCheckBox;
   private PointsOverlayView pointsOverlayView;
+  private String _cb = null;
 
-  public int getStatusBarHeight() {
-    int result = 0;
-    int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-    if (resourceId > 0) {
-      result = getResources().getDimensionPixelSize(resourceId);
-    }
-    return result;
-  }
+	private void hideStatusTitleBar() {
+		Window window = getWindow();
+		// window.requestFeature(Window.FEATURE_NO_TITLE);
 
-  private void hideStatusTitleBar() {
-    Window window = getWindow();
-    window.requestFeature(Window.FEATURE_NO_TITLE);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+				| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+				| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+				| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(Color.TRANSPARENT);
+			window.setNavigationBarColor(Color.TRANSPARENT);
+		}
 
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-              | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-      window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-              | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION //这里删除的话  可以解决华为虚拟按键的覆盖
-              | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(Color.TRANSPARENT);
-      window.setNavigationBarColor(Color.TRANSPARENT);//这里删除的话
-    }
-  }
+		//显示返回键
+		ActionBar supportActionBar = getSupportActionBar();
+		if (supportActionBar != null) {
+			supportActionBar.setDisplayHomeAsUpEnabled(true);
+		}
+	}
 
   private void initQRCodeReaderView() {
 
     qrCodeReaderView = (QRCodeReaderView) mainLayout.findViewById(R.id.qrdecoderview);
-    resultTextView = (TextView) mainLayout.findViewById(R.id.result_text_view);
     flashlightCheckBox = (CheckBox) mainLayout.findViewById(R.id.flashlight_checkbox);
-    enableDecodingCheckBox = (CheckBox) mainLayout.findViewById(R.id.enable_decoding_checkbox);
     pointsOverlayView = (PointsOverlayView) mainLayout.findViewById(R.id.points_overlay_view);
 
     qrCodeReaderView.setAutofocusInterval(2000L);
@@ -74,20 +79,15 @@ public class QrcodeActivity extends AppCompatActivity
         qrCodeReaderView.setTorchEnabled(isChecked);
       }
     });
-    enableDecodingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        qrCodeReaderView.setQRDecodingEnabled(isChecked);
-      }
-    });
     qrCodeReaderView.startCamera();
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    hideStatusTitleBar();
+		_cb = getIntent().getStringExtra("cb");
 
-    setContentView(R.layout.qrcode);
+		setContentView(R.layout.qrcode);
 
     mainLayout = (ViewGroup) findViewById(R.id.qrcode_layout);
 
@@ -97,6 +97,8 @@ public class QrcodeActivity extends AppCompatActivity
     } else {
       requestCameraPermission();
     }
+
+		hideStatusTitleBar();
   }
 
   @Override protected void onResume() {
@@ -120,7 +122,6 @@ public class QrcodeActivity extends AppCompatActivity
     if (requestCode != MY_PERMISSION_REQUEST_CAMERA) {
       return;
     }
-
     if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       Snackbar.make(mainLayout, "Camera permission was granted.", Snackbar.LENGTH_SHORT).show();
       initQRCodeReaderView();
@@ -133,8 +134,8 @@ public class QrcodeActivity extends AppCompatActivity
   // "text" : the text encoded in QR
   // "points" : points where QR control points are placed
   @Override public void onQRCodeRead(String text, PointF[] points) {
-    resultTextView.setText(text);
     pointsOverlayView.setPoints(points);
+		scanResult(text);
   }
 
   private void requestCameraPermission() {
@@ -155,5 +156,33 @@ public class QrcodeActivity extends AppCompatActivity
       }, MY_PERMISSION_REQUEST_CAMERA);
     }
   }
+
+  private void scanResult(String result) {
+		Intent intent = new Intent();
+		if (_cb != null && !_cb.isEmpty())
+			intent.putExtra("cb", _cb);
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("data", result);
+		intent.putExtra("data", new JSONObject(data).toString());
+		setResult(101, intent);
+		finish();
+	}
+
+	@Override public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			scanResult("");
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			scanResult("");
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 
 }

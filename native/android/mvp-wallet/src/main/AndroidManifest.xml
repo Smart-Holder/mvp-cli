@@ -6,9 +6,6 @@
     >
 
   <uses-permission android:name="android.permission.CAMERA"/>
-	<uses-permission android:name="cn.sina.youxi.permission.ACCESS_DOWNLOAD_MANAGER" />
-	<uses-permission android:name="cn.sina.youxi.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED" />
-	<uses-permission android:name="cn.sina.youxi.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
 	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 	<uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 	<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
@@ -21,6 +18,7 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 
 	<uses-feature android:name="android.hardware.camera"/>
   <uses-feature android:name="android.hardware.camera.autofocus"/>
@@ -37,10 +35,20 @@
         >
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
+		<activity
+			android:name=".QrcodeActivity"
+			android:label=""
+			android:theme="@style/theme_qrcode"
+			>
+			<intent-filter>
+				<action android:name=".QrcodeActivity"/>
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
   </application>
 
 </manifest>
