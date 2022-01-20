@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stars_mine.qrcodereaderview;
+package com.stars_mine.qrcode;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -36,7 +36,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
+import com.stars_mine.qrcode.camera.CameraManager;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
@@ -135,10 +135,10 @@ public class QRCodeReaderView extends SurfaceView
 	 * Starts camera preview and decoding
 	 */
 	public void startCamera() {
-				if (!mCameraManager.isOpen()) {
-					tryOpenDriver(_holder);
-				}
-				mCameraManager.startPreview();
+		if (!mCameraManager.isOpen()) {
+			tryOpenDriver(_holder);
+		}
+		mCameraManager.startPreview();
 	}
 
 	/**

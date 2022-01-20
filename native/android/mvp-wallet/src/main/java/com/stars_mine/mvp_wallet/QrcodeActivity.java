@@ -21,8 +21,8 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
-import com.dlazaro66.qrcodereaderview.QRCodeReaderView.OnQRCodeReadListener;
+import com.stars_mine.qrcode.QRCodeReaderView;
+import com.stars_mine.qrcode.QRCodeReaderView.OnQRCodeReadListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

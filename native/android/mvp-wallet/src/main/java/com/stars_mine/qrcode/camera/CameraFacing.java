@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stars_mine.camera.open;
+package com.stars_mine.qrcode.camera;
 
 public enum CameraFacing {
 
-  BACK,  // must be value 0!
-  FRONT, // must be value 1!
+	BACK,  // must be value 0!
+	FRONT, // must be value 1!
 
 }
