@@ -11,12 +11,12 @@ import { decryptPrivateKey } from "../deps/webpkit/deps/crypto-tx/keystore";
 import { Modal } from 'antd-mobile';
 import { React } from 'webpkit/mobile';
 import IconFont from "../src/components/icon_font";
-import "./util/wallet_ui.scss";
 import Button from "../src/components/button";
 import { chainTraits } from "../src/models";
 import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
 import { alert as dialogAlert } from 'webpkit/lib/dialog';
+import "./util/wallet_ui.scss";
 
 var cryptoTx = require('crypto-tx');
 
@@ -47,7 +47,7 @@ export class SecretKey implements ISecretKey {
 				'请输入密钥解锁密码',
 				'',
 				[
-					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -30000 }) },
+					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -1 }) },
 					{ text: '提交', onPress: password => resolve(password) },
 				],
 				'secure-text',
@@ -58,7 +58,12 @@ export class SecretKey implements ISecretKey {
 	async unlock() {
 		if (!this._key) {
 			let pwd = await this.inputPasswordModal();
-			let priv = decryptPrivateKey(this.keystore, pwd);
+			let priv = new Buffer('');
+			try {
+				priv = decryptPrivateKey(this.keystore, pwd);
+			} catch (error) {
+				throw Error('密钥密码输入错误!')
+			}
 			this._key = buffer.from(priv);
 			return this._key;
 			// TODO ...
@@ -94,6 +99,10 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		this.provider = new providers.HttpProvider(ctr_network || network || config.defaultNetwork);
 	}
 
+	setAccounts(new_account: Dict<ISecretKey> | undefined) {
+		this._accounts = new_account
+	}
+
 	async currentKey() {
 		await this.keys();
 		// let currkey = await this.selectCurrentKey();
@@ -105,7 +114,9 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async setCurrentKey(keyName: string) {
 		var json = await native.getKey(keyName);
 		var keystore = JSON.parse(String(json));
-		var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
+		// var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
+		var key = new SecretKey(keystore);
+
 		this._currentKey = key; // The first wallet is selected by default
 		// window.alert(JSON.stringify(key))
 	}
@@ -190,13 +201,13 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async keyFrom(address: string) {
 		address = cryptoTx.checksumAddress(address);
 		var keys = await this.keys();
-		let oldKey;
+		// let oldKey;
 		// 记住用户输入密码
-		if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
+		// if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
 		var key = Object.values(keys).find(e => e.address == address);
 		if (!key)
 			throw Error.new('Key not found');
-		return oldKey || key;
+		return key;
 	}
 
 	async onAccounts(user?: WalletUser): Promise<string[]> {
@@ -244,8 +255,11 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 			return UIWalletManager.getRLPEncodedTransaction(tx, signTx);
 		} catch (error: any) {
-			if (error.errno == -30000) throw new Error('.');
-			dialogAlert(error.message);
+			// if (error.errno == -30000) throw new Error('.');
+			let e = new Error(error);
+			if (error.errno) e = error;
+			throw e;
+			// dialogAlert(error.message);
 		}
 	}
 

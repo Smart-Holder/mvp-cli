@@ -269,7 +269,7 @@ export abstract class WalletManagerAbstract implements WalletManager {
 		// 	params: [tx],
 		// });
 		var raw = await this.signTransaction(user, tx);
-		var r = await this.onRequest({ method: 'eth_sendRawTransaction', params: [raw.raw] }, user);
+		var r = await this.onRequest({ method: 'eth_sendRawTransaction', params: [raw?.raw] }, user);
 		return r;
 	}
 
