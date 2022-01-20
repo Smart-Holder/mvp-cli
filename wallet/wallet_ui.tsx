@@ -62,7 +62,7 @@ export class SecretKey implements ISecretKey {
 			try {
 				priv = decryptPrivateKey(this.keystore, pwd);
 			} catch (error) {
-				throw new Error('密钥密码输入错误!')
+				throw Error('密钥密码输入错误!')
 			}
 			this._key = buffer.from(priv);
 			return this._key;
