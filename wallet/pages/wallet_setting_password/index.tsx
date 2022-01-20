@@ -9,6 +9,7 @@ import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
 import native from '../../native'
+import wallet_ui from '../../wallet_ui';
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 
@@ -44,7 +45,7 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				let privateKey = decryptPrivateKey(keyStore, old_password).toString('hex');
 
 				let keyStoreJson = await encryptPrivateKey('0x' + privateKey, confirm_password);
-
+				wallet_ui.setAccounts(undefined);
 				await native.setKey(key, JSON.stringify(keyStoreJson));
 
 				alert('密码修改成功!', () => this.replacePage('/home'));
@@ -56,6 +57,7 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 			try {
 				await native.deleteKey(key);
 				let keyStoreJson = encryptPrivateKey('0x' + address, confirm_password);
+				wallet_ui.setAccounts(undefined);
 				await native.setKey(key, JSON.stringify(keyStoreJson));
 				alert('密码重置成功!', () => this.replacePage('/home'));
 			} catch (error: any) {

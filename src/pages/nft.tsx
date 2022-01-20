@@ -111,7 +111,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, currKey: key });
 		try {
-			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=7534&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=4769&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			console.log('start');
 			let href = await native.scan();
 

@@ -4,7 +4,7 @@ import { Col, Statistic, Spin } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import Input from '../../../src/components/input';
 import Button from '../../../src/components/button';
-import { login, sendPhoneVerify } from '../../user';
+import { login, register, sendPhoneVerify } from '../../user';
 import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
 // import wallet from '../../wallet';
@@ -31,7 +31,8 @@ class Login extends NavPage {
 
 	async triggerLoad() {
 		var state = await storage.get('loginState');
-		state && this.replacePage('/home');
+		let keyname = await native.getKeysName();
+		state && this.replacePage(keyname.length ? '/home' : '/secret_key');
 	}
 
 	async loginMethodClick(login_method: IMethodType) {
@@ -45,6 +46,14 @@ class Login extends NavPage {
 	async loginClick() {
 		this.setState({ loading: true });
 		let { username, password, login_method, v_code } = this.state;
+		let isRegister = false;
+		try {
+			await register(username, password, '000000');
+		} catch (error: any) {
+			if (error.errno == 100307) isRegister = true;
+		}
+		if (!isRegister) alert('该账号未注册，请注册后登录');
+
 		try {
 			if (login_method == 'vcode') {
 				await login(username, { pwd: password, verify: v_code });

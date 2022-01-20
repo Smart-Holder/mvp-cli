@@ -19,6 +19,7 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import models from '../sdk';
+import Header from '../../src/util/header';
 
 import '../css/my.scss';
 
@@ -233,6 +234,7 @@ class My extends NavPage<{ address: string }> {
 		return <div className="my_page">
 			{loading && <Spin style={{ maxHeight: 'none', height: "100%", }} spinning={loading} tip='loading' delay={500} />}
 
+			<Header page={this} title="我的藏品" />
 
 			{/* <div className="my_page_title">{t('我的NFT')}</div> */}
 

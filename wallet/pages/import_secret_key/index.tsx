@@ -29,6 +29,7 @@ class ImportSecretKeyPage extends NavPage {
 	// 导入钱包
 	async importWallet() {
 		let { address, secret_key_name, password, confirm_password } = this.state;
+		if (address.startsWith('0x')) address = address.split('0x')[1];
 		if (!address || (address.length !== 64 && address.length !== 66)) return alert("请输入有效的私钥!");
 		if (confirm_password !== password) return alert("两次密码输入不一致!");
 
