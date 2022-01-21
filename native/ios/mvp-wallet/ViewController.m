@@ -11,12 +11,13 @@
 #import "AVCaptureSessionManager.h"
 #import "QRScan.h"
 #import "Security/Security.h"
+#import "Cache.h"
 
 #import "../../../out/ios_host.h"
 
 @class JSAPI;
 
-@interface ViewController () <WKNavigationDelegate, WKUIDelegate>
+@interface ViewController () <WKNavigationDelegate, WKUIDelegate, WKURLSchemeHandler>
 @property(nonatomic, strong) WKWebView* webview;
 @property(nonatomic, strong) JSAPI* api;
 -(void)scan:(void (^)(NSString * _Nullable))cb;
@@ -34,6 +35,7 @@
 
 	WKUserContentController * api = host.webview.configuration.userContentController;
 
+	[api addScriptMessageHandler:self name:@"getStatusBarHeight"];
 	[api addScriptMessageHandler:self name:@"scan"];
 	[api addScriptMessageHandler:self name:@"getKeysName"];
 	[api addScriptMessageHandler:self name:@"getKey"];
@@ -66,6 +68,12 @@
 	return self;
 }
 
+-(UIWindow*) keyWindow {
+	UIWindow* win = UIApplication.sharedApplication.keyWindow?:
+		UIApplication.sharedApplication.windows.firstObject;
+	return win;
+}
+
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)msg {
 	NSString* name = msg.name;
 	NSDictionary* body = msg.body;
@@ -93,11 +101,16 @@
 	} else if ([name isEqualToString:@"deleteKey"]) {
 		[self deleteKey:[args objectAtIndex:0]];
 		[self callback:id error:nil result:nil];
+	} else if ([name isEqualToString:@"getStatusBarHeight"]) {
+		// self.keyWindow.windowScene.statusBarManager.statusBarStyle;
+		CGFloat height = MIN(UIApplication.sharedApplication.statusBarFrame.size.height, 20);
+		NSNumber *num = [NSNumber numberWithFloat:height];
+		[self callback:id error:nil result:num];
 	} else {
 		[self callback:id error:@"Method non-existent" result:nil];
 	}
 }
-    
+		
 -(NSArray*)getKeysName {
 	return [self getKey:@"keysName" prefix:NO isArray:YES]?:@[];
 }
@@ -197,6 +210,12 @@
 
 @end
 
+@implementation WKWebView(handlesURLScheme)
++(BOOL)handlesURLScheme:(NSString *)urlScheme {
+	return NO;
+}
+@end
+
 @implementation ViewController
 
 - (BOOL)prefersStatusBarHidden {
@@ -208,10 +227,10 @@
 }
 
 - (void) loadView {
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+		[self.navigationController setNavigationBarHidden:YES animated:YES];
 	//创建网页配置对象
 	WKWebViewConfiguration *config = [WKWebViewConfiguration new];
-
+	
 	// 创建设置对象
 	WKPreferences *preference = [WKPreferences new];
 	//最小字体大小 当将javaScriptEnabled属性设置为NO时，可以看到明显的效果
@@ -233,12 +252,17 @@
 	//设置请求的User-Agent信息中应用程序名称 iOS9后可用
 	config.applicationNameForUserAgent = @"mvp-wallet";
 	
+	MvpCache *cache = [MvpCache new];
+	
+	[config setURLSchemeHandler:cache forURLScheme:@"http"];
+	[config setURLSchemeHandler:cache forURLScheme:@"https"];
+	
 	WKWebView* view = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) configuration:config];
 	
 	self.view = view;
 	self.webview = view;
 	
-	view.allowsBackForwardNavigationGestures = YES;
+	view.allowsBackForwardNavigationGestures = NO;
 	view.navigationDelegate = self;
 	view.UIDelegate = self;
 	
@@ -247,7 +271,7 @@
 	if ([[versionarr objectAtIndex:0] integerValue] < 11) {
 		self.edgesForExtendedLayout = UIRectEdgeNone;
 	} else {
-		view.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;//隐藏顶部状态栏，还要设置空间全屏
+		view.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever; //隐藏顶部状态栏，还要设置空间全屏
 	}
 
 	self.api = [[JSAPI alloc] init:self];
@@ -257,6 +281,20 @@
 	NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
 	
 	[view loadRequest:req];
+	
+	//[self.navigationController setNavigationBarHidden:NO animated:YES];
+	
+	self.navigationController.navigationBarHidden = YES;
+	
+	//	CGFloat height = MIN(UIApplication.sharedApplication.statusBarFrame.size.height, 20);
+	//	NSNumber *num = [NSNumber numberWithFloat:height];
+	//	NSLog(@"%@", num);
+}
+
++(UIViewController*) ctr {
+	UIWindow* win = UIApplication.sharedApplication.keyWindow?:
+		UIApplication.sharedApplication.windows.firstObject;
+	return win.rootViewController;
 }
 
 - (void)viewDidLoad {
@@ -350,15 +388,13 @@
 	[AVCaptureSessionManager checkAuthorizationStatusForCameraWithGrantBlock:^{
 		UIStoryboard *board = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 		QRScan *scan = [board instantiateViewControllerWithIdentifier:@"qrScan"];
-        
+				
 		scan.callback = ^(NSString* result) {
-            
-			[self.navigationController popToViewController:self animated:YES];
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
+			[self.navigationController setNavigationBarHidden:YES animated:YES];
 			cb(result);
 		};
 		[self.navigationController pushViewController:scan animated:YES];
-        [self.navigationController setNavigationBarHidden:NO animated:YES];// setHidden:NO];
+		
 	} DeniedBlock:^{
 		[Alert alert:@"权限未开启" message:@"您未开启相机权限，点击确定跳转至系统设置开启" callback:^(){
 			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];

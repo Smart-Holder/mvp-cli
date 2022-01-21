@@ -16,7 +16,7 @@
 		BF229BE2278C388300FDFC96 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BE1278C388300FDFC96 /* main.m */; };
 		BF229BEA278C3A8C00FDFC96 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BE9278C3A8C00FDFC96 /* UIKit.framework */; };
 		BF229BEC278C3ABD00FDFC96 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF229BEB278C3ABD00FDFC96 /* WebKit.framework */; };
-		BF229BF8278C59AA00FDFC96 /* NSURLFile.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BF7278C59AA00FDFC96 /* NSURLFile.m */; };
+		BF229BF8278C59AA00FDFC96 /* Cache.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229BF7278C59AA00FDFC96 /* Cache.m */; };
 		BF229C14278D8C0100FDFC96 /* AVCaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */; };
 		BF229C15278D8C0100FDFC96 /* UIImage+ZZYQRImageExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */; };
 		BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C0B278D890400FDFC96 /* QRScan.m */; };
@@ -40,8 +40,8 @@
 		BF229BE1278C388300FDFC96 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BF229BE9278C3A8C00FDFC96 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BF229BEB278C3ABD00FDFC96 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		BF229BF7278C59AA00FDFC96 /* NSURLFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSURLFile.m; sourceTree = "<group>"; };
-		BF229BF9278C59FC00FDFC96 /* NSURLFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLFile.h; sourceTree = "<group>"; };
+		BF229BF7278C59AA00FDFC96 /* Cache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cache.m; sourceTree = "<group>"; };
+		BF229BF9278C59FC00FDFC96 /* Cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cache.h; sourceTree = "<group>"; };
 		BF229C00278D87F900FDFC96 /* AVCaptureSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVCaptureSessionManager.m; sourceTree = "<group>"; };
 		BF229C01278D87F900FDFC96 /* UIImage+ZZYQRImageExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZZYQRImageExtension.m"; sourceTree = "<group>"; };
 		BF229C02278D87F900FDFC96 /* AVCaptureSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVCaptureSessionManager.h; sourceTree = "<group>"; };
@@ -105,8 +105,8 @@
 				BF229BDD278C388300FDFC96 /* LaunchScreen.storyboard */,
 				BF229BE0278C388300FDFC96 /* Info.plist */,
 				BF229BE1278C388300FDFC96 /* main.m */,
-				BF229BF7278C59AA00FDFC96 /* NSURLFile.m */,
-				BF229BF9278C59FC00FDFC96 /* NSURLFile.h */,
+				BF229BF7278C59AA00FDFC96 /* Cache.m */,
+				BF229BF9278C59FC00FDFC96 /* Cache.h */,
 				BF229C25278D9BD700FDFC96 /* Alert.h */,
 				BF229C24278D9BD700FDFC96 /* Alert.m */,
 			);
@@ -214,7 +214,7 @@
 				BF229BD7278C388000FDFC96 /* ViewController.m in Sources */,
 				BF229BD1278C388000FDFC96 /* AppDelegate.m in Sources */,
 				BF229BE2278C388300FDFC96 /* main.m in Sources */,
-				BF229BF8278C59AA00FDFC96 /* NSURLFile.m in Sources */,
+				BF229BF8278C59AA00FDFC96 /* Cache.m in Sources */,
 				BF229BD4278C388000FDFC96 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,7 +370,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -379,7 +379,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet2.stars-mine.com";
+				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet3.stars-mine.com";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -403,7 +403,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -412,7 +412,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet2.stars-mine.com";
+				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet3.stars-mine.com";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

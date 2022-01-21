@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "NSURLFile.h"
 
 @interface AppDelegate ()
 
@@ -16,15 +15,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
-
-//	[NSURLFile setNSURLFile];
-
 	return YES;
 }
 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application
+	supportedInterfaceOrientationsForWindow:(nullable UIWindow *)window {
+	return UIInterfaceOrientationMaskPortrait;
+}
 
 #pragma mark - UISceneSession lifecycle
-
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
 	// Called when a new scene session is being created.

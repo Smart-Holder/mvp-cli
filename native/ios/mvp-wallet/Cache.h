@@ -6,8 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <WebKit/WKURLSchemeHandler.h>
 
-@interface NSURLFile: NSURLProtocol
-+(void)setNSURLFile;
+@interface MvpCache: NSObject<WKURLSchemeHandler>
 @end
 

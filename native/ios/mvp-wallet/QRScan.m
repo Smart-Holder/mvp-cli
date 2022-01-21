@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *scanTop;
 
 @property (nonatomic, strong) CADisplayLink *link;
+@property (nonatomic, strong) NSString *result;
 
 @property (nonatomic, strong) AVCaptureSessionManager *session;
 @property(assign, nonatomic) BOOL TorchState;
@@ -20,9 +21,17 @@
 
 @implementation QRScan
 
+- (BOOL)shouldAutorotate {
+	return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskPortrait;
+}
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	[self createRightBtn];
+	[self createNavBtn];
 	
 	// 添加跟屏幕刷新频率一样的定时器
 	CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(scan)];
@@ -33,12 +42,15 @@
 																														AVCaptureType:AVCaptureTypeQRCode
 																																 scanRect:CGRectNull
 																														 successBlock:^(NSString *reuslt) {
-			[self showResult:reuslt];
+		[self showResult:reuslt];
 	}];
 	self.session.isPlaySound = YES;
 	
 	[self.session showPreviewLayerInView:self.view];
-    
+	
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
+
+	self.result = @"";
 }
 
 // 在页面将要显示的时候添加定时器
@@ -49,18 +61,27 @@
 }
 
 // 在页面将要消失的时候移除定时器
-- (void)viewWillDisappear:(BOOL)animated{
+- (void)viewWillDisappear:(BOOL)animated {
+	if (_callback) {
+		_callback(self.result);
+	}
 	[super viewWillDisappear:animated];
 	[self.session stop];
 	[self.link removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
-- (void)createRightBtn {
-	UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"相册"
-																													style:UIBarButtonItemStylePlain
-																												 target:self
-																												 action:@selector(showPhotoLibary)];
-	self.navigationItem.rightBarButtonItem = item;
+- (void)createNavBtn {
+	// self.navigationController.navigationBar.backItem.backBarButtonItem
+	
+	UIBarButtonItem *right = [[UIBarButtonItem alloc]initWithTitle:@"相册"
+																													 style:UIBarButtonItemStylePlain
+																													target:self
+																													action:@selector(showPhotoLibary)];
+	self.navigationItem.rightBarButtonItem = right;
+}
+
+- (void)backBtnClicked {
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)showPhotoLibary {
@@ -84,7 +105,6 @@ didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
 		[self.session start];
 		[self.session scanPhotoWith:[info objectForKey:@"UIImagePickerControllerOriginalImage"]
 									 successBlock:^(NSString *reuslt) {
-			// NSString *str = reuslt!= nil ? reuslt : @"没有识别到二维码";
 			[self showResult:reuslt?:@""];
 		}];
 	}];
@@ -97,7 +117,9 @@ didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
 
 - (void)showResult:(NSString *)result {
 	if (_callback) {
-		_callback(result);
+		if (self.navigationController)
+			[self.navigationController popViewControllerAnimated:YES];
+		self.result = result;
 	} else {
 		[Alert alert:@"扫描结果" message:result callback:nil];
 	}
