@@ -290,27 +290,33 @@
 	//	CGFloat height = MIN(UIApplication.sharedApplication.statusBarFrame.size.height, 20);
 	//	NSNumber *num = [NSNumber numberWithFloat:height];
 	//	NSLog(@"%@", num);
+    
+    [self loadURL];
 }
 
 -(void)loadURL {
-	if (_isNetwork) {
+	//if (_isNetwork) {
 		loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
 		NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
 		[self.webview loadRequest:req];
-	}
+	//}
 }
 
 -(void)checkNetwork {
-	if (!_isNetwork) {
-		[self.cache checkNetwork:^(bool ok) {
-			if (ok) {
-				self->_isNetwork = ok;
-				[self loadURL];
-			} else {
+	//if (!_isNetwork) {
+		//[self.cache checkNetwork:^(bool ok) {
+		//	if (ok) {
+		//		self->_isNetwork = ok;
+		//		[self loadURL];
+		//	} else {
+    
+    NSLog(@"%@", @"check");
+    
+    
 				[self performSelector:@selector(checkNetwork) withObject:nil afterDelay:1.0];
-			}
-		}];
-	}
+		//	}
+		//}];
+	//}
 }
 
 - (void)viewDidLoad {

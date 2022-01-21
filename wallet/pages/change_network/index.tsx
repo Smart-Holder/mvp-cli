@@ -20,6 +20,7 @@ const networkList: INetworkListItemProps[] = [
 	{ name: '以太坊', iconType: 'icon-ETH', chainId: 1, network: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161' },
 	{ name: 'Ethereum Testnet Rinkeby', iconType: 'icon-evm', chainId: 4, network: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161' },
 	{ name: 'Matic Testnet Mumbai', iconType: 'icon-evm', chainId: 80001, network: 'https://rpc-mumbai.maticvigil.com/v1/4ea0aeeeb8f8b2d8899acfc89e9852a361bf5b13' },
+	{ name: 'BSN', iconType: 'icon-evm', chainId: 5, network: 'https://opbtest.bsngate.com:18602/api/ac733d05c764467787cebef16f31f646/rpc' },	
 ]
 
 class NetWorkChange extends NavPage {
