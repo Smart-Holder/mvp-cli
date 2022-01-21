@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 		_cache = new Cache(this);
 		initWebview();
 
-		_jsapi.scan("1");
+		//_jsapi.scan("1");
 	}
 
 	private void initWebview() {
