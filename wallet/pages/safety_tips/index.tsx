@@ -40,7 +40,7 @@ export default class extends NavPage {
 		return <div className='safety_tips_page safety_tips'>
 			<Header page={this} title='安全提示' />
 			<div className="top_tips">
-				中心密码、助记词一旦泄漏，价值及可被他人
+				中心密码、助记词一旦泄漏，价值及可被他人掌握
 			</div>
 
 			<div className="safety_tips_content">

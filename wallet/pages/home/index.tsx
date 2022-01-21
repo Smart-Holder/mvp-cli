@@ -12,6 +12,7 @@ import "../../util/wallet_ui.scss";
 import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
+import { getParams } from '../../util/tools';
 
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -19,7 +20,7 @@ export interface IAddressListItemProps {
 	balance?: string;
 	address: string
 }
-ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+
 
 class Home extends NavPage {
 
@@ -27,9 +28,18 @@ class Home extends NavPage {
 		addressList: [] as IAddressListItemProps[]
 	}
 
+	async triggerLoad() {
+		this.getKeyNameList()
+
+		ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+
+	}
 
 	async triggerShow() {
+		this.getKeyNameList()
+	}
 
+	async getKeyNameList() {
 		let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
 		let addressList = keysNameArr.map(async (key) => {
@@ -43,35 +53,42 @@ class Home extends NavPage {
 		console.log(newAddressList, "newAddressList");
 
 		this.setState({ addressList: newAddressList });
-
-		// console.log(data, "data");
-
-
 	}
 
 	async deviceList(item: IAddressListItemProps) {
 		wallet.setCurrentKey(item.key);
-		this.pushPage(`/device?address=${item.address}&keyName=${item.key}`);
+		this.pushPage(`/device?address=${item.address}&keyName=${item.key}`, false);
 	}
 
 
 	async myNft(item: IAddressListItemProps) {
 		wallet.setCurrentKey(item.key);
 		await storage.set('currAccount', item.address);
-		this.pushPage(`/my?address=${item.address}`);
+		this.pushPage(`/my?address=${item.address}`, false);
+	}
+
+	async scanNftInfo() {
+		let href = await native.scan();
+		if (href?.startsWith('http')) {
+			let { token, tokenId } = getParams(href);
+			this.pushPage(`/nft_details?token=${token}&tokenId=${tokenId}`);
+		}
 	}
 
 	render() {
 		let { addressList } = this.state;
 		return <div className="home_page">
-			<Header page={this} title="管理密钥" />
+			<Header hiddenBtn={true} page={this} title="管理密钥" actionBtn={<IconFont type="icon-saoma" style={{width:'.48rem',height:'.48rem'}} onClick={this.scanNftInfo.bind(this)} />} />
+
+			<div className="wallet_part">
+
 			<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
 
 			<div className="wallet_box">
 				<div className="add_wallet" onClick={() => {
 					operation([
 						{ text: '导入管理密码', onPress: () => this.pushPage('/import_secret_key'), style: { textAlign: 'center' } },
-						{ text: '创建管理秘钥', onPress: () => { this.pushPage('/create_account') }, style: { textAlign: 'center' } },
+						{ text: '创建管理密钥', onPress: () => { this.pushPage('/create_account') }, style: { textAlign: 'center' } },
 						{ text: '取消', style: { textAlign: 'center', color: '#1677ff' } },
 					]);
 				}}>
@@ -91,7 +108,7 @@ class Home extends NavPage {
 
 							<div className="mid_part">
 								<div className="left_box">POWER</div>
-								<div className="right_box"> {item.balance} </div>
+								<div className="right_box"> {(String(item.balance).split('.')[1]?.length > 4) ? Number(item.balance).toFixed(4) : item.balance} </div>
 							</div>
 						</div>
 
@@ -108,7 +125,9 @@ class Home extends NavPage {
 					</div>
 				})}
 			</div>
-		</div>
+			</div>
+
+			</div>
 	}
 }
 

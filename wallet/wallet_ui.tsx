@@ -114,11 +114,14 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async setCurrentKey(keyName: string) {
 		var json = await native.getKey(keyName);
 		var keystore = JSON.parse(String(json));
-		// var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
-		var key = new SecretKey(keystore);
+		var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
+		// var key = new SecretKey(keystore);
 
 		this._currentKey = key; // The first wallet is selected by default
-		// window.alert(JSON.stringify(key))
+	}
+
+	async clearCurrentKey() {
+		this._currentKey = undefined;
 	}
 
 	async selectCurrentKey(): Promise<string> {
@@ -155,7 +158,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 	async signFrom(target: string, msg: IBuffer): Promise<Signature> {
 		var device = await getDeviceFormAddress(target);
-		if (device && device.owner) {
+		if (device && device.owner ) {
 			var key = await this.keyFrom(device.owner);
 		} else {
 			var key = await this.currentKey();
@@ -201,13 +204,13 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async keyFrom(address: string) {
 		address = cryptoTx.checksumAddress(address);
 		var keys = await this.keys();
-		// let oldKey;
+		let oldKey;
 		// 记住用户输入密码
-		// if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
+		if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
 		var key = Object.values(keys).find(e => e.address == address);
 		if (!key)
-			throw Error.new('Key not found');
-		return key;
+			throw Error.new('与当前设备绑定的钱包不存在');
+		return oldKey || key;
 	}
 
 	async onAccounts(user?: WalletUser): Promise<string[]> {

@@ -23,7 +23,9 @@ const crypto_tx = require('crypto-tx');
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 
-
+interface IDeviceItemProps extends Device{
+	key?:string
+}
 
 class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
@@ -38,18 +40,17 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	}
 
 	state = {
-		nft: [] as NFT[], device: [] as Device[], loading: true, visible: false, carouselType: 'MateMask' as ICarouselType,
+		nft: [] as NFT[], device: [] as IDeviceItemProps[], loading: true, visible: false, carouselType: 'MateMask' as ICarouselType,
 		keysName: [] as string[],
 		currKey: ''
 	};
 
 	async triggerLoad() {
 		// await initialize();
-		var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
-		console.log(hex);
+		// var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
+		// console.log(hex);
 
-		let keysName = await native.getKeysName() || [];
-		this.setState({ keysName });
+	
 		this.getDeviceList();
 	}
 
@@ -60,9 +61,33 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 	async getDeviceList() {
 		let { address } = this.params;
-		let device = await devices();
-		if (address) device = device.filter((item) => item.owner === address);
-		this.setState({ device, loading: false });
+		let device: IDeviceItemProps[] = await devices();
+		// 仅允许当前手机内的钱包和设备有绑定关系的 设备出现
+		let keysName = await native.getKeysName() || [];
+		let addressListPromise = keysName?.map(async (key) => { return { keyStoreStr: await native.getKey(key),key}});
+		let addressList:any = (await Promise.all(addressListPromise)).reduce((pre,curr) => {
+			let { keyStoreStr, key } = curr;
+			let address = ('0x' + JSON.parse(String(keyStoreStr)).address).toUpperCase()
+			return { ...pre,[address]: {key ,address}};
+		},{});
+
+		let addressArr = Object.keys(addressList);
+		// 从钱包设备进入仅显示当前钱包绑定关系的设备
+		if (address) {
+			device = device.filter((item) => {
+				item.key = addressList[String(address)]?.key;
+				return item.owner === address;
+			})
+		} else {
+		// 从底部tab设备进入显示当前所有钱包有绑定关系的设备
+			device = device.filter(item => {
+				let owner = item.owner.toUpperCase();
+				let ownerItem = addressList[owner];
+				item.key = ownerItem?.key;
+				return addressArr.includes(owner);
+			});
+		};
+		this.setState({ device, loading: false, keysName });
 	}
 
 	// 添加设备
@@ -111,10 +136,9 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, currKey: key });
 		try {
-			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=4769&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
-			console.log('start');
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=5938&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			let href = await native.scan();
-
+			if (!href) return this.setState({loading:false});
 			config.env == 'dev' && (href = href.replace('https://mvp-dev.stars-mine.com', config.host));
 			await wallet.setCurrentKey(key);
 			setDeviceSigner(wallet);
@@ -122,12 +146,9 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 			await device.bind(crypto_tx.checksumAddress(a), c, v);
 			this.getDeviceList();
 		} catch (error: any) {
-			console.log('end');
 			this.setState({ loading: false });
-			if ('Key derivation failed - possibly wrong password' == error.message) return alert('密码输入错误');;
 			alert(error.message);
 		}
-		console.log('other');
 
 	}
 

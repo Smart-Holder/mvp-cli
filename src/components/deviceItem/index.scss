@@ -2,11 +2,26 @@
 	// padding-top: 0.2rem;
 	position: relative;
 	margin-bottom: 0.2rem;
+	overflow: hidden;
+	margin-top: .2rem;
+	.wallet_name{
+		position: absolute;
+		left: 0;
+		top: 0;
+		background-color: rgba(0, 0, 0, 0.486);
+		z-index: 99;
+		color: #fff;
+		padding: 0.06rem 0.25rem;
+		border-radius: 0.2rem 0 0.2rem 0 ;
+		font-size: .26rem;
+	}
 	.device_desc_box {
 		border: 1px solid #eeeeee;
 		padding: 0.24rem;
 		border-radius: 0.16rem;
 		background-color: #fefffe;
+		padding-top: .5rem;
+		overflow: hidden;
 	}
 	.right_arrow {
 		width: 0.36rem;
@@ -49,15 +64,21 @@
 	}
 
 	.bottom_part {
-		display: flex;
-		justify-content: space-between;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 		padding: 0.14rem;
 		padding-right: 0.01rem;
 		background-color: #fafafa;
 		border-radius: 0.08rem;
 		color: #0061f9;
-		align-items: center;
 		font-weight: 500;
+		// flex-direction: column;
+		// .nft_count_box,.wallet_box {
+		// 	display: flex;
+		// 	justify-content: space-between;
+		// 	align-items: center;
+		// }
 		.nft_title {
 			font-size: 0.32rem;
 		}

@@ -62,7 +62,7 @@ class ImportSecretKeyPage extends NavPage {
 			<div className="import_secretkey_page_content">
 				<div className="import_method_card">
 					<div onClick={this.set_import_method.bind(this, 'secret_key')} className={`import_item ${import_method == 'secret_key' && 'active'}`}> <span>私钥导入</span> </div>
-					<div onClick={this.set_import_method.bind(this, 'mnemonic_words')} className={`import_item ${import_method == 'mnemonic_words' && 'active'}`}> <span>助记词导入</span> </div>
+					{/* <div onClick={this.set_import_method.bind(this, 'mnemonic_words')} className={`import_item ${import_method == 'mnemonic_words' && 'active'}`}> <span>助记词导入</span> </div> */}
 				</div>
 
 

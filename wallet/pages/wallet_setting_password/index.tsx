@@ -46,8 +46,8 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 
 				let keyStoreJson = await encryptPrivateKey('0x' + privateKey, confirm_password);
 				wallet_ui.setAccounts(undefined);
+				wallet_ui.clearCurrentKey();
 				await native.setKey(key, JSON.stringify(keyStoreJson));
-
 				alert('密码修改成功!', () => this.replacePage('/home'));
 			} catch (error: any) {
 				console.log(error);
@@ -58,6 +58,7 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				await native.deleteKey(key);
 				let keyStoreJson = encryptPrivateKey('0x' + address, confirm_password);
 				wallet_ui.setAccounts(undefined);
+				wallet_ui.clearCurrentKey();
 				await native.setKey(key, JSON.stringify(keyStoreJson));
 				alert('密码重置成功!', () => this.replacePage('/home'));
 			} catch (error: any) {

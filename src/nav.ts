@@ -14,6 +14,10 @@ class NavPage<P = {}> extends NavPageBase<P> {
 
 	t = (this.props as any).t;
 
+	// async triggerLoad() {
+		// console.log(this.props.priv.m_status = 666, '');
+
+	// }
 
 	triggerShow(data: { active?: 'init', [key: string]: any } = {}) {
 		// document.title = this.title;

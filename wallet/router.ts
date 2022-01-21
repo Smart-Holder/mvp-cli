@@ -2,12 +2,13 @@
 import router from '../src/router';
 
 export default [
+	
 	{
 		path: '/',
 		page: () => import('./pages/login'),
 	},
 	{
-		path: '/home',
+		path: ['/home','/index.html'],
 		page: () => import('./pages/home'),
 	},
 	{

@@ -1,5 +1,5 @@
 import NavPage from '../../../src/nav';
-import { React } from 'webpkit/mobile';
+import { React, ReactDom } from 'webpkit/mobile';
 import { Col, Statistic, Spin } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import Input from '../../../src/components/input';
@@ -8,13 +8,17 @@ import { login, register, sendPhoneVerify } from '../../user';
 import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
 // import wallet from '../../wallet';
-import { Signature, providers, Web3 } from 'web3z';
 import storage from 'somes/storage'
-import "./index.scss";
 import native from '../../native';
+import { MyRoot } from '../..';
+import _404 from '../../../src/pages/404';
+import routes from '../../router';
+import "./index.scss";
 
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
+
+
 
 class Login extends NavPage {
 
@@ -30,9 +34,11 @@ class Login extends NavPage {
 	formRef = React.createRef<FormInstance>();
 
 	async triggerLoad() {
+		ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
-		state && this.replacePage(keyname.length ? '/home' : '/secret_key');
+		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
 	}
 
 	async loginMethodClick(login_method: IMethodType) {

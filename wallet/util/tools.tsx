@@ -2,6 +2,12 @@ import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../../src/components/icon_font';
 
+const TabBarItemConfig = [
+	{ text:'密钥' ,pathname: '/home', selectIcon: 'icon-miyuexuanzhong', icon: 'icon-miyue', current: 0 },
+	{ text:'设备' ,pathname: '/device', selectIcon: 'icon-shebeixuanzhong', icon: 'icon-shebei', current: 2 },
+	{ text:'我的' ,pathname: '/account', selectIcon: 'icon-wodexuanzhong', icon: 'icon-wode', current:1},
+]
+
 
 export class Tab extends ViewController<{ nav: () => Nav }> {
 
@@ -9,14 +15,20 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		current: 0
 	}
 
-	m_click_1 = () => {
-		this.setState({ current: 0 });
-		this.props.nav().replace('/home', false, 0);
-	};
-	m_click_2 = () => {
-		this.setState({ current: 1 });
-		this.props.nav().replace('/account', false, 0);
-	};
+	// m_click_1 = () => {
+	// 	this.setState({ current: 0 });
+	// 	this.props.nav().replace('/home', false, 0);
+	// };
+	// m_click_2 = () => {
+	// 	this.setState({ current: 1 });
+	// 	this.props.nav().replace('/account', false, 0);
+	// };
+
+	m_click(pathname:string,current:number) {
+		this.setState({ current });
+		this.props.nav().replace(pathname, false, 0);
+
+	}
 
 
 	render() {
@@ -25,14 +37,13 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		let style = { width: '.48rem', height: '.48rem' };
 		return (
 			<div className="_tools" >
-				<div className="btn" onClick={this.m_click_1}>
-					{(current === 0 && location.pathname.startsWith("/home")) ? <IconFont style={style} type="icon-miyuexuanzhong" /> : <IconFont style={style} type="icon-miyue" />}
-					<div className={`txt ${(current === 0 && location.pathname.startsWith("/home")) && 'active'}`}>{("密钥")}</div>
-				</div>
-				<div className="btn" onClick={this.m_click_2}>
-					{(current === 1 || location.pathname.startsWith("/account")) ? <IconFont style={style} type="icon-wodexuanzhong" /> : <IconFont style={style} type="icon-wode" />}
-					<div className={`txt ${(current === 1 || location.pathname.startsWith("/account")) && 'active'}`}>{("我的")}</div>
-				</div>
+				{TabBarItemConfig.map(item => {
+					return <div className="btn" onClick={this.m_click.bind(this,item.pathname,item.current)}>
+						{(current === item.current && location.pathname.startsWith(item.pathname)) ? <IconFont style={style} type={item.selectIcon} /> : <IconFont style={style} type={item.icon} />}
+						<div className={`txt ${(current === item.current && location.pathname.startsWith(item.pathname)) && 'active'}`}>{item.text}</div>
+					</div>
+				})}
+
 			</div>
 		);
 	}

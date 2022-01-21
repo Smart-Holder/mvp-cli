@@ -42,6 +42,7 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 	return <div className="device_item" onClick={onClick && onClick}>
 		{showArrow && <img className="right_arrow" src={require("../../assets/right_arrow.png")} alt=">" />}
 		<div className="device_desc_box" >
+			{(deviceInfo as any).key && <div className="wallet_name">{(deviceInfo as any).key}</div>}
 			<div className="top_part">
 				<div className="left_box">
 					<img src={(deviceInfo).screen <= 1 ? require('../../assets/screen_icon.jpg') : require('../../assets/test_device.png')} alt="" />
@@ -58,8 +59,14 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 				</div>
 			</div>
 			<div className="bottom_part">
-				<div className="nft_title">NFT</div>
-				<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
+				{/* <div className="nft_count_box"> */}
+					<div className="nft_title">NFT</div>
+					<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
+				{/* </div> */}
+				{/* <div className="wallet_box">
+					<div className="nft_title">所属钱包</div>
+					<div className="nft_price">{(deviceInfo as any).key}</div>
+				</div> */}
 			</div>
 		</div>
 

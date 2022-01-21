@@ -38,6 +38,8 @@ class DeviceInfo extends NavPage<Device> {
 
 	async triggerLoad() {
 		let owner = this.params.address;
+		console.log(this.params,"this.params");
+		
 		this.getNFTList(owner);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
@@ -59,7 +61,7 @@ class DeviceInfo extends NavPage<Device> {
 	async getDeviceInfo(address: string) {
 		let device = await devices();
 		let deviceObj = ArrayToObj(device, 'address');
-		this.setState({ deviceInfo: deviceObj[address] })
+		this.setState({ deviceInfo: { ...this.params, ...deviceObj[address]} });
 	}
 
 	// 获取nft列表
@@ -118,6 +120,7 @@ class DeviceInfo extends NavPage<Device> {
 
 			if (error.errno == -1) return;
 			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到钱包');
+			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
 			// window.alert((Object.keys(error)));
@@ -196,8 +199,6 @@ class DeviceInfo extends NavPage<Device> {
 
 
 			<div className="device_info_page_content">
-
-
 				<div className="device_card_box">
 					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>

@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 		settings.setAppCachePath(getApplicationContext().getCacheDir().getPath());
 		settings.setAllowFileAccess(true);
 		settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-		settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+//		settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		settings.setGeolocationEnabled(true);
 		settings.setBuiltInZoomControls(false);
 		settings.setJavaScriptEnabled(true);
