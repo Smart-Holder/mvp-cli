@@ -25,13 +25,36 @@
 			font-size: 16px;
 			/*color: #fff;*/
 		}
+		#bodyhark {
+			width: .1rem;
+			height: .1rem;
+			position: absolute;
+			background: rgb(0, 0, 0, 0.01);
+			top: .1rem;
+			left: .1rem;
+			z-index: 120;
+			animation: spin 1s linear infinite;
+		}
+		@keyframes spin {
+			from { transform: rotate(0deg); }
+			to { transform: rotate(360deg); }
+		}
 	</style>
+
 </head>
 
 <body>
+	<div id="bodyhark"></div>
 	<div id="app">
 		<div class="init-loading">Loading..</div>
 	</div>
+
+	<script>
+		if (!/Android|Adr/.test(navigator.userAgent)) { // not android delete hark
+			document.body.removeChild(document.querySelector('#bodyhark'));
+		}
+	</script>
+
 </body>
 
 </html>
