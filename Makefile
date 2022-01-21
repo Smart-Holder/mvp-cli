@@ -25,7 +25,7 @@ dev: cfg
 cfg:
 	@mkdir -p out/android/cfg
 	@$(call cfg,$(ENV))
-	@echo "NSString *loadURL=@\""$(HOST_STR)"\";" > ./out/ios_host.h
+	@echo "NSString *loadURL=@\"$(HOST_STR)/index.html\";" > ./out/ios_host.h
 	@echo "package cfg;public class MvpCfg {public static final String host = \"$(HOST_STR)/index.html\";}" > ./out/android/cfg/MvpCfg.java
 
 pull:

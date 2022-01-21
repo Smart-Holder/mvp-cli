@@ -290,33 +290,40 @@
 	//	CGFloat height = MIN(UIApplication.sharedApplication.statusBarFrame.size.height, 20);
 	//	NSNumber *num = [NSNumber numberWithFloat:height];
 	//	NSLog(@"%@", num);
+	
+	[self loadURL];
 }
 
 -(void)loadURL {
-	if (_isNetwork) {
-		loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
-		NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
-		[self.webview loadRequest:req];
-	}
+#if DEBUG
+	loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
+#endif
+	NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
+	[self.webview loadRequest:req];
 }
 
--(void)checkNetwork {
-	if (!_isNetwork) {
-		[self.cache checkNetwork:^(bool ok) {
-			if (ok) {
-				self->_isNetwork = ok;
-				[self loadURL];
-			} else {
-				[self performSelector:@selector(checkNetwork) withObject:nil afterDelay:1.0];
-			}
-		}];
+-(void)checkWebview {
+	
+	//	NSLog(@"---------------------------------------------------------,%d,%f,%@,%@,%@",
+	//				self.webview.isLoading,
+	//				self.webview.estimatedProgress,
+	//				self.webview.title,
+	//				self.webview.customUserAgent,
+	//				self.webview.URL.path
+	//				);
+	
+	if (!self.webview.isLoading) {
+		if (self.webview.URL.path == nil) { //reload
+			[self loadURL];
+			[self performSelector:@selector(checkNetwork) withObject:nil afterDelay:2.0];
+		}
 	}
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the view.
-	[self checkNetwork];
+	[self checkWebview];
 }
 
 +(UIViewController*) ctr {
@@ -371,6 +378,7 @@
 }
  //进程被终止时调用
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView{
+	NSLog(@"%@", @"webViewWebContentProcessDidTerminate");
 }
 
 
