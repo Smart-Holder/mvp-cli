@@ -256,6 +256,8 @@ public class QRCodeReaderView extends SurfaceView
 			return;
 		}
 
+		_holder = holder;
+
 		if (mCameraManager.getPreviewSize() == null) {
 			SimpleLog.e(TAG, "Error: preview size does not exist");
 			return;

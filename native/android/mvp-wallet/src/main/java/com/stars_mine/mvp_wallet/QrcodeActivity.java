@@ -20,13 +20,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import com.stars_mine.qrcode.QRCodeReaderView;
 import com.stars_mine.qrcode.QRCodeReaderView.OnQRCodeReadListener;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +35,7 @@ public class QrcodeActivity extends AppCompatActivity
 
 	private ViewGroup mainLayout;
 
-	private QRCodeReaderView qrCodeReaderView;
+	private QRCodeReaderView qrCodeReaderView = null;
 	private CheckBox flashlightCheckBox;
 	private PointsOverlayView pointsOverlayView;
 	private String _cb = null;
@@ -67,7 +64,13 @@ public class QrcodeActivity extends AppCompatActivity
 
 	private void initQRCodeReaderView() {
 
-		qrCodeReaderView = (QRCodeReaderView) mainLayout.findViewById(R.id.qrdecoderview);
+		if (qrCodeReaderView != null)
+			mainLayout.removeView(qrCodeReaderView);
+
+		qrCodeReaderView = new QRCodeReaderView(this);
+
+		mainLayout.addView(qrCodeReaderView, 0);
+
 		flashlightCheckBox = (CheckBox) mainLayout.findViewById(R.id.flashlight_checkbox);
 		pointsOverlayView = (PointsOverlayView) mainLayout.findViewById(R.id.points_overlay_view);
 
@@ -85,11 +88,11 @@ public class QrcodeActivity extends AppCompatActivity
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		_cb = getIntent().getStringExtra("cb");
-
 		setContentView(R.layout.qrcode);
 
 		mainLayout = (ViewGroup) findViewById(R.id.qrcode_layout);
+
+		_cb = getIntent().getStringExtra("cb");
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
 				== PackageManager.PERMISSION_GRANTED) {
