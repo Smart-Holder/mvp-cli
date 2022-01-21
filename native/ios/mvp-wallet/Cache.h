@@ -9,5 +9,6 @@
 #import <WebKit/WKURLSchemeHandler.h>
 
 @interface MvpCache: NSObject<WKURLSchemeHandler>
+-(void)checkNetwork:(void (^)(bool))cb;
 @end
 

@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 			//@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				alert("警告", "网络异常", new OnClickListener() {
+				alert("网络异常", "请检查当前网络环境", new OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						MainActivity.this.finish();
 					}

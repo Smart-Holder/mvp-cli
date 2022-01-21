@@ -17,9 +17,12 @@
 
 @class JSAPI;
 
-@interface ViewController () <WKNavigationDelegate, WKUIDelegate, WKURLSchemeHandler>
+@interface ViewController () <WKNavigationDelegate, WKUIDelegate, WKURLSchemeHandler> {
+	bool _isNetwork;
+}
 @property(nonatomic, strong) WKWebView* webview;
 @property(nonatomic, strong) JSAPI* api;
+@property(nonatomic, strong) MvpCache* cache;
 -(void)scan:(void (^)(NSString * _Nullable))cb;
 @end
 
@@ -218,6 +221,13 @@
 
 @implementation ViewController
 
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
+	self = [super initWithCoder:coder];
+	self.cache = [MvpCache new];
+	_isNetwork = false;
+	return self;
+}
+
 - (BOOL)prefersStatusBarHidden {
 	 return NO;
 }
@@ -227,7 +237,8 @@
 }
 
 - (void) loadView {
-		[self.navigationController setNavigationBarHidden:YES animated:YES];
+	
+	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	//创建网页配置对象
 	WKWebViewConfiguration *config = [WKWebViewConfiguration new];
 	
@@ -252,10 +263,8 @@
 	//设置请求的User-Agent信息中应用程序名称 iOS9后可用
 	config.applicationNameForUserAgent = @"mvp-wallet";
 	
-	MvpCache *cache = [MvpCache new];
-	
-	[config setURLSchemeHandler:cache forURLScheme:@"http"];
-	[config setURLSchemeHandler:cache forURLScheme:@"https"];
+	[config setURLSchemeHandler:self.cache forURLScheme:@"http"];
+	[config setURLSchemeHandler:self.cache forURLScheme:@"https"];
 	
 	WKWebView* view = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) configuration:config];
 	
@@ -275,15 +284,7 @@
 	}
 
 	self.api = [[JSAPI alloc] init:self];
-	
-	loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
-	
-	NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
-	
-	[view loadRequest:req];
-	
-	//[self.navigationController setNavigationBarHidden:NO animated:YES];
-	
+
 	self.navigationController.navigationBarHidden = YES;
 	
 	//	CGFloat height = MIN(UIApplication.sharedApplication.statusBarFrame.size.height, 20);
@@ -291,15 +292,37 @@
 	//	NSLog(@"%@", num);
 }
 
-+(UIViewController*) ctr {
-	UIWindow* win = UIApplication.sharedApplication.keyWindow?:
-		UIApplication.sharedApplication.windows.firstObject;
-	return win.rootViewController;
+-(void)loadURL {
+	if (_isNetwork) {
+		loadURL = [NSString stringWithFormat:@"%@?%ld", loadURL, time(NULL)];
+		NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
+		[self.webview loadRequest:req];
+	}
+}
+
+-(void)checkNetwork {
+	if (!_isNetwork) {
+		[self.cache checkNetwork:^(bool ok) {
+			if (ok) {
+				self->_isNetwork = ok;
+				[self loadURL];
+			} else {
+				[self performSelector:@selector(checkNetwork) withObject:nil afterDelay:1.0];
+			}
+		}];
+	}
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the view.
+	[self checkNetwork];
+}
+
++(UIViewController*) ctr {
+	UIWindow* win = UIApplication.sharedApplication.keyWindow?:
+		UIApplication.sharedApplication.windows.firstObject;
+	return win.rootViewController;
 }
 
 // ------------------------------ IMPL WKNavigationDelegate ------------------------------
@@ -321,6 +344,9 @@
  //提交发生错误时调用
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation
 			withError:(NSError *)error {
+	[Alert alert:@"网络异常" message:@"请检查当前网络环境" callback:^{
+		exit(0);
+	}];
 }
 // 接收到服务器跳转请求即服务重定向时之后调用
 - (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation {

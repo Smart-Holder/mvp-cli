@@ -70,6 +70,19 @@ static NSURLSession *_Session = nil;
 	}
 }
 
+-(void)checkNetwork:(void (^)(bool))cb {
+	NSString* loadURL = @"https://mvp.stars-mine.com/";
+	NSURLRequest* req = [NSURLRequest requestWithURL: [NSURL URLWithString:loadURL]];
+	NSURLSessionDataTask *urltask;
+	urltask = [[MvpCache getSession] dataTaskWithRequest:req
+																		 completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			cb(!error);
+		});
+	}];
+	[urltask resume];
+}
+
 //@private
 
 -(void)request:(id <WKURLSchemeTask>)task {
@@ -79,8 +92,7 @@ static NSURLSession *_Session = nil;
 	NSURLSessionDataTask *urltask;
 
 	urltask = [[MvpCache getSession] dataTaskWithRequest:task.request
-																		 completionHandler:^(NSData * _Nullable data,
-																												 NSURLResponse * _Nullable response, NSError * _Nullable error) {
+																		 completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 		[self.sataTasks removeObjectForKey:_id];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
