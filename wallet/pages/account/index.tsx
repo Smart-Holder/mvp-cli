@@ -57,10 +57,10 @@ export default class Account extends NavPage<{ key: string }> {
 				<div className="setting_title">我的数字收藏品</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div> */}
-			<div className="setting_item" onClick={this.deviceList.bind(this)}>
+			{/* <div className="setting_item" onClick={this.deviceList.bind(this)}>
 				<div className="setting_title">管理设备</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
-			</div>
+			</div> */}
 			<div className="setting_item" onClick={this.goResetPassword.bind(this)}>
 				<div className="setting_title">修改登录密码</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>

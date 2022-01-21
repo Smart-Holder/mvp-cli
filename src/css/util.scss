@@ -20,6 +20,14 @@ body {
 ._main .title_box {
 	display: flex;
 	justify-content: space-between;
+	// align-items: center;
+	position: relative;
+	.my_icon {
+		position: absolute;
+		right: 0;
+		transform: translate(0%,-50%);
+    	top: 50%;
+	}
 }
 
 ._main ._title ._b:after {
@@ -35,7 +43,6 @@ body {
 	// background-color: pink;
 	// overflow: hidden;
 	box-sizing: border-box;
-	padding-top: 0.8rem;
 }
 
 ._mini_app ._title ._b {

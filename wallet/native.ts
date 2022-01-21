@@ -120,7 +120,7 @@ class AndroidAPI extends APIIMPL {
 	private _api: any = (globalThis as any).__android_api;
 
 	async getStatusBarHeight(): Promise<number> {
-		return this._api.getStatusBarHeight();
+		return this._api.getStatusBarHeight() / window.devicePixelRatio ;
 	}
 	
 	scan(): Promise<string> {
