@@ -204,6 +204,10 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		return acc || null;
 	}
 
+	async setKey(name: string, key: ISecretKey) {
+		this.addKey(name, key);
+	}
+
 	async keyFrom(address: string) {
 		address = cryptoTx.checksumAddress(address);
 		var keys = await this.keys();
@@ -318,7 +322,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 						</div>
 
 						<div className="label_item">
-							<div className="label">矿工费用</div>
+							<div className="label">操作费用</div>
 							<div className="value">
 								<div className="title"> {(Number(gas) * Number(gasPrice)) / Math.pow(10, 18)} {unit}</div>
 								<div className="sub_title">≈ Gas({Number(gas)})*Gas Price({Number(gasPrice) / Math.pow(10, 9)}Gwei)</div>

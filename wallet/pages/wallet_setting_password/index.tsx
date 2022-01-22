@@ -9,7 +9,7 @@ import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
 import native from '../../util/prefix_native'
-import wallet_ui from '../../wallet_ui';
+import wallet_ui, { SecretKey } from '../../wallet_ui';
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 
@@ -47,7 +47,9 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				let keyStoreJson = await encryptPrivateKey('0x' + privateKey, confirm_password);
 				wallet_ui.setAccounts(undefined);
 				wallet_ui.clearCurrentKey();
-				await native.setKey(key, JSON.stringify(keyStoreJson));
+				// await native.setKey(key, JSON.stringify(keyStoreJson));
+				await wallet_ui.setKey(key, new SecretKey(keyStore));
+
 				alert('密码修改成功!', () => this.replacePage('/home'));
 			} catch (error: any) {
 				console.log(error);
@@ -59,7 +61,9 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				let keyStoreJson = encryptPrivateKey('0x' + address, confirm_password);
 				wallet_ui.setAccounts(undefined);
 				wallet_ui.clearCurrentKey();
-				await native.setKey(key, JSON.stringify(keyStoreJson));
+				// await native.setKey(key, JSON.stringify(keyStoreJson));
+				await wallet_ui.setKey(key, new SecretKey(keyStoreJson));
+
 				alert('密码重置成功!', () => this.replacePage('/home'));
 			} catch (error: any) {
 				alert(error.message);
