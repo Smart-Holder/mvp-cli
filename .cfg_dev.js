@@ -4,7 +4,7 @@ module.exports = {
 	sdk: 'https://mvp-dev.stars-mine.com/service-api',
 	platform: 'eth',
 	env: 'dev',
-	defaultNetwork: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+	defaultNetwork: 'https://opbtest.bsngate.com:18602/api/ac733d05c764467787cebef16f31f646/rpc',
 	contracts: {
 		ETHEREUM_ERC721Proxy: '0xA9764A2A4AE8E772275f8bc75E8AA7d74e1E4525',
 		ETHEREUM_ERC1155Proxy: '0xA532D68894B6d61b86F0807c5C24aA649d92Bd25',

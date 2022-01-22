@@ -487,7 +487,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
-				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem" }} type="icon-ai221" />} />
+				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem" ,marginRight:'.2rem',width:'.38rem',height:'.38rem'}} type="icon-ai221" />} />
 
 				<div className="device_set_carousel_body">
 					{this.getCurrPageContent()}
@@ -522,7 +522,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont type={item.icon} /> {t(item.label)}</p>
+					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont style={{width:'.34rem',height:'.34rem'}} type={item.icon} /> {t(item.label)}</p>
 				})}
 			</Drawer>
 

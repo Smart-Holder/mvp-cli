@@ -15,6 +15,7 @@ import { withTranslation } from 'react-i18next';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
 import '../css/transfer_nft.scss';
+import native from '../../wallet/native';
 
 const tp = require('tp-js-sdk');
 
@@ -45,7 +46,7 @@ class TransferNft extends NavPage<INftItem> {
 	}
 
 	transfer_nft() {
-		tp.invokeQRScanner().then((address: string) => {
+		native.scan().then((address: string) => {
 			// this.transferAction(nft, address);
 			this.setState({ inputToken: address });
 		});
