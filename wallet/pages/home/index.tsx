@@ -71,7 +71,7 @@ class Home extends NavPage {
 		let href = await native.scan();
 		if (href?.startsWith('http')) {
 			let { token, tokenId } = getParams(href);
-			this.pushPage(`/nft_details?token=${token}&tokenId=${tokenId}`);
+			this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
 		}
 	}
 

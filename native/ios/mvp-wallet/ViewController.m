@@ -315,9 +315,11 @@
 	if (!self.webview.isLoading) {
 		if (self.webview.URL.path == nil) { //reload
 			[self loadURL];
-			[self performSelector:@selector(checkNetwork) withObject:nil afterDelay:2.0];
+			[self performSelector:@selector(checkWebview) withObject:nil afterDelay:2.0];
 		}
-	}
+    } else {
+        [self performSelector:@selector(checkWebview) withObject:nil afterDelay:2.0];
+    }
 }
 
 - (void)viewDidLoad {

@@ -141,6 +141,12 @@ export async function setRef(ref: string) { // 用来关联当前会话用户,�
 	await sdk.user.methods.setUser({ ref });
 }
 
+export async function bSNGasTap(address: string) { // 请求水龙头
+	await sdk.user.methods.bSNGasTap({ address });
+}
+
+
+
 export async function exists(name: string) { // is user exists
 	!!await sdk.user.methods.authUser({}, { headers: { 'auth-name': name } });
 }
