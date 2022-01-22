@@ -38,7 +38,7 @@ const settingDarwerConfig = [
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },
 	{ label: "更新检查", value: SettingDarwerType.version, icon: 'icon-banbengengxin' },
 	{ label: "背景颜色", value: SettingDarwerType.color, icon: 'icon-yanse' },
-	{ label: "NFT信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
+	{ label: "数字藏品信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
 ];
 
@@ -336,7 +336,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { t } = this;
 		let { switchValue, switchLoading } = this.state;
 		return <div className="setting_card_box">
-			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏NFT信息和详情二维码')}</div>
+			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏数字藏品信息和详情二维码')}</div>
 			<Switch onChange={async (e) => {
 				this.setState({ switchValue: e, switchLoading: true });
 				await switchDetails(this.params.address, e);
@@ -363,9 +363,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 				>
 					<div className="item_page" >
 						<div className="radio_box">
-							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频NFT')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张藏品')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播藏品')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频藏品')}</div>
 						</div>
 
 						{leftNftList.length ? <div className="nft_list">
@@ -376,7 +376,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 							<div className="right_box">
 								{rightNftList.map(item => this.rendNftItem(item))}
 							</div>
-						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
+						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description={t("暂无数字藏品，请添加数字藏品至钱包")} />}
 					</div>
 					<div className="item_page2" >
 						<div className="time_box">

@@ -17,6 +17,7 @@ import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
 import { alert as dialogAlert } from 'webpkit/lib/dialog';
 import "./util/wallet_ui.scss";
+import { bSNGasTap } from "./user";
 
 var cryptoTx = require('crypto-tx');
 
@@ -133,7 +134,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 						alertInstance.close();
 						resolve(key);
 					}}>
-						<IconFont type="icon-qianbao" />
+						<IconFont type="icon-qianbao" style={{width:'.34rem',height:'.34rem'}} />
 						<div className="name">{key}</div>
 					</Button>
 				})}
@@ -236,6 +237,10 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async onSignTransaction(user: WalletUser, tx: Transaction): Promise<RLPEncodedTransaction | any> {
 		try {
 			var from = tx.from;
+
+			let balance = Number(await this.getBalance(from)) / Math.pow(10, 18);
+			if (!balance) await bSNGasTap(from);
+
 			var key = await this.keyFrom(from);
 			var getSignature = async (message: IBuffer) => await key.sign(message);
 

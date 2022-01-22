@@ -7,3 +7,6 @@ export function sendPhoneVerify(phone: string) {
 	return sdk.user.methods.sendPhoneVerify({ phone });
 }
 
+export function bSNGasTap(address: string) {
+	return sdk.user.methods.bSNGasTap({ address });
+}

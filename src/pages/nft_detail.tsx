@@ -22,7 +22,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 	}
 
 	tabsConfig = [
-		{ title: this.t('基本信息'), index: 0 }, { title: this.t('交易历史'), index: 1 }, { title: this.t('NFT介绍'), index: 2 }
+		{ title: this.t('基本信息'), index: 0 }, { title: this.t('交易历史'), index: 1 }, { title: this.t('数字藏品介绍'), index: 2 }
 	];
 
 
@@ -47,7 +47,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 		let { t } = this;
 		let { nft, nftOrderList, loading } = this.state;
 		return <div className='nft_detail_page'>
-			<Header title={t("NFT详情")} page={this} />
+			<Header title={t("数字藏品详情")} page={this} />
 
 			<div className="nft_detail_page_card_box">
 				<Spin spinning={loading}>

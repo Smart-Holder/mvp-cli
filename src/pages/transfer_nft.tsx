@@ -63,7 +63,7 @@ class TransferNft extends NavPage<INftItem> {
 
 				show({
 					buttons: { [btnText]: () => { } },
-					title: t('NFT存入已发起申请'), text: <div className="transferToDeviceTipBox">
+					title: t('数字藏品存入已发起申请'), text: <div className="transferToDeviceTipBox">
 						<div>{t('请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。')}</div>
 						<div className="tip_img_box">
 
@@ -137,7 +137,7 @@ class TransferNft extends NavPage<INftItem> {
 		const { nftItem, inputToken } = this.state;
 
 		return <div className="transfer_nft_page">
-			<Header title={t("转移NFT")} page={this} />
+			<Header title={t("转移数字藏品")} page={this} />
 
 			<div className="transfer_nft_page_content">
 				<div className="transfer_input_card">

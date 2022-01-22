@@ -12,7 +12,7 @@ const IconFontCN = createFromIconfontCN({
 
 
 const IconFont = (props: IconFontProps) => {
-	return <IconFontCN {...props} className='my_icon' />;
+	return <IconFontCN className='my_icon' {...props}  />;
 }
 
 export default IconFont;

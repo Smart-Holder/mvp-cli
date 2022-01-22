@@ -10,7 +10,7 @@ export default class extends ViewController<{ page: NavPage; title: string; back
 
 	private m_handleClick_1 = (e: any) => {
 		if (this.props.page) {
-			this.props.page.popPage(false);
+			this.props.page.popPage();
 		}
 	}
 

@@ -60,7 +60,7 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 			</div>
 			<div className="bottom_part">
 				{/* <div className="nft_count_box"> */}
-					<div className="nft_title">NFT</div>
+					<div className="nft_title">数字藏品</div>
 					<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
 				{/* </div> */}
 				{/* <div className="wallet_box">

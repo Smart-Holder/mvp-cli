@@ -43,9 +43,6 @@ class Login extends NavPage {
 
 	async loginMethodClick(login_method: IMethodType) {
 		this.setState({ login_method });
-		// await native.setKey('test', '{name:"老六"}');
-		// let data = await native.getKey('test');
-		// alert(data);
 	}
 
 	// 登录事件

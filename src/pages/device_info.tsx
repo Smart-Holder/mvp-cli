@@ -205,7 +205,7 @@ class DeviceInfo extends NavPage<Device> {
 
 
 				<Tabs tabBarUnderlineStyle={{ backgroundColor: '#1677ff', color: '#1677ff', borderColor: '#1677ff' }} tabBarBackgroundColor={'#f5f5f5'} tabBarActiveTextColor={'#1677ff'} tabs={
-					[{ title: this.t('本网络NFT'), index: 0 }, { title: this.t('其他网络NFT'), index: 1 }]
+					[{ title: this.t('本网络数字藏品'), index: 0 }, { title: this.t('其他网络数字藏品'), index: 1 }]
 				}
 					onChange={(item, index) => {
 						this.setState({ tabIndex: index })
@@ -213,13 +213,13 @@ class DeviceInfo extends NavPage<Device> {
 					initialPage={0}
 				>
 					<div className="list_box">
-						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
 					</div>
 					<div className="list_box">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
-							{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT绑定到设备")}
+							{t("您只能查看在其他网络的数字藏品，不能进行任何操作，若您想把其他网络的数字藏品取出到钱包，需切换到该数字藏品所在的网络后才可以将该数字藏品绑定到设备")}
 						</NoticeBar>}
-						{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
 					</div>
 				</Tabs>
 

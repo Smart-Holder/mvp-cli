@@ -2,21 +2,20 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import { Device, NFT } from '../models';
-import { encodeParameters } from '../chain';
 import { devices, setDeviceSigner } from '../models/device';
 import { Spin } from 'antd';
 import { DeviceItem } from '../components/deviceItem';
 import IconFont from '../components/icon_font';
-// import { changeLanguage } from '../util/i18next';
 import { withTranslation } from 'react-i18next';
-import '../css/index.scss';
 import native from '../../wallet/native';
 import wallet from '../../wallet/wallet_ui';
-import "../../wallet/util/wallet_ui.scss";
 import * as config from '../../config';
 import { getParams } from '../../wallet/util/tools';
 import * as device from '../models/device';
 import { alert } from 'webpkit/lib/dialog';
+import { check } from '../../wallet/user';
+import '../css/index.scss';
+import "../../wallet/util/wallet_ui.scss";
 
 const crypto_tx = require('crypto-tx');
 
@@ -61,6 +60,8 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 	async getDeviceList() {
 		let { address } = this.params;
+		await check();
+		
 		let device: IDeviceItemProps[] = await devices();
 		// 仅允许当前手机内的钱包和设备有绑定关系的 设备出现
 		let keysName = await native.getKeysName() || [];
@@ -136,7 +137,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, currKey: key });
 		try {
-			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=5938&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=1625&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			let href = await native.scan();
 			if (!href) return this.setState({loading:false});
 			config.env == 'dev' && (href = href.replace('https://mvp-dev.stars-mine.com', config.host));

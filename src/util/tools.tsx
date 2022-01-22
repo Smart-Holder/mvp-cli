@@ -206,6 +206,7 @@ export const unitLabel: { [key: string]: any } = {
 	1001: "BAOBAB",
 	97: "BSC_TESTNET",
 	5: "GOERLI",
+	5555: "BSN_TEST",
 }
 
 
