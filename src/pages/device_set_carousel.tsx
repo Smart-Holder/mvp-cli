@@ -522,7 +522,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont style={{width:'.34rem',height:'.34rem'}} type={item.icon} /> {t(item.label)}</p>
+					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{display:'flex',alignItems:'center'}}><IconFont style={{width:'.34rem',height:'.34rem',marginRight:'.2rem'}} type={item.icon} /> {t(item.label)}</p>
 				})}
 			</Drawer>
 

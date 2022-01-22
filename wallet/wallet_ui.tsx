@@ -17,7 +17,7 @@ import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
 import { alert as dialogAlert } from 'webpkit/lib/dialog';
 import "./util/wallet_ui.scss";
-import { bSNGasTap } from "./user";
+import { bSNGasTap, setRef } from "./user";
 
 var cryptoTx = require('crypto-tx');
 
@@ -117,7 +117,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		var keystore = JSON.parse(String(json));
 		var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
 		// var key = new SecretKey(keystore);
-
+		await setRef(key.address);
 		this._currentKey = key; // The first wallet is selected by default
 	}
 

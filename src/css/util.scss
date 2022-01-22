@@ -5,7 +5,9 @@ body {
 ._main {
 	background: none;
 }
-
+.ant-image-preview-operations {
+	top: .46rem !important;
+}
 ._main > div {
 	padding-bottom: 1.35rem;
 	// background-color: pink;
@@ -72,6 +74,7 @@ body {
 	padding: 8px 16px;
 	width: 100%;
 	text-align: center;
+	margin-top: .48rem;
 }
 
 ._mini_app ._title ._b > div:first-child {

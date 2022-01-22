@@ -20,7 +20,7 @@ interface INftCardProps {
 }
 
 const NftCard = (props: INftCardProps) => {
-	let { nft, btnClick, transferBtnClick, btnText, btnLoadingText = btnText, showChain = false, showTransferBtn = navigator.userAgent.includes('TokenPocket') } = props;
+	let { nft, btnClick, transferBtnClick, btnText, btnLoadingText = btnText, showChain = false, showTransferBtn = false } = props;
 
 	const { btn_disabled, transfer_btn_disabled } = nft;
 
@@ -58,8 +58,8 @@ const NftCard = (props: INftCardProps) => {
 
 		</div>
 
-		{!showChain && <div className={`action_btn_box ${'btn_list'}`}>
-			<Button loading={transfer_btn_disabled} disabled={btn_disabled || transfer_btn_disabled} type="primary" ghost={true} onClick={transferBtnClick}>{t('转移数字藏品')}</Button>
+		{!showChain && <div className={`action_btn_box ${showTransferBtn && 'btn_list'}`}>
+			{showTransferBtn && <Button loading={transfer_btn_disabled} disabled={btn_disabled || transfer_btn_disabled} type="primary" ghost={true} onClick={transferBtnClick}>{t('转移数字藏品')}</Button>}
 			<Button loading={btn_disabled} disabled={transfer_btn_disabled || btn_disabled} type="primary" ghost={true} onClick={btnClick}>{btn_disabled ? btnLoadingText : btnText}</Button>
 		</div>}
 	</div>;
