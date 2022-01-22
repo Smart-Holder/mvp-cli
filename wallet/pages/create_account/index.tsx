@@ -5,7 +5,7 @@ import Input from '../../../src/components/input';
 import { Checkbox } from 'antd';
 import Button from '../../../src/components/button'
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
-import native from '../../native'
+import native from '../../util/prefix_native'
 import { genPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/account';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";

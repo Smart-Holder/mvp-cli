@@ -15,7 +15,7 @@ import { withTranslation } from 'react-i18next';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
 import '../css/transfer_nft.scss';
-import native from '../../wallet/native';
+import native from '../../wallet/util/prefix_native';
 
 const tp = require('tp-js-sdk');
 

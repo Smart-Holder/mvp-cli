@@ -51,7 +51,7 @@ public class Cache {
 		return "application/octet-stream";
 	}
 
-	public WebResourceResponse loadResources(String ur) {
+	public WebResourceResponse loadResources(String url) {
 		int start_index = url.indexOf("/", 10);
 		if (start_index != -1) {
 			String path = "public" + url.substring(start_index, url.length());

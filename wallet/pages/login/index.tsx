@@ -9,7 +9,7 @@ import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
 // import wallet from '../../wallet';
 import storage from 'somes/storage'
-import native from '../../native';
+import native from '../../util/prefix_native';
 import { MyRoot } from '../..';
 import _404 from '../../../src/pages/404';
 import routes from '../../router';

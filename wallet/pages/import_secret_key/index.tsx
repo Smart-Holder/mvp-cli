@@ -8,7 +8,7 @@ import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
-import native from '../../native'
+import native from '../../util/prefix_native'
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 

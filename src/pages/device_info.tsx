@@ -19,7 +19,7 @@ import { Tabs, NoticeBar } from 'antd-mobile';
 import models from '../sdk';
 import '../css/device_info.scss';
 import { Empty } from 'antd';
-import native from '../../wallet/native';
+import native from '../../wallet/util/prefix_native';
 const tp = require('tp-js-sdk');
 
 

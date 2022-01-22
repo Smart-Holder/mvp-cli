@@ -3,7 +3,7 @@ import { React, ReactDom } from 'webpkit/mobile';
 import Button from '../../../src/components/button';
 import IconFont from '../../../src/components/icon_font';
 import Header from '../../../src/util/header';
-import native from '../../native'
+import native from '../../util/prefix_native'
 import wallet from '../../wallet_ui';
 import storage from 'somes/storage';
 import "./index.scss";
@@ -13,7 +13,7 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
 import { getParams } from '../../util/tools';
-
+// import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
 	key: string;
@@ -40,6 +40,9 @@ class Home extends NavPage {
 	}
 
 	async getKeyNameList() {
+		// let keyname = await prefix_native.getKeysName()
+		// console.log(keyname,"keyname");
+		
 		let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
 		let addressList = keysNameArr.map(async (key) => {
