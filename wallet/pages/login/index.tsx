@@ -39,7 +39,7 @@ class Login extends NavPage {
 
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
-		console.log(keyname,'triggerLoad login keyname');
+		console.log(keyname, 'triggerLoad login keyname', state);
 		
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
 	}

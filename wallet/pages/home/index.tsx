@@ -13,6 +13,7 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
 import { getParams } from '../../util/tools';
+import { loginState } from '../../user';
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -30,7 +31,8 @@ class Home extends NavPage {
 
 	async triggerLoad() {
 		let keysNameArr = await native.getKeysName() || [];
-		if (!keysNameArr.length) {
+		var state = await storage.get('loginState');
+		if (!keysNameArr.length && state?.name) {
 			this.replacePage('/secretkey'); return
 		};
 		this.getKeyNameList(keysNameArr);
