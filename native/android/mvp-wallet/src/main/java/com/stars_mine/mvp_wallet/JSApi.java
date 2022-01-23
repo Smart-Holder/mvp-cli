@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -217,7 +219,16 @@ public class JSApi {
 		int total = getScreenHeight();
 		int pixel = disp.heightPixels;
 		int statusBarHeight = getStatusBarHeight();
-		return total - pixel - statusBarHeight;
+		int h = total - pixel - statusBarHeight;
+		int result = 0;
+		if (h > 0) {
+			Resources res = _ctx.getResources();
+			int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+			if (resourceId > 0) {
+				result = res.getDimensionPixelSize(resourceId);
+			}
+		}
+		return result;
 	}
 
 	@JavascriptInterface
