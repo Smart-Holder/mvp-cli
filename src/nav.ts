@@ -1,6 +1,7 @@
 
 // import somes from 'somes';
 import { NavPage as NavPageBase } from 'webpkit/mobile';
+import native from '../wallet/util/prefix_native';
 
 class NavPage<P = {}> extends NavPageBase<P> {
 
@@ -21,6 +22,7 @@ class NavPage<P = {}> extends NavPageBase<P> {
 
 	triggerShow(data: { active?: 'init', [key: string]: any } = {}) {
 		// document.title = this.title;
+		
 	}
 
 }

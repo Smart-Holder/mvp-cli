@@ -31,7 +31,7 @@ export default class extends NavPage<device.Device> {
 		return `item ${type == this.state.save.type ? 'on': ''}`;
 	}
 
-	triggerShow() {
+	async triggerShow() {
 		this.setState({ save: device.get_screen_save(this.params.address) });
 	}
 

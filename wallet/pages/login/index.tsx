@@ -28,7 +28,8 @@ class Login extends NavPage {
 		username: '',
 		v_code: '',
 		password: '',
-		loading: false
+		loading: false,
+		dateNow:Date.now()
 	}
 
 	formRef = React.createRef<FormInstance>();
@@ -55,7 +56,7 @@ class Login extends NavPage {
 		} catch (error: any) {
 			if (error.errno == 100307) isRegister = true;
 		}
-		if (!isRegister) alert('该账号未注册，请注册后登录');
+		if (!isRegister && login_method == 'vcode') return alert('该账号未注册，请注册后登录');
 
 		try {
 			if (login_method == 'vcode') {
@@ -101,7 +102,7 @@ class Login extends NavPage {
 		if (!verificationPhone(username)) return alert('请输入有效的手机号码');
 		try {
 			await sendPhoneVerify(username);
-			this.setState({ isCountdown: true });
+			this.setState({ isCountdown: true, dateNow:Date.now()});
 		} catch (error: any) {
 			alert(error.message);
 		}
@@ -134,7 +135,7 @@ class Login extends NavPage {
 							<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
 							<div className="get_vcode_box">
 								{isCountdown ?
-									<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
+									<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={this.state.dateNow + 60 * 1000} /> :
 									<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
 							</div>
 						</Col>}

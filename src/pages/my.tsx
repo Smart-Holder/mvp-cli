@@ -145,6 +145,7 @@ class My extends NavPage<{ address: string }> {
 			if (error?.code == 4001 || error.errno == -30000) { errorText = errorCode || '已取消存储操作' }
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
+			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
 
 
 			let btnText = t('我知道了');
@@ -180,11 +181,6 @@ class My extends NavPage<{ address: string }> {
 			},
 			title: t('数字藏品存入已发起申请'), text: <div className="transferToDeviceTipBox">
 				<div>{t('请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。')}</div>
-				<div className="tip_img_box">
-
-					<div className="tip_img_box_text">{t('请点击页面右下角“…”找到“重新加载”更新该页面')}</div>
-					<img src={localStorage.getItem('language') === 'ZH' ? require("../assets/ref_bg.png") : require("../assets/ref_bg_en.jpg")} alt="" />
-				</div>
 			</div>
 		});
 

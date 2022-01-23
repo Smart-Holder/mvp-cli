@@ -182,7 +182,7 @@ export abstract class WalletManagerAbstract implements WalletManager {
 
 	async getBalance(from: string, blockNum: BlockNumber = 'latest') {
 		var num = await this.onRequest<string>({ method: 'eth_getBalance', params: [from, blockNum] });
-		return BigInt(num);
+		return BigInt(num || 0);
 	}
 
 	async getTransactionCount(from: string, blockNum: BlockNumber = 'latest') {

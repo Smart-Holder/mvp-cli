@@ -123,7 +123,8 @@ class DeviceInfo extends NavPage<Device> {
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的密钥';
-			// window.alert((Object.keys(error)));
+			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
+
 
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
@@ -167,7 +168,7 @@ class DeviceInfo extends NavPage<Device> {
 		let cancel = t('取消');
 		let confim = t('确认解绑');
 		showModal({
-			id: 'bind_device', title: t("是否解绑设备"), text: t("请确认是否解绑设备，确认则解除对设备解绑。"), buttons: {
+			id: 'bind_device', title: t("解绑设备"), text: t("请确认是否解绑设备，确认后将解除对设备的绑定。"), buttons: {
 				[cancel]: () => this.setState({ loading: false }), ['@' + confim]: async () => {
 					try {
 						this.setState({ loading: true });

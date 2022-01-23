@@ -41,6 +41,7 @@ import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
 import wallet from './wallet_ui';
 import { Tab } from './util/tools';
+import native from './util/prefix_native';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
@@ -88,9 +89,9 @@ export class MyRoot<P> extends Root<P> {
 	}
 }
 
-initializeChain(wallet).then(async() => {
+initializeChain(wallet).then(() => {
 	let app = document.querySelector('#app');
-
+	// ._main > div
 	// height && app?.setAttribute('style', `padding-top:${height / window.devicePixelRatio}px`);
 	ReactDom.render(<MyRoot routes={routes} notFound={_404} />, app);
 	if (process.env.NODE_ENV == 'development') {

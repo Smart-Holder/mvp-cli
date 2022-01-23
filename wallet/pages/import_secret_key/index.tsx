@@ -71,7 +71,7 @@ class ImportSecretKeyPage extends NavPage {
 
 				<div className="card_box address">
 					<div className="wallet_input_box">
-						<Input inputType='textarea' placeholder="输入密钥或扫描二维码，注意大小写" value={address} onChange={(e) => this.setState({ address: e.target.value })} />
+						<Input inputType='textarea' placeholder="输入私钥或扫描二维码，注意大小写" value={address} onChange={(e) => this.setState({ address: e.target.value })} />
 						<IconFont className="qrcode_icon" type="icon-saoma" onClick={this.scan.bind(this)} />
 					</div>
 				</div>

@@ -84,9 +84,11 @@ class TransferNft extends NavPage<INftItem> {
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
 
-			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || '已取消存储操作';
+			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode ||'已取消存储操作';
 			if (error?.errno == 100400) errorText = error.description;
+			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
 
+			
 			let btnText = t('我知道了');
 			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {t(errorText)}</div>, buttons: { [btnText]: () => { } } });
 		} finally {

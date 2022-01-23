@@ -1,7 +1,7 @@
 import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../../src/components/icon_font';
-
+import native from "./prefix_native"
 const TabBarItemConfig = [
 	{ text:'密钥' ,pathname: '/home', selectIcon: 'icon-miyuexuanzhong', icon: 'icon-miyue', current: 0 },
 	{ text:'设备' ,pathname: '/device', selectIcon: 'icon-shebeixuanzhong', icon: 'icon-shebei', current: 2 },
@@ -12,7 +12,8 @@ const TabBarItemConfig = [
 export class Tab extends ViewController<{ nav: () => Nav }> {
 
 	state = {
-		current: 0
+		current: 0,
+		bottom:30
 	}
 
 	// m_click_1 = () => {
@@ -30,13 +31,23 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 
 	}
 
+	async triggerLoad() {
+		let data = await native.getBottomStatusHeight();
+		// let mainEle = document.querySelector('._main > div');
+		setTimeout(() => {
+			let mainEle = document.querySelector('._main > div');
+			mainEle?.setAttribute('style', `padding-bottom:${data ? '1.55rem' : '1.15rem'}`)
+			console.log(mainEle, "mainEle", data);
+		},1000);
+		this.setState({ bottom: data });
+	}
 
 	render() {
 		// console.log(location.pathname, "this.props");
-		let { current } = this.state;
+		let { current, bottom } = this.state;
 		let style = { width: '.48rem', height: '.48rem' };
 		return (
-			<div className="_tools" >
+			<div className="_tools" style={{ paddingBottom: (bottom || 10) + 'px'}}>
 				{TabBarItemConfig.map(item => {
 					return <div className="btn" onClick={this.m_click.bind(this,item.pathname,item.current)}>
 						{(current === item.current && location.pathname.startsWith(item.pathname)) ? <IconFont style={style} type={item.selectIcon} /> : <IconFont style={style} type={item.icon} />}

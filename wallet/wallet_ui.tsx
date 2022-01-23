@@ -172,7 +172,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	// ---------------------------------- impl DeviceSigner end ----------------------------------
 
 	async keys() {
-		if (!this._accounts) {
+		if (!this._accounts || !Object.keys(this._accounts).length) {
 			this._accounts = {};
 			var keysName = await native.getKeysName() || [];
 			for (var name of keysName) {

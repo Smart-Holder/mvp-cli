@@ -3,6 +3,11 @@ import native from '../native';
 
 class PrefixNative {
 
+	
+	async getBottomStatusHeight() {
+		return await native.getBottomStatusHeight();
+	}
+
 	async getStatusBarHeight() {
 		return await native.getStatusBarHeight();
 	}
