@@ -1,7 +1,10 @@
 .select_wallet_box {
-	&:last-child .wallet_item {
-		// background-color: red;
+
+	.am-modal-body {
+
+		color: #333;
 	}
+
 	.wallet_item {
 		display: flex;
 		align-items: center;
@@ -20,9 +23,9 @@
 	.wallet_item:last-child {
 		margin-bottom: 0;
 	}
-	// .active {
-	// 	background-color: #1677ff3e;
-	// }
+	.active {
+		background-color: rgba(22, 119, 255, 0.243);
+	}
 }
 
 .am-modal-popup {

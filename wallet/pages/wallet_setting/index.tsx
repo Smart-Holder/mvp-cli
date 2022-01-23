@@ -4,12 +4,10 @@ import Header from '../../../src/util/header';
 import IconFont from '../../../src/components/icon_font';
 
 import Button from '../../../src/components/button';
-import native from '../../native';
+import native from '../../util/prefix_native';
 import { copyText } from '../../../src/util/tools';
-import { initialize } from '../../../src/sdk';
 import { confirm } from 'webpkit/lib/dialog';
 
-import { IAddressListItemProps } from '../home';
 import "./index.scss";
 
 export default class Account extends NavPage<{ key: string }> {

@@ -8,7 +8,8 @@ import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
-import native from '../../native'
+import native from '../../util/prefix_native'
+import wallet_ui, { SecretKey } from '../../wallet_ui';
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 
@@ -35,7 +36,9 @@ class ImportSecretKeyPage extends NavPage {
 
 		try {
 			let keyStore = await encryptPrivateKey('0x' + address, password);
-			await native.setKey(secret_key_name, JSON.stringify(keyStore));
+			// await native.setKey(secret_key_name, JSON.stringify(keyStore));
+			await wallet_ui.addKey(secret_key_name, new SecretKey(keyStore));
+
 			alert('私钥导入成功!', () => this.replacePage('/home'));
 		} catch (error: any) {
 			alert(error);

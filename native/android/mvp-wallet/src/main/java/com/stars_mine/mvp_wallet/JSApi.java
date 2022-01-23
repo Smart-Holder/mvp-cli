@@ -41,8 +41,8 @@ public class JSApi {
 
 		_externalAvailable = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
 		if (_externalAvailable) {
-			file = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/.keystore");
-			// file = _ctx.getApplicationContext().getExternalFilesDir("keystore");
+//			file = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/.keystore");
+			 file = _ctx.getApplicationContext().getExternalFilesDir("keystore");
 			file.mkdirs();
 			_keystore2 = file.getPath();
 			Log.d("Test", _keystore2);

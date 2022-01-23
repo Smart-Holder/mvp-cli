@@ -5,10 +5,11 @@ import Input from '../../../src/components/input';
 import { Checkbox } from 'antd';
 import Button from '../../../src/components/button'
 import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
-import native from '../../native'
+import native from '../../util/prefix_native'
 import { genPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/account';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
+import wallet_ui, { SecretKey } from '../../wallet_ui';
 
 
 export default class CreateAccount extends NavPage {
@@ -31,7 +32,8 @@ export default class CreateAccount extends NavPage {
 			let keyStore = await encryptPrivateKey('0x' + privateKey.toString('hex'), password);
 			console.log(privateKey.toString('hex'), "privateKey");
 
-			await native.setKey(address_name, JSON.stringify(keyStore));
+			// await native.setKey(address_name, JSON.stringify(keyStore));
+			await wallet_ui.addKey(address_name, new SecretKey(keyStore));
 			alert('密钥创建成功!', () => this.replacePage('/safety_tips'));
 		} catch (error: any) {
 			alert(error);

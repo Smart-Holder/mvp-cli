@@ -4,7 +4,7 @@ import { Signature, providers } from 'web3z';
 import { RLPEncodedTransaction } from 'web3-core';
 import { DeviceSigner, getDeviceFormAddress } from '../src/models/device';
 import somes from 'somes';
-import native from "./native";
+import native from "./util/prefix_native";
 import buffer, { IBuffer } from 'somes/buffer';
 import * as config from "../config";
 import { decryptPrivateKey } from "../deps/webpkit/deps/crypto-tx/keystore";
@@ -15,7 +15,6 @@ import Button from "../src/components/button";
 import { chainTraits } from "../src/models";
 import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
-import { alert as dialogAlert } from 'webpkit/lib/dialog';
 import "./util/wallet_ui.scss";
 import { bSNGasTap, setRef } from "./user";
 
@@ -125,24 +124,27 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		this._currentKey = undefined;
 	}
 
-	async selectCurrentKey(): Promise<string> {
-		var keysName = await native.getKeysName() || [];
-		return new Promise((resolve) => {
-			let alertInstance = alert('选择管理密钥', <div className="select_wallet_box">
-				{keysName.map(key => {
-					return <Button key={key} className="wallet_item" onClick={async () => {
-						alertInstance.close();
-						resolve(key);
-					}}>
-						<IconFont type="icon-qianbao" style={{width:'.34rem',height:'.34rem'}} />
-						<div className="name">{key}</div>
-					</Button>
-				})}
-			</div>, [
-				{ text: '取消', onPress: () => resolve('') },
-			]);
-		});
-	}
+	// async selectCurrentKey(): Promise<string> {
+	// 	var keysName = await native.getKeysName() || [];
+	// 	let index = '';
+	// 	return new Promise((resolve) => {
+	// 		let alertInstance = alert('选择管理密钥', <div className="select_wallet_box">
+	// 			{keysName.map(key => {
+	// 				return <Button key={key} className="wallet_item" onClick={async () => {
+	// 					// alertInstance.close();
+	// 					// resolve(key);
+	// 					index = key;
+	// 				}}>
+	// 					<IconFont type="icon-qianbao" style={{width:'.34rem',height:'.34rem'}} />
+	// 					<div className="name">{key}</div>
+	// 					<div>index {index} </div>
+	// 				</Button>
+	// 			})}
+	// 		</div>, [
+	// 			{ text: '取消', onPress: () => resolve('') },
+	// 		]);
+	// 	});
+	// }
 
 	// ---------------------------------- impl DeviceSigner ----------------------------------
 	async availableOwner() {
@@ -200,6 +202,10 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async getKey(name: string): Promise<ISecretKey | null> {
 		var acc = (await this.keys())[name];
 		return acc || null;
+	}
+
+	async setKey(name: string, key: ISecretKey) {
+		this.addKey(name, key);
 	}
 
 	async keyFrom(address: string) {
@@ -316,7 +322,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 						</div>
 
 						<div className="label_item">
-							<div className="label">矿工费用</div>
+							<div className="label">操作费用</div>
 							<div className="value">
 								<div className="title"> {(Number(gas) * Number(gasPrice)) / Math.pow(10, 18)} {unit}</div>
 								<div className="sub_title">≈ Gas({Number(gas)})*Gas Price({Number(gasPrice) / Math.pow(10, 9)}Gwei)</div>

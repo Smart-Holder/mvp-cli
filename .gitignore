@@ -13,3 +13,6 @@ nifty
 yarn.lock
 native/ios/mvp-wallet.xcodeproj/project.xcworkspace
 native/ios/mvp-wallet.xcodeproj/xcuserdata
+native/android/mvp-wallet/build
+native/android/mvp-wallet/release
+

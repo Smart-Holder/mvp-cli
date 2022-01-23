@@ -1,7 +1,7 @@
 
 import { React, NavPage, Root, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
-import native from '../../wallet/native';
+import native from '../../wallet/util/prefix_native';
 
 export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element ,hiddenBtn?:boolean}> {
 	state = {

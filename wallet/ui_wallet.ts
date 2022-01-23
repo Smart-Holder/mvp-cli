@@ -3,7 +3,7 @@ import { JsonRpcPayload } from 'web3-core-helpers';
 import { Signature, providers } from 'web3z';
 import { RLPEncodedTransaction, } from 'web3-core';
 
-import native from "./native";
+import native from "./util/prefix_native";
 import buffer, { IBuffer } from 'somes/buffer';
 import storage from "somes/storage";
 import * as config from '../config';

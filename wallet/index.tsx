@@ -41,7 +41,6 @@ import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
 import wallet from './wallet_ui';
 import { Tab } from './util/tools';
-import native from './native';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);

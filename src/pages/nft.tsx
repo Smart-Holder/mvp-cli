@@ -7,13 +7,14 @@ import { Spin } from 'antd';
 import { DeviceItem } from '../components/deviceItem';
 import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
-import native from '../../wallet/native';
+import native from '../../wallet/util/prefix_native';
 import wallet from '../../wallet/wallet_ui';
 import * as config from '../../config';
 import { getParams } from '../../wallet/util/tools';
 import * as device from '../models/device';
 import { alert } from 'webpkit/lib/dialog';
 import { check } from '../../wallet/user';
+import { Modal } from 'antd-mobile'
 import '../css/index.scss';
 import "../../wallet/util/wallet_ui.scss";
 
@@ -94,27 +95,16 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	// 添加设备
 	async addDevice() {
 
+		let keyName = this.params.keyName;
+		if (keyName) {
+			this.selectCurrKey(keyName);
+		} else {	
+			this.setState({ visible: true });
+		}
 
-		// let carouselType = '';
-		// let userAgent = navigator.userAgent
-		// // if ()
-		// if (userAgent.includes('imToken')) {
-		// 	carouselType = 'imToken';
-		// } else if (userAgent.includes('TokenPocket')) {
-		// 	carouselType = 'TokenPocket';
-
-		// 	tp.invokeQRScanner().then((href: string) => {
-		// 		if (href.startsWith('http')) location.href = href;
-		// 	});
-		// 	return
-		// } else {
-		// 	carouselType = 'MateMask';
-		// }
-		// this.setState({ visible: true, carouselType });
-		let data = this.params.keyName || (await wallet.selectCurrentKey());
-		if (!data) return false;
-		// console.log(data);
-		this.selectCurrKey(data);
+		// let data = this.params.keyName || (await wallet.selectCurrentKey());
+		// if (!data) return false;
+		// this.selectCurrKey(data);
 
 	}
 
@@ -135,9 +125,9 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	};
 
 	async selectCurrKey(key: string) {
-		this.setState({ loading: true, currKey: key });
+		this.setState({ loading: true, visible:false });
 		try {
-			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=3789&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=6357&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			let href = await native.scan();
 			if (!href) return this.setState({loading:false});
 			config.env == 'dev' && (href = href.replace('https://mvp-dev.stars-mine.com', config.host));
@@ -153,9 +143,16 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 	}
 
+	async walletModalOk() {
+		// this.setState({ visible:false });
+		let { currKey } = this.state;
+		if (!currKey) return false;
+		this.selectCurrKey(currKey);
+	}
+
 
 	render() {
-		const { device, loading } = this.state;
+		const { device, loading, keysName , currKey} = this.state;
 		const { t } = this;
 		return (
 			<div className="index device_list_page">
@@ -189,22 +186,25 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 				</Modal> */}
 					</div>
 
-					{/* <Modal visible={this.state.visible}
+					<Modal visible={this.state.visible}
 						transparent
 						title={'选择管理密钥'}
 						closable
 						className="select_wallet_box"
 						onClose={() => this.setState({ visible: false })}
-					// footer={[{ text: t('我知道了'), onPress: () => this.setState({ visible: false }) }]}
+						footer={[
+							{ text: t('取消'), onPress: () => this.setState({ visible:false}) },
+							{ text: t('确定'), onPress: this.walletModalOk.bind(this) }
+						]}
 					>
 						{keysName.map(key => {
-							return <div key={key} className="wallet_item" onClick={this.selectCurrKey.bind(this, key)}>
+							return <div key={key} className={`wallet_item ${currKey == key && 'active'}`} onClick={() => this.setState({ currKey: key == currKey ? '' : key})}>
 								<IconFont type="icon-qianbao" />
 								<div className="name">{key}</div>
 							</div>
 						})}
 
-					</Modal> */}
+					</Modal>
 				</Spin>
 
 			</div>
