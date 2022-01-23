@@ -3,7 +3,7 @@ import { React, NavPage, Root, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import native from '../../wallet/util/prefix_native';
 
-export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element ,hiddenBtn?:boolean}> {
+export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element, hiddenBtn?: boolean, className?:string}> {
 	state = {
 		height:0
 }
@@ -31,7 +31,7 @@ export default class extends ViewController<{ page: NavPage; title: string; back
 		let { height } = this.state;
 		// console.log(this.props.page, nav.length, this.props.back, "this.props.page");
 		return (
-			<div className="_title" style={height ? { marginTop: height + 'px'}:{}}>
+			<div className={`_title ${this.props.className}`} style={height ? { marginTop: height + 'px'}:{}}>
 				{/* <div className="_a"></div> */}
 				{/* <div className="status_bar_box" style={{}}></div> */}
 				<div className="title_box">

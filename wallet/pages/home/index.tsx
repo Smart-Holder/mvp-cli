@@ -13,7 +13,12 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
 import { getParams } from '../../util/tools';
-import { loginState } from '../../user';
+
+import * as device from '../../../src/models/device';
+import { Spin } from 'antd';
+import { alert } from 'webpkit/lib/dialog';
+
+const crypto_tx = require('crypto-tx');
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -26,7 +31,8 @@ export interface IAddressListItemProps {
 class Home extends NavPage {
 
 	state = {
-		addressList: [] as IAddressListItemProps[]
+		addressList: [] as IAddressListItemProps[],
+		loading:false
 	}
 
 	async triggerLoad() {
@@ -45,7 +51,8 @@ class Home extends NavPage {
 		this.getKeyNameList(keysNameArr);
 	}
 
-	async getKeyNameList(keysNameArr:string[]) {
+	async getKeyNameList(keysNameArr: string[]) {
+		this.setState({ loading: true });
 		// let keyname = await prefix_native.getKeysName()
 		// let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
@@ -59,7 +66,7 @@ class Home extends NavPage {
 		let newAddressList = await Promise.all(addressList);
 		console.log(newAddressList, "newAddressList");
 
-		this.setState({ addressList: newAddressList });
+		this.setState({ addressList: newAddressList, loading:false });
 	}
 
 	async deviceList(item: IAddressListItemProps) {
@@ -77,8 +84,17 @@ class Home extends NavPage {
 	async scanNftInfo() {
 		let href = await native.scan();
 		if (href?.startsWith('http')) {
-			let { token, tokenId } = getParams(href);
-			this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
+			let { token, tokenId, a, c, v} = getParams(href);
+			if (token) {
+			return	this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
+
+			} else if (a) {
+				this.setState({ loading:true});
+				await device.bind(crypto_tx.checksumAddress(a), c, v);
+				this.setState({ loading: false });
+				alert('设备绑定成功!', () => this.replacePage('/device'));
+			}
+
 		}
 	}
 
@@ -88,11 +104,13 @@ class Home extends NavPage {
 	}
 
 	render() {
-		let { addressList } = this.state;
+		let { addressList, loading } = this.state;
 		return <div className="home_page">
+
 			<Header hiddenBtn={true} page={this} title="管理密钥" actionBtn={<IconFont type="icon-saoma" style={{width:'.48rem',height:'.48rem'}} onClick={this.scanNftInfo.bind(this)} />} />
 
 			<div className="wallet_part">
+				<Spin spinning={loading} className="wallet_home_loading">
 
 			<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
 
@@ -140,6 +158,7 @@ class Home extends NavPage {
 					</div>
 				})}
 			</div>
+			</Spin>
 			</div>
 
 			</div>
