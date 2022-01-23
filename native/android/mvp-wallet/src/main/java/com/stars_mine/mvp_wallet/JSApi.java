@@ -1,10 +1,14 @@
 package com.stars_mine.mvp_wallet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import org.json.JSONArray;
@@ -13,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -119,6 +124,26 @@ public class JSApi {
 		}
 	}
 
+	private int getScreenHeight() {
+		int dpi = 0;
+		WindowManager windowManager = (WindowManager)
+			_ctx.getSystemService(Context.WINDOW_SERVICE);
+		Display display = windowManager.getDefaultDisplay();
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		@SuppressWarnings("rawtypes")
+		Class c;
+		try {
+			c = Class.forName("android.view.Display");
+			@SuppressWarnings("unchecked")
+			Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+			method.invoke(display, displayMetrics);
+			dpi = displayMetrics.heightPixels;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dpi;
+	}
+
 	@JavascriptInterface
 	public int getStatusBarHeight() {
 		int result = 0;
@@ -127,6 +152,11 @@ public class JSApi {
 			result = _ctx.getResources().getDimensionPixelSize(resourceId);
 		}
 		return result;
+	}
+
+	@JavascriptInterface
+	public int getBottomStatusHeight() {
+		return getScreenHeight() - _ctx.getResources().getDisplayMetrics().heightPixels;
 	}
 
 	@JavascriptInterface
