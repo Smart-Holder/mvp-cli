@@ -37,12 +37,12 @@ class PrefixNative {
 	}
 
 
-	async getKeysName(): Promise<string[]> {
+	async getKeysName(account_name?:string): Promise<string[]> {
 
 		var keys: string[] = [];
 		let keyArr = await native.getKeysName();
 		let loginstate = await storage.get('loginState');
-		let prefix = this._Prefix + loginstate?.name + '_';
+		let prefix = this._Prefix + (loginstate?.name || account_name) + '_';
 		
 		keyArr.forEach(key => {
 			if (key.substring(0, prefix.length) == prefix) {

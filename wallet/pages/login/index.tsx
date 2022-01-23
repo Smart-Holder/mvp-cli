@@ -39,7 +39,7 @@ class Login extends NavPage {
 
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
-		console.log(keyname,'login keyname');
+		console.log(keyname,'triggerLoad login keyname');
 		
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
 	}
@@ -58,7 +58,7 @@ class Login extends NavPage {
 		} catch (error: any) {
 			if (error.errno == 100307) isRegister = true;
 		}
-		if (!isRegister && login_method == 'vcode') return alert('该账号未注册，请注册后登录');
+		if (!isRegister && login_method == 'password') return alert('该账号未注册，请注册后登录');
 
 		try {
 			if (login_method == 'vcode') {
@@ -66,9 +66,11 @@ class Login extends NavPage {
 			} else {
 				await login(username, { pwd: password });
 			}
-			let keyName = await native.getKeysName();
-			if (await (keyName.length)) return this.replacePage('/home');
-			this.replacePage('/secretkey');
+			let keyName = await native.getKeysName(username);
+				console.log(keyName, 'login keyname');
+				if ( keyName.length) return this.replacePage('/home');
+				this.replacePage('/secretkey');
+				
 		} catch (error: any) {
 			alert(error.message);
 		}

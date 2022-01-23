@@ -45,8 +45,6 @@ class Home extends NavPage {
 
 	async getKeyNameList(keysNameArr:string[]) {
 		// let keyname = await prefix_native.getKeysName()
-		// console.log(keyname,"keyname");
-		
 		// let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
 		let addressList = keysNameArr.map(async (key) => {
