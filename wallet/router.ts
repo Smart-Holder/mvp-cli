@@ -7,6 +7,11 @@ export default [
 		path: '/',
 		page: () => import('./pages/login'),
 	},
+	
+	{
+		path:'/wallet_address',
+		page: () => import('./pages/wallet_address'),
+	},
 	{
 		path: ['/home','/index.html'],
 		page: () => import('./pages/home'),

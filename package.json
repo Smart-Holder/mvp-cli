@@ -12,9 +12,11 @@
 		"deploy2": "UPGRADE=true truffle deploy"
 	},
 	"devDependencies": {
+		"@types/qrcode.react": "^1.0.2",
 		"crypto-tx": "file:deps/webpkit/deps/crypto-tx",
 		"moment": "^2.29.1",
 		"mvp-cli-tools": "file:tools",
+		"qrcode.react": "^1.0.1",
 		"somes": "file:deps/webpkit/deps/somes",
 		"web3z": "file:deps/web3z",
 		"webpkit": "file:deps/webpkit"

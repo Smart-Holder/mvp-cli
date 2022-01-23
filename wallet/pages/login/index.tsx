@@ -63,7 +63,8 @@ class Login extends NavPage {
 			} else {
 				await login(username, { pwd: password });
 			}
-			if (await (await native.getKeysName()).length) return this.replacePage('/home');
+			let keyName = await native.getKeysName();
+			if (await (keyName.length)) return this.replacePage('/home');
 			this.replacePage('/secretkey');
 		} catch (error: any) {
 			alert(error.message);

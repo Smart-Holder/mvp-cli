@@ -103,7 +103,7 @@ class DeviceInfo extends NavPage<Device> {
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
 			await this._Withdraw(nft, to);
 
-			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, async () => {
+			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到密钥成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, async () => {
 				await getNFTList();
 				let dsq_id = setTimeout(async () => {
 					let alert_id = this.state.alert_id as any;
@@ -119,10 +119,10 @@ class DeviceInfo extends NavPage<Device> {
 			let errorCode = error.msg || error.message || error.description;
 
 			if (error.errno == -1) return;
-			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到钱包');
+			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到密钥');
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
-			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
+			if (error?.errno == 100400) errorText = '请切换至对应链的密钥';
 			// window.alert((Object.keys(error)));
 
 			newNftItem[disabledKey] = false;
@@ -138,7 +138,7 @@ class DeviceInfo extends NavPage<Device> {
 	_Withdraw = async (nft: NFT, to: string) => {
 		const { t } = this;
 		var from = nft.ownerBase || '';
-		var l = await Loading.show(t('正在取出到您的钱包中,请勿操作'));
+		var l = await Loading.show(t('正在取出到您的密钥中,请勿操作'));
 		return new Promise(async (resolve, reject) => {
 			try {
 
@@ -146,7 +146,7 @@ class DeviceInfo extends NavPage<Device> {
 				// debugger
 				proxyAddress(nft.type, nft.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
-				chain.assetChain(nft.chain, '请切换至对应链的钱包');
+				chain.assetChain(nft.chain, '请切换至对应链的密钥');
 				await nft_proxy.New(nft.owner, nft.chain)
 					.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
 				resolve(nft);
@@ -195,7 +195,7 @@ class DeviceInfo extends NavPage<Device> {
 
 		return <div className="device_info_page">
 			{/* <div className="device_info_page_title">设备列表</div> */}
-			<Header title={t("设备列表")} page={this} />
+			<Header title={t("设备详情页")} page={this} />
 
 
 			<div className="device_info_page_content">
@@ -213,13 +213,13 @@ class DeviceInfo extends NavPage<Device> {
 					initialPage={0}
 				>
 					<div className="list_box">
-						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
+						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到密钥")} btnLoadingText={t("取出到密钥")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至密钥')} />)}
 					</div>
 					<div className="list_box">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
-							{t("您只能查看在其他网络的数字藏品，不能进行任何操作，若您想把其他网络的数字藏品取出到钱包，需切换到该数字藏品所在的网络后才可以将该数字藏品绑定到设备")}
+							{t("您只能查看在其他网络的数字藏品，不能进行任何操作，若您想把其他网络的数字藏品取出到密钥，需切换到该数字藏品所在的网络后才可以将该数字藏品绑定到设备")}
 						</NoticeBar>}
-						{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
+						{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到密钥")} btnLoadingText={t("取出到密钥")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至密钥')} />)}
 					</div>
 				</Tabs>
 

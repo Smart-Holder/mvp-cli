@@ -5,6 +5,7 @@ import { FormInstance } from 'antd/lib/form';
 import Input from '../../../src/components/input';
 import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
+import native from '../../util/prefix_native';
 
 import "./index.scss";
 import { verificationPhone } from '../../util/tools';
@@ -20,7 +21,8 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 		username: '',
 		v_code: '',
 		password: '',
-		confirm_password: ''
+		confirm_password: '',
+		dateNow: Date.now()
 	}
 
 	formRef = React.createRef<FormInstance>();
@@ -47,7 +49,9 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 			try {
 				await login(username, { pwd: password, verify: v_code });
 				await changePwd(username, password);
-				alert('密码修改成功!', () => this.pushPage('/secretkey'));
+
+				let keyName = await native.getKeysName();
+				alert('密码修改成功!', () => this.pushPage(keyName.length ? '/home': '/secretkey'));
 
 			} catch (error: any) {
 				alert(error.message);
@@ -80,7 +84,7 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 
 	async getVcode() {
 		await sendPhoneVerify(this.state.username);
-		this.setState({ isCountdown: true });
+		this.setState({ isCountdown: true ,dateNow:Date.now()});
 	}
 
 	render() {
@@ -114,7 +118,7 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 						<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
 						<div className="get_vcode_box">
 							{isCountdown ?
-								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
+								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={this.state.dateNow + 60 * 1000} /> :
 								<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
 						</div>
 					</Col>

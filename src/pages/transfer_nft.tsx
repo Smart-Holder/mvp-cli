@@ -66,11 +66,6 @@ class TransferNft extends NavPage<INftItem> {
 					buttons: { [btnText]: () => { } },
 					title: t('数字藏品存入已发起申请'), text: <div className="transferToDeviceTipBox">
 						<div>{t('请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。')}</div>
-						<div className="tip_img_box">
-
-							<div className="tip_img_box_text">{t('请点击页面右下角“…”找到“重新加载”更新该页面')}</div>
-							<img src={localStorage.getItem('language') === 'ZH' ? require("../assets/ref_bg.png") : require("../assets/ref_bg_en.jpg")} alt="" />
-						</div>
 					</div>
 				});
 				if (this.nav.length > 1) {
@@ -79,7 +74,7 @@ class TransferNft extends NavPage<INftItem> {
 					this.replacePage('/my');
 				}
 			} else {
-				alert(t('请复制或扫码输入钱包地址'), () => this.inputRef.current?.focus());
+				alert(t('请复制或扫码输入密钥地址'), () => this.inputRef.current?.focus());
 			}
 
 		} catch (error: any) {
@@ -87,7 +82,9 @@ class TransferNft extends NavPage<INftItem> {
 			removeNftDisabledTimeItem(nft, "nftDisabledTime");
 
 			let errorText = error;
-			if (error?.code == 4001 || error.errno == -30000) errorText = '已取消存储操作';
+			let errorCode = error.msg || error.message || error.description;
+
+			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || '已取消存储操作';
 			if (error?.errno == 100400) errorText = error.description;
 
 			let btnText = t('我知道了');
@@ -105,7 +102,7 @@ class TransferNft extends NavPage<INftItem> {
 
 			try {
 				if (nft.type == AssetType.ERC721) { // erc721
-					chain.assetChain(nft.chain, '请切换至对应链的钱包');
+					chain.assetChain(nft.chain, '请切换至对应链的密钥');
 					if (ownerBase) {
 						await erc721.safeTransferToProxy( // 转移给代理协约
 							nft.token, [address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.chain));
@@ -114,7 +111,7 @@ class TransferNft extends NavPage<INftItem> {
 					}
 					resolve('');
 				} else if (nft.type == AssetType.ERC1155) {
-					chain.assetChain(nft.chain, '请切换至对应链的钱包');
+					chain.assetChain(nft.chain, '请切换至对应链的密钥');
 					if (ownerBase) {
 						await nft_proxy.New(nft.owner, nft.chain)
 							.withdraw(address, nft.token, BigInt(nft.tokenId), BigInt(nft.count));
@@ -146,7 +143,7 @@ class TransferNft extends NavPage<INftItem> {
 						<div className="label" >{t("转移到")}: </div>
 						<Input.TextArea ref={this.inputRef} required value={inputToken} onChange={(e) => {
 							this.setState({ inputToken: e.target.value });
-						}} placeholder={t("请复制或扫码输入钱包地址")} allowClear />
+						}} placeholder={t("请复制或扫码输入密钥地址")} allowClear />
 						<div><img onClick={this.transfer_nft.bind(this)} src={require('../assets/qr_icon2.png')} /> </div>
 					</div>
 				</div>

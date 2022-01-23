@@ -3,7 +3,12 @@ import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import IconFont from '../../../src/components/icon_font';
 import "./index.scss";
-class SecretKeyPage extends NavPage {
+import Button from '../../../src/components/button';
+import { logout } from '../../user';
+// import { LeftOutlined} from '@ant-design/icons';
+
+
+class SecretKeyPage extends NavPage<{isHomePage?:string}> {
 	render() {
 		return <div className="secret_key_page">
 			<Header title="密钥" page={this} />
@@ -26,6 +31,11 @@ class SecretKeyPage extends NavPage {
 					</div>
 					<div className="action_icon"><IconFont type='icon-bianzu' /> </div>
 				</div>
+			</div>
+
+			<div className="loginout_btn_box">
+
+				{!this.params.isHomePage && <Button type="link" onClick={logout}>  退出登录 </Button>}
 			</div>
 		</div>
 	}
