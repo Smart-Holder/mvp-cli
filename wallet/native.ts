@@ -3,11 +3,12 @@ import somes from 'somes';
 
 export abstract class NativeAPI {
 	abstract getStatusBarHeight(): Promise<number>;
+	abstract getBottomStatusHeight(): Promise<number>;
 	abstract scan(): Promise<string>;
 	abstract getKeysName(): Promise<string[]>;
 	abstract getKey(name: string): Promise<string | undefined>;
 	abstract setKey(name: string, value: any): Promise<void>;
-	abstract deleteKey(name: string): Promise<void>;
+	abstract isSafeKeysStore(): Promise<boolean>;
 }
 
 class DefaultAPI extends NativeAPI {
@@ -19,6 +20,10 @@ class DefaultAPI extends NativeAPI {
 	}
 
 	async getStatusBarHeight() {
+		return 0;
+	}
+
+	async getBottomStatusHeight() {
 		return 0;
 	}
 
@@ -46,6 +51,10 @@ class DefaultAPI extends NativeAPI {
 
 	async deleteKey(name: string): Promise<void> {
 		localStorage.removeItem(this._Key(name));
+	}
+
+	async isSafeKeysStore() {
+		return false;
 	}
 }
 
@@ -84,6 +93,11 @@ class IOSAPI extends APIIMPL {
 		});
 	}
 
+	async getBottomStatusHeight() {
+		// TODO ...
+		return 0;
+	}
+
 	scan(): Promise<string> {
 		return this.call<string>((id: string) => {
 			this._webkit.messageHandlers.scan.postMessage({ id, args: [] });
@@ -113,6 +127,10 @@ class IOSAPI extends APIIMPL {
 			this._webkit.messageHandlers.deleteKey.postMessage({ id, args: [name] });
 		});
 	}
+
+	async isSafeKeysStore(): Promise<boolean> {
+		return true;
+	}
 }
 
 class AndroidAPI extends APIIMPL {
@@ -120,7 +138,11 @@ class AndroidAPI extends APIIMPL {
 	private _api: any = (globalThis as any).__android_api;
 
 	async getStatusBarHeight(): Promise<number> {
-		return this._api.getStatusBarHeight() / window.devicePixelRatio ;
+		return this._api.getStatusBarHeight() / window.devicePixelRatio;
+	}
+
+	async getBottomStatusHeight(): Promise<number> {
+		return this._api.getBottomStatusHeight() / window.devicePixelRatio;
 	}
 	
 	scan(): Promise<string> {
@@ -146,6 +168,11 @@ class AndroidAPI extends APIIMPL {
 	async deleteKey(name: string): Promise<void> {
 		return this._api.deleteKey(name);
 	}
+
+	async isSafeKeysStore(): Promise<boolean> {
+		return this._api.isSafeKeysStore();
+	}
+
 }
 
 const _api =

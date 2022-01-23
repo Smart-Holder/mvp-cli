@@ -4,8 +4,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.content.Context;
 
-public final class TestPaths {
-	public static void print(Context ctx) {
+public final class Test {
+	public static void paths(Context ctx) {
 
 		// /storage/emulated/0
 		Log.d("Test", Environment.getExternalStorageDirectory().getPath());
@@ -45,4 +45,5 @@ public final class TestPaths {
 		Log.d("Test", ctx.getApplicationContext().getCacheDir().getPath());
 
 	}
+
 }

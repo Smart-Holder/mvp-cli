@@ -1,13 +1,19 @@
 package com.stars_mine.mvp_wallet;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -25,13 +31,56 @@ import java.util.Set;
 
 public class JSApi {
 
-	private Activity _ctx;
+	private static final int PERMISSION_REQUEST_External = 0;
+	private MainActivity _ctx;
 	private WebView _webview;
 	private boolean _externalAvailable = false;
 	private String _keystore1 = null;
 	private String _keystore2 = null;
 
-	public JSApi(Activity ctx, WebView webview) {
+	private void TestKeys() {
+		Log.d("Test", _keystore2);
+		Log.d("Test", getKeysName());
+		Log.d("Test", getKey("a"));
+		Log.d("Test", getKey("b"));
+		setKey("a", "A");
+		setKey("b", "B");
+		Log.d("Test", getKey("a"));
+		Log.d("Test", getKey("b"));
+		deleteKey("a");
+	}
+
+	public boolean checkExternalStorage() {
+		if (_keystore2 != null) {
+			return true;
+		}
+		if (!_externalAvailable) {
+			_externalAvailable = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+			if (!_externalAvailable) {
+				return false;
+			}
+		}
+		if (ActivityCompat.checkSelfPermission(_ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+			!= PackageManager.PERMISSION_GRANTED) {
+			_ctx.requestExternalPermission();
+			return false;
+		}
+
+		File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/data/.wallet-keystore");
+		file.mkdirs();
+
+		if (file.exists()) {
+			_keystore2 = file.getPath();
+			List<String> names = getKeysNameList();
+			for(int i = 0; i < names.size(); i++) {
+				getKey(names.get(i));
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public JSApi(MainActivity ctx, WebView webview) {
 		_ctx = ctx;
 		_webview = webview;
 
@@ -39,23 +88,7 @@ public class JSApi {
 		file.mkdirs();
 		_keystore1 = file.getPath();
 
-		_externalAvailable = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-		if (_externalAvailable) {
-//			file = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/.keystore");
-			 file = _ctx.getApplicationContext().getExternalFilesDir("keystore");
-			file.mkdirs();
-			_keystore2 = file.getPath();
-			Log.d("Test", _keystore2);
-		}
-
-		//Log.d("Test", getKeysName());
-		//Log.d("Test", getKey("a"));
-		//Log.d("Test", getKey("b"));
-		//setKey("a", "A");
-		//setKey("b", "B");
-		//Log.d("Test", getKey("a"));
-		//Log.d("Test", getKey("b"));
-		// deleteKey("a");
+		checkExternalStorage();
 	}
 
 	private static String extname(String path) {
@@ -107,6 +140,8 @@ public class JSApi {
 		if (path != null) {
 			File file = new File(path);
 			File[] files = file.listFiles();
+			if (files == null)
+				return;
 			for (int i = 0; i < files.length; i++) {
 				File item = files[i];
 				if (item.isFile()) {
@@ -122,6 +157,15 @@ public class JSApi {
 				}
 			}
 		}
+	}
+
+	private List<String> getKeysNameList() {
+		Set<String> set = new HashSet<String>();
+		List<String> keys = new ArrayList<String>();
+		getKeysNameFrom(_keystore1, set, keys);
+		getKeysNameFrom(_keystore2, set, keys);
+		JSONArray jsonArray = new JSONArray(keys);
+		return keys;
 	}
 
 	private int getScreenHeight() {
@@ -156,7 +200,10 @@ public class JSApi {
 
 	@JavascriptInterface
 	public int getBottomStatusHeight() {
-		return getScreenHeight() - _ctx.getResources().getDisplayMetrics().heightPixels;
+		DisplayMetrics disp = _ctx.getResources().getDisplayMetrics();
+		int total = getScreenHeight();
+		int pixel = disp.heightPixels;
+		return total - pixel;
 	}
 
 	@JavascriptInterface
@@ -167,18 +214,21 @@ public class JSApi {
 	}
 
 	@JavascriptInterface
+	public boolean isSafeKeysStore() {
+		return checkExternalStorage();
+	}
+
+	@JavascriptInterface
 	public String getKeysName() {
-		Set<String> set = new HashSet<String>();
-		List<String> keys = new ArrayList<String>();
-		getKeysNameFrom(_keystore1, set, keys);
-		getKeysNameFrom(_keystore2, set, keys);
-		JSONArray jsonArray = new JSONArray(keys);
+		checkExternalStorage();
+		JSONArray jsonArray = new JSONArray(getKeysNameList());
 		String json = jsonArray.toString();
 		return json;
 	}
 
 	@JavascriptInterface
 	public String getKey(String name) {
+		checkExternalStorage();
 		String value = readFile(_keystore1 + "/" + name + ".key");
 		if (value == null) {
 			if (_keystore2 != null) {
@@ -197,6 +247,7 @@ public class JSApi {
 
 	@JavascriptInterface
 	public void setKey(String name, String value) {
+		checkExternalStorage();
 		writeFile(_keystore1 + "/" + name + ".key", value);
 		if (_keystore2 != null) {
 			writeFile(_keystore2 + "/" + name + ".key", value);
@@ -205,6 +256,7 @@ public class JSApi {
 
 	@JavascriptInterface
 	public void deleteKey(String name) {
+		checkExternalStorage();
 		removeFile(_keystore1 + "/" + name + ".key");
 		if (_keystore2 != null) {
 			removeFile(_keystore2 + "/" + name + ".key");

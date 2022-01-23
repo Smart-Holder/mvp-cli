@@ -122,14 +122,15 @@ public class QrcodeActivity extends AppCompatActivity
 
 	@Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 			@NonNull int[] grantResults) {
-		if (requestCode != MY_PERMISSION_REQUEST_CAMERA) {
+		if (requestCode != MY_PERMISSION_REQUEST_CAMERA || grantResults.length == 0) {
 			return;
 		}
-		if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-			Snackbar.make(mainLayout, "Camera permission was granted.", Snackbar.LENGTH_SHORT).show();
+		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+			//Snackbar.make(mainLayout, "Camera permission was granted.", Snackbar.LENGTH_SHORT).show();
 			initQRCodeReaderView();
 		} else {
-			Snackbar.make(mainLayout, "Camera permission request was denied.", Snackbar.LENGTH_SHORT).show();
+			// Camera permission request was denied.
+			Snackbar.make(mainLayout, "像机权限请求被拒绝", Snackbar.LENGTH_SHORT).show();
 		}
 	}
 
@@ -143,7 +144,8 @@ public class QrcodeActivity extends AppCompatActivity
 
 	private void requestCameraPermission() {
 		if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-			Snackbar.make(mainLayout, "Camera access is required to display the camera preview.",
+			// Camera access is required to display the camera preview.
+			Snackbar.make(mainLayout, "需要摄像头访问才能显示摄像头预览",
 					Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
 				@Override public void onClick(View view) {
 					ActivityCompat.requestPermissions(QrcodeActivity.this, new String[] {
@@ -152,8 +154,7 @@ public class QrcodeActivity extends AppCompatActivity
 				}
 			}).show();
 		} else {
-			Snackbar.make(mainLayout, "Permission is not available. Requesting camera permission.",
-					Snackbar.LENGTH_SHORT).show();
+			//Snackbar.make(mainLayout, "Permission is not available. Requesting camera permission.", Snackbar.LENGTH_SHORT).show();
 			ActivityCompat.requestPermissions(this, new String[] {
 					Manifest.permission.CAMERA
 			}, MY_PERMISSION_REQUEST_CAMERA);

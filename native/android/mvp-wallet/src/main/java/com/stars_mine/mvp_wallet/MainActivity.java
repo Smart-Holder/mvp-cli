@@ -1,11 +1,16 @@
 package com.stars_mine.mvp_wallet;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,12 +29,18 @@ import android.content.pm.ApplicationInfo;
 
 import cfg.MvpCfg;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+	implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+	private static final int PERMISSION_REQUEST_External = 0;
 	private ViewGroup _mainLayout;
 	private WebView _webview;
 	private Cache _cache;
 	private JSApi _jsapi;
+
+	private ViewGroup getMainLayout() {
+		return _mainLayout;
+	}
 
 	private void hideStatusTitleBar() {
 		Window window = getWindow();
@@ -40,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
 							| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 			window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION //这里删除的话  可以解决华为虚拟按键的覆盖
-							| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+							| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+				| View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 深色显示状态栏文字颜色
+			);
 			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 			window.setStatusBarColor(Color.TRANSPARENT);
 			window.setNavigationBarColor(Color.TRANSPARENT);//这里删除的话
@@ -50,6 +63,38 @@ public class MainActivity extends AppCompatActivity {
 	protected boolean isDebugger() {
 		ApplicationInfo info = getApplicationInfo();
 		return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+	}
+
+	@Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+																									 @NonNull int[] grantResults) {
+		if (requestCode != PERMISSION_REQUEST_External || grantResults.length == 0) {
+			return;
+		}
+		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+			// Snackbar.make(mainLayout, "Camera permission was granted.", Snackbar.LENGTH_SHORT).show();
+			_jsapi.checkExternalStorage();
+		} else {
+			// File permission request denied.
+			Snackbar.make(getMainLayout(), "文件权限请求被拒绝", Snackbar.LENGTH_SHORT).show();
+		}
+	}
+
+	public void requestExternalPermission() {
+		if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+			// File access is required to store keys.
+			Snackbar.make(getMainLayout(), "存储密钥需要文件访问权限",
+				Snackbar.LENGTH_INDEFINITE).setAction("确认", new View.OnClickListener() {
+				@Override public void onClick(View view) {
+					ActivityCompat.requestPermissions(MainActivity.this, new String[] {
+						Manifest.permission.WRITE_EXTERNAL_STORAGE
+					}, PERMISSION_REQUEST_External);
+				}
+			}).show();
+		} else {
+			ActivityCompat.requestPermissions(this, new String[] {
+				Manifest.permission.WRITE_EXTERNAL_STORAGE
+			}, PERMISSION_REQUEST_External);
+		}
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 		settings.setAppCachePath(getApplicationContext().getCacheDir().getPath());
 		settings.setAllowFileAccess(true);
 		settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-//		settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		settings.setGeolocationEnabled(true);
 		settings.setBuiltInZoomControls(false);
 		settings.setJavaScriptEnabled(true);
