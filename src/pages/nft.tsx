@@ -152,7 +152,6 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	}
 
 	async walletModalOk() {
-		// this.setState({ visible:false });
 		let { currKey } = this.state;
 		if (!currKey) return false;
 		this.selectCurrKey(currKey);
