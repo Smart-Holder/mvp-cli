@@ -45,6 +45,8 @@ class PrefixNative {
 		let prefix = this._Prefix + (loginstate?.name || account_name) + '_';
 		
 		keyArr.forEach(key => {
+			console.log(key, prefix);
+			
 			if (key.substring(0, prefix.length) == prefix) {
 				keys.push(key.substring(prefix.length));
 			}
