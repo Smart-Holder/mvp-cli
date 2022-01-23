@@ -44,7 +44,7 @@ export default class CreateAccount extends NavPage {
 	render() {
 		let { address_name, password, confirm_password } = this.state;
 
-		return <div className="create_account_page"> <Header page={this} title="创建账号" />
+		return <div className="create_account_page"> <Header page={this} title="创建管理密钥" />
 
 			<div className="create_account_page_content">
 				<div className="card_box secret_key_name_box">
@@ -72,7 +72,7 @@ export default class CreateAccount extends NavPage {
 					</div>
 				</div> */}
 
-				<Button onClick={this.create.bind(this)} className="import_btn" type='primary' disabled={!address_name || password.length < 8 || confirm_password.length < 8} >创建账号</Button>
+				<Button onClick={this.create.bind(this)} className="import_btn" type='primary' disabled={!address_name || password.length < 8 || confirm_password.length < 8} >创建</Button>
 			</div>
 
 		</div>

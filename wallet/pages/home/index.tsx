@@ -78,6 +78,11 @@ class Home extends NavPage {
 		}
 	}
 
+	// 密钥地址页面
+	walletAddress(item:IAddressListItemProps) {
+		this.pushPage(`/wallet_address?address=${item.address}`);
+	}
+
 	render() {
 		let { addressList } = this.state;
 		return <div className="home_page">
@@ -90,7 +95,7 @@ class Home extends NavPage {
 			<div className="wallet_box">
 				<div className="add_wallet" onClick={() => {
 					operation([
-						{ text: '导入管理密码', onPress: () => this.pushPage('/import_secret_key'), style: { textAlign: 'center' } },
+						{ text: '导入管理密钥', onPress: () => this.pushPage('/import_secret_key'), style: { textAlign: 'center' } },
 						{ text: '创建管理密钥', onPress: () => { this.pushPage('/create_account') }, style: { textAlign: 'center' } },
 						{ text: '取消', style: { textAlign: 'center', color: '#1677ff' } },
 					]);
@@ -117,8 +122,11 @@ class Home extends NavPage {
 
 						<div className="bottom_part">
 							<div className="left_box">
+								<Button className="address_btn" type="link" onClick={this.walletAddress.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>地址</Button>
+								<div className="dot_box">
 								<div className="dot1"></div>
 								<div className="dot2"></div>
+								</div>
 							</div>
 							<div className="right_box">
 								<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>

@@ -70,13 +70,24 @@
 			}
 
 			.right_box {
-				font-size: 0.56rem;
-				font-weight: 500;
+				font-size: 0.46rem;
+				// font-weight: 500;
 			}
 		}
 
 		.bottom_part {
 			align-items: center;
+			.left_box {
+				align-items: center;
+			display: flex;
+			}
+			.dot_box {
+				position: absolute;
+				margin-top: .1rem;
+			}
+			.address_btn {
+				margin-left: .1rem;
+			}
 			.dot1,
 			.dot2 {
 				background-color: $mainColor;

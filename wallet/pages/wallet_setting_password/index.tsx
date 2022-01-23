@@ -48,7 +48,7 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				wallet_ui.setAccounts(undefined);
 				wallet_ui.clearCurrentKey();
 				// await native.setKey(key, JSON.stringify(keyStoreJson));
-				await wallet_ui.setKey(key, new SecretKey(keyStore));
+				await wallet_ui.setKey(key, new SecretKey(keyStoreJson));
 
 				alert('密码修改成功!', () => this.replacePage('/home'));
 			} catch (error: any) {

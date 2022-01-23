@@ -125,7 +125,7 @@ class My extends NavPage<{ address: string }> {
 
 		newNftList[index] = newNftItem;
 
-		var l = await Loading.show(isWithdraw ? t('正在取出到您的钱包中,请勿操作') : t('正在存入到您的设备中,请勿操作'));
+		var l = await Loading.show(isWithdraw ? t('正在取出到您的密钥中,请勿操作') : t('正在存入到您的设备中,请勿操作'));
 		try {
 			if (device?.address) {
 				this.setState({ visible: false, nft: newNftList, ...getDistinguishNftList(newNftList) });
@@ -197,7 +197,7 @@ class My extends NavPage<{ address: string }> {
 					if (nft.ownerBase) {
 						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
 					} else {
-						chain.assetChain(nft.chain, '请切换至对应链的钱包');
+						chain.assetChain(nft.chain, '请切换至对应链的密钥');
 						await erc721.safeTransferToProxy( // 转移给代理协约
 							nft.token, [device_address], BigInt(nft.tokenId), proxyAddress(AssetType.ERC721, nft.chain));
 					}
@@ -208,7 +208,7 @@ class My extends NavPage<{ address: string }> {
 					if (nft.ownerBase) {
 						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
 					} else {
-						chain.assetChain(nft.chain, '请切换至对应链的钱包');
+						chain.assetChain(nft.chain, '请切换至对应链的密钥');
 						await erc1155.safeTransferToProxy( // 转移给代理协约
 							nft.token, [device_address], BigInt(nft.tokenId), BigInt(nft.count), proxyAddress(AssetType.ERC1155, nft.chain));
 					}
@@ -248,13 +248,13 @@ class My extends NavPage<{ address: string }> {
 					initialPage={0}
 				>
 					<div className="list_box">
-						{(nftList1.length) ? nftList1.map(item => <NftCard showTransferBtn={true} page={this} showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
+						{(nftList1.length) ? nftList1.map(item => <NftCard showTransferBtn={true} page={this} showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至密钥')} />)}
 					</div>
 					<div className="list_box">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
 							{t("您只能查看在其他网络的数字藏品，不能进行任何操作，若您想把其他网络的数字藏品绑定到设备，需切换到该数字藏品所在的网络后才可以将该数字藏品绑定到设备")}
 						</NoticeBar>}
-						{(nftList2.length) ? nftList2.map(item => <NftCard showTransferBtn={true} page={this} showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至钱包')} />)}
+						{(nftList2.length) ? nftList2.map(item => <NftCard showTransferBtn={true} page={this} showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无数字藏品，请添加数字藏品至密钥')} />)}
 					</div>
 				</Tabs>
 

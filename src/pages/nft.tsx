@@ -14,7 +14,10 @@ import { getParams } from '../../wallet/util/tools';
 import * as device from '../models/device';
 import { alert } from 'webpkit/lib/dialog';
 import { check } from '../../wallet/user';
-import { Modal } from 'antd-mobile'
+import { Modal } from 'antd-mobile';
+import Header from '../util/header';
+
+
 import '../css/index.scss';
 import "../../wallet/util/wallet_ui.scss";
 
@@ -152,14 +155,15 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 
 	render() {
-		const { device, loading, keysName , currKey} = this.state;
+		const { device, loading, keysName, currKey } = this.state;
+		const {address } = this.params;
 		const { t } = this;
 		return (
 			<div className="index device_list_page">
 				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏品')}</div>
 				<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} >
 
-					{/* <Header title="我的NFT" page={this} /> */}
+					{Boolean(address) && <Header title="设备管理" page={this} />}
 					<div className="device_warp">
 
 						<div className="device_list">

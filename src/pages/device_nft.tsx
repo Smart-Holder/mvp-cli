@@ -39,7 +39,7 @@ export default class extends NavPage<Device> {
 		// 	nft.owner == contracts.ERC1155Proxy, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 		proxyAddress(nft.type, nft.chain, '#device_nft#_Withdraw: BAD_NFT_PROXY');
 
-		var l = await Loading.show('正在取出到钱包');
+		var l = await Loading.show('正在取出到密钥');
 		try {
 			var proxy = nft_proxy.New(nft.owner as string, nft.chain);
 			// var val = await proxy.balanceOf(nft.token, BigInt(nft.tokenId), from);
@@ -48,11 +48,11 @@ export default class extends NavPage<Device> {
 			// return;
 			await proxy
 				.withdrawFrom(from, to, nft.token, BigInt(nft.tokenId), BigInt(nft.count)); // 取出一个
-			alert('取出到钱包成功,数据显示可能有所延时,请稍后刷新数据显示');
+			alert('取出到密钥成功,数据显示可能有所延时,请稍后刷新数据显示');
 			this.popPage();
 		} catch (err: any) {
 			console.error(err);
-			alert('取出到钱包失败');
+			alert('取出到密钥失败');
 			if (env == 'dev') {
 				alert(err.message);
 			}
