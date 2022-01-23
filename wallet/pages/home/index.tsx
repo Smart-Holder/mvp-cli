@@ -29,21 +29,25 @@ class Home extends NavPage {
 	}
 
 	async triggerLoad() {
-		this.getKeyNameList()
-
+		let keysNameArr = await native.getKeysName() || [];
+		if (!keysNameArr.length) {
+			this.replacePage('/secretkey'); return
+		};
+		this.getKeyNameList(keysNameArr);
 		ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 	}
 
 	async triggerShow() {
-		this.getKeyNameList()
+		let keysNameArr = await native.getKeysName() || [];
+		this.getKeyNameList(keysNameArr);
 	}
 
-	async getKeyNameList() {
+	async getKeyNameList(keysNameArr:string[]) {
 		// let keyname = await prefix_native.getKeysName()
 		// console.log(keyname,"keyname");
 		
-		let keysNameArr = await native.getKeysName() || [];
+		// let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
 		let addressList = keysNameArr.map(async (key) => {
 			let data = await native.getKey(key);

@@ -13,17 +13,8 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 
 	state = {
 		current: 0,
-		bottom:30
+		bottom:10
 	}
-
-	// m_click_1 = () => {
-	// 	this.setState({ current: 0 });
-	// 	this.props.nav().replace('/home', false, 0);
-	// };
-	// m_click_2 = () => {
-	// 	this.setState({ current: 1 });
-	// 	this.props.nav().replace('/account', false, 0);
-	// };
 
 	m_click(pathname:string,current:number) {
 		this.setState({ current });
@@ -36,8 +27,8 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		// let mainEle = document.querySelector('._main > div');
 		setTimeout(() => {
 			let mainEle = document.querySelector('._main > div');
-			mainEle?.setAttribute('style', `padding-bottom:${data ? '1.55rem' : '1.15rem'}`)
-			console.log(mainEle, "mainEle", data);
+			mainEle?.setAttribute('style', `padding-bottom:${data ? (70 + data) + 'px' : '70px'}`)
+			console.log(mainEle, "mainEle", data, window.devicePixelRatio);
 		},1000);
 		this.setState({ bottom: data });
 	}

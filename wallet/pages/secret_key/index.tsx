@@ -1,14 +1,23 @@
 import NavPage from '../../../src/nav';
-import { React } from 'webpkit/mobile';
+import { React, ReactDom } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import IconFont from '../../../src/components/icon_font';
 import "./index.scss";
 import Button from '../../../src/components/button';
 import { logout } from '../../user';
+import _404 from '../../../src/pages/404';
+import routes from '../../router';
+import { MyRoot } from '../..';
+
 // import { LeftOutlined} from '@ant-design/icons';
 
 
-class SecretKeyPage extends NavPage<{isHomePage?:string}> {
+class SecretKeyPage extends NavPage<{ isHomePage?: string }> {
+	
+	async triggerLoad() {
+		ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
+	}
+
 	render() {
 		return <div className="secret_key_page">
 			<Header title="密钥" page={this} />
