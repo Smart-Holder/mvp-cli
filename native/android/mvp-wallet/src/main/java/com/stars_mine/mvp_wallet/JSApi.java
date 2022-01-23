@@ -50,6 +50,21 @@ public class JSApi {
 		deleteKey("a");
 	}
 
+	private boolean tryCheckExternalStorage(String path) {
+		File file = new File(path);
+		file.mkdirs();
+
+		if (file.exists()) {
+			_keystore2 = file.getPath();
+			List<String> names = getKeysNameList();
+			for(int i = 0; i < names.size(); i++) {
+				getKey(names.get(i));
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public boolean checkExternalStorage() {
 		if (_keystore2 != null) {
 			return true;
@@ -66,17 +81,15 @@ public class JSApi {
 			return false;
 		}
 
-		File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/data/.wallet-keystore");
-		file.mkdirs();
+		String dir = Environment.getExternalStorageDirectory().getPath();
 
-		if (file.exists()) {
-			_keystore2 = file.getPath();
-			List<String> names = getKeysNameList();
-			for(int i = 0; i < names.size(); i++) {
-				getKey(names.get(i));
-			}
+		if (tryCheckExternalStorage(dir + "/Android/data/.wallet-keystore")) {
 			return true;
 		}
+		if (tryCheckExternalStorage(dir + "/.wallet-keystore")) {
+			return true;
+		}
+
 		return false;
 	}
 
