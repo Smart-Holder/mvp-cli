@@ -66,6 +66,13 @@
 	background-image: url("../assets/home_bg2.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
+	.device_header {
+		background-color: rgb(33, 109, 241);
+		border-bottom: 1px solid #555;
+		._b {
+			color: #000;
+		}
+	}
 	.device_warp {
 		padding: 0 0.3rem;
 		z-index: 9;

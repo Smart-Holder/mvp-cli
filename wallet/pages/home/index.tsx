@@ -13,7 +13,13 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
 import { getParams } from '../../util/tools';
-import { loginState } from '../../user';
+
+import * as device from '../../../src/models/device';
+import { Spin } from 'antd';
+import { alert } from 'webpkit/lib/dialog';
+import { setDeviceSigner } from '../../../src/models/device';
+import "../../util/wallet_ui.scss";
+const crypto_tx = require('crypto-tx');
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -26,7 +32,12 @@ export interface IAddressListItemProps {
 class Home extends NavPage {
 
 	state = {
-		addressList: [] as IAddressListItemProps[]
+		addressList: [] as IAddressListItemProps[],
+		loading: false,
+		visible: false,
+		keysName: [],
+		currKey: '',
+		href:''
 	}
 
 	async triggerLoad() {
@@ -45,7 +56,8 @@ class Home extends NavPage {
 		this.getKeyNameList(keysNameArr);
 	}
 
-	async getKeyNameList(keysNameArr:string[]) {
+	async getKeyNameList(keysNameArr: string[]) {
+		this.setState({ loading: true });
 		// let keyname = await prefix_native.getKeysName()
 		// let keysNameArr = await native.getKeysName() || [];
 		// let new_wallet = new wallet();
@@ -59,7 +71,7 @@ class Home extends NavPage {
 		let newAddressList = await Promise.all(addressList);
 		console.log(newAddressList, "newAddressList");
 
-		this.setState({ addressList: newAddressList });
+		this.setState({ addressList: newAddressList, loading: false, keysName:keysNameArr });
 	}
 
 	async deviceList(item: IAddressListItemProps) {
@@ -77,8 +89,14 @@ class Home extends NavPage {
 	async scanNftInfo() {
 		let href = await native.scan();
 		if (href?.startsWith('http')) {
-			let { token, tokenId } = getParams(href);
-			this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
+			let { token, tokenId, a, } = getParams(href);
+			if (token) {
+			return	this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
+
+			} else if (a) {
+				this.setState({ href, visible: true });
+			}
+
 		}
 	}
 
@@ -87,12 +105,32 @@ class Home extends NavPage {
 		this.pushPage(`/wallet_address?address=${item.address}`);
 	}
 
+	async walletModalOk() {
+		let { currKey, href } = this.state;
+		// if (!currKey) return false;
+		// this.scanNftInfo();
+		this.setState({ loading: true, visible: false });
+		try {
+			let {  a, c, v } = getParams(href);
+
+			await wallet.setCurrentKey(currKey);
+			setDeviceSigner(wallet);
+			await device.bind(crypto_tx.checksumAddress(a), c, v);
+			this.setState({ loading: false, visible:false });
+			alert('设备绑定成功!', () => this.replacePage('/device'));
+		} catch (error) {
+			this.setState({ loading: false, visible: false});
+		}
+	}
+
 	render() {
-		let { addressList } = this.state;
+		let { addressList, loading, keysName, currKey} = this.state;
 		return <div className="home_page">
+
 			<Header hiddenBtn={true} page={this} title="管理密钥" actionBtn={<IconFont type="icon-saoma" style={{width:'.48rem',height:'.48rem'}} onClick={this.scanNftInfo.bind(this)} />} />
 
 			<div className="wallet_part">
+				<Spin spinning={loading} className="wallet_home_loading">
 
 			<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
 
@@ -140,8 +178,28 @@ class Home extends NavPage {
 					</div>
 				})}
 			</div>
+			</Spin>
 			</div>
 
+			<Modal visible={this.state.visible}
+				transparent
+				title={'选择管理密钥'}
+				closable
+				className="select_wallet_box"
+				onClose={() => this.setState({ visible: false })}
+				footer={[
+					{ text: '取消', onPress: () => this.setState({ visible: false }) },
+					{ text: '确定', onPress: this.walletModalOk.bind(this) }
+				]}
+			>
+				{keysName.map(key => {
+					return <div key={key} className={`wallet_item ${currKey == key && 'active'}`} onClick={() => this.setState({ currKey: key == currKey ? '' : key })}>
+						<IconFont type="icon-qianbao" />
+						<div className="name">{key}</div>
+					</div>
+				})}
+
+			</Modal>
 			</div>
 	}
 }

@@ -132,11 +132,16 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 		try {
 			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=6357&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			let href = await native.scan();
-			if (!href) return this.setState({loading:false});
+			if (!href) return this.setState({ loading: false });
+			
 			config.env == 'dev' && (href = href.replace('https://mvp-dev.stars-mine.com', config.host));
 			await wallet.setCurrentKey(key);
 			setDeviceSigner(wallet);
 			let { a, c, v } = getParams(href);
+			if (!a) {
+				alert("请扫描设备绑定二维码!");
+				return this.setState({ loading: false });
+			}
 			await device.bind(crypto_tx.checksumAddress(a), c, v);
 			this.getDeviceList();
 		} catch (error: any) {
@@ -147,7 +152,6 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	}
 
 	async walletModalOk() {
-		// this.setState({ visible:false });
 		let { currKey } = this.state;
 		if (!currKey) return false;
 		this.selectCurrKey(currKey);
@@ -156,14 +160,14 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 	render() {
 		const { device, loading, keysName, currKey } = this.state;
-		const {address } = this.params;
+		// const {address } = this.params;
 		const { t } = this;
 		return (
 			<div className="index device_list_page">
 				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏品')}</div>
 				<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} >
 
-					{Boolean(address) && <Header title="设备管理" page={this} />}
+					 <Header title="设备管理" page={this} className="device_header" />
 					<div className="device_warp">
 
 						<div className="device_list">
