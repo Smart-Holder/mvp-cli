@@ -203,7 +203,8 @@ public class JSApi {
 		DisplayMetrics disp = _ctx.getResources().getDisplayMetrics();
 		int total = getScreenHeight();
 		int pixel = disp.heightPixels;
-		return total - pixel;
+		int statusBarHeight = getStatusBarHeight();
+		return total - pixel - statusBarHeight;
 	}
 
 	@JavascriptInterface

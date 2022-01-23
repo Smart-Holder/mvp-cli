@@ -20,7 +20,8 @@ export default class ResetPassword extends NavPage {
 		username: '',
 		v_code: '',
 		password: '',
-		confirm_password: ''
+		confirm_password: '',
+		dateNow:Date.now()
 	}
 
 	// 输入框事件
@@ -32,7 +33,7 @@ export default class ResetPassword extends NavPage {
 
 	async getVcode() {
 		await sendPhoneVerify(this.state.username);
-		this.setState({ isCountdown: true });
+		this.setState({ isCountdown: true, dateNow:Date.now() });
 	}
 
 	// 登录事件
@@ -79,7 +80,7 @@ export default class ResetPassword extends NavPage {
 						<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
 						<div className="get_vcode_box">
 							{isCountdown ?
-								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={Date.now() + 60 * 1000} /> :
+								<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={this.state.dateNow + 60 * 1000} /> :
 								<Button disabled={username.length < 11} type="link" className="get_vcode" onClick={this.getVcode.bind(this)}>获取验证码</Button>}
 						</div>
 					</Col>

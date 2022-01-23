@@ -188,7 +188,7 @@ export const copyText = (text: string) => {
 	(document?.getElementById('cp_hgz_input') as any).select();
 	document.execCommand('copy');
 	(document.getElementById('cp_hgz_input') as any).remove();
-	Toast.show(<span style={{color:'#fff'}}>复制完成!</span>)
+	Toast.show(<span style={{ color: '#fff' }}>复制完成!</span>, 1, false);
 };
 
 
