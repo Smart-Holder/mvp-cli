@@ -7,7 +7,6 @@ import Button from '../../../src/components/button';
 import { login, register, sendPhoneVerify } from '../../user';
 import { alert } from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
-// import wallet from '../../wallet';
 import storage from 'somes/storage'
 import native from '../../util/prefix_native';
 import { MyRoot } from '../..';
@@ -29,7 +28,7 @@ class Login extends NavPage {
 		v_code: '',
 		password: '',
 		loading: false,
-		dateNow:Date.now()
+		dateNow: Date.now()
 	}
 
 	formRef = React.createRef<FormInstance>();
@@ -40,7 +39,7 @@ class Login extends NavPage {
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
 		console.log(keyname, 'triggerLoad login keyname', state);
-		
+
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
 	}
 
@@ -67,37 +66,20 @@ class Login extends NavPage {
 				await login(username, { pwd: password });
 			}
 			let keyName = await native.getKeysName(username);
-				console.log(keyName, 'login keyname');
-				if ( keyName.length) return this.replacePage('/home');
-				this.replacePage('/secretkey');
-				
+			console.log(keyName, 'login keyname');
+			if (keyName.length) return this.replacePage('/home');
+			this.replacePage('/secretkey');
+
 		} catch (error: any) {
 			alert(error.message);
 		}
 		this.setState({ loading: false });
-
-		// let data = await _api.scan();
-		// alert(data);
-		// let fromVal = await this.formRef.current?.validateFields();
-		// console.log(fromVal, "fromVal");
-		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
-		// console.log(username, password );
-		// let privateKey = hash.sha256(username + password + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
-		// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a
-		// console.log(privateKey.toString('base64'));
-
-		// await devices();
-		// console.log(privateKey.toString('base64'), "privateKey");
-
 	}
 
 	// 输入框事件
 	inputChange(key: string, e: React.ChangeEvent<HTMLInputElement>) {
-		// console.log(e.target.value);
 		let val = e.target.value;
 		this.setState({ [key]: val });
-
-
 	}
 
 	// 获取验证码
@@ -106,7 +88,7 @@ class Login extends NavPage {
 		if (!verificationPhone(username)) return alert('请输入有效的手机号码');
 		try {
 			await sendPhoneVerify(username);
-			this.setState({ isCountdown: true, dateNow:Date.now()});
+			this.setState({ isCountdown: true, dateNow: Date.now() });
 		} catch (error: any) {
 			alert(error.message);
 		}

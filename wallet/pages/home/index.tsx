@@ -168,7 +168,7 @@ class Home extends NavPage {
 									</div>
 									<div className="right_box">
 										<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
-										<Button type="primary" onClick={this.deviceList.bind(this, item)}>设备管理</Button>
+										<Button type="primary" onClick={this.deviceList.bind(this, item)}>我的设备</Button>
 									</div>
 								</div>
 							</div>

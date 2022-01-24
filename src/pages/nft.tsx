@@ -158,12 +158,12 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 			<div className="index device_list_page">
 				<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} >
 
-					<Header title="设备管理" page={this} className="device_header" />
-					{!(keyName) && <img className="home_bg_img" src={require("../assets/home_bg3.png")} alt="" />}
+					<Header title={keyName ? "我的设备" : "全部设备"} page={this} className="device_header" />
+					{!(keyName) && <img className="home_bg_img" src={require("../assets/home_bg4.png")} alt="" />}
 					<div className="device_warp">
 
 						<div className="device_list" style={{ marginTop: keyName ? '.5rem' : '2.12rem' }}>
-							<div className="list_title" >{t("全部设备")}</div>
+							<div className="list_title" >{keyName ? "我的设备" : "全部设备"}</div>
 							<div className="list_top_extra">
 								<div className="bind_device_btn" onClick={this.addDevice.bind(this)}>
 									<img className="add_icon" src={require('../assets/add_icon.png')} alt="+" /> {t("绑定新设备")}
