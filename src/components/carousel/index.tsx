@@ -25,8 +25,8 @@ export const BindDeviceCarousel = (props: IbindDeviceCarouselProps) => {
 
 	let carouselSetupTypeConfig = {
 		TokenPocket: [
-			{ title: t('1.通过管理密钥列表找到绑定设备的密钥,点击"设备管理"'), img: require('../../assets/wallet_setp1.jpg') },
-			{ title: <div>{t('2.在设备管理页面点击"绑定新设备",调用扫一扫功能,扫描设备绑定二维码即可')}</div>, img: require('../../assets/wallet_setp2.jpg') },
+			{ title: t('1.通过管理密钥列表找到绑定设备的密钥,点击"设备管理"'), img: require('../../assets/wallet_step1.png') },
+			{ title: <div>{t('2.在设备管理页面点击"绑定新设备",调用扫一扫功能,扫描设备绑定二维码即可')}</div>, img: require('../../assets/wallet_step2.png') },
 		],
 		MateMask: [
 			{ title: <div>{t('第一步：请点击左上角')}“<IconFont type="icon-danchuangicon1" />”{t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require('../../assets/step_1.png') },
@@ -40,16 +40,7 @@ export const BindDeviceCarousel = (props: IbindDeviceCarouselProps) => {
 	};
 
 	let carouselType: ICarouselType = 'TokenPocket';
-	let userAgent = navigator.userAgent
-	// if (userAgent.includes('imToken')) {
-	// 	carouselType = 'imToken';
-	// } else if (userAgent.includes('TokenPocket')) {
-	// 	carouselType = 'TokenPocket';
-	// } else {
-	// 	carouselType = 'MateMask';
-	// }
 
-	// props.pageType === 'device' && carouselSetupTypeConfig[carouselType].unshift({ title: t('您还未绑定任何设备，请右翻查看绑定设备操作步骤'), img: require('../../assets/empty_device_box.jpg') })
 
 	const { carouselSetupType = carouselSetupTypeConfig, afterChange } = props;
 

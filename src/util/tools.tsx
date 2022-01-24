@@ -12,6 +12,11 @@ export type IDisabledKey = 'transfer_btn_disabled' | 'btn_disabled';
 import { Toast } from 'antd-mobile';
 import "./tools.scss";
 import chain from '../chain';
+import wallet from '../../wallet/wallet_ui';
+import { setDeviceSigner } from '../models/device';
+import * as device from '../models/device';
+import { getParams } from '../../wallet/util/tools';
+const crypto_tx = require('crypto-tx');
 
 class Tab extends ViewController<{ nav: () => Nav }> {
 	triggerLoad() {
@@ -225,3 +230,15 @@ export function omit<T>(obj: T, omitKeys: string[] | string) {
 	return newObj;
 }
 
+
+// 绑定设备设置当前钱包
+export const setCurrWallet_BindDevice = async (key: string, href:string) => {
+	await wallet.setCurrentKey(key);
+	setDeviceSigner(wallet);
+	let { a, c, v } = getParams(href);
+	if (!a) {
+		// alert("请扫描设备绑定二维码!");
+		throw Error('请扫描设备绑定二维码!')
+	}
+	await device.bind(crypto_tx.checksumAddress(a), c, v);
+}
