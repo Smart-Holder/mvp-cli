@@ -2,18 +2,22 @@
 import router from '../src/router';
 
 export default [
-	
+
 	{
 		path: '/',
 		page: () => import('./pages/login'),
 	},
-	
+
 	{
-		path:'/wallet_address',
+		path: '/wallet_device_list',
+		page: () => import('./pages/wallet_device_list'),
+	},
+	{
+		path: '/wallet_address',
 		page: () => import('./pages/wallet_address'),
 	},
 	{
-		path: ['/home','/index.html'],
+		path: ['/home', '/index.html'],
 		page: () => import('./pages/home'),
 	},
 	{

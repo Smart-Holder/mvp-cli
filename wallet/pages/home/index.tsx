@@ -19,6 +19,8 @@ import { Spin } from 'antd';
 import { alert } from 'webpkit/lib/dialog';
 import { setDeviceSigner } from '../../../src/models/device';
 import "../../util/wallet_ui.scss";
+import SelectWallet from '../../../src/components/select_wallet';
+import { setCurrWallet_BindDevice } from '../../../src/util/tools';
 const crypto_tx = require('crypto-tx');
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
@@ -37,7 +39,7 @@ class Home extends NavPage {
 		visible: false,
 		keysName: [],
 		currKey: '',
-		href:''
+		href: ''
 	}
 
 	async triggerLoad() {
@@ -71,7 +73,7 @@ class Home extends NavPage {
 		let newAddressList = await Promise.all(addressList);
 		console.log(newAddressList, "newAddressList");
 
-		this.setState({ addressList: newAddressList, loading: false, keysName:keysNameArr });
+		this.setState({ addressList: newAddressList, loading: false, keysName: keysNameArr });
 	}
 
 	async deviceList(item: IAddressListItemProps) {
@@ -91,7 +93,7 @@ class Home extends NavPage {
 		if (href?.startsWith('http')) {
 			let { token, tokenId, a, } = getParams(href);
 			if (token) {
-			return	this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
+				return this.pushPage(`/nft_detail?token=${token}&tokenId=${tokenId}`);
 
 			} else if (a) {
 				this.setState({ href, visible: true });
@@ -101,106 +103,83 @@ class Home extends NavPage {
 	}
 
 	// 密钥地址页面
-	walletAddress(item:IAddressListItemProps) {
+	walletAddress(item: IAddressListItemProps) {
 		this.pushPage(`/wallet_address?address=${item.address}`);
 	}
 
-	async walletModalOk() {
-		let { currKey, href } = this.state;
-		// if (!currKey) return false;
-		// this.scanNftInfo();
+	async walletModalOk(currKey: string) {
+		let { href } = this.state;
 		this.setState({ loading: true, visible: false });
 		try {
-			let {  a, c, v } = getParams(href);
-
-			await wallet.setCurrentKey(currKey);
-			setDeviceSigner(wallet);
-			await device.bind(crypto_tx.checksumAddress(a), c, v);
-			this.setState({ loading: false, visible:false });
+			await setCurrWallet_BindDevice(currKey, href);
 			alert('设备绑定成功!', () => this.replacePage('/device'));
-		} catch (error) {
-			this.setState({ loading: false, visible: false});
+		} catch (error: any) {
+			this.setState({ loading: false, visible: false });
+			alert(error.message);
 		}
 	}
 
 	render() {
-		let { addressList, loading, keysName, currKey} = this.state;
+		let { addressList, loading } = this.state;
 		return <div className="home_page">
 
-			<Header hiddenBtn={true} page={this} title="管理密钥" actionBtn={<IconFont type="icon-saoma" style={{width:'.48rem',height:'.48rem'}} onClick={this.scanNftInfo.bind(this)} />} />
+			<Header hiddenBtn={true} page={this} title="管理密钥" actionBtn={<IconFont type="icon-saoma" style={{ width: '.48rem', height: '.48rem' }} onClick={this.scanNftInfo.bind(this)} />} />
 
 			<div className="wallet_part">
 				<Spin spinning={loading} className="wallet_home_loading">
 
-			<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
+					<img className="wallet_bg" src={require('../../../src/assets/wallet_bg.png')} alt="" />
 
-			<div className="wallet_box">
-				<div className="add_wallet" onClick={() => {
-					operation([
-						{ text: '导入管理密钥', onPress: () => this.pushPage('/import_secret_key'), style: { textAlign: 'center' } },
-						{ text: '创建管理密钥', onPress: () => { this.pushPage('/create_account') }, style: { textAlign: 'center' } },
-						{ text: '取消', style: { textAlign: 'center', color: '#1677ff' } },
-					]);
-				}}>
-					<IconFont type='icon-chuangjianguanlimiyue' style={{ width: '.48rem', height: '.48rem' }} />
-					<span>管理密钥</span>
-				</div>
-				{addressList.map(item => {
-					return <div className="wallet_item" key={item.address}>
-
-						<div className='push_page_part' onClick={() => this.pushPage(`/wallet_setting?key=${(item.key)}`)}>
-							<div className="top_part">
-								<div className="left_box">
-									{item.key}
-								</div>
-								<div className="right_box"> <IconFont style={{ width: '.36rem', height: '.36rem' }} type='icon-youjiantou' /> </div>
-							</div>
-
-							<div className="mid_part">
-								<div className="left_box">POWER</div>
-								<div className="right_box"> {(String(item.balance).split('.')[1]?.length > 4) ? Number(item.balance).toFixed(4) : item.balance} </div>
-							</div>
+					<div className="wallet_box">
+						<div className="add_wallet" onClick={() => {
+							operation([
+								{ text: '导入管理密钥', onPress: () => this.pushPage('/import_secret_key'), style: { textAlign: 'center' } },
+								{ text: '创建管理密钥', onPress: () => { this.pushPage('/create_account') }, style: { textAlign: 'center' } },
+								{ text: '取消', style: { textAlign: 'center', color: '#1677ff' } },
+							]);
+						}}>
+							<IconFont type='icon-chuangjianguanlimiyue' style={{ width: '.48rem', height: '.48rem' }} />
+							<span>管理密钥</span>
 						</div>
+						{addressList.map(item => {
+							return <div className="wallet_item" key={item.address}>
 
-						<div className="bottom_part">
-							<div className="left_box">
-								<Button className="address_btn" type="link" onClick={this.walletAddress.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>地址</Button>
-								<div className="dot_box">
-								<div className="dot1"></div>
-								<div className="dot2"></div>
+								<div className='push_page_part' onClick={() => this.pushPage(`/wallet_setting?key=${(item.key)}`)}>
+									<div className="top_part">
+										<div className="left_box">
+											{item.key}
+										</div>
+										<div className="right_box"> <IconFont style={{ width: '.36rem', height: '.36rem' }} type='icon-youjiantou' /> </div>
+									</div>
+
+									<div className="mid_part">
+										<div className="left_box">POWER</div>
+										<div className="right_box"> {(String(item.balance).split('.')[1]?.length > 4) ? Number(item.balance).toFixed(4) : item.balance} </div>
+									</div>
+								</div>
+
+								<div className="bottom_part">
+									<div className="left_box">
+										<Button className="address_btn" type="link" onClick={this.walletAddress.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>地址</Button>
+										<div className="dot_box">
+											<div className="dot1"></div>
+											<div className="dot2"></div>
+										</div>
+									</div>
+									<div className="right_box">
+										<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
+										<Button type="primary" onClick={this.deviceList.bind(this, item)}>我的设备</Button>
+									</div>
 								</div>
 							</div>
-							<div className="right_box">
-								<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
-								<Button type="primary" onClick={this.deviceList.bind(this, item)}>设备管理</Button>
-							</div>
-						</div>
+						})}
 					</div>
-				})}
-			</div>
-			</Spin>
+				</Spin>
 			</div>
 
-			<Modal visible={this.state.visible}
-				transparent
-				title={'选择管理密钥'}
-				closable
-				className="select_wallet_box"
-				onClose={() => this.setState({ visible: false })}
-				footer={[
-					{ text: '取消', onPress: () => this.setState({ visible: false }) },
-					{ text: '确定', onPress: this.walletModalOk.bind(this) }
-				]}
-			>
-				{keysName.map(key => {
-					return <div key={key} className={`wallet_item ${currKey == key && 'active'}`} onClick={() => this.setState({ currKey: key == currKey ? '' : key })}>
-						<IconFont type="icon-qianbao" />
-						<div className="name">{key}</div>
-					</div>
-				})}
+			<SelectWallet visible={this.state.visible} modalOk={this.walletModalOk.bind(this)} onClose={() => this.setState({ visible: false })} />
 
-			</Modal>
-			</div>
+		</div>
 	}
 }
 

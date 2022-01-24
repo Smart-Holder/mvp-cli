@@ -3,9 +3,9 @@ import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../../src/components/icon_font';
 import native from "./prefix_native"
 const TabBarItemConfig = [
-	{ text:'密钥' ,pathname: '/home', selectIcon: 'icon-miyuexuanzhong', icon: 'icon-miyue', current: 0 },
-	{ text:'设备' ,pathname: '/device', selectIcon: 'icon-shebeixuanzhong', icon: 'icon-shebei', current: 2 },
-	{ text:'我的' ,pathname: '/account', selectIcon: 'icon-wodexuanzhong', icon: 'icon-wode', current:1},
+	{ text: '密钥', pathname: '/home', selectIcon: 'icon-miyuexuanzhong', icon: 'icon-miyue', current: 0 },
+	{ text: '设备', pathname: '/device', selectIcon: 'icon-shebeixuanzhong', icon: 'icon-shebei', current: 2 },
+	{ text: '我的', pathname: '/account', selectIcon: 'icon-wodexuanzhong', icon: 'icon-wode', current: 1 },
 ]
 
 
@@ -13,10 +13,10 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 
 	state = {
 		current: 0,
-		bottom:10
+		bottom: 10
 	}
 
-	m_click(pathname:string,current:number) {
+	m_click(pathname: string, current: number) {
 		this.setState({ current });
 		this.props.nav().replace(pathname, false, 0);
 
@@ -27,9 +27,9 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		// let mainEle = document.querySelector('._main > div');
 		setTimeout(() => {
 			let mainEle = document.querySelector('._main > div');
-			mainEle?.setAttribute('style', `padding-bottom:${data ? (70 + data) + 'px' : '70px'}`)
+			mainEle?.setAttribute('style', `padding-bottom:${data ? (52 + data) + 'px' : '52px'}`)
 			console.log(mainEle, "mainEle", data, window.devicePixelRatio);
-		},1000);
+		}, 1000);
 		this.setState({ bottom: data });
 	}
 
@@ -38,9 +38,9 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		let { current, bottom } = this.state;
 		let style = { width: '.48rem', height: '.48rem' };
 		return (
-			<div className="_tools" style={{ paddingBottom: (bottom || 10) + 'px'}}>
+			<div className="_tools" style={{ paddingBottom: (bottom || 10) + 'px' }}>
 				{TabBarItemConfig.map(item => {
-					return <div className="btn" onClick={this.m_click.bind(this,item.pathname,item.current)}>
+					return <div className="btn" onClick={this.m_click.bind(this, item.pathname, item.current)}>
 						{(current === item.current && location.pathname.startsWith(item.pathname)) ? <IconFont style={style} type={item.selectIcon} /> : <IconFont style={style} type={item.icon} />}
 						<div className={`txt ${(current === item.current && location.pathname.startsWith(item.pathname)) && 'active'}`}>{item.text}</div>
 					</div>

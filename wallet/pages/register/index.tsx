@@ -6,10 +6,9 @@ import Input from '../../../src/components/input';
 import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
 import native from '../../util/prefix_native';
-
-import "./index.scss";
 import { verificationPhone } from '../../util/tools';
 import { changePwd, login, register, sendPhoneVerify } from '../../user';
+import "./index.scss";
 
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
@@ -36,14 +35,8 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 		let { username, v_code, password, confirm_password } = this.state;
 		let { pageType } = this.params;
 		if (!verificationPhone(username)) return alert('请输入正确格式的手机号!');
-		// let fromVal = await this.formRef.current?.validateFields();
 		if (confirm_password !== password) return alert("两次密码输入不一致!");
-		let body = {
-			username,
-			v_code,
-			password,
-			confirm_password
-		};
+		let body = { username, v_code, password, confirm_password };
 
 		if (pageType == 'reset_password') {
 			try {
@@ -51,7 +44,7 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 				await changePwd(username, password);
 
 				let keyName = await native.getKeysName();
-				alert('密码修改成功!', () => this.pushPage(keyName.length ? '/home': '/secretkey'));
+				alert('密码修改成功!', () => this.pushPage(keyName.length ? '/home' : '/secretkey'));
 
 			} catch (error: any) {
 				alert(error.message);
@@ -84,7 +77,7 @@ class Login extends NavPage<{ pageType?: 'register' | 'reset_password' }> {
 
 	async getVcode() {
 		await sendPhoneVerify(this.state.username);
-		this.setState({ isCountdown: true ,dateNow:Date.now()});
+		this.setState({ isCountdown: true, dateNow: Date.now() });
 	}
 
 	render() {

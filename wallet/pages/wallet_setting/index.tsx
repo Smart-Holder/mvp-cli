@@ -64,19 +64,11 @@ export default class Account extends NavPage<{ key: string }> {
 				<div className="setting_title">我的数字收藏品</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
-			{/* <div className="setting_item" style={{ marginBottom: '.3rem' }} onClick={this.deviceList.bind(this)}>
-				<div className="setting_title">管理设备</div>
-				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
-			</div> */}
 
 			<div className="setting_item" onClick={() => this.pushPage(`/wallet_setting_password?key=${this.params.key}&type=modify`)}>
 				<div className="setting_title">修改解锁密码</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
-			{/* <div className="setting_item" onClick={() => this.pushPage(`/wallet_setting_password?key=${this.params.key}&type=reset`)}>
-				<div className="setting_title">重制解锁密码</div>
-				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
-			</div> */}
 
 			<div className="btn_box">
 				<Button type="primary" className="width_btn" danger onClick={this.deleteAddress.bind(this)}>删除管理密钥</Button>

@@ -42,7 +42,7 @@ public class Cache {
 		if (suffix != null && !suffix.equals("")) {
 			String type = _mines.get(suffix);
 			if (type != null) {
-				return null;
+				return type;
 			}
 			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(suffix);
 			if (type != null && !type.isEmpty())

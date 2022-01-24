@@ -232,8 +232,6 @@ class My extends NavPage<{ address: string }> {
 
 			<Header page={this} title="我的藏品" />
 
-			{/* <div className="my_page_title">{t('我的NFT')}</div> */}
-			
 			<div className="my_page_content">
 				<Tabs tabBarUnderlineStyle={{ backgroundColor: '#1677ff', color: '#1677ff', borderColor: '#1677ff' }} tabBarBackgroundColor={'#f5f5f5'} tabBarActiveTextColor={'#1677ff'} tabs={
 					[{ title: this.t('本网络数字藏品'), index: 0 }, { title: this.t('其他网络数字藏品'), index: 1 }]
@@ -255,7 +253,6 @@ class My extends NavPage<{ address: string }> {
 				</Tabs>
 
 
-				{/* // {(!nft.length && !loading) && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />} */}
 			</div>
 			<Modal
 				onClose={() => {

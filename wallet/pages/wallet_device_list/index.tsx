@@ -1,32 +1,21 @@
 
 import { React } from 'webpkit/mobile';
-import NavPage from '../nav';
-import { Device, NFT } from '../models';
-import { devices, setDeviceSigner } from '../models/device';
+import NavPage from '../../../src/nav';
+import { Device, NFT } from '../../../src/models';
+import { devices } from '../../../src/models/device';
 import { Spin } from 'antd';
-import { DeviceItem } from '../components/deviceItem';
-import IconFont from '../components/icon_font';
-import { withTranslation } from 'react-i18next';
-import native from '../../wallet/util/prefix_native';
-import wallet from '../../wallet/wallet_ui';
-import * as config from '../../config';
-import { getParams } from '../../wallet/util/tools';
-import * as device from '../models/device';
+import { DeviceItem } from '../../../src/components/deviceItem';
+import native from '../../util/prefix_native';
+import * as config from '../../../config';
 import { alert } from 'webpkit/lib/dialog';
-import { check } from '../../wallet/user';
-import { Modal } from 'antd-mobile';
-import Header from '../util/header';
+import { check } from '../../user';
+import Header from '../../../src/util/header';
 
 
-import '../css/index.scss';
-import "../../wallet/util/wallet_ui.scss";
-import SelectWallet from '../components/select_wallet';
-import { setCurrWallet_BindDevice } from '../util/tools';
+import SelectWallet from '../../../src/components/select_wallet';
+import { setCurrWallet_BindDevice } from '../../../src/util/tools';
+import './index.scss';
 
-const crypto_tx = require('crypto-tx');
-
-// const { t } = Translation(); //把使用方法结构
-type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
 
 interface IDeviceItemProps extends Device {
 	key?: string
@@ -34,27 +23,13 @@ interface IDeviceItemProps extends Device {
 
 class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
-	title = '我的NFT';
-
-	_NftAdd = () => {
-		this.pushPage('/nft_add');
-	}
-
-	_NftDetails(e: NFT) {
-		this.pushPage({ url: `/nft_details`, params: { id: e.id } });
-	}
 
 	state = {
-		nft: [] as NFT[], device: [] as IDeviceItemProps[], loading: true, visible: false, carouselType: 'MateMask' as ICarouselType,
+		nft: [] as NFT[], device: [] as IDeviceItemProps[], loading: true, visible: false,
 
 	};
 
 	async triggerLoad() {
-		// await initialize();
-		// var hex = encodeParameters(['address'], ['0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391']);
-		// console.log(hex);
-
-
 		this.getDeviceList();
 	}
 
@@ -106,27 +81,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 			this.setState({ visible: true });
 		}
 
-		// let data = this.params.keyName || (await wallet.selectCurrentKey());
-		// if (!data) return false;
-		// this.selectCurrKey(data);
-
 	}
-
-	carouselSetupType = {
-		TokenPocket: [
-			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/tp_setp_1.jpg') },
-			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-		MateMask: [
-			{ title: <div>{this.t('第一步：请点击左上角')}“<IconFont type="icon-danchuangicon1" />”{this.t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require('../assets/step_1.png') },
-			{ title: <div>{this.t('第二步：进入钱包后请点击右上角')} <br />“<IconFont type="icon-danchuangicon3" />”{this.t('按钮')}</div>, img: require('../assets/step_2.png') },
-			{ title: <div>{this.t('第三步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-		imToken: [
-			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/imtoken_setp_1.1.jpg') },
-			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-	};
 
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, visible: false });
@@ -152,21 +107,18 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 	render() {
 		const { device, loading } = this.state;
-		const { keyName } = this.params;
-		const { t } = this;
+		// const {address } = this.params;
 		return (
-			<div className="index device_list_page">
+			<div className="index wallet_device_list_page">
 				<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} >
-
-					<Header title={keyName ? "我的设备" : "全部设备"} page={this} className="device_header" />
-					{!(keyName) && <img className="home_bg_img" src={require("../assets/home_bg4.png")} alt="" />}
+					<Header title="设备管理" page={this} className="device_header" />
 					<div className="device_warp">
 
-						<div className="device_list" style={{ marginTop: keyName ? '.5rem' : '2.12rem' }}>
-							<div className="list_title" >{keyName ? "我的设备" : "全部设备"}</div>
+						<div className="device_list">
+							<div className="list_title" >{("全部设备")}</div>
 							<div className="list_top_extra">
 								<div className="bind_device_btn" onClick={this.addDevice.bind(this)}>
-									<img className="add_icon" src={require('../assets/add_icon.png')} alt="+" /> {t("绑定新设备")}
+									<img className="add_icon" src={require('../../../src/assets/add_icon.png')} alt="+" /> {("绑定新设备")}
 								</div>
 							</div>
 
@@ -191,4 +143,4 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 
 }
 
-export default withTranslation('translations', { withRef: true })(DeviceList);
+export default DeviceList;

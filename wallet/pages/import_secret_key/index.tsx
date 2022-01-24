@@ -3,13 +3,12 @@ import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import Input from '../../../src/components/input';
 import IconFont from '../../../src/components/icon_font';
-import { Checkbox } from 'antd';
 import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
-import "./index.scss";
-import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
+import { encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
 import native from '../../util/prefix_native'
 import wallet_ui, { SecretKey } from '../../wallet_ui';
+import "./index.scss";
 
 type IimportMethodType = 'secret_key' | 'mnemonic_words';
 
@@ -43,11 +42,6 @@ class ImportSecretKeyPage extends NavPage {
 		} catch (error: any) {
 			alert(error);
 		}
-		// let data = await native.getKey(secret_key_name);
-
-		// let privateKey = await decryptPrivateKey(JSON.parse(String(data)), password);
-		// alert(String(data));
-		// console.log(privateKey.toString('hex'),data);
 	}
 
 	// 扫码获取私钥地址
@@ -65,7 +59,6 @@ class ImportSecretKeyPage extends NavPage {
 			<div className="import_secretkey_page_content">
 				<div className="import_method_card">
 					<div onClick={this.set_import_method.bind(this, 'secret_key')} className={`import_item ${import_method == 'secret_key' && 'active'}`}> <span>私钥导入</span> </div>
-					{/* <div onClick={this.set_import_method.bind(this, 'mnemonic_words')} className={`import_item ${import_method == 'mnemonic_words' && 'active'}`}> <span>助记词导入</span> </div> */}
 				</div>
 
 
@@ -91,14 +84,6 @@ class ImportSecretKeyPage extends NavPage {
 						<Input maxLength={25} inputType="password" placeholder="请重复输入密码" value={confirm_password} onChange={(e) => this.setState({ confirm_password: e.target.value })} />
 					</div>
 				</div>
-
-				{/* <div className="checkbox_part">
-					<Checkbox style={{ marginRight: '.05rem', marginLeft: '.08rem' }} />
-					<div className="checkbox_label">
-						<span>我已仔细阅读并同意</span>
-						<a>《用户协议》</a>
-					</div>
-				</div> */}
 
 				<Button disabled={!address || !password || !confirm_password || !secret_key_name || password.length < 8 || confirm_password.length < 8} className="import_btn" type='primary' onClick={this.importWallet.bind(this)}>导入</Button>
 			</div>
