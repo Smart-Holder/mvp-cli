@@ -66,10 +66,10 @@ export default class Account extends NavPage<{ key: string }> {
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
 
-			<div className="setting_item" style={{ marginBottom: '.3rem' }} onClick={this.changeNetwork.bind(this)}>
+			{/* <div className="setting_item" style={{ marginBottom: '.3rem' }} onClick={this.changeNetwork.bind(this)}>
 				<div className="setting_title">网络切换</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
-			</div>
+			</div> */}
 
 			<div className="btn_box">
 				<Button type="primary" className="width_btn" onClick={() => {

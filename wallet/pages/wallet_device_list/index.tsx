@@ -111,10 +111,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 		return (
 			<div className="index wallet_device_list_page">
 				<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} >
-
 					<Header title="设备管理" page={this} className="device_header" />
-					{/* <img className="home_bg_img" src={require("../assets/home_bg3.png")} alt="" /> */}
-
 					<div className="device_warp">
 
 						<div className="device_list">

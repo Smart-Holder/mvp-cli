@@ -2,10 +2,8 @@ import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import Input from '../../../src/components/input';
-import { Checkbox } from 'antd';
 import Button from '../../../src/components/button'
-import { decryptPrivateKey, encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
-import native from '../../util/prefix_native'
+import { encryptPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/keystore';
 import { genPrivateKey } from '../../../deps/webpkit/deps/crypto-tx/account';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
@@ -21,8 +19,6 @@ export default class CreateAccount extends NavPage {
 	}
 
 	async create() {
-		// this.pushPage('/safety_tips');
-		// genPrivateKey
 		let { address_name, password, confirm_password } = this.state;
 
 		if (confirm_password !== password) return alert("两次密码输入不一致!");
@@ -63,14 +59,6 @@ export default class CreateAccount extends NavPage {
 						<Input minLength={8} maxLength={25} inputType="password" placeholder="请重复输入密码" value={confirm_password} onChange={(e) => this.setState({ confirm_password: e.target.value })} />
 					</div>
 				</div>
-
-				{/* <div className="checkbox_part">
-					<Checkbox style={{ marginRight: '.05rem', marginLeft: '.08rem' }} />
-					<div className="checkbox_label">
-						<span>我已仔细阅读并同意</span>
-						<a>《用户协议》</a>
-					</div>
-				</div> */}
 
 				<Button onClick={this.create.bind(this)} className="import_btn" type='primary' disabled={!address_name || password.length < 8 || confirm_password.length < 8} >创建</Button>
 			</div>

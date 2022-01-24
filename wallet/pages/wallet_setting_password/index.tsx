@@ -61,7 +61,6 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 				let keyStoreJson = encryptPrivateKey('0x' + address, confirm_password);
 				wallet_ui.setAccounts(undefined);
 				wallet_ui.clearCurrentKey();
-				// await native.setKey(key, JSON.stringify(keyStoreJson));
 				await wallet_ui.setKey(key, new SecretKey(keyStoreJson));
 
 				alert('密码重置成功!', () => this.replacePage('/home'));

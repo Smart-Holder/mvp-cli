@@ -3,7 +3,7 @@ import native from '../native';
 
 class PrefixNative {
 
-	
+
 	async getBottomStatusHeight() {
 		return await native.getBottomStatusHeight();
 	}
@@ -28,7 +28,7 @@ class PrefixNative {
 		return value;
 	}
 
-	async setKey(id: string,value:string) {
+	async setKey(id: string, value: string) {
 		await native.setKey(await this._Key(id), value);
 	}
 
@@ -37,28 +37,20 @@ class PrefixNative {
 	}
 
 
-	async getKeysName(account_name?:string): Promise<string[]> {
+	async getKeysName(account_name?: string): Promise<string[]> {
 
 		var keys: string[] = [];
 		let keyArr = await native.getKeysName();
 		let loginstate = await storage.get('loginState');
 		let prefix = this._Prefix + (loginstate?.name || account_name) + '_';
-		
+
 		keyArr.forEach(key => {
 			console.log(key, prefix);
-			
+
 			if (key.substring(0, prefix.length) == prefix) {
 				keys.push(key.substring(prefix.length));
 			}
 		});
-
-		// for (var key in keyArr) {
-		// 	console.log(key.substring(0, prefix.length), prefix, key);
-			
-		// 	if (key.substring(0, prefix.length) == prefix) {
-		// 		keys.push(key.substring(prefix.length));
-		// 	}
-		// }
 		return keys;
 	}
 }
