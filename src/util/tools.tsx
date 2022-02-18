@@ -206,4 +206,23 @@ export const unitLabel: { [key: string]: any } = {
 	1001: "BAOBAB",
 	97: "BSC_TESTNET",
 	5: "GOERLI",
+	5555: "BSN_TEST",
 }
+
+export const unitLabelProd: { [key: string]: any } = {
+	'1': "ETH",
+	0: "UNKNOWN",
+	137: "MATIC",
+	8217: "KLAYTN",
+	100: "XDAI",
+	56: "BSC",
+	'-2': "FLOW",
+	'-1': "LOCAL",
+	4: "RINKEBY",
+	80001: "MUMBAI",
+	1001: "BAOBAB",
+	97: "BSC_TESTNET",
+	5: "GOERLI",
+	5555: "BSN",
+}
+

@@ -159,7 +159,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 		let newselectedList: { [key: string]: NFT } = {};
 		carouselConfig.data.forEach(item => {
-			if (nftListObj[item.tokenId]) newselectedList[item.tokenId] = item as NFT;;
+			let id = item.tokenId + '_' + item.token;
+			if (nftListObj[item.tokenId]) newselectedList[id] = item as NFT;;
 		});
 		return newselectedList;
 	}
@@ -183,11 +184,12 @@ class DeviceSetCarousel extends NavPage<Device> {
 	nftItemClick(nftItem: NFT) {
 		let { selectedList, isShowAbbreviation, radioValue } = this.state;
 		let newselectedList = { ...selectedList };
+		let id = nftItem.tokenId + '_' + nftItem.token;
 
 
-		if (newselectedList[nftItem.tokenId]) {
+		if (newselectedList[id]) {
 			// 删除已选择的nft
-			delete newselectedList[nftItem.tokenId];
+			delete newselectedList[id];
 			// 如果没有选中项了 收起底部弹框
 			!Object.keys(newselectedList).length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
 
@@ -195,7 +197,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			// 单张nft图片选择限制
 			if ((radioValue === CarouselType.single || radioValue === CarouselType.video) && Object.keys(selectedList).length >= 1) newselectedList = {};
 			// 选中当前点击的nft
-			newselectedList[nftItem.tokenId] = nftItem;
+			newselectedList[id] = nftItem;
 			// 显示底部已选弹框
 			isShowAbbreviation = true;
 		}
@@ -218,10 +220,12 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	rendNftItem(nft: NFT) {
 		const { selectedList } = this.state;
+		let id = nft.tokenId + '_' + nft.token;
+
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{/* <img src={(nft.image)} alt="" /> */}
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
-			<div className={`select_btn ${selectedList[nft.tokenId] && 'select_btn_active'}`} />
+			<div className={`select_btn ${selectedList[id] && 'select_btn_active'}`} />
 		</div>
 	}
 

@@ -2,11 +2,12 @@ import { React } from 'webpkit/mobile';
 import Button from '../button';
 import { Image } from 'antd';
 import { INftItem } from '../../pages/interface';
-import { getSubStr, unitLabel } from '../../util/tools';
+import { getSubStr, unitLabel, unitLabelProd } from '../../util/tools';
 import { useTranslation } from 'react-i18next';
 
 import NavPage from '../../nav';
 import "./index.scss";
+import * as config from '../../../config';
 
 interface INftCardProps {
 	nft: INftItem;
@@ -52,7 +53,7 @@ const NftCard = (props: INftCardProps) => {
 
 				{showChain && <div className="nft_hash_box">
 					<div className="nft_hash_title">{t('网络')}</div>
-					<div className="nft_hash textNoWrap">{unitLabel[String(nft?.chain)]}</div>
+					<div className="nft_hash textNoWrap">{(config.env == 'prod' ? unitLabelProd : unitLabel)[String(nft?.chain)]}</div>
 				</div>}
 			</div>
 

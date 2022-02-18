@@ -86,8 +86,14 @@ class TransferNft extends NavPage<INftItem> {
 			removeNftDisabledTimeItem(nft, "nftDisabledTime");
 
 			let errorText = error;
+			let errorCode = error.msg || error.message || error.description;
+
 			if (error?.code == 4001 || error.errno == -30000) errorText = '已取消存储操作';
 			if (error?.errno == 100400) errorText = error.description;
+
+			(error?.code != 4001 && errorCode !== 'cancel') && (errorText += errorCode);
+
+			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 
 			let btnText = t('我知道了');
 			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {t(errorText)}</div>, buttons: { [btnText]: () => { } } });
