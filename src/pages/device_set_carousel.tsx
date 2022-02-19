@@ -3,6 +3,8 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import { Tabs, Modal } from 'antd-mobile';
 import Button from '../components/button';
+import SetCarousel from '../components/set_carousel';
+
 import models, { Device, NFT } from '../models';
 import { Empty, Drawer, Slider, Switch } from 'antd';
 import * as device from '../models/device';
@@ -10,7 +12,7 @@ import { alert, confirm } from '../../deps/webpkit/lib/dialog';
 import { ArrayToObj } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 import IconFont from '../components/icon_font';
-import { checkVersion, getScreenSettings, nftmvp_apk_upgrade, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
+import { checkVersion, getScreenSettings, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
 import Loading from '../../deps/webpkit/lib/loading';
 
 import '../css/device_set_carousel.scss';
@@ -25,7 +27,7 @@ const intervalTimeConfig = [
 	{ label: "20s", value: 20 },
 ];
 
-enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail' };
+enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
 
 // enum CallDeviceType {wifi = 'wifi',  version = 'version' };
 
@@ -40,9 +42,10 @@ const settingDarwerConfig = [
 	{ label: "背景颜色", value: SettingDarwerType.color, icon: 'icon-yanse' },
 	{ label: "数字藏品信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
+	{ label: "投屏", value: SettingDarwerType.shadow, icon: 'icon-pingmu' },
 ];
 
-enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
+export enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
 
 const callDeviceConfig: { [key: string]: { title: string, btnText: string } } = {
 	wifi: { title: "WIFI设置", btnText: '唤起WIFI' },
@@ -81,7 +84,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		carouselIntervalTime: 5,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
-		currSettingIndex: 'imgage',
+		currSettingIndex: 'shadow',
 		drawerVisible: false,
 		settingModalVisible: false,
 		currcallDeviceIndex: 'wifi',
@@ -141,7 +144,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 		(type === CarouselType.video ? videoNftList : imgNftList).forEach((item, index) => {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
-
 
 		let newState: any = { leftNftList, rightNftList, videoNftList };
 
@@ -431,11 +433,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.nftDetailCard();
 			// case SettingDarwerType.autoLight:
 			// 	return this.autoLight();
+			case SettingDarwerType.shadow:
+				return <SetCarousel page={this} mode='shadow' />;
 
 			default:
+				return <SetCarousel page={this} mode='normal' />;
 				return this.imageCard();
 		}
 	}
+
 
 	// 抽屉项点击事件
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
@@ -487,13 +493,13 @@ class DeviceSetCarousel extends NavPage<Device> {
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
-				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem" ,marginRight:'.2rem',width:'.38rem',height:'.38rem'}} type="icon-ai221" />} />
+				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem", marginRight: '.2rem', width: '.38rem', height: '.38rem' }} type="icon-ai221" />} />
 
 				<div className="device_set_carousel_body">
 					{this.getCurrPageContent()}
 				</div>
 
-				{isShowAbbreviation && <div className="bottom_modal_box">
+				{/* {isShowAbbreviation && <div className="bottom_modal_box">
 					<div className="top_part">
 						<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>{t('取消')}</Button>
 						<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {Object.keys(selectedList).length} )</Button>
@@ -509,7 +515,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 							</div>
 						})}
 					</div>
-				</div>}
+				</div>} */}
 			</div>
 
 			<Drawer
@@ -522,7 +528,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{display:'flex',alignItems:'center'}}><IconFont style={{width:'.34rem',height:'.34rem',marginRight:'.2rem'}} type={item.icon} /> {t(item.label)}</p>
+					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>
 				})}
 			</Drawer>
 

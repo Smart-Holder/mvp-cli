@@ -43,7 +43,7 @@ import * as moment from 'moment';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
-	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
+	if (['Connection disconnection', 'ResizeObserver loop limit exceeded'].includes(e.data.message)) return false;
 	errnoHandles(e.data)
 });
 utils.onUnhandledRejection.on((e) => {
@@ -58,7 +58,7 @@ class MyRoot<P> extends Root<P> {
 	isHashRoutes = false;
 
 	async triggerLoad() {
-	
+
 		await super.triggerLoad();
 		try {
 			await initialize();

@@ -1,6 +1,6 @@
 
 import storage from 'somes/storage';
-import index, { NFT, Device } from '.';
+import { NFT, Device } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
 import somes from 'somes';
 import sdk, { authName } from '../sdk';
@@ -133,12 +133,11 @@ export function screenOrientation(target: string, orientation: string) {
 	return call(target, 'screenOrientation', { orientation });
 }
 
-
-// /files/res/apk/nftmvp_apk_upgrade.json
-
-export function nftmvp_apk_upgrade() {
-	return sdk.mbx.methods.post('/files/res/apk/nftmvp_apk_upgrade.json');
+// 清除投屏
+export function clearShadow(target: string) {
+	return call(target, 'clearShadow');
 }
+
 
 export function displaySingleImage(target: string, token: string, tokenId: string) {
 	return call(target, 'displaySingleImage', { type: 'image', time: 0, data: [{ token, tokenId }] });
@@ -150,6 +149,18 @@ export function displayMultiImage(target: string, time: number, data: { token: s
 
 export function displayVideo(target: string, token: string, tokenId: string) {
 	return call(target, 'displayVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
+}
+
+export function shadowSingleImage(target: string, token: string, tokenId: string) {
+	return call(target, 'shadowSingleImage', { type: 'image', time: 0, data: [{ token, tokenId }] });
+}
+
+export function shadowMultiImage(target: string, time: number, data: { token: string, tokenId: string }[]) {
+	return call(target, 'shadowMultiImage', { type: 'image', time, data });
+}
+
+export function shadowVideo(target: string, token: string, tokenId: string) {
+	return call(target, 'shadowVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
 }
 
 export function sign(target: string, msg: IBuffer): Promise<{ signer: string, sign: string }[]> {
@@ -204,10 +215,6 @@ export async function set_screen_save(address: string,
 
 	ss.data = ss.data.filter(e => nfts_set.has(e.token + e.tokenId));
 
-	if (!ss.data.length && nfts.length) {
-		// ss.data = [nfts[0]];
-	}
-
 	ss.type = type;
 	await storage.set('__device_set_screen_save_cur_' + address, type);
 	await storage.set('__device_set_screen_save_' + address + type, ss);
@@ -227,3 +234,45 @@ export async function set_screen_save(address: string,
 			await displayMultiImage(address, ss.time, ss.data);
 	}
 }
+
+
+export async function get_shadow_screen_save(address: string, _type?: 'single' | 'multi' | 'video'): Promise<DeviceScreenSave> {
+	var type = _type || await storage.get('__device_set_shadow_screen_save_cur_' + address, 'single');
+	var save = await storage.get('__device_set_shadow_screen_save_' + address + type, { address, time: 10, type })
+	return { data: [], ...save };
+}
+
+export async function set_shadow_screen_save(address: string,
+	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video', isNotCall?: boolean) {
+	var ss = Object.assign(await get_screen_save(address, type), pss);
+	var nfts = await sdk.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
+	var nfts_set = new Set();
+
+	for (var nft of nfts) {
+		nfts_set.add(nft.token + nft.tokenId);
+	}
+
+	ss.data = ss.data.filter(e => nfts_set.has(e.token + e.tokenId));
+
+	ss.type = type;
+	// await storage.set('__device_set_shadow_screen_save_cur_' + address, type);
+	// await storage.set('__device_set_shadow_screen_save_' + address + type, ss);
+
+	if (pss.data) {
+		if (type == 'single') {
+			somes.assert(pss.data.length, 'Bad param for call shadowSingleImage()');
+			!isNotCall && await shadowSingleImage(address, pss.data[0].token, pss.data[0].tokenId);
+		} else if (type == 'multi') {
+			await shadowMultiImage(address, ss.time, pss.data);
+		} else {
+			somes.assert(pss.data.length, 'Bad param for call shadowVideo()');
+			await shadowVideo(address, pss.data[0].token, pss.data[0].tokenId);
+		}
+	} else if (pss.time) {
+		if (type == 'multi')
+			await shadowMultiImage(address, ss.time, ss.data);
+	}
+}
+
+
+

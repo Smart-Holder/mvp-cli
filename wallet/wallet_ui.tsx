@@ -62,7 +62,7 @@ export class SecretKey implements ISecretKey {
 			try {
 				priv = decryptPrivateKey(this.keystore, pwd);
 			} catch (error) {
-				throw Error('密钥密码输入错误!')
+				throw Error.new('密钥密码输入错误!')
 			}
 			this._key = buffer.from(priv);
 			return this._key;
@@ -161,7 +161,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 	async signFrom(target: string, msg: IBuffer): Promise<Signature> {
 		var device = await getDeviceFormAddress(target);
-		if (device && device.owner ) {
+		if (device && device.owner) {
 			var key = await this.keyFrom(device.owner);
 		} else {
 			var key = await this.currentKey();
@@ -215,8 +215,10 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		// 记住用户输入密码
 		if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
 		var key = Object.values(keys).find(e => e.address == address);
-		if (!key)
+		if (!key) {
+			console.log(keys, address, '不存在key');
 			throw Error.new('与当前设备绑定的密钥不存在');
+		}
 		return oldKey || key;
 	}
 

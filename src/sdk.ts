@@ -89,7 +89,7 @@ export class SDKSigner implements Signer {
 
 		var signature = sign(hash, this.privateKey());
 		var sign_ = buffer.concat([signature.signature, [signature.recovery]]).toString('base64');
-
+		// debugger
 		return {
 			st: String(st),
 			sign: sign_,

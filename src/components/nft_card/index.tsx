@@ -26,14 +26,17 @@ const NftCard = (props: INftCardProps) => {
 
 	const { t } = useTranslation();
 
+	// let suffix = 'watermark/2/text/SGFzaGlp5pWw5a2X6JeP5ZOB/font/5a6L5L2T/fontsize/1800/dissolve/80/fill/I0ZGRkZGRg==';
+	let suffix = 'watermark/1/image/a29kbzovL25mdG12cC9IYXNoaWlfd2F0ZXJtYXJrLnBuZw==/dissolve/50/gravity/SouthEast/dx/20/dy/20';
+
 	return <div className="nft_card">
 		<div className="nft_info_box">
 			<div className="nft_img_box">
 				{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
-				{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="" placeholder={
+				{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image width='100%' src={(nft.image || nft.imageOrigin) + `?${suffix}`} alt="" placeholder={
 					<Image
 						preview={false}
-						src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
+						src={`${nft.image || nft.imageOrigin}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
 						width='100%'
 					/>
 				} />}

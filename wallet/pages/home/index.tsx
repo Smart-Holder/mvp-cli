@@ -14,14 +14,11 @@ import routes from '../../router';
 import { MyRoot } from '../..';
 import { getParams } from '../../util/tools';
 
-import * as device from '../../../src/models/device';
 import { Spin } from 'antd';
 import { alert } from 'webpkit/lib/dialog';
-import { setDeviceSigner } from '../../../src/models/device';
 import "../../util/wallet_ui.scss";
 import SelectWallet from '../../../src/components/select_wallet';
 import { setCurrWallet_BindDevice } from '../../../src/util/tools';
-const crypto_tx = require('crypto-tx');
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -43,6 +40,15 @@ class Home extends NavPage {
 	}
 
 	async triggerLoad() {
+
+		// console.log(
+		// 	Buffer.from('5LiD54mb5LqR5a2Y5YKo' || '', 'base64').toString('utf8')
+		// );
+
+		// console.log(Buffer.from('Hashii 数字藏品' || '').toString('base64'));
+
+
+
 		let keysNameArr = await native.getKeysName() || [];
 		var state = await storage.get('loginState');
 		if (!keysNameArr.length && state?.name) {

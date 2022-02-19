@@ -1,7 +1,7 @@
 
 module.exports = {
 	host: 'https://mvp-wallet.stars-mine.com',
-	sdk: 'https://mvp.stars-mine.com/service-api',
+	sdk: 'https://mvp-cn.stars-mine.com/service-api',
 	platform: 'eth',
 	env: 'prod',
 	defaultNetwork: 'https://opbtest.bsngate.com:18602/api/ac733d05c764467787cebef16f31f646/rpc',

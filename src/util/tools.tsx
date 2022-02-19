@@ -232,7 +232,7 @@ export function omit<T>(obj: T, omitKeys: string[] | string) {
 
 
 // 绑定设备设置当前钱包
-export const setCurrWallet_BindDevice = async (key: string, href:string) => {
+export const setCurrWallet_BindDevice = async (key: string, href: string) => {
 	await wallet.setCurrentKey(key);
 	setDeviceSigner(wallet);
 	let { a, c, v } = getParams(href);

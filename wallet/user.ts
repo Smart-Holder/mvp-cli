@@ -7,6 +7,7 @@ import hash from 'somes/hash';
 import somes from 'somes';
 import sdk, { store } from './sdk';
 import { SDKSigner, setPrivateKey } from '../src/sdk';
+import wallet from './wallet_ui'
 
 const crypto_tx = require('crypto-tx');
 
@@ -50,6 +51,8 @@ async function useLoginState(state: LoginState) {
 	await storage.set('loginState', state);
 	state.priv = undefined;
 	_LoginState = state;
+
+
 	if (store.conv) {
 		store.conv.autoReconnect = 50;
 		store.conv.connect();
@@ -62,6 +65,7 @@ async function tryLogin(state: LoginState, key2?: string, ref?: string) { // tes
 	} catch (err: any) { // ILLEGAL ACCESS
 		if (err.errno == errno.ERR_ILLEGAL_ACCESS[0]) {
 			if (location.pathname != '/login') {
+				console.log(state, "state", key2, "key2", '过期数据');
 				logout();
 				throw new Error('身份验证过期!');
 			};
@@ -74,9 +78,6 @@ async function tryLogin(state: LoginState, key2?: string, ref?: string) { // tes
 
 function genLoginState(name: string, pwd: string) {
 	var priv = hash.sha256(name + pwd + 'a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a');
-	// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699eccd55f9ff301a new
-	// a1048d9bb6a4e985342b240b5dd63176b27f1bac62fa268699ea6b55f9ff301a old
-	console.log(priv.toString('base64'), '0x' + priv.toString('hex'));
 
 	return {
 		name: name,
@@ -96,7 +97,9 @@ export function logout() {
 	nav.replace('/login', false, 0); // to login page
 	if (store.conv) {
 		store.conv.autoReconnect = 3e4;
+		store.conv.close();
 	}
+	wallet.setAccounts(undefined);
 }
 
 export const sendPhoneVerify = async (phone: string) => {

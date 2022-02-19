@@ -27,7 +27,7 @@ export class Tab extends ViewController<{ nav: () => Nav }> {
 		// let mainEle = document.querySelector('._main > div');
 		setTimeout(() => {
 			let mainEle = document.querySelector('._main > div');
-			mainEle?.setAttribute('style', `padding-bottom:${data ? (52 + data) + 'px' : '52px'}`)
+			data && (mainEle?.setAttribute('style', `padding-bottom:${data ? (52 + data) + 'px' : '52px'}`))
 			console.log(mainEle, "mainEle", data, window.devicePixelRatio);
 		}, 1000);
 		this.setState({ bottom: data });

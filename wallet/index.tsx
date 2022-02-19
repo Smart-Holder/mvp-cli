@@ -41,11 +41,10 @@ import 'antd-mobile/dist/antd-mobile.css'
 import * as moment from 'moment';
 import wallet from './wallet_ui';
 import { Tab } from './util/tools';
-import native from './util/prefix_native';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message);
-	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
+	if (['Connection disconnection', 'ResizeObserver loop limit exceeded'].includes(e.data.message)) return false;
 	errnoHandles(e.data);
 });
 
@@ -63,7 +62,7 @@ export class MyRoot<P> extends Root<P> {
 	async triggerLoad() {
 		await super.triggerLoad();
 		try {
-		
+
 			await initialize(wallet);
 		} catch (err: any) {
 			dialog.alert(err.message);
