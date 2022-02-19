@@ -244,3 +244,26 @@ export enum unitChainIdLabel {
 	HCETH = 64, // hard-chain ETHEREUM
 	BSN = 5555,
 }
+
+
+export class ChainTraits {
+	UNKNOWN = [ChainType.UNKNOWN, 0, 'UNK'];
+	ETHEREUM = [ChainType.ETHEREUM, 18, 'ETH'];
+	MATIC = [ChainType.MATIC, 18, 'MATIC'];
+	KLAYTN = [ChainType.KLAYTN, 18, 'KLAY'];
+	XDAI = [ChainType.XDAI, 18, 'XDAI'];
+	BSC = [ChainType.BSC, 18, 'BNB'];
+	FLOW = [ChainType.FLOW, 18, 'FLOW',];
+	LOCAL = [ChainType.LOCAL, 18, 'LOCAL',];
+	ROPSTEN = [ChainType.ROPSTEN, 18, 'ROPSTEN'];
+	RINKEBY = [ChainType.RINKEBY, 18, 'RINKEBY'];
+	MUMBAI = [ChainType.MUMBAI, 18, 'MUMBAI'];
+	BAOBAB = [ChainType.BAOBAB, 18, 'BAOBAB'];
+	BSC_TESTNET = [ChainType.BSC_TESTNET, 18, 'BNB_TEST'];
+	GOERLI = [ChainType.GOERLI, 18, 'GOERLI'];
+	HCETH = [ChainType.HCETH, 18, 'ETH'];
+	// BSN_TEST = [ChainType.BSN_TEST, 18, 'BSN_TEST'];
+	BSN = [ChainType.BSN, 18, 'BSN'];
+}
+
+export const chainTraits = new ChainTraits();

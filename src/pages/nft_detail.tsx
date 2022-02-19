@@ -1,11 +1,11 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
-import index, { AssetOrder, chainTraits, NFT } from '../models';
+import index, { AssetOrder,  NFT } from '../models';
 import { Image, Spin } from 'antd';
 import { Tabs } from 'antd-mobile';
 
-import { copyText, getSubStr, unitChainIdLabel, unitLabel } from '../util/tools';
+import { chainTraits, copyText, getSubStr, unitChainIdLabel, unitLabel } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 // import moment from "moment";
 
