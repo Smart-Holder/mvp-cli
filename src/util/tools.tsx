@@ -226,3 +226,21 @@ export const unitLabelProd: { [key: string]: any } = {
 	5555: "BSN",
 }
 
+export enum unitChainIdLabel {
+	UNKNOWN = 0, // UNKNOWN
+	ETHEREUM = 1, // ETHEREUM
+	MATIC = 137, // MATIC
+	KLAYTN = 8217, // KLAYTN
+	XDAI = 100, // XDAI
+	BSC = 56, // BSC
+	FLOW = -2, // FLOW
+	LOCAL = -1, // LOCAL
+	ROPSTEN = 3, // ROPSTEN
+	RINKEBY = 4, // RINKEBY
+	MUMBAI = 80001, // MUMBAI
+	BAOBAB = 1001, // BAOBAB
+	BSC_TESTNET = 97, // BSC_TESTNET
+	GOERLI = 5, // GOERLI
+	HCETH = 64, // hard-chain ETHEREUM
+	BSN = 5555,
+}

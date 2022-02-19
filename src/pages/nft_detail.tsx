@@ -5,7 +5,7 @@ import index, { AssetOrder, chainTraits, NFT } from '../models';
 import { Image, Spin } from 'antd';
 import { Tabs } from 'antd-mobile';
 
-import { copyText, getSubStr, unitLabel } from '../util/tools';
+import { copyText, getSubStr, unitChainIdLabel, unitLabel } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 // import moment from "moment";
 
@@ -96,12 +96,13 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 										{nftOrderList.map(item => {
 											let { fromAddres, value, toAddress, date } = item;
 											// let 
-											let unit = (chainTraits as any)[unitLabel[String(nft?.chain)]][2]
+											// let unit = (chainTraits as any)[unitLabel[String(nft?.chain)]][2];
+											let unit = (chainTraits as any)[unitChainIdLabel[Number(nft?.chain)]][2];
 											return <div className="order_item" key={item.id}>
 
 												<div className='order_row'>
 													<div className="label letter_space">{t("事件")}</div>
-													<div className="value">{t(fromAddres ? "购买" : "上架")}</div>
+													<div className="value">{t(fromAddres ? "转移" : "上架")}</div>
 												</div>
 
 												<div className='order_row'>
