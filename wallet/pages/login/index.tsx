@@ -57,7 +57,11 @@ class Login extends NavPage {
 		} catch (error: any) {
 			if (error.errno == 100307) isRegister = true;
 		}
-		if (!isRegister && login_method == 'password') return alert('该账号未注册，请注册后登录');
+		if (!isRegister && login_method == 'password') {
+			this.setState({ loading: false });
+			alert('该账号未注册，请注册后登录');
+			return;
+		};
 
 		try {
 			if (login_method == 'vcode') {

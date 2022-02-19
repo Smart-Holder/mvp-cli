@@ -7,6 +7,7 @@ import hash from 'somes/hash';
 import somes from 'somes';
 import sdk, { store } from './sdk';
 import { SDKSigner, setPrivateKey } from '../src/sdk';
+import wallet from './wallet_ui';
 
 const crypto_tx = require('crypto-tx');
 
@@ -96,7 +97,9 @@ export function logout() {
 	nav.replace('/login', false, 0); // to login page
 	if (store.conv) {
 		store.conv.autoReconnect = 3e4;
+		store.conv.close();
 	}
+	wallet.setAccounts(undefined);
 }
 
 export const sendPhoneVerify = async (phone: string) => {
