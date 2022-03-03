@@ -3,6 +3,8 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import { Tabs, Modal } from 'antd-mobile';
 import Button from '../components/button';
+import SetCarousel from '../components/set_carousel';
+
 import models, { Device, NFT } from '../models';
 import { Empty, Drawer, Slider, Switch } from 'antd';
 import * as device from '../models/device';
@@ -10,7 +12,7 @@ import { alert, confirm } from '../../deps/webpkit/lib/dialog';
 import { ArrayToObj } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 import IconFont from '../components/icon_font';
-import { checkVersion, getScreenSettings, nftmvp_apk_upgrade, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
+import { checkVersion, getScreenSettings, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
 import Loading from '../../deps/webpkit/lib/loading';
 
 import '../css/device_set_carousel.scss';
@@ -19,13 +21,13 @@ import '../css/device_set_carousel.scss';
 
 
 const intervalTimeConfig = [
-	{ label: "5s", value: 5 },
+	// { label: "5s", value: 5 },
 	{ label: "10s", value: 10 },
 	{ label: "15s", value: 15 },
 	{ label: "20s", value: 20 },
 ];
 
-enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail' };
+enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
 
 // enum CallDeviceType {wifi = 'wifi',  version = 'version' };
 
@@ -38,11 +40,12 @@ const settingDarwerConfig = [
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },
 	{ label: "更新检查", value: SettingDarwerType.version, icon: 'icon-banbengengxin' },
 	{ label: "背景颜色", value: SettingDarwerType.color, icon: 'icon-yanse' },
-	{ label: "NFT信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
+	{ label: "数字藏品信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
+	{ label: "投屏", value: SettingDarwerType.shadow, icon: 'icon-pingmu' },
 ];
 
-enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
+export enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
 
 const callDeviceConfig: { [key: string]: { title: string, btnText: string } } = {
 	wifi: { title: "WIFI设置", btnText: '唤起WIFI' },
@@ -78,10 +81,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 		rightNftList: [] as NFT[],
 		videoNftList: [] as NFT[],
 		selectedList: {} as { [key: string]: NFT },
-		carouselIntervalTime: 5,
+		carouselIntervalTime: 10,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
-		currSettingIndex: 'imgage',
+		currSettingIndex: 'image',
 		drawerVisible: false,
 		settingModalVisible: false,
 		currcallDeviceIndex: 'wifi',
@@ -142,7 +145,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
 
-
 		let newState: any = { leftNftList, rightNftList, videoNftList };
 
 		type !== CarouselType.video && (newState.nft = nftList);
@@ -159,8 +161,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 		let newselectedList: { [key: string]: NFT } = {};
 		carouselConfig.data.forEach(item => {
-			let id = item.tokenId + '_' + item.token;
-			if (nftListObj[item.tokenId]) newselectedList[id] = item as NFT;;
+			if (nftListObj[item.tokenId]) newselectedList[item.tokenId] = item as NFT;;
 		});
 		return newselectedList;
 	}
@@ -184,12 +185,11 @@ class DeviceSetCarousel extends NavPage<Device> {
 	nftItemClick(nftItem: NFT) {
 		let { selectedList, isShowAbbreviation, radioValue } = this.state;
 		let newselectedList = { ...selectedList };
-		let id = nftItem.tokenId + '_' + nftItem.token;
 
 
-		if (newselectedList[id]) {
+		if (newselectedList[nftItem.tokenId]) {
 			// 删除已选择的nft
-			delete newselectedList[id];
+			delete newselectedList[nftItem.tokenId];
 			// 如果没有选中项了 收起底部弹框
 			!Object.keys(newselectedList).length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
 
@@ -197,7 +197,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			// 单张nft图片选择限制
 			if ((radioValue === CarouselType.single || radioValue === CarouselType.video) && Object.keys(selectedList).length >= 1) newselectedList = {};
 			// 选中当前点击的nft
-			newselectedList[id] = nftItem;
+			newselectedList[nftItem.tokenId] = nftItem;
 			// 显示底部已选弹框
 			isShowAbbreviation = true;
 		}
@@ -220,12 +220,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	rendNftItem(nft: NFT) {
 		const { selectedList } = this.state;
-		let id = nft.tokenId + '_' + nft.token;
-
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{/* <img src={(nft.image)} alt="" /> */}
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
-			<div className={`select_btn ${selectedList[id] && 'select_btn_active'}`} />
+			<div className={`select_btn ${selectedList[nft.tokenId] && 'select_btn_active'}`} />
 		</div>
 	}
 
@@ -340,7 +338,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { t } = this;
 		let { switchValue, switchLoading } = this.state;
 		return <div className="setting_card_box">
-			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏NFT信息和详情二维码')}</div>
+			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏数字藏品信息和详情二维码')}</div>
 			<Switch onChange={async (e) => {
 				this.setState({ switchValue: e, switchLoading: true });
 				await switchDetails(this.params.address, e);
@@ -367,9 +365,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 				>
 					<div className="item_page" >
 						<div className="radio_box">
-							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频NFT')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张藏品')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播藏品')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频藏品')}</div>
 						</div>
 
 						{leftNftList.length ? <div className="nft_list">
@@ -380,7 +378,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 							<div className="right_box">
 								{rightNftList.map(item => this.rendNftItem(item))}
 							</div>
-						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
+						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../assets/empty_img.png')} description={t("暂无数字藏品，请添加数字藏品至密钥")} />}
 					</div>
 					<div className="item_page2" >
 						<div className="time_box">
@@ -435,11 +433,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.nftDetailCard();
 			// case SettingDarwerType.autoLight:
 			// 	return this.autoLight();
+			case SettingDarwerType.shadow:
+				return <SetCarousel page={this} mode='shadow' />;
 
 			default:
+				return <SetCarousel page={this} mode='normal' />;
 				return this.imageCard();
 		}
 	}
+
 
 	// 抽屉项点击事件
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
@@ -491,13 +493,13 @@ class DeviceSetCarousel extends NavPage<Device> {
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
-				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem" }} type="icon-ai221" />} />
+				<Header title={t("设置")} page={this} actionBtn={<IconFont onClick={() => this.setState({ drawerVisible: true })} style={{ fontSize: ".5rem", marginRight: '.2rem', width: '.38rem', height: '.38rem' }} type="icon-ai221" />} />
 
 				<div className="device_set_carousel_body">
 					{this.getCurrPageContent()}
 				</div>
 
-				{isShowAbbreviation && <div className="bottom_modal_box">
+				{/* {isShowAbbreviation && <div className="bottom_modal_box">
 					<div className="top_part">
 						<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>{t('取消')}</Button>
 						<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {Object.keys(selectedList).length} )</Button>
@@ -513,7 +515,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 							</div>
 						})}
 					</div>
-				</div>}
+				</div>} */}
 			</div>
 
 			<Drawer
@@ -526,7 +528,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''}><IconFont type={item.icon} /> {t(item.label)}</p>
+					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>
 				})}
 			</Drawer>
 
