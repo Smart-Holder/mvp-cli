@@ -215,6 +215,8 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 		// 记住用户输入密码
 		if (this._currentKey && (this._currentKey?.address == address)) oldKey = this._currentKey;
 		var key = Object.values(keys).find(e => e.address == address);
+		console.log(keys, address,'keyFrom');
+		
 		if (!key)
 			throw Error.new('与当前设备绑定的密钥不存在');
 		return oldKey || key;

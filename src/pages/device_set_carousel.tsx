@@ -19,7 +19,7 @@ import '../css/device_set_carousel.scss';
 
 
 const intervalTimeConfig = [
-	{ label: "5s", value: 5 },
+	// { label: "5s", value: 5 },
 	{ label: "10s", value: 10 },
 	{ label: "15s", value: 15 },
 	{ label: "20s", value: 20 },
@@ -78,7 +78,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		rightNftList: [] as NFT[],
 		videoNftList: [] as NFT[],
 		selectedList: {} as { [key: string]: NFT },
-		carouselIntervalTime: 5,
+		carouselIntervalTime: 10,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
 		currSettingIndex: 'imgage',
