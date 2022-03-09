@@ -58,6 +58,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselIntervalTime: 5,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
+		isShadow: false
 	}
 
 	componentWillMount() {
@@ -78,7 +79,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
 		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
 		let newselectedList = await this.getNewSelectedList(nftList);
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time, isShowAbbreviation: false });
+		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time, isShowAbbreviation: false, isShadow });
 	}
 
 
@@ -214,7 +216,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, radioValue);
 			mode == 'shadow' && localStorage.setItem('isShadow', '1');
 
-			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
+			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig, isShadow: true });
 			alert(t('轮播图设置完成!'));
 		} catch (error: any) {
 			alert(error?.message);
@@ -233,6 +235,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 							await clearShadow(this.props.page.params.address);
 							resolve('success!');
 							localStorage.setItem('isShadow', '0');
+							this.setState({ isShadow: false });
 							alert('已取消投屏');
 						} catch (error: any) {
 							alert(error.message);
