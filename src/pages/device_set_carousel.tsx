@@ -100,6 +100,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		hasNewAction: false,
 		autoLightLoading: false,
 		autoLight: false,
+		time: 10
 	}
 
 	dsqRef = React.createRef();
@@ -108,11 +109,11 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight }) => {
+		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time }) => {
 			if (light > 100) light = 100;
 			light = parseInt(String(light / 20));
 			volume = volume / 3;
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight });
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time });
 		}).finally(() => l.close());
 		this.getCarouselConfig();
 
@@ -419,7 +420,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 	}
 
 	getCurrPageContent() {
-		const { currSettingIndex } = this.state;
+		const { currSettingIndex, time } = this.state;
 		switch (currSettingIndex) {
 			case SettingDarwerType.audio:
 				return this.audioCard();

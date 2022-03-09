@@ -94,6 +94,11 @@ export function switchAutoLight(target: string, auto: boolean) {
 }
 
 
+// 设置轮播时间
+export function timeMultiImage(target: string, time: number | string) {
+	return send(target, 'timeMultiImage', { time });
+}
+
 // 设置屏幕角度
 export function screenOrientation(target: string, orientation: string) {
 	return call(target, 'screenOrientation', { orientation });

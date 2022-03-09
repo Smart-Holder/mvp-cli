@@ -11,7 +11,7 @@ import NavPage from "../../nav";
 import { alert, confirm } from '../../../deps/webpkit/lib/dialog';
 
 import './index.scss';
-import { clearShadow } from "../../models/device";
+import { clearShadow, getScreenSettings, timeMultiImage } from "../../models/device";
 import chain from "../../chain";
 
 const intervalTimeConfig = [
@@ -36,6 +36,7 @@ const modeConfig = {
 
 interface ISetCarouselProps {
 	page: NavPage<device.Device>, mode: 'normal' | 'shadow'
+
 }
 
 class SetCarousel extends Component<ISetCarouselProps> {
@@ -55,7 +56,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		rightNftList: [] as NFT[],
 		videoNftList: [] as NFT[],
 		selectedList: {} as { [key: string]: NFT },
-		carouselIntervalTime: 5,
+		carouselIntervalTime: 10,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
 		isShadow: false
@@ -66,7 +67,6 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
-		// console.log(props, this.props);
 		if (props.mode != this.props.mode) {
 			this.getCarouselConfig(props.mode);
 		}
@@ -79,8 +79,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
 		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
 		let newselectedList = await this.getNewSelectedList(nftList);
+		const { time } = await getScreenSettings(address);
 		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time, isShowAbbreviation: false, isShadow });
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: time, isShowAbbreviation: false, isShadow });
 	}
 
 
@@ -112,10 +113,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// 标签tab切换事件
 	onTabsChange(tabs: any, tabsCurrent: number) {
-		const { carouselConfig, radioValue } = this.state;
+		const { radioValue } = this.state;
 		// 不是多选时 取消选中间隔设置
 		radioValue !== CarouselType.multi && (tabsCurrent = 0);
-		this.setState({ isShowAbbreviation: false, tabsCurrent, carouselIntervalTime: carouselConfig.time });
+		this.setState({ isShowAbbreviation: false, tabsCurrent });
 	}
 
 	// 单选按钮事件
@@ -188,9 +189,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { carouselConfig, radioValue, carouselIntervalTime } = this.state;
 		// 修改当前选择的时间间隔
 		let newCarouselConfig = { ...carouselConfig, time: carouselIntervalTime };
-		let { mode } = this.props;
+		// let { mode } = this.props;
 		try {
-			await modeConfig[mode].set_screen_save(address, { time: carouselIntervalTime }, radioValue);
+			// await modeConfig[mode].set_screen_save(address, { time: carouselIntervalTime }, radioValue);
+			await timeMultiImage(address, carouselIntervalTime);
 			this.setState({ carouselConfig: newCarouselConfig });
 			alert(t('轮播图时间间隔设置完成!'));
 		} catch (error: any) {
