@@ -12,7 +12,6 @@ import { alert, confirm } from '../../../deps/webpkit/lib/dialog';
 
 import './index.scss';
 import { clearShadow } from "../../models/device";
-import chain from "../../chain";
 
 const intervalTimeConfig = [
 	// { label: "5s", value: 5 },
@@ -78,7 +77,6 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
 		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
 		let newselectedList = await this.getNewSelectedList(nftList);
-
 		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time, isShowAbbreviation: false });
 	}
 
@@ -86,8 +84,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	// 获取nft列表
 	async getNftList(list?: NFT[], type?: CarouselType) {
 		let { mode } = this.props;
-		let { address } = this.props.page.params;
-		let owner = await chain.getDefaultAccount();
+		let { address, owner } = this.props.page.params;
 		let ownerAddress = mode == 'shadow' ? owner : address;
 		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
 		let leftNftList: NFT[] = [];
@@ -135,8 +132,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	// 根据之前保存的配置 获取新的选中项
 	async getNewSelectedList(nftList?: NFT[]) {
 		let { mode } = this.props;
-		let { address } = this.props.page.params;
-		let carouselConfig = await modeConfig[mode].get_screen_save(address);
+		let carouselConfig = await modeConfig[mode].get_screen_save(this.props.page.params.address);
 
 		let nftListObj = ArrayToObj(nftList || [] as any, 'tokenId');
 
@@ -214,6 +210,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { mode } = this.props;
 		try {
 			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, radioValue);
+			mode == 'shadow' && localStorage.setItem('isShadow', '1');
+
 			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
 			alert(t('轮播图设置完成!'));
 		} catch (error: any) {
@@ -232,6 +230,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 						try {
 							await clearShadow(this.props.page.params.address);
 							resolve('success!');
+							localStorage.setItem('isShadow', '0');
 							alert('已取消投屏');
 						} catch (error: any) {
 							alert(error.message);
@@ -249,7 +248,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { mode } = this.props;
 		let t = this.t;
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
-			{mode == 'shadow' && <Button type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
+			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0'} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
 
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
