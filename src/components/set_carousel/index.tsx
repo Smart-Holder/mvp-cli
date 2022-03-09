@@ -248,7 +248,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { mode } = this.props;
 		let t = this.t;
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
-			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0'} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
+			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '1'} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
 
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
