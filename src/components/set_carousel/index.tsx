@@ -12,6 +12,7 @@ import { alert, confirm } from '../../../deps/webpkit/lib/dialog';
 
 import './index.scss';
 import { clearShadow } from "../../models/device";
+import chain from "../../chain";
 
 const intervalTimeConfig = [
 	// { label: "5s", value: 5 },
@@ -84,7 +85,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	// 获取nft列表
 	async getNftList(list?: NFT[], type?: CarouselType) {
 		let { mode } = this.props;
-		let { address, owner } = this.props.page.params;
+		let { address } = this.props.page.params;
+		let owner = await chain.getDefaultAccount();
 		let ownerAddress = mode == 'shadow' ? owner : address;
 		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
 		let leftNftList: NFT[] = [];
