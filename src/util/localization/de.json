@@ -101,5 +101,10 @@
 	"元数据": "metadata",
 	"基本信息": "Basic info",
 	"交易历史": "Orders",
-	"NFT介绍": "NFT introduce"
+	"NFT介绍": "NFT introduce",
+	"取消投屏": "clear shadow",
+	"投屏": "Shadow",
+	"确定取消本次投屏吗？": "Are you sure to cancel this screen projection?",
+	"已取消投屏": "Screen projection has been cancelled.",
+	"确认": "Ok"
 }

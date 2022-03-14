@@ -40,7 +40,7 @@ const settingDarwerConfig = [
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },
 	{ label: "更新检查", value: SettingDarwerType.version, icon: 'icon-banbengengxin' },
 	{ label: "背景颜色", value: SettingDarwerType.color, icon: 'icon-yanse' },
-	{ label: "数字藏品信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
+	{ label: "NFT信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
 	{ label: "投屏", value: SettingDarwerType.shadow, icon: 'icon-pingmu' },
 ];
@@ -339,7 +339,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { t } = this;
 		let { switchValue, switchLoading } = this.state;
 		return <div className="setting_card_box">
-			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏数字藏品信息和详情二维码')}</div>
+			<div style={{ marginBottom: '.2rem' }}>{t('开关：显示/隐藏NFT信息和详情二维码')}</div>
 			<Switch onChange={async (e) => {
 				this.setState({ switchValue: e, switchLoading: true });
 				await switchDetails(this.params.address, e);

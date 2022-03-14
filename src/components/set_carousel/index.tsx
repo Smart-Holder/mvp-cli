@@ -228,17 +228,20 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// 取消投屏点击
 	clearShadowClick() {
+		let { t } = this;
 		return new Promise((resolve, reject) => {
+			let calText = t('取消');
+			let okText = t('确认');
 			showModal({
-				title: '取消投屏', text: '确定取消本次投屏吗？', buttons: {
-					'取消': resolve,
-					'@确认': async () => {
+				title: t('取消投屏'), text: t('确定取消本次投屏吗？'), buttons: {
+					[calText]: resolve,
+					[`@${okText}`]: async () => {
 						try {
 							await clearShadow(this.props.page.params.address);
 							resolve('success!');
 							localStorage.setItem('isShadow', '0');
 							this.setState({ isShadow: false });
-							alert('已取消投屏');
+							alert(t('已取消投屏'));
 						} catch (error: any) {
 							alert(error.message);
 							reject(error);
@@ -254,8 +257,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { radioValue, isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs, selectedList } = this.state;
 		const { mode } = this.props;
 		let t = this.t;
+
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
-			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
+			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>{t('取消投屏')}</Button>}
 
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
@@ -270,9 +274,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 				>
 					<div className="item_page" >
 						<div className="radio_box">
-							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张藏品')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播藏品')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频藏品')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张NFT')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播NFT')}</div>
+							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频NFT')}</div>
 						</div>
 
 						{leftNftList.length ? <div className="nft_list">
