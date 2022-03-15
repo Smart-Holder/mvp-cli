@@ -484,7 +484,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		this.setState({ hasNewLoading: true });
 		checkVersion(this.params.address).then((res) => {
 			this.setState({ hasNewAction: true, hasNew: res.hasNew, hasNewLoading: false });
-			res.upgrading && alert('设备升级中...');
+			res.upgrading && alert(this.t('设备升级中...'));
 		});
 	}
 
@@ -544,16 +544,16 @@ class DeviceSetCarousel extends NavPage<Device> {
 				<div style={{ height: '1.6rem', display: "flex", alignItems: "center", width: '100%' }}>
 					{currcallDeviceIndex === 'version' ?
 						<div className='label_item'>
-							<div className="label">检测版本:</div>
+							<div className="label">{t("检测版本")}:</div>
 							{hasNewAction ?
 								<Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button> :
-								<Button loading={hasNewLoading} ghost type="primary" onClick={this.checkDeviceVersion.bind(this)} > 点击检查版本更新</Button>
+								<Button loading={hasNewLoading} ghost type="primary" onClick={this.checkDeviceVersion.bind(this)} > {t("点击检查版本更新")}</Button>
 							}
 							{/* // <Button loading={hasNewLoading} className={String(hasNew && 'hasNew')} ghost type="primary" onClick={this.settingModalClick.bind(this)}> {hasNew ? t('发现新版本') : t('已经是最新版本了')}</Button> */}
 						</div>
 						:
 						<div className='label_item'>
-							<div className="label">WIFI设置:</div>
+							<div className="label">{t("WIFI设置")}:</div>
 							<Button ghost type="primary" onClick={this.settingModalClick.bind(this)}> {t(callDeviceConfig[currcallDeviceIndex]?.btnText)}</Button>
 						</div>
 					}
