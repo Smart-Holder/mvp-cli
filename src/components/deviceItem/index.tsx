@@ -2,9 +2,10 @@ import { Device } from "../../models"
 import * as device from '../../models/device';
 import Button from "../button";
 import { React } from 'webpkit/mobile';
-import { show, alert } from "../../../deps/webpkit/lib/dialog";
+import { show } from "../../../deps/webpkit/lib/dialog";
 import { getSubStr } from "../../util/tools";
 import { useTranslation } from 'react-i18next';
+import {alert} from '../../util/tools'
 import "./index.scss";
 
 interface IDeviceItemProps {

@@ -1,11 +1,10 @@
 
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
-import Header from '../util/header';
 import '../css/device_nft.scss';
 import * as device from '../models/device';
-import { alert } from 'webpkit/lib/dialog';
-import { URL } from 'somes/path';
+// import { alert } from 'webpkit/lib/dialog';
+import { alert } from '../util/tools'
 import { Spin } from 'antd';
 import { withTranslation } from 'react-i18next';
 

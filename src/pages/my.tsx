@@ -5,7 +5,8 @@ import models, { AssetType, Device, NFT } from '../models';
 import { CloseOutlined } from '@ant-design/icons';
 import chain from '../chain';
 import NftCard from '../components/nft_card';
-import { show, alert } from 'webpkit/lib/dialog';
+import { show } from 'webpkit/lib/dialog';
+import { alert } from '../util/tools'
 import { devices } from '../models/device';
 import { Modal } from 'antd-mobile';
 import nftproxy, { proxyAddress } from '../chain/nftproxy';

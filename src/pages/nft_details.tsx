@@ -7,10 +7,10 @@ import models, { NFT, AssetType } from '../models';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import nftproxy, { proxyAddress } from '../chain/nftproxy';
-import chain, { encodeParameters } from '../chain';
-import { alert } from 'webpkit/lib/dialog';
+import chain from '../chain';
+// import { alert } from 'webpkit/lib/dialog';
+import { alert } from '../util/tools'
 import Loading from 'webpkit/lib/loading';
-import { contracts } from '../../config';
 import somes from 'somes';
 import { renderNft } from '../util/media';
 

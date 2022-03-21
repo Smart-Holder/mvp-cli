@@ -7,7 +7,8 @@ import NftCard from '../components/nft_card';
 import { INftItem } from './interface';
 import models, { AssetType } from '../models';
 import Loading from '../../deps/webpkit/lib/loading';
-import { show, alert } from '../../deps/webpkit/lib/dialog';
+import { show } from '../../deps/webpkit/lib/dialog';
+import { alert } from '../util/tools'
 import { removeNftDisabledTimeItem, setNftDisabledTime } from '../util/tools';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';

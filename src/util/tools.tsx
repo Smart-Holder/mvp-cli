@@ -3,7 +3,7 @@ import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 import { ChainType, NFT } from '../models';
-import { DefaultOptions, show } from '../../deps/webpkit/lib/dialog';
+import { DefaultOptions, DialogIn, show } from '../../deps/webpkit/lib/dialog';
 import { CloseOutlined } from '@ant-design/icons';
 import { withTranslation } from 'react-i18next';
 import { INftItem } from '../pages/interface';
@@ -12,6 +12,7 @@ export type IDisabledKey = 'transfer_btn_disabled' | 'btn_disabled';
 import { Toast } from 'antd-mobile';
 import "./tools.scss";
 import chain from '../chain';
+import { t } from 'i18next';
 
 class Tab extends ViewController<{ nav: () => Nav }> {
 	triggerLoad() {
@@ -267,3 +268,19 @@ export class ChainTraits {
 }
 
 export const chainTraits = new ChainTraits();
+
+export const alert = (text: string | DialogIn, onOk?: () => void) => {
+	let btnText = t('@确认');
+	if (typeof text === 'string') {
+		return show({
+			text,
+			buttons: { [btnText]: () => onOk && onOk() },
+		});
+	}
+
+	return show({
+		...text,
+		buttons: { [btnText]: () => onOk && onOk() },
+	});
+
+}

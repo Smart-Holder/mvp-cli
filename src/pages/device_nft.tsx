@@ -4,7 +4,8 @@ import NavPage from '../nav';
 import Header from '../util/header';
 import '../css/device_nft.scss';
 import * as device from '../models/device';
-import { alert } from 'webpkit/lib/dialog';
+// import { alert } from 'webpkit/lib/dialog';
+import { alert } from '../util/tools'
 import models, { NFT } from '../models';
 import { renderNft } from '../util/media';
 import nft_proxy, {proxyAddress} from '../chain/nftproxy';

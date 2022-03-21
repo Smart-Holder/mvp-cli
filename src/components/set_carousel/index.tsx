@@ -1,18 +1,20 @@
 import models, { NFT } from "../../models";
 import { React, Component } from 'webpkit/mobile';
-import { Tabs, Modal } from 'antd-mobile';
+import { Tabs } from 'antd-mobile';
 import { CarouselType } from "../../pages/device_set_carousel";
+import NavPage from "../../nav";
 import * as device from '../../models/device';
 import { ArrayToObj, showModal } from "../../util/tools";
 import Button from '../../components/button';
 import { Empty } from 'antd';
 import { withTranslation } from 'react-i18next';
-import NavPage from "../../nav";
-import { alert, confirm } from '../../../deps/webpkit/lib/dialog';
+// import { alert } from '../../../deps/webpkit/lib/dialog';
+import { alert } from '../../util/tools'
+
+import { clearShadow, timeMultiImage } from "../../models/device";
+import chain from "../../chain";
 
 import './index.scss';
-import { clearShadow, getScreenSettings, timeMultiImage } from "../../models/device";
-import chain from "../../chain";
 
 const intervalTimeConfig = [
 	// { label: "5s", value: 5 },
@@ -35,8 +37,9 @@ const modeConfig = {
 }
 
 interface ISetCarouselProps {
-	page: NavPage<device.Device>, mode: 'normal' | 'shadow'
-
+	page: NavPage<device.Device>,
+	mode: 'normal' | 'shadow',
+	time?: number,
 }
 
 class SetCarousel extends Component<ISetCarouselProps> {
@@ -79,9 +82,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
 		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
 		let newselectedList = await this.getNewSelectedList(nftList);
-		const { time } = await getScreenSettings(address);
+		// const { time } = await getScreenSettings(address);
 		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: time, isShowAbbreviation: false, isShadow });
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: this.props.time, isShowAbbreviation: false, isShadow });
 	}
 
 
@@ -151,7 +154,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	rendNftItem(nft: NFT) {
 		const { selectedList } = this.state;
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
-			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
+			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />}
 			<div className={`select_btn ${selectedList[nft.tokenId] && 'select_btn_active'}`} />
 		</div>
 	}
@@ -315,7 +318,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 							<div className="close_btn">
 								<img onClick={this.nftItemClick.bind(this, item)} src={require('../../assets/close.png')} alt="x" />
 							</div>
-							<img className="nft_img" src={item.image} alt="" />
+							<img className="nft_img" src={item.image || item.imageOrigin} alt="" />
 						</div>
 					})}
 				</div>
