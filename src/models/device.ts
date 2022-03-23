@@ -6,6 +6,7 @@ import * as key from '../key';
 import somes from 'somes';
 import sdk from '../sdk';
 import chain from '../chain';
+import { t } from 'i18next';
 
 export { Device };
 
@@ -21,11 +22,21 @@ export function devices(): Promise<Device[]> {
 }
 
 export async function call(target: string, method: string, args?: any, vCheck?: string): Promise<any> {
-	var hash = await index.mbx.methods.call({
-		target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
-	}) as string;
-	let r = await post(hash);
-	return JSON.parse(r);
+	return new Promise(async (resolve, reject) => {
+		try {
+			var hash = await index.mbx.methods.call({
+				target, method, args: { errno: 0, message: '', data: JSON.stringify(args) }, vCheck
+			}) as string;
+			let r = await post(hash);
+			let res = JSON.parse(r);
+			resolve(res);
+			return res;
+		} catch (error: any) {
+			error.message = t(error.message);
+			console.log(error, error.message, 'error');
+			reject(error);
+		}
+	});
 }
 
 export async function send(target: string, event: string, args?: any): Promise<any> {
