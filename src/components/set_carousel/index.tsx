@@ -70,13 +70,13 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
-		if (props.mode != this.props.mode) {
-			this.getCarouselConfig(props.mode);
+		if (props.mode != this.props.mode || props.time != this.props.time) {
+			this.getCarouselConfig(props.mode, props.time);
 		}
 	}
 
 	// 获取本地轮播图配置
-	async getCarouselConfig(newMode?: 'normal' | 'shadow') {
+	async getCarouselConfig(newMode?: 'normal' | 'shadow', newTime?: number) {
 		let { address } = this.props.page.params;
 		let mode = newMode || this.props.mode;
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
@@ -84,7 +84,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let newselectedList = await this.getNewSelectedList(nftList);
 		// const { time } = await getScreenSettings(address);
 		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: this.props.time, isShowAbbreviation: false, isShadow });
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: newTime || this.props.time, isShowAbbreviation: false, isShadow });
 	}
 
 
