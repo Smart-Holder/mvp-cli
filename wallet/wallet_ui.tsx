@@ -10,17 +10,17 @@ import * as config from "../config";
 import { decryptPrivateKey } from "../deps/webpkit/deps/crypto-tx/keystore";
 import { Modal } from 'antd-mobile';
 import { React } from 'webpkit/mobile';
-import IconFont from "../src/components/icon_font";
 import Button from "../src/components/button";
 import { chainTraits } from "../src/models";
 import { unitLabel } from "../src/util/tools";
 import chain from "../src/chain";
-import "./util/wallet_ui.scss";
 import { bSNGasTap, setRef } from "./user";
+import { inputPasswordModal } from "./util/tools";
+import "./util/wallet_ui.scss";
 
 var cryptoTx = require('crypto-tx');
 
-const { alert, prompt } = Modal;
+const { alert } = Modal;
 
 export interface ISecretKey {
 	readonly address: string;
@@ -40,24 +40,9 @@ export class SecretKey implements ISecretKey {
 		this.keystore = keystore;
 		this.address = cryptoTx.checksumAddress('0x' + keystore.address);
 	}
-
-	async inputPasswordModal(): Promise<string> {
-		return new Promise((resolve, reject) => {
-			prompt(
-				'请输入密钥解锁密码',
-				'',
-				[
-					{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -1 }) },
-					{ text: '提交', onPress: password => resolve(password) },
-				],
-				'secure-text',
-			)
-		});
-	}
-
 	async unlock() {
 		if (!this._key) {
-			let pwd = await this.inputPasswordModal();
+			let pwd = await inputPasswordModal();
 			let priv = new Buffer('');
 			try {
 				priv = decryptPrivateKey(this.keystore, pwd);
@@ -123,28 +108,6 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async clearCurrentKey() {
 		this._currentKey = undefined;
 	}
-
-	// async selectCurrentKey(): Promise<string> {
-	// 	var keysName = await native.getKeysName() || [];
-	// 	let index = '';
-	// 	return new Promise((resolve) => {
-	// 		let alertInstance = alert('选择管理密钥', <div className="select_wallet_box">
-	// 			{keysName.map(key => {
-	// 				return <Button key={key} className="wallet_item" onClick={async () => {
-	// 					// alertInstance.close();
-	// 					// resolve(key);
-	// 					index = key;
-	// 				}}>
-	// 					<IconFont type="icon-qianbao" style={{width:'.34rem',height:'.34rem'}} />
-	// 					<div className="name">{key}</div>
-	// 					<div>index {index} </div>
-	// 				</Button>
-	// 			})}
-	// 		</div>, [
-	// 			{ text: '取消', onPress: () => resolve('') },
-	// 		]);
-	// 	});
-	// }
 
 	// ---------------------------------- impl DeviceSigner ----------------------------------
 	async availableOwner() {

@@ -22,6 +22,7 @@ import models from '../sdk';
 import Header from '../../src/util/header';
 
 import '../css/my.scss';
+import * as config from '../../config';
 
 
 class My extends NavPage<{ address: string }> {
@@ -146,6 +147,7 @@ class My extends NavPage<{ address: string }> {
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
 			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
+			if (error?.errno == 100320) errorText = 'Gas费用充值中,请稍后操作';
 
 
 			let btnText = t('我知道了');
@@ -304,6 +306,7 @@ class My extends NavPage<{ address: string }> {
 					this.setState({ carouselIndex: index });
 				}} pageType='device' />
 			</Modal>
+
 		</div>
 
 	}

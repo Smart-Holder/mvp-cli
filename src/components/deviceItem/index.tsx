@@ -3,7 +3,7 @@ import * as device from '../../models/device';
 import Button from "../button";
 import { React } from 'webpkit/mobile';
 import { show, alert } from "../../../deps/webpkit/lib/dialog";
-import { getSubStr } from "../../util/tools";
+import { copyText, getSubStr } from "../../util/tools";
 import { useTranslation } from 'react-i18next';
 import "./index.scss";
 
@@ -50,18 +50,22 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 				<div className="right_box">
 					<div className="sn_box">
 						<div className="sn_title">SN</div>
-						<div className="sn">{(deviceInfo.sn)}</div>
+						<div className="sn" onClick={() => {
+							copyText(deviceInfo.sn);
+						}}>{(deviceInfo.sn)}</div>
 					</div>
 					<div className="address_box">
 						<div className="address_title">Address</div>
-						<div className="address">{getSubStr(deviceInfo.address)}</div>
+						<div className="address" onClick={() => {
+							copyText(deviceInfo.address);
+						}}>{getSubStr(deviceInfo.address)}</div>
 					</div>
 				</div>
 			</div>
 			<div className="bottom_part">
 				{/* <div className="nft_count_box"> */}
-					<div className="nft_title">数字藏品</div>
-					<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
+				<div className="nft_title">数字藏品</div>
+				<div className="nft_price">{deviceInfo.assetCount || (deviceInfo as any).nft || 0}</div>
 				{/* </div> */}
 				{/* <div className="wallet_box">
 					<div className="nft_title">所属钱包</div>

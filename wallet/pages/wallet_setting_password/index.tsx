@@ -3,7 +3,6 @@ import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import Input from '../../../src/components/input';
 import IconFont from '../../../src/components/icon_font';
-import { Checkbox } from 'antd';
 import Button from '../../../src/components/button';
 import { alert } from 'webpkit/lib/dialog';
 import "./index.scss";
@@ -58,11 +57,11 @@ class ImportSecretKeyPage extends NavPage<{ key: string; type: 'modify' | 'reset
 		} else {
 			try {
 				await native.deleteKey(key);
-				let keyStoreJson = encryptPrivateKey('0x' + address, confirm_password);
+				let isHex = address.startsWith('0x') ? '' : '0x';
+				let keyStoreJson = encryptPrivateKey(isHex + address, confirm_password);
 				wallet_ui.setAccounts(undefined);
 				wallet_ui.clearCurrentKey();
 				await wallet_ui.setKey(key, new SecretKey(keyStoreJson));
-
 				alert('密码重置成功!', () => this.replacePage('/home'));
 			} catch (error: any) {
 				alert(error.message);

@@ -19,6 +19,7 @@ import { alert } from 'webpkit/lib/dialog';
 import "../../util/wallet_ui.scss";
 import SelectWallet from '../../../src/components/select_wallet';
 import { setCurrWallet_BindDevice } from '../../../src/util/tools';
+import { bSNGasTap } from '../../user';
 // import prefix_native from '../../util/prefix_native'
 const operation = Modal.operation;
 export interface IAddressListItemProps {
@@ -60,6 +61,10 @@ class Home extends NavPage {
 	}
 
 	async triggerShow() {
+		this.getWalletList();
+	}
+
+	async getWalletList() {
 		let keysNameArr = await native.getKeysName() || [];
 		this.getKeyNameList(keysNameArr);
 	}
@@ -125,6 +130,11 @@ class Home extends NavPage {
 		}
 	}
 
+	async ontest(from: string) {
+		await bSNGasTap(from);
+		await this.getWalletList();
+	}
+
 	render() {
 		let { addressList, loading } = this.state;
 		return <div className="home_page">
@@ -175,6 +185,7 @@ class Home extends NavPage {
 									<div className="right_box">
 										<Button type="primary" onClick={this.myNft.bind(this, item)} ghost style={{ marginRight: '.24rem' }}>我的藏品</Button>
 										<Button type="primary" onClick={this.deviceList.bind(this, item)}>我的设备</Button>
+										{/* <Button type="primary" onClick={this.ontest.bind(this, item.address)}> test </Button> */}
 									</div>
 								</div>
 							</div>

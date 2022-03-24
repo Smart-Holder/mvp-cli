@@ -12,7 +12,7 @@ export { Device };
 export interface DeviceScreenSave {
 	time: number;
 	type: 'single' | 'multi' | 'video';
-	data: { token: string; tokenId: string }[];
+	data: NFT[];
 }
 
 export function devices(): Promise<Device[]> {
@@ -128,6 +128,11 @@ export function switchDetails(target: string, show: boolean) {
 	return send(target, 'switchDetails', { show });
 }
 
+// 设置轮播时间
+export function timeMultiImage(target: string, time: number | string) {
+	return send(target, 'timeMultiImage', { time });
+}
+
 // 设置屏幕角度
 export function screenOrientation(target: string, orientation: string) {
 	return call(target, 'screenOrientation', { orientation });
@@ -151,16 +156,16 @@ export function displayVideo(target: string, token: string, tokenId: string) {
 	return call(target, 'displayVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
 }
 
-export function shadowSingleImage(target: string, token: string, tokenId: string) {
-	return call(target, 'shadowSingleImage', { type: 'image', time: 0, data: [{ token, tokenId }] });
+export function shadowSingleImage(target: string, token: string, tokenId: string, item: NFT) {
+	return call(target, 'shadowSingleImage', { type: 'image', time: 0, data: [item] });
 }
 
 export function shadowMultiImage(target: string, time: number, data: { token: string, tokenId: string }[]) {
 	return call(target, 'shadowMultiImage', { type: 'image', time, data });
 }
 
-export function shadowVideo(target: string, token: string, tokenId: string) {
-	return call(target, 'shadowVideo', { type: 'video', time: 0, data: [{ token, tokenId }] });
+export function shadowVideo(target: string, token: string, tokenId: string, item: NFT) {
+	return call(target, 'shadowVideo', { type: 'video', time: 0, data: [item] });
 }
 
 export function sign(target: string, msg: IBuffer): Promise<{ signer: string, sign: string }[]> {
@@ -244,7 +249,7 @@ export async function get_shadow_screen_save(address: string, _type?: 'single' |
 
 export async function set_shadow_screen_save(address: string,
 	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video', isNotCall?: boolean) {
-	var ss = Object.assign(await get_screen_save(address, type), pss);
+	var ss = Object.assign(await get_shadow_screen_save(address, type), pss);
 	var nfts = await sdk.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
 	var nfts_set = new Set();
 
@@ -259,18 +264,25 @@ export async function set_shadow_screen_save(address: string,
 	// await storage.set('__device_set_shadow_screen_save_' + address + type, ss);
 
 	if (pss.data) {
+		let nft = { ...pss.data[0], shadow: 1 };
 		if (type == 'single') {
 			somes.assert(pss.data.length, 'Bad param for call shadowSingleImage()');
-			!isNotCall && await shadowSingleImage(address, pss.data[0].token, pss.data[0].tokenId);
+			!isNotCall && await shadowSingleImage(address, pss.data[0].token, pss.data[0].tokenId, nft);
 		} else if (type == 'multi') {
-			await shadowMultiImage(address, ss.time, pss.data);
+			let nftList = pss.data.map(item => {
+				return { ...item, shadow: 1 };
+			});
+			await shadowMultiImage(address, ss.time, nftList);
 		} else {
 			somes.assert(pss.data.length, 'Bad param for call shadowVideo()');
-			await shadowVideo(address, pss.data[0].token, pss.data[0].tokenId);
+			await shadowVideo(address, pss.data[0].token, pss.data[0].tokenId, nft);
 		}
 	} else if (pss.time) {
+		let nftList = ss.data.map(item => {
+			return { ...item, shadow: 1 };
+		});
 		if (type == 'multi')
-			await shadowMultiImage(address, ss.time, ss.data);
+			await shadowMultiImage(address, ss.time, nftList);
 	}
 }
 

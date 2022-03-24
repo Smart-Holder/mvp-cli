@@ -1,6 +1,6 @@
 import models, { NFT } from "../../models";
 import { React, Component } from 'webpkit/mobile';
-import { Tabs, Modal } from 'antd-mobile';
+import { Tabs } from 'antd-mobile';
 import { CarouselType } from "../../pages/device_set_carousel";
 import * as device from '../../models/device';
 import { ArrayToObj, showModal } from "../../util/tools";
@@ -8,13 +8,13 @@ import Button from '../../components/button';
 import { Empty } from 'antd';
 import { withTranslation } from 'react-i18next';
 import NavPage from "../../nav";
-import { alert, confirm } from '../../../deps/webpkit/lib/dialog';
+import { alert } from '../../../deps/webpkit/lib/dialog';
 
 import './index.scss';
-import { clearShadow } from "../../models/device";
+import { clearShadow, getScreenSettings, timeMultiImage } from "../../models/device";
 
 const intervalTimeConfig = [
-	{ label: "5s", value: 5 },
+	// { label: "5s", value: 5 },
 	{ label: "10s", value: 10 },
 	{ label: "15s", value: 15 },
 	{ label: "20s", value: 20 },
@@ -34,7 +34,9 @@ const modeConfig = {
 }
 
 interface ISetCarouselProps {
-	page: NavPage<{ address: string }>, mode: 'normal' | 'shadow'
+	page: NavPage<device.Device>, mode: 'normal' | 'shadow',
+	time?: number,
+
 }
 
 class SetCarousel extends Component<ISetCarouselProps> {
@@ -57,33 +59,41 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselIntervalTime: 5,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
+		isShadow: false,
 	}
 
 	componentWillMount() {
 		this.getCarouselConfig();
+		// console.log(this.props, this.props.time, "this.props.time");
+
 	}
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
 		// console.log(props, this.props);
-		if (props.mode != this.props.mode) {
-			this.getCarouselConfig();
+		if (props.mode != this.props.mode || props.time != this.props.time) {
+			this.getCarouselConfig(props.mode, props.time);
 		}
 	}
 
 	// 获取本地轮播图配置
-	async getCarouselConfig() {
+	async getCarouselConfig(newMode?: 'normal' | 'shadow', newTime?: number) {
 		let { address } = this.props.page.params;
-		let { mode } = this.props;
+		let mode = newMode || this.props.mode;
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
 		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
 		let newselectedList = await this.getNewSelectedList(nftList);
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: carouselConfig.time });
+		// const { time } = await getScreenSettings(address);
+		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: newTime || this.props.time, isShowAbbreviation: false, isShadow });
 	}
 
 
 	// 获取nft列表
 	async getNftList(list?: NFT[], type?: CarouselType) {
-		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: this.props.page.params.address });
+		let { mode } = this.props;
+		let { address, owner } = this.props.page.params;
+		let ownerAddress = mode == 'shadow' ? owner : address;
+		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
 		let videoNftList: NFT[] = [];
@@ -105,10 +115,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// 标签tab切换事件
 	onTabsChange(tabs: any, tabsCurrent: number) {
-		const { carouselConfig, radioValue } = this.state;
+		const { radioValue } = this.state;
 		// 不是多选时 取消选中间隔设置
 		radioValue !== CarouselType.multi && (tabsCurrent = 0);
-		this.setState({ isShowAbbreviation: false, tabsCurrent, carouselIntervalTime: carouselConfig.time });
+		this.setState({ isShowAbbreviation: false, tabsCurrent });
 	}
 
 	// 单选按钮事件
@@ -130,8 +140,6 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async getNewSelectedList(nftList?: NFT[]) {
 		let { mode } = this.props;
 		let carouselConfig = await modeConfig[mode].get_screen_save(this.props.page.params.address);
-		console.log(carouselConfig, mode);
-
 		let nftListObj = ArrayToObj(nftList || [] as any, 'tokenId');
 
 		let newselectedList: { [key: string]: NFT } = {};
@@ -179,12 +187,12 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async saveCarouselIntervalTime() {
 		let { t } = this;
 		const { address } = this.props.page.params;
-		const { carouselConfig, radioValue, carouselIntervalTime } = this.state;
+		const { carouselConfig, carouselIntervalTime } = this.state;
 		// 修改当前选择的时间间隔
 		let newCarouselConfig = { ...carouselConfig, time: carouselIntervalTime };
-		let { mode } = this.props;
 		try {
-			await modeConfig[mode].set_screen_save(address, { time: carouselIntervalTime }, radioValue);
+			// await modeConfig[mode].set_screen_save(address, { time: carouselIntervalTime }, radioValue);
+			await timeMultiImage(address, carouselIntervalTime);
 			this.setState({ carouselConfig: newCarouselConfig });
 			alert(t('轮播图时间间隔设置完成!'));
 		} catch (error: any) {
@@ -208,7 +216,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { mode } = this.props;
 		try {
 			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, radioValue);
-			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig });
+			mode == 'shadow' && localStorage.setItem('isShadow', '1');
+			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig, isShadow: true });
 			alert(t('轮播图设置完成!'));
 		} catch (error: any) {
 			alert(error?.message);
@@ -226,6 +235,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 						try {
 							await clearShadow(this.props.page.params.address);
 							resolve('success!');
+							localStorage.setItem('isShadow', '0');
+							this.setState({ isShadow: false });
 							alert('已取消投屏');
 						} catch (error: any) {
 							alert(error.message);
@@ -243,7 +254,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { mode } = this.props;
 		let t = this.t;
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
-			{mode == 'shadow' && <Button type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
+			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>取消投屏</Button>}
 
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}

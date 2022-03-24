@@ -1,18 +1,27 @@
 @import "../index.scss";
 
-
 .account_page {
 	background-color: #f5f5f5;
+
+	.config_env {
+		position: absolute;
+		z-index: 999;
+		bottom: 12%;
+		right: 0;
+		font-size: 0.2rem;
+		color: #ccc;
+		font-weight: 500;
+	}
 
 	.account_item {
 		display: flex;
 		background-color: #fefefe;
-		padding: .24rem .3rem;
-		margin-bottom: .3rem;
+		padding: 0.24rem 0.3rem;
+		margin-bottom: 0.3rem;
 		.left_box {
 			svg {
-				height: .5rem;
-				width: .5rem;
+				height: 0.5rem;
+				width: 0.5rem;
 			}
 			img {
 				width: 100%;
@@ -31,26 +40,26 @@
 			}
 
 			.account_name {
-				font-size: .32rem;
-				margin-left: .1rem;
+				font-size: 0.32rem;
+				margin-left: 0.1rem;
 			}
 			.account_address {
 				color: #999999;
-				font-size: .28rem;
+				font-size: 0.28rem;
 				width: 80%;
 			}
 		}
 	}
 
-		.setting_item {
+	.setting_item {
 		display: flex;
-		padding: .24rem .30rem;
+		padding: 0.24rem 0.3rem;
 		justify-content: space-between;
 		align-items: center;
 		background-color: #fefefe;
 
 		.setting_title {
-			font-size: .32rem;
+			font-size: 0.32rem;
 		}
 
 		.setting_icon {
@@ -58,9 +67,8 @@
 		}
 	}
 
-
 	.btn_box {
-		padding: 0 .3rem;
+		padding: 0 0.3rem;
 		.ant-btn {
 			margin-top: 1.6rem;
 		}

@@ -20,7 +20,6 @@ import models from '../sdk';
 import '../css/device_info.scss';
 import { Empty } from 'antd';
 import native from '../../wallet/util/prefix_native';
-const tp = require('tp-js-sdk');
 
 
 class DeviceInfo extends NavPage<Device> {
@@ -38,8 +37,6 @@ class DeviceInfo extends NavPage<Device> {
 
 	async triggerLoad() {
 		let owner = this.params.address;
-		console.log(this.params,"this.params");
-		
 		this.getNFTList(owner);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
@@ -61,7 +58,7 @@ class DeviceInfo extends NavPage<Device> {
 	async getDeviceInfo(address: string) {
 		let device = await devices();
 		let deviceObj = ArrayToObj(device, 'address');
-		this.setState({ deviceInfo: { ...this.params, ...deviceObj[address]} });
+		this.setState({ deviceInfo: { ...this.params, ...deviceObj[address] } });
 	}
 
 	// 获取nft列表
@@ -124,6 +121,7 @@ class DeviceInfo extends NavPage<Device> {
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的密钥';
 			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
+			if (error?.errno == 100320) errorText = 'Gas费用充值中,请稍后操作';
 
 
 			newNftItem[disabledKey] = false;
@@ -173,7 +171,7 @@ class DeviceInfo extends NavPage<Device> {
 					try {
 						this.setState({ loading: true });
 						const address = this.state.deviceInfo.address;
-						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' }] }, 'single', true);
+						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' } as any] }, 'single', true);
 						await device.unbind(address);
 						alert(t('解绑设备成功'), () => window.history.back());
 
@@ -191,7 +189,7 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	render() {
-		let { nftList, loading, nftList1, nftList2, tabIndex } = this.state;
+		let { loading, nftList1, nftList2, tabIndex } = this.state;
 		const { t } = this;
 
 		return <div className="device_info_page">

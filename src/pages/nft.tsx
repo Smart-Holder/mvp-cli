@@ -8,13 +8,9 @@ import { DeviceItem } from '../components/deviceItem';
 import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
 import native from '../../wallet/util/prefix_native';
-import wallet from '../../wallet/wallet_ui';
 import * as config from '../../config';
-import { getParams } from '../../wallet/util/tools';
-import * as device from '../models/device';
 import { alert } from 'webpkit/lib/dialog';
 import { check } from '../../wallet/user';
-import { Modal } from 'antd-mobile';
 import Header from '../util/header';
 
 
@@ -22,8 +18,6 @@ import '../css/index.scss';
 import "../../wallet/util/wallet_ui.scss";
 import SelectWallet from '../components/select_wallet';
 import { setCurrWallet_BindDevice } from '../util/tools';
-
-const crypto_tx = require('crypto-tx');
 
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';
@@ -131,7 +125,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 	async selectCurrKey(key: string) {
 		this.setState({ loading: true, visible: false });
 		try {
-			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=3458&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
+			// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0x137C59F4eb2BcfE409dad6C467Af90459383FA3A&c=6135&v=7ijxWXoQKGFGo' || await native.scan() + `&owner=${key}`;
 			let href = await native.scan();
 			if (!href) return this.setState({ loading: false });
 

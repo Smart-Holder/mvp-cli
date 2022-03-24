@@ -7,7 +7,10 @@ import Button from '../../../src/components/button';
 import native from '../../util/prefix_native';
 import { copyText } from '../../../src/util/tools';
 import { confirm } from 'webpkit/lib/dialog';
+import buffer, { IBuffer } from 'somes/buffer';
 
+import { inputPasswordModal } from '../../util/tools';
+import { decryptPrivateKey } from 'webpkit/deps/crypto-tx/keystore';
 import "./index.scss";
 
 export default class Account extends NavPage<{ key: string }> {
@@ -45,6 +48,21 @@ export default class Account extends NavPage<{ key: string }> {
 		});
 	}
 
+	// 导出私钥
+	async exportSecretKey() {
+		let { key } = this.params;
+		let keystore = await native.getKey(key);
+		let pwd = await inputPasswordModal();
+		try {
+			let priv = decryptPrivateKey(JSON.parse(String(keystore)), pwd);
+			console.log(priv.toString('hex'), "privateKey");
+			let hex_priv = `0x` + priv.toString('hex');
+			this.pushPage(`/safety_tips?pushUrl=export_secret_key&secret_key=${hex_priv}`);
+		} catch (error) {
+			throw Error.new('密钥密码输入错误!');
+		}
+	}
+
 
 	render() {
 		let { addressInfo } = this.state;
@@ -60,13 +78,23 @@ export default class Account extends NavPage<{ key: string }> {
 				</div>
 			</div>
 
-			<div className="setting_item" onClick={this.myNft.bind(this)} style={{ marginBottom: '.3rem' }}>
+			<div className="setting_item" onClick={this.myNft.bind(this)} >
 				<div className="setting_title">我的数字收藏品</div>
+				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
+			</div>
+
+			<div className="setting_item" onClick={this.exportSecretKey.bind(this)} style={{ marginBottom: '.3rem' }}>
+				<div className="setting_title">导出私钥</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
 
 			<div className="setting_item" onClick={() => this.pushPage(`/wallet_setting_password?key=${this.params.key}&type=modify`)}>
 				<div className="setting_title">修改解锁密码</div>
+				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
+			</div>
+
+			<div className="setting_item" onClick={() => this.pushPage(`/wallet_setting_password?key=${this.params.key}&type=reset`)}>
+				<div className="setting_title">重置解锁密码</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
 

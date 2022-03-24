@@ -9,6 +9,8 @@ import { confirm } from 'webpkit/lib/dialog';
 import storage from '../../../deps/webpkit/deps/somes/storage';
 import { LoginState, logout } from '../../user';
 import "./index.scss";
+import * as config from '../../../config';
+import * as packageJson from '../../../package.json'
 
 export default class Account extends NavPage<{ key: string }> {
 
@@ -39,6 +41,7 @@ export default class Account extends NavPage<{ key: string }> {
 	render() {
 		let { userInfo } = this.state;
 		return <div className="account_page">
+
 			<Header page={this} title="设置" />
 			<div className="account_item">
 
@@ -76,10 +79,16 @@ export default class Account extends NavPage<{ key: string }> {
 					confirm('确认退出当前登录吗?', (isOk) => {
 						// logout
 						if (isOk) logout();
-
 					});
+
 				}}>退出登录</Button>
 			</div>
+
+			{config.env === 'dev' && <div className="config_env">
+				<div>{config.env}</div>
+				<div>{packageJson.version}</div>
+			</div>}
+
 		</div>
 	}
 }

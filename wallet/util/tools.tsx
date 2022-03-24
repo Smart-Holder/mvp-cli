@@ -1,7 +1,11 @@
 import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../../src/components/icon_font';
-import native from "./prefix_native"
+import native from "./prefix_native";
+import { Modal } from 'antd-mobile';
+
+const { prompt } = Modal;
+
 const TabBarItemConfig = [
 	{ text: '密钥', pathname: '/home', selectIcon: 'icon-miyuexuanzhong', icon: 'icon-miyue', current: 0 },
 	{ text: '设备', pathname: '/device', selectIcon: 'icon-shebeixuanzhong', icon: 'icon-shebei', current: 2 },
@@ -69,4 +73,32 @@ export const getParams = (url: string) => {
 		obj[key] = value;
 	}
 	return obj;
+}
+
+// async inputPasswordModal(): Promise < string > {
+// 	return new Promise((resolve, reject) => {
+// 		prompt(
+// 			'请输入密钥解锁密码',
+// 			'',
+// 			[
+// 				{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -1 }) },
+// 				{ text: '提交', onPress: password => resolve(password) },
+// 			],
+// 			'secure-text',
+// 		)
+// 	});
+// }
+
+export const inputPasswordModal = async () => {
+	return new Promise((resolve, reject) => {
+		prompt(
+			'请输入密钥解锁密码',
+			'',
+			[
+				{ text: '取消', onPress: () => reject({ message: '取消输入密码', errno: -1 }) },
+				{ text: '提交', onPress: password => resolve(password) },
+			],
+			'secure-text',
+		)
+	});
 }

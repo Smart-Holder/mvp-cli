@@ -2,11 +2,9 @@ import NavPage from '../../../src/nav';
 import { React } from 'webpkit/mobile';
 import Header from '../../../src/util/header';
 import Button from '../../../src/components/button';
-import { Modal } from 'antd-mobile';
 
 import './index.scss';
 
-const operation = Modal.operation;
 
 const SafetyTipsConfig = [{
 	img: require('../../../src/assets/safety_tips_1.png'),
@@ -26,14 +24,15 @@ const SafetyTipsConfig = [{
 }
 ]
 
-export default class extends NavPage {
+export default class extends NavPage<{ secret_key?: string, pushUrl?: string }> {
 
 	onOk() {
-		this.pushPage('/home');
-		// operation([
-		// 	{ text: '备份助记词', onPress: () => console.log('标为未读被点击了'), style: { textAlign: 'center' } },
-		// 	{ text: '不备份助记词直接完成', onPress: () => console.log('置顶聊天被点击了'), style: { textAlign: 'center' } },
-		// ]);
+		let { pushUrl, secret_key } = this.params;
+		if (pushUrl) {
+			this.replacePage(pushUrl ? `/${pushUrl}?secret_key=${secret_key}` : `/home`);
+		} else {
+			this.pushPage(`/home`);
+		}
 	}
 
 	render() {

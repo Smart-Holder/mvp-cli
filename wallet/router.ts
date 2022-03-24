@@ -13,6 +13,10 @@ export default [
 		page: () => import('./pages/wallet_device_list'),
 	},
 	{
+		path: '/export_secret_key',
+		page: () => import('./pages/export_secret_key'),
+	},
+	{
 		path: '/wallet_address',
 		page: () => import('./pages/wallet_address'),
 	},

@@ -12,14 +12,18 @@ android {
 		applicationId "com.stars_mine.mvp_wallet"
 		minSdkVersion 14
 		targetSdkVersion 26
-		versionCode="2"
-		versionName="1.1"
+		versionCode="6"
+		versionName="1.5"
 	}
 
 	buildTypes {
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+		}
+		debug {
+			applicationIdSuffix ".debug"
+
 		}
 	}
 
@@ -31,7 +35,7 @@ android {
 				if (buildType.name == 'release') {
 					def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
 					// app包名称
-					outputFileName = "MVP Wallet_v" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
+					outputFileName = "MVP_Wallet_v" + defaultConfig.versionName + "_" + createTime + ".apk"
 				}
 			}
 	}
