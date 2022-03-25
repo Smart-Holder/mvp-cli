@@ -84,7 +84,7 @@ export default class Account extends NavPage<{ key: string }> {
 				}}>退出登录</Button>
 			</div>
 
-			{config.env === 'dev' && <div className="config_env">
+			{<div className="config_env">
 				<div>{config.env}</div>
 				<div>{packageJson.version}</div>
 			</div>}

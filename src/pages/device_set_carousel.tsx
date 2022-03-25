@@ -84,8 +84,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 			if (light > 100) light = 100;
 			light = parseInt(String(light / 20));
 			volume = volume / 3;
-			console.log(time, 'time');
-
 			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time });
 		}).catch((err: any) => {
 			alert(err.message);
