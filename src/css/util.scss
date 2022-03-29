@@ -221,6 +221,8 @@ body {
 	border-radius: 0.16rem;
 	.tip_box {
 		position: relative;
+		word-wrap: break-word;
+		word-break: break-all;
 		.tip_icon {
 			margin-top: 1px;
 			position: absolute;

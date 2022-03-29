@@ -134,12 +134,13 @@ class My extends NavPage<{ address: string }> {
 			}
 
 		} catch (error: any) {
+
 			removeNftDisabledTimeItem(nftInfo, "nftDisabledTime");
 			newNftItem[disabledKey] = false;
 			newNftList[index] = newNftItem;
 			this.setState({ nft: newNftList, ...getDistinguishNftList(newNftList) });
 			let errorCode = error.msg || error.message || error.description;
-			let errorText = error || errorCode;
+			let errorText = errorCode || error;
 
 			if (error.errno == -1) return;
 
@@ -149,7 +150,7 @@ class My extends NavPage<{ address: string }> {
 			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
 			if (error?.errno == 100320) errorText = 'Gas费用充值中,请稍后操作';
 
-
+			console.log(error, 'error', errorText, 'errorText', error.message, 'error.message');
 			let btnText = t('我知道了');
 			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {(errorText)}</div>, buttons: { [btnText]: () => { } } });
 		} finally {
