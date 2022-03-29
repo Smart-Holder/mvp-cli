@@ -9,6 +9,11 @@ export default [
 	},
 
 	{
+		path: '/agreement',
+		page: () => import('./pages/agreement'),
+	},
+
+	{
 		path: '/wallet_device_list',
 		page: () => import('./pages/wallet_device_list'),
 	},

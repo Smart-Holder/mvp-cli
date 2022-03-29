@@ -14,11 +14,12 @@ interface IDeviceItemProps {
 	onClick?: () => void;
 	onOk?: () => void;
 	onUnbindDevice?: () => void;
-	loading?: boolean
+	loading?: boolean;
+	isCopy?: boolean;
 }
 
 export const DeviceItem = (props: IDeviceItemProps) => {
-	const { deviceInfo, showArrow = true, onClick, showActionBtn = false, onOk, onUnbindDevice, loading } = props;
+	const { deviceInfo, showArrow = true, onClick, showActionBtn = false, onOk, onUnbindDevice, loading, isCopy = true } = props;
 	const { t } = useTranslation();
 	// 解绑设备按钮点击
 	const unbind_device = () => {
@@ -51,13 +52,13 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 					<div className="sn_box">
 						<div className="sn_title">SN</div>
 						<div className="sn" onClick={() => {
-							copyText(deviceInfo.sn);
+							isCopy && copyText(deviceInfo.sn);
 						}}>{(deviceInfo.sn)}</div>
 					</div>
 					<div className="address_box">
 						<div className="address_title">Address</div>
 						<div className="address" onClick={() => {
-							copyText(deviceInfo.address);
+							isCopy && copyText(deviceInfo.address);
 						}}>{getSubStr(deviceInfo.address)}</div>
 					</div>
 				</div>

@@ -76,7 +76,7 @@ export class MyRoot<P> extends Root<P> {
 
 	renderTools() {
 		let pathname = location.pathname;
-		return !['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register', '/'].includes(pathname) ? <Tab nav={this._nav} /> : '';
+		return !['/login', '/safety_tips', '/create_account', '/secretkey', '/import_secret_key', '/register', '/', '/agreement'].includes(pathname) ? <Tab nav={this._nav} /> : '';
 	}
 }
 

@@ -3,6 +3,11 @@
 .login_page {
 	height: 100%;
 	background-color: #fefefe;
+	.agreement_box {
+		text-align: center;
+		margin-top: 0.3rem;
+		font-size: 0.2rem;
+	}
 	.top_part {
 		padding: 2.45rem 0.3rem 1.34rem;
 		background-image: url("../../../src/assets/login_bg.png");

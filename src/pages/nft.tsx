@@ -165,7 +165,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 							</div>
 
 							{device.map(item => {
-								return <DeviceItem key={item.sn} deviceInfo={item} onClick={() => {
+								return <DeviceItem isCopy={false} key={item.sn} deviceInfo={item} onClick={() => {
 									this.pushPage({ url: `/device_info`, params: { ...item } });
 								}} />
 							})}
