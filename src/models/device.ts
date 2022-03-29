@@ -7,6 +7,7 @@ import somes from 'somes';
 import sdk from '../sdk';
 import chain from '../chain';
 import { t } from 'i18next';
+import { alert } from '../util/tools';
 
 export { Device };
 
@@ -33,7 +34,7 @@ export async function call(target: string, method: string, args?: any, vCheck?: 
 			return res;
 		} catch (error: any) {
 			error.message = t(error.message);
-			console.log(error, error.message, 'error');
+			// console.log(error, error.message, 'error');
 			reject(error);
 		}
 	});

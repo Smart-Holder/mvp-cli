@@ -36,19 +36,20 @@ import './index.css';
 import sdk, { initialize } from './sdk';
 import chain from './chain';
 import utils from 'somes';
-import errnoHandles from './handle';
-import Tools from './util/tools';
+// import errnoHandles from './handle';
+import Tools, { handle } from './util/tools';
 import 'antd-mobile/dist/antd-mobile.css'
-import { env } from '../config';
 import * as moment from 'moment';
 
 utils.onUncaughtException.on((e) => {
-	console.log(e.data.message);
+	console.log(e.data.message, 'onUncaughtException');
 	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
-	errnoHandles(e.data)
+	// errnoHandles(e.data);
+	handle(e.data);
 });
 utils.onUnhandledRejection.on((e) => {
-	errnoHandles(e.data.reason)
+	// console.log(e.data, 'onUnhandledRejection');
+	handle(e.data.reason)
 });
 
 Nav.platform = '_mini_app';

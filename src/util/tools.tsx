@@ -282,5 +282,43 @@ export const alert = (text: string | DialogIn, onOk?: () => void) => {
 		...text,
 		buttons: { [btnText]: () => onOk && onOk() },
 	});
-
 }
+
+export const confirm = async (text: string | DialogIn, onOk?: (isOk?: any) => Promise<void>) => {
+	let btnText = t('@确认');
+	let btnTextCanel = t('取消');
+
+	if (typeof text === 'string') {
+		let l: any = await show({
+			text,
+			buttons: { [btnTextCanel]: () => l.close(), [btnText]: () => onOk && onOk(true) },
+		});
+		return l;
+	}
+
+	return show({
+		...text,
+		buttons: { [btnText]: () => onOk && onOk() },
+	});
+}
+const dialog_handles: Dict<any> = {};
+
+export const handle = function (e: any) {
+	var err = Error.new(e);
+	var errno = err.errno as number;
+	var text = err.message ? (
+		<span>
+			{err.message}<br />{err.description}
+		</span>
+	) : <span>An unknown exception</span>;
+	if (errno) {
+		if (!dialog_handles[errno]) {
+			var dag = alert({ text }, () => {
+				delete dialog_handles[errno];
+			});
+			dialog_handles[errno] = dag;
+		}
+	} else {
+		alert({ text });
+	}
+};

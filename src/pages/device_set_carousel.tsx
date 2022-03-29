@@ -6,8 +6,8 @@ import Button from '../components/button';
 import SetCarousel from '../components/set_carousel';
 import { Device } from '../models';
 import { Drawer, Slider, Switch } from 'antd';
-import { confirm } from '../../deps/webpkit/lib/dialog';
-import { alert } from '../util/tools'
+// import { confirm } from '../../deps/webpkit/lib/dialog';
+import { alert, confirm } from '../util/tools'
 import { withTranslation } from 'react-i18next';
 import IconFont from '../components/icon_font';
 import { checkVersion, getScreenSettings, screenColor, screenLight, screenOrientation, screenVolume, screenWiFi, switchAutoLight, switchDetails, upgradeVersion } from '../models/device';
