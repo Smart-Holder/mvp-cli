@@ -1,5 +1,11 @@
-.agree_box {
-	overflow: auto;
-	height: 100%;
-	padding: 0.3rem;
+
+.agreement_box {
+	display: flex;
+	flex-direction: column;
+	.agree_box {
+		overflow: auto;
+		height: 100%;
+		padding: 0.3rem;
+		flex: 1;
+	}
 }

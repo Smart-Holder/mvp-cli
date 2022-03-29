@@ -7,7 +7,7 @@ import "./index.scss";
 
 class Agreement extends NavPage {
 	render() {
-		return <div className="agreement_box">
+		return <div className="agreement_box" style={{paddingBottom:'0'}}>
 			<Header page={this} title='Hashii隐私协议' />
 
 			<div className="agree_box">
