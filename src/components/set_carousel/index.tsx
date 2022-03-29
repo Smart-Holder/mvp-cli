@@ -100,7 +100,12 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let videoNftList: NFT[] = [];
 		let imgNftList: NFT[] = [];
 
-		nftList.forEach(item => item.media.match(/\.mp4/i) ? videoNftList.push(item) : imgNftList.push(item));
+		nftList.forEach(item => {
+			let { image, imageOrigin, media, mediaOrigin } = item;
+			if (image && imageOrigin && media && mediaOrigin) {
+				item.media.match(/\.mp4/i) ? videoNftList.push(item) : imgNftList.push(item)
+			}
+		});
 
 		(type === CarouselType.video ? videoNftList : imgNftList).forEach((item, index) => {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
