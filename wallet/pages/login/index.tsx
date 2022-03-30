@@ -146,8 +146,8 @@ class Login extends NavPage {
 
 				<div className="bottom_part">
 					<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
-					<div className="agreement_box">
-						登录即代表您同意“{<a onClick={() => this.pushPage('/agreement')} >Hashii隐私协议</a>}”
+					<div className="login_agreement_box">
+						<span>登录即代表您同意</span> {<span className="argee_text" onClick={() => this.pushPage('/agreement')} >“Hashii隐私协议”</span>}
 					</div>
 				</div>
 			</Spin>

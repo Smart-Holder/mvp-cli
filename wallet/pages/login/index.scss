@@ -3,10 +3,15 @@
 .login_page {
 	height: 100%;
 	background-color: #fefefe;
-	.agreement_box {
+	.login_agreement_box {
 		text-align: center;
 		margin-top: 0.3rem;
 		font-size: 0.2rem;
+		white-space: nowrap;
+		.argee_text {
+			color: #1890ff;
+			cursor: pointer;
+		}
 	}
 	.top_part {
 		padding: 2.45rem 0.3rem 1.34rem;
