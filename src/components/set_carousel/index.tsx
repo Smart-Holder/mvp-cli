@@ -147,11 +147,11 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { mode } = this.props;
 		let carouselConfig = await modeConfig[mode].get_screen_save(this.props.page.params.address);
 
-		let nftListObj = ArrayToObj(nftList || [] as any, 'tokenId');
+		let nftListObj = ArrayToObj(nftList || [] as any, 'id');
 
 		let newselectedList: { [key: string]: NFT } = {};
 		carouselConfig.data.forEach(item => {
-			if (nftListObj[item.tokenId]) newselectedList[item.tokenId] = item as NFT;;
+			if (nftListObj[item.id]) newselectedList[item.id] = item as NFT;;
 		});
 		return newselectedList;
 	}
@@ -160,7 +160,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		const { selectedList } = this.state;
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />}
-			<div className={`select_btn ${selectedList[nft.tokenId] && 'select_btn_active'}`} />
+			<div className={`select_btn ${selectedList[nft.id] && 'select_btn_active'}`} />
 		</div>
 	}
 
@@ -170,9 +170,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { selectedList, isShowAbbreviation, radioValue } = this.state;
 		let newselectedList = { ...selectedList };
 
-		if (newselectedList[nftItem.tokenId]) {
+		if (newselectedList[nftItem.id]) {
 			// 删除已选择的nft
-			delete newselectedList[nftItem.tokenId];
+			delete newselectedList[nftItem.id];
 			// 如果没有选中项了 收起底部弹框
 			!Object.keys(newselectedList).length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
 
@@ -180,7 +180,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			// 单张nft图片选择限制
 			if ((radioValue === CarouselType.single || radioValue === CarouselType.video) && Object.keys(selectedList).length >= 1) newselectedList = {};
 			// 选中当前点击的nft
-			newselectedList[nftItem.tokenId] = nftItem;
+			newselectedList[nftItem.id] = nftItem;
 			// 显示底部已选弹框
 			isShowAbbreviation = true;
 		}
