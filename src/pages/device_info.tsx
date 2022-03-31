@@ -22,8 +22,11 @@ import { Empty } from 'antd';
 import native from '../../wallet/util/prefix_native';
 import wallet_ui from '../../wallet/wallet_ui';
 
+interface IDeviceProps extends Device {
+	key:string
+}
 
-class DeviceInfo extends NavPage<Device>  {
+class DeviceInfo extends NavPage<IDeviceProps>  {
 
 	state = {
 		nftList: [] as INftItem[],
