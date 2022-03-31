@@ -20,9 +20,10 @@ import models from '../sdk';
 import '../css/device_info.scss';
 import { Empty } from 'antd';
 import native from '../../wallet/util/prefix_native';
+import wallet_ui from '../../wallet/wallet_ui';
 
 
-class DeviceInfo extends NavPage<Device> {
+class DeviceInfo extends NavPage<Device>  {
 
 	state = {
 		nftList: [] as INftItem[],
@@ -36,7 +37,8 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	async triggerLoad() {
-		let owner = this.params.address;
+		let {address:owner} = this.params;
+		
 		this.getNFTList(owner);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
@@ -83,6 +85,7 @@ class DeviceInfo extends NavPage<Device> {
 		const { t } = this;
 		const getNFTList = this.getNFTList.bind(this, this.params.address)
 		const { nftList } = this.state;
+		const deviceOwner = this.params.owner;
 
 		let newNftList = [...nftList];
 
@@ -96,8 +99,10 @@ class DeviceInfo extends NavPage<Device> {
 			newNftList[index] = newNftItem;
 			this.setState({ nftList: newNftList });
 
-			let to = toAddress || await chain.defaultAccount();
+			let to = toAddress || deviceOwner;
+			
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
+			
 			await this._Withdraw(nft, to);
 
 			alert({ text: <div className="tip_box"><img style={{ width: ".5rem" }} src={require('../assets/success.jpg')} alt="" /> {t('取出到密钥成功,数据显示可能有所延时,请稍后刷新数据显示.')}</div> }, async () => {
@@ -114,7 +119,7 @@ class DeviceInfo extends NavPage<Device> {
 		} catch (error: any) {
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
-
+			if (errorCode?.startsWith('Returned values')) errorText = '当前密钥余额不足';
 			if (error.errno == -1) return;
 			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到密钥');
 			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
@@ -140,6 +145,12 @@ class DeviceInfo extends NavPage<Device> {
 		var l = await Loading.show(t('正在取出到您的密钥中,请勿操作'));
 		return new Promise(async (resolve, reject) => {
 			try {
+				// let balance = Number(await wallet_ui.getBalance(to)) / Math.pow(10, 18);
+				// console.log(balance, "balance", to);
+				// if (!balance) await bSNGasTap(to);
+				let { key} = this.params;
+
+				wallet_ui.setCurrentKey(String(key));
 
 				somes.assert(from, '#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW'); // 暂时只支持代理取出
 				// debugger

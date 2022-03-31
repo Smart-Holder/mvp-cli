@@ -208,10 +208,8 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async onSignTransaction(user: WalletUser, tx: Transaction): Promise<RLPEncodedTransaction | any> {
 		try {
 			var from = tx.from;
-
 			let balance = Number(await this.getBalance(from)) / Math.pow(10, 18);
 			if (!balance) await bSNGasTap(from);
-
 			var key = await this.keyFrom(from);
 			var getSignature = async (message: IBuffer) => await key.sign(message);
 
