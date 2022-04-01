@@ -75,7 +75,7 @@ class DeviceList extends NavPage<{ address?: string, keyName?: string }> {
 		// 从钱包设备进入仅显示当前钱包绑定关系的设备
 		if (address) {
 			device = device.filter((item) => {
-				item.key = addressList[String(address)]?.key;
+				item.key = addressList[String(address).toLocaleUpperCase()]?.key;
 				return item.owner === address;
 			})
 		} else {
