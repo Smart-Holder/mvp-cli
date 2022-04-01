@@ -146,7 +146,7 @@ class My extends NavPage {
 
 
 			let btnText = t('我知道了');
-			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {(errorText)}</div>, buttons: { [btnText]: () => { } } });
+			show({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {t(errorText)}</div>, buttons: { [btnText]: () => { } } });
 		} finally {
 			l.close();
 		}

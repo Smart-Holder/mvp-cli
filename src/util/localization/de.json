@@ -136,5 +136,6 @@
 	"上一笔交易未完成": "Previous transaction not completed",
 	"发送以太坊交易失败": "Failed to send Ethereum transaction",
 	"调整屏幕角度将重启设备，确定调整屏幕角度吗？": "Adjusting the screen angle will restart the device. Are you sure to adjust the screen angle?",
-	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT取出到钱包": "You can only view NFTs on other networks and cannot do anything. If you want to take NFTs from other networks out of your wallet, you need to switch to the network where the NFT is located before you can take the NFT out of your wallet"
+	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT取出到钱包": "You can only view NFTs on other networks and cannot do anything. If you want to take NFTs from other networks out of your wallet, you need to switch to the network where the NFT is located before you can take the NFT out of your wallet",
+	"Gas费用不足，请充值": "Gas charge is insufficient, please recharge"
 }

@@ -123,7 +123,7 @@ class DeviceInfo extends NavPage<Device> {
 			// window.alert((Object.keys(error)));
 
 			newNftItem[disabledKey] = false;
-			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
+			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(t(errorText))}</div> });
 
 		} finally {
 			newNftList[index] = newNftItem;

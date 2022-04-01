@@ -89,7 +89,7 @@ class TransferNft extends NavPage<INftItem> {
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
 
-			if (error?.code == 4001 || error.errno == -30000) errorText = '已取消存储操作';
+			if (error?.code == 4001 || error.errno == -30000) errorText = t('已取消存储操作');
 			if (error?.errno == 100400) errorText = error.description;
 
 			(error?.code != 4001 && errorCode !== 'cancel') && (errorText += errorCode);
