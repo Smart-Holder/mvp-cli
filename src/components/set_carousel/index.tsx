@@ -270,7 +270,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 						if (radioValue === CarouselType.multi && item.index === 1) {
 							this.setState({ tabsCurrent: 1 })
 						}
-					}} className={`${(radioValue !== CarouselType.multi && item.index === 1) && 'disabledTab'} `}>{item.title}</div>}
+					}} className={`${(radioValue !== CarouselType.multi && item.index === 1) && 'disabledTab'} carousel_tabs`}>{item.title}</div>}
 				>
 					<div className="item_page" >
 						<div className="radio_box">

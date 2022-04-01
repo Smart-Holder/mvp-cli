@@ -87,6 +87,8 @@ class TransferNft extends NavPage<INftItem> {
 			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode ||'已取消存储操作';
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
+			if (error?.code == -32000) errorText = 'Gas费用不足，请充值';
+			if (error?.errno == 100320) errorText = 'Gas费用充值中,请稍后操作';
 
 			
 			let btnText = t('我知道了');

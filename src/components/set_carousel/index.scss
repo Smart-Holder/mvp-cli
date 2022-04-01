@@ -2,6 +2,10 @@
 	height: 100%;
 	overflow: hidden;
 	transition: 0.3s all;
+	.carousel_tabs {
+		font-size: .26rem;
+		white-space: nowrap;
+	}
 
 	.clear_btn {
 		position: absolute;
