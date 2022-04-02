@@ -22,6 +22,7 @@
 		BF229C1C278D92BC00FDFC96 /* QRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C0B278D890400FDFC96 /* QRScan.m */; };
 		BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF229C03278D87F900FDFC96 /* ZZYQRCode.bundle */; };
 		BF229C26278D9BD700FDFC96 /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = BF229C24278D9BD700FDFC96 /* Alert.m */; };
+		BF5C3A2E27F81EF9006B6694 /* public in Resources */ = {isa = PBXBuildFile; fileRef = BF5C3A2D27F81EF9006B6694 /* public */; };
 		BFBF96DA278EA5ED00869204 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFBF96D9278EA5ED00869204 /* Security.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,7 @@
 		BF229C0B278D890400FDFC96 /* QRScan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QRScan.m; sourceTree = "<group>"; };
 		BF229C24278D9BD700FDFC96 /* Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
 		BF229C25278D9BD700FDFC96 /* Alert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
+		BF5C3A2D27F81EF9006B6694 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = ../../../out/public; sourceTree = "<group>"; };
 		BFBF96D9278EA5ED00869204 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BFBF96DB278EAA4B00869204 /* mvp-wallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "mvp-wallet.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +92,7 @@
 		BF229BCE278C388000FDFC96 /* mvp-wallet */ = {
 			isa = PBXGroup;
 			children = (
+				BF5C3A2D27F81EF9006B6694 /* public */,
 				BFBF96DB278EAA4B00869204 /* mvp-wallet.entitlements */,
 				BF229BFF278D87F900FDFC96 /* qrcode */,
 				BF229BCF278C388000FDFC96 /* AppDelegate.h */,
@@ -193,6 +196,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF5C3A2E27F81EF9006B6694 /* public in Resources */,
 				BF229C20278D952600FDFC96 /* ZZYQRCode.bundle in Resources */,
 				BF229BDC278C388300FDFC96 /* Assets.xcassets in Resources */,
 				BF229BDF278C388300FDFC96 /* LaunchScreen.storyboard in Resources */,
