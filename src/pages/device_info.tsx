@@ -120,8 +120,8 @@ class DeviceInfo extends NavPage<IDeviceProps>  {
 				this.setState({ dsq_id });
 			});
 		} catch (error: any) {
-			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
+			let errorText = errorCode || error;
 			if (errorCode?.startsWith('Returned values')) errorText = '当前密钥余额不足';
 			if (error.errno == -1) return;
 			if (error?.code == 4001 || error.errno == -30000) errorText = errorCode || t('已取消取出到密钥');
@@ -131,6 +131,7 @@ class DeviceInfo extends NavPage<IDeviceProps>  {
 			if (error?.errno == 100272) errorText = '网络出现问题，请稍后操作';
 			if (error?.errno == 100320) errorText = 'Gas费用充值中,请稍后操作';
 
+			// console.log(error, 'error', errorText, 'errorText', error.message, 'error.message');
 
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(errorText)}</div> });
@@ -165,7 +166,6 @@ class DeviceInfo extends NavPage<IDeviceProps>  {
 				resolve(nft);
 			} catch (err: any) {
 				removeNftDisabledTimeItem(nft, "drawNftDisabledTime");
-				console.error(err);
 				reject(err);
 			} finally {
 				l.close();
