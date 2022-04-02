@@ -40,7 +40,7 @@ static NSURLSession *_Session = nil;
 		return NO;
 	NSString *ext = request.URL.pathExtension;
 
-	BOOL isFile = [@[@"png", @"jpeg", @"gif", @"jpg", @"js", @"css", @"html"]
+	BOOL isFile = [@[@"png", @"jpeg", @"gif", @"jpg", @"js", @"css", @"html", @"svg", @"ttf"]
 						 indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 			return [ext compare:obj options:NSCaseInsensitiveSearch] == NSOrderedSame;
 	}] != NSNotFound;
@@ -49,8 +49,9 @@ static NSURLSession *_Session = nil;
 }
 
 - (void)webView:(WKWebView *)webView startURLSchemeTask:(id <WKURLSchemeTask>)task {
-	if ([self canRequest: task.request]) {
-		NSString *fileName = [task.request.URL.path componentsSeparatedByString:@"/"].lastObject;
+	NSLog(@"-------------------, %@, %@", task.request.URL.path, task.request.URL.query);
+	if (!task.request.URL.query && [self canRequest: task.request]) {
+		NSString *fileName = [NSString stringWithFormat:@"public/%@", task.request.URL.path];
 		NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
 		if (path) {
 			[self requestLocal:task path:path];
