@@ -38,6 +38,10 @@ export default class Account extends NavPage<{ key: string }> {
 		this.pushPage('/reset_password');
 	}
 
+	pushAgree() {
+		this.pushPage('/agreement');
+	}
+
 	render() {
 		let { userInfo } = this.state;
 		return <div className="account_page">
@@ -64,8 +68,13 @@ export default class Account extends NavPage<{ key: string }> {
 				<div className="setting_title">管理设备</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div> */}
-			<div className="setting_item" onClick={this.goResetPassword.bind(this)}>
+			<div className="setting_item bot_line" onClick={this.goResetPassword.bind(this)}>
 				<div className="setting_title">修改登录密码</div>
+				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
+			</div>
+
+			<div className="setting_item" onClick={this.pushAgree.bind(this)}>
+				<div className="setting_title">隐私协议</div>
 				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }} /></div>
 			</div>
 
@@ -82,12 +91,12 @@ export default class Account extends NavPage<{ key: string }> {
 					});
 
 				}}>退出登录</Button>
+			{<div className="config_env">
+				<div className='vcode_row'>版本:{packageJson.version}</div>
+					{config.env !== 'prod' && <div>{config.env}</div>}
+			</div>}
 			</div>
 
-			{<div className="config_env">
-				<div>{config.env}</div>
-				<div>{packageJson.version}</div>
-			</div>}
 
 		</div>
 	}

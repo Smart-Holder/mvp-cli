@@ -3,11 +3,30 @@
 .login_page {
 	height: 100%;
 	background-color: #fefefe;
+
+	.login_checkbox {
+				.am-checkbox {
+					height: .32rem;
+					width: auto;
+					margin-right: .1rem;
+				}
+				.am-checkbox-inner {
+					width: .3rem;
+					height: .3rem;
+				}
+				.am-checkbox-inner:after {
+					height: 9px;
+					right: 4px;
+				}
+	}						
+					
 	.login_agreement_box {
 		text-align: center;
 		margin-top: 0.3rem;
 		font-size: 0.2rem;
 		white-space: nowrap;
+		display: flex;
+		justify-content: center;
 		.argee_text {
 			color: #1890ff;
 			cursor: pointer;

@@ -13,7 +13,7 @@ import { MyRoot } from '../..';
 import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import "./index.scss";
-
+import {  Checkbox } from 'antd-mobile';
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
 
@@ -28,7 +28,8 @@ class Login extends NavPage {
 		v_code: '',
 		password: '',
 		loading: false,
-		dateNow: Date.now()
+		dateNow: Date.now(),
+		checked:false
 	}
 
 	formRef = React.createRef<FormInstance>();
@@ -50,7 +51,7 @@ class Login extends NavPage {
 	// 登录事件
 	async loginClick() {
 		this.setState({ loading: true });
-		let { username, password, login_method, v_code } = this.state;
+		let { username, password, login_method, v_code, checked} = this.state;
 		let isRegister = false;
 		try {
 			await register(username, password, '000000');
@@ -99,7 +100,7 @@ class Login extends NavPage {
 	}
 
 	render() {
-		let { login_method, isCountdown, username, v_code, password, loading } = this.state;
+		let { login_method, isCountdown, username, v_code, password, loading, checked } = this.state;
 		return <div className="login_page">
 			<Spin spinning={loading}>
 
@@ -145,9 +146,12 @@ class Login extends NavPage {
 				</div>
 
 				<div className="bottom_part">
-					<Button disabled={(username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password)} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
+					<Button disabled={Boolean((username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password) || !checked )} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
 					<div className="login_agreement_box">
-						<span>登录即代表您同意</span> {<span className="argee_text" onClick={() => this.pushPage('/agreement')} >“Hashii隐私协议”</span>}
+						<Checkbox checked={checked} className="login_checkbox" onChange={(e) => this.setState({ checked:e.target.checked})}>
+						<span>登录即代表您同意</span> 
+						</Checkbox>
+						{<span className="argee_text" onClick={() => this.pushPage('/agreement')} >“Hashii隐私协议”</span>}
 					</div>
 				</div>
 			</Spin>

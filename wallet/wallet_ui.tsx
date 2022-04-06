@@ -124,11 +124,11 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 	async signFrom(target: string, msg: IBuffer): Promise<Signature> {
 		var device = await getDeviceFormAddress(target);
-		if (device && device.owner) {
-			var key = await this.keyFrom(device.owner);
-		} else {
+		// if (device && device.owner) {
+			// var key = await this.keyFrom(device.owner);
+		// } else {
 			var key = await this.currentKey();
-		}
+		// }
 		var sign = await key.sign(msg);
 		return sign;
 	}
