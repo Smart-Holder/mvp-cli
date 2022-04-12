@@ -168,6 +168,7 @@ export default class ProxyAPI {
 }
 
 export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): any {
+	
 	somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 
 	if (type < 256) {
@@ -175,6 +176,8 @@ export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): a
 	}
 
 	var _contracts = contracts as Dict<string>;
+	console.log(ChainType, chain, ChainType[chain], _contracts, AssetType[type], type, `${ChainType[chain]}_${AssetType[type]}`);
+
 	var key = `${ChainType[chain]}_${AssetType[type]}`;
 	var address = _contracts[key];
 
