@@ -74,25 +74,8 @@ class DeviceList extends NavPage {
 		this.setState({ visible: true, carouselType });
 	}
 
-	carouselSetupType = {
-		TokenPocket: [
-			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/tp_setp_1.jpg') },
-			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-		MateMask: [
-			{ title: <div>{this.t('第一步：请点击左上角')}“<IconFont type="icon-danchuangicon1" />”{this.t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require('../assets/step_1.png') },
-			{ title: <div>{this.t('第二步：进入钱包后请点击右上角')} <br />“<IconFont type="icon-danchuangicon3" />”{this.t('按钮')}</div>, img: require('../assets/step_2.png') },
-			{ title: <div>{this.t('第三步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-		imToken: [
-			{ title: this.t('第一步：进入钱包主页，点击右上角扫一扫'), img: require('../assets/imtoken_setp_1.1.jpg') },
-			{ title: <div>{this.t('第二步：扫码绑定成功')}</div>, img: require('../assets/step_3.png') },
-		],
-	};
-
-
 	render() {
-		const { device, loading, carouselType } = this.state;
+		const { device, loading } = this.state;
 		const { t } = this;
 		return (
 			<div className="index device_list_page">

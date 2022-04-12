@@ -295,7 +295,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 							<div className="right_box">
 								{rightNftList.map(item => this.rendNftItem(item))}
 							</div>
-						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无数字藏品，请添加数字藏品至密钥")} />}
+						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
 					</div>
 					<div className="item_page2" >
 						<div className="time_box">

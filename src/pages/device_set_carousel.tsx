@@ -72,18 +72,21 @@ class DeviceSetCarousel extends NavPage<Device> {
 		hasNewAction: false,
 		autoLightLoading: false,
 		autoLight: false,
-		time: 10
+		time: 10,
+		versionCode:0
 	}
 
 	async triggerLoad() {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time }) => {
+		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time, versionCode }) => {
 			if (light > 100) light = 100;
 			light = parseInt(String(light / 20));
 			volume = volume / 3;
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time });
+			console.log(versionCode);
+			
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode});
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -256,7 +259,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	render() {
 
-		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction } = this.state;
+		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction, versionCode} = this.state;
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -277,7 +280,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 				onClose={() => this.setState({ drawerVisible: false })}
 			>
 				{settingDarwerConfig.map(item => {
-					return <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>
+					let ele = <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>;
+					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
+						return ele;
 				})}
 			</Drawer>
 
