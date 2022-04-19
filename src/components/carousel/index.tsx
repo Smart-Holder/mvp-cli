@@ -68,7 +68,7 @@ export const BindDeviceCarousel = (props: IbindDeviceCarouselProps) => {
 		carouselType = 'MateMask';
 	}
 
-	props.pageType === 'device' && carouselSetupTypeConfig[carouselType].unshift({ title: t('您还未绑定任何设备，请右翻查看绑定设备操作步骤'), img: require('../../assets/empty_device_box.jpg') })
+	props.pageType === 'device' && carouselSetupTypeConfig[carouselType].unshift({ title: t('您还未绑定任何设备，请右翻查看绑定设备操作步骤'), img: require(`../../assets/empty_device_box${isZhCn ? '' : '_en'}.jpg`) })
 
 	const { carouselSetupType = carouselSetupTypeConfig, afterChange } = props;
 
