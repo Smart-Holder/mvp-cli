@@ -8,10 +8,8 @@ import { ArrayToObj, showModal } from "../../util/tools";
 import Button from '../../components/button';
 import { Empty } from 'antd';
 import { withTranslation } from 'react-i18next';
-// import { alert } from '../../../deps/webpkit/lib/dialog';
-import { alert } from '../../util/tools'
-
 import { clearShadow, timeMultiImage } from "../../models/device";
+import { alert } from '../../util/tools'
 import chain from "../../chain";
 
 import './index.scss';
@@ -52,17 +50,16 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	state = {
 		isShowAbbreviation: false,
-		radioValue: 'single' as CarouselType,
 		tabsCurrent: 0,
 		nft: [] as NFT[],
 		leftNftList: [] as NFT[],
 		rightNftList: [] as NFT[],
 		videoNftList: [] as NFT[],
-		selectedList: {} as { [key: string]: NFT },
 		carouselIntervalTime: 10,
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
-		isShadow: false
+		isShadow: false,
+		selectedArrList: [] as NFT[]
 	}
 
 	componentWillMount() {
@@ -84,7 +81,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let newselectedList = await this.getNewSelectedList(nftList);
 		// const { time } = await getScreenSettings(address);
 		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedList: newselectedList, carouselIntervalTime: newTime || this.props.time, isShowAbbreviation: false, isShadow });
+		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedArrList: newselectedList, carouselIntervalTime: newTime || this.props.time, isShowAbbreviation: false, isShadow });
 	}
 
 
@@ -100,20 +97,20 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let videoNftList: NFT[] = [];
 		let imgNftList: NFT[] = [];
 
-		nftList.forEach(item => {
-			let { image, imageOrigin, media, mediaOrigin } = item;
-			if (image && imageOrigin && media && mediaOrigin) {
-				item.media.match(/\.mp4/i) ? videoNftList.push(item) : imgNftList.push(item)
-			}
-		});
+		// nftList.forEach(item => {
+		// 	let { image, imageOrigin, media, mediaOrigin } = item;
+		// 	if (image && imageOrigin && media && mediaOrigin) {
+		// 		item.media.match(/\.mp4/i) ? videoNftList.push(item) : imgNftList.push(item)
+		// 	}
+		// });
 
-		(type === CarouselType.video ? videoNftList : imgNftList).forEach((item, index) => {
+		(nftList).forEach((item, index) => {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
 
-		let newState: any = { leftNftList, rightNftList, videoNftList };
+		let newState: any = { leftNftList, rightNftList, nft: nftList};
 
-		type !== CarouselType.video && (newState.nft = nftList);
+		// type !== CarouselType.video && (newState.nft = nftList);
 
 		this.setState({ ...newState });
 		return nftList;
@@ -121,26 +118,12 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// 标签tab切换事件
 	onTabsChange(tabs: any, tabsCurrent: number) {
-		const { radioValue } = this.state;
+		// const { radioValue } = this.state;
 		// 不是多选时 取消选中间隔设置
-		radioValue !== CarouselType.multi && (tabsCurrent = 0);
+		// radioValue !== CarouselType.multi && (tabsCurrent = 0);
 		this.setState({ isShowAbbreviation: false, tabsCurrent });
 	}
 
-	// 单选按钮事件
-	async setRadioValue(radioValue: CarouselType) {
-		let { videoNftList, nft, carouselConfig, tabsCurrent } = this.state;
-		let tabs = this.tabsConfig;
-		// 仅显示视频nft数据
-		radioValue === CarouselType.video ? this.getNftList(videoNftList, radioValue) : this.getNftList(nft, radioValue);
-		radioValue === CarouselType.multi && (tabsCurrent = 0);
-		let selectedList = {};
-
-		// 选中之前选择的项
-		if (radioValue === carouselConfig.type) selectedList = await this.getNewSelectedList(nft);
-		this.setState({ radioValue, isShowAbbreviation: false, selectedList, tabs, tabsCurrent });
-
-	}
 
 	// 根据之前保存的配置 获取新的选中项
 	async getNewSelectedList(nftList?: NFT[]) {
@@ -153,39 +136,42 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselConfig.data.forEach(item => {
 			if (nftListObj[item.id]) newselectedList[item.id] = item as NFT;;
 		});
-		return newselectedList;
+		return carouselConfig.data;
 	}
 
-	rendNftItem(nft: NFT) {
-		const { selectedList } = this.state;
+	rendNftItem(nft: NFT, index: number) {
+		const {  selectedArrList } = this.state;
+		let ids = selectedArrList.map(item => item.id);
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />}
-			<div className={`select_btn ${selectedList[nft.id] && 'select_btn_active'}`} />
+			<div className={`select_btn ${ids.includes(nft.id) && 'select_btn_active'}`} />
 		</div>
 	}
 
 
 	// nft列表项点击事件
 	nftItemClick(nftItem: NFT) {
-		let { selectedList, isShowAbbreviation, radioValue } = this.state;
-		let newselectedList = { ...selectedList };
+		let {  isShowAbbreviation,  selectedArrList} = this.state;
+		let newselectedArrList = JSON.parse(JSON.stringify([ ...selectedArrList ]));
 
-		if (newselectedList[nftItem.id]) {
+		let findNftIndex = newselectedArrList.findIndex((item:any) => item.id === nftItem.id);
+
+		if (findNftIndex >= 0) {
 			// 删除已选择的nft
-			delete newselectedList[nftItem.id];
+			newselectedArrList.splice(findNftIndex, 1);
+			
 			// 如果没有选中项了 收起底部弹框
-			!Object.keys(newselectedList).length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
+			!newselectedArrList.length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
+			
 
 		} else {
-			// 单张nft图片选择限制
-			if ((radioValue === CarouselType.single || radioValue === CarouselType.video) && Object.keys(selectedList).length >= 1) newselectedList = {};
 			// 选中当前点击的nft
-			newselectedList[nftItem.id] = nftItem;
+			newselectedArrList.push(nftItem)
 			// 显示底部已选弹框
 			isShowAbbreviation = true;
 		}
 
-		this.setState({ selectedList: newselectedList, isShowAbbreviation });
+		this.setState({ isShowAbbreviation, selectedArrList: newselectedArrList });
 
 	}
 
@@ -194,7 +180,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async saveCarouselIntervalTime() {
 		let { t } = this;
 		const { address } = this.props.page.params;
-		const { carouselConfig, radioValue, carouselIntervalTime } = this.state;
+		const { carouselConfig,  carouselIntervalTime } = this.state;
 		// 修改当前选择的时间间隔
 		let newCarouselConfig = { ...carouselConfig, time: carouselIntervalTime };
 		// let { mode } = this.props;
@@ -218,12 +204,13 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async saveCarousel() {
 		let { t } = this;
 		let { address } = this.props.page.params;
-		let { carouselConfig, radioValue, selectedList } = this.state;
-		let newCarouselConfig = { ...carouselConfig, type: radioValue, data: Object.keys(selectedList).map(key => selectedList[key]) };
-		if (radioValue === CarouselType.multi && newCarouselConfig.data.length < 2) return alert(t('请选择至少两张图片'));
+		let { carouselConfig,  selectedArrList } = this.state;
+		let newCarouselConfig = { ...carouselConfig, data: selectedArrList };
 		let { mode } = this.props;
+		console.log(newCarouselConfig,"newCarouselConfig");
+		
 		try {
-			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, radioValue);
+			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, 'nft');
 			mode == 'shadow' && localStorage.setItem('isShadow', '1');
 
 			this.setState({ isShowAbbreviation: false, carouselConfig: newCarouselConfig, isShadow: true });
@@ -262,10 +249,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	render() {
-		const { radioValue, isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs, selectedList } = this.state;
+		const {  isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs,  selectedArrList } = this.state;
 		const { mode } = this.props;
 		let t = this.t;
-
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
 			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>{t('取消投屏')}</Button>}
 
@@ -275,25 +261,16 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					page={tabsCurrent}
 					onChange={this.onTabsChange.bind(this)}
 					renderTab={(item) => <div onClick={() => {
-						if (radioValue === CarouselType.multi && item.index === 1) {
-							this.setState({ tabsCurrent: 1 })
-						}
-					}} className={`${(radioValue !== CarouselType.multi && item.index === 1) && 'disabledTab'} carousel_tabs`}>{item.title}</div>}
+					}} className={`carousel_tabs`}>{item.title}</div>}
 				>
 					<div className="item_page" >
-						<div className="radio_box">
-							<div onClick={this.setRadioValue.bind(this, CarouselType.single)} className={`radio_item ${radioValue === CarouselType.single && "active"}`}>{t('单张NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.multi)} className={`radio_item ${radioValue === CarouselType.multi && "active"}`}>{t('多张轮播NFT')}</div>
-							<div onClick={this.setRadioValue.bind(this, CarouselType.video)} className={`radio_item ${radioValue === CarouselType.video && "active"}`}>{t('选择视频NFT')}</div>
-						</div>
-
 						{leftNftList.length ? <div className="nft_list">
 							<div className="left_box">
-								{leftNftList.map(item => this.rendNftItem(item))}
+								{leftNftList.map((item,index) => this.rendNftItem(item,index))}
 							</div>
 
 							<div className="right_box">
-								{rightNftList.map(item => this.rendNftItem(item))}
+								{rightNftList.map((item,index) => this.rendNftItem(item,index))}
 							</div>
 						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
 					</div>
@@ -314,11 +291,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			{isShowAbbreviation && <div className="bottom_modal_box">
 				<div className="top_part">
 					<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>{t('取消')}</Button>
-					<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {Object.keys(selectedList).length} )</Button>
+					<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {selectedArrList.length} )</Button>
 				</div>
 				<div className="bottom_part">
-					{Object.keys(selectedList).map(key => {
-						let item = selectedList[key];
+					{selectedArrList.map(item => {
 						return <div key={item.id} className="selected_nft_item">
 							<div className="close_btn">
 								<img onClick={this.nftItemClick.bind(this, item)} src={require('../../assets/close.png')} alt="x" />
