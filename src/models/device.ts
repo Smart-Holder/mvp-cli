@@ -168,6 +168,9 @@ export function shadowVideo(target: string, token: string, tokenId: string, item
 	return call(target, 'shadowVideo', { type: 'video', time: 0, data: [item] });
 }
 
+// export function displayNFTs(target: string, token: string, tokenId: string, item: NFT) {
+// 	return call(target, 'displayNFTs', { type: 'image', time: 0, data: [item] });
+// }
 export function sign(target: string, msg: IBuffer): Promise<{ signer: string, sign: string }[]> {
 	return call(target, 'sign', { message: msg.toString('base64') });
 }

@@ -159,6 +159,11 @@
 		overflow-x: auto;
 		padding-top: 0.18rem;
 
+		.ant-image {
+			height: 100%;
+			width: 100%;
+		}
+
 		.selected_nft_item {
 			width: 1.23rem;
 			height: 1.23rem;
@@ -173,6 +178,7 @@
 				border-radius: 0.08rem;
 			}
 			.close_btn {
+				z-index: 99;
 				background-color: rgba(0, 0, 0, 0.701);
 				border-radius: 50%;
 				position: absolute;

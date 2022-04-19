@@ -12,6 +12,7 @@ import { alert } from '../../../deps/webpkit/lib/dialog';
 
 import './index.scss';
 import { clearShadow, getScreenSettings, timeMultiImage } from "../../models/device";
+import ImageMogr from "../image_mogr";
 
 const intervalTimeConfig = [
 	// { label: "5s", value: 5 },
@@ -157,7 +158,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	rendNftItem(nft: NFT) {
 		const { selectedList } = this.state;
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
-			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <img src={nft.image} alt="" />}
+			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> :
+				<ImageMogr className="nft_img" src={nft.image} nft={nft} /> || <img src={nft.image} alt="" />}
 			<div className={`select_btn ${selectedList[nft.tokenId] && 'select_btn_active'}`} />
 		</div>
 	}
@@ -315,7 +317,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 							<div className="close_btn">
 								<img onClick={this.nftItemClick.bind(this, item)} src={require('../../assets/close.png')} alt="x" />
 							</div>
-							<img className="nft_img" src={item.image} alt="" />
+							{/* <img className="nft_img" src={item.image} alt="" /> */}
+							<ImageMogr className="nft_img" src={item.image} nft={item} />
 						</div>
 					})}
 				</div>

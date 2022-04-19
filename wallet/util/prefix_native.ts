@@ -1,14 +1,18 @@
 import storage from 'somes/storage';
 import native from '../native';
+import somes from 'somes';
 
 class PrefixNative {
 
+	private _api: any = somes.webFlags?.ios ? (window as any).webkit?.messageHandlers?.getStatusBarHeight : somes.webFlags?.android ? (globalThis as any).__android_api : localStorage ;
 
 	async getBottomStatusHeight() {
+		if (!this?._api) return 0;
 		return await native.getBottomStatusHeight();
 	}
 
 	async getStatusBarHeight() {
+		if (!this?._api) return 0;
 		return await native.getStatusBarHeight();
 	}
 
@@ -38,9 +42,9 @@ class PrefixNative {
 
 
 	async getKeysName(account_name?: string): Promise<string[]> {
-
+		if (!this?._api) return [];
 		var keys: string[] = [];
-		let keyArr = await native.getKeysName();
+		let keyArr = native?.getKeysName ? await native.getKeysName() : [];
 		let loginstate = await storage.get('loginState');
 		let prefix = this._Prefix + (loginstate?.name || account_name) + '_';
 
