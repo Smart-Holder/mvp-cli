@@ -107,9 +107,6 @@ public class MainActivity extends AppCompatActivity
 		_mainLayout = (ViewGroup) findViewById(R.id.main_layout);
 		_webview = (WebView) _mainLayout.findViewById(R.id.webview);
 		_cache = new Cache(this);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			WebView.setWebContentsDebuggingEnabled(true);
-		}
 		initWebview();
 
 		//_jsapi.scan("1");

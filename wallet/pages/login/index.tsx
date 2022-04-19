@@ -5,7 +5,7 @@ import { FormInstance } from 'antd/lib/form';
 import Input from '../../../src/components/input';
 import Button from '../../../src/components/button';
 import { login, register, sendPhoneVerify } from '../../user';
-import { alert } from 'webpkit/lib/dialog';
+import { alert ,show} from 'webpkit/lib/dialog';
 import { verificationPhone } from '../../util/tools';
 import storage from 'somes/storage'
 import native from '../../util/prefix_native';
@@ -39,9 +39,8 @@ class Login extends NavPage {
 
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
-		console.log(keyname, 'triggerLoad login keyname', state);
-
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
+
 	}
 
 	async loginMethodClick(login_method: IMethodType) {
@@ -50,8 +49,37 @@ class Login extends NavPage {
 
 	// 登录事件
 	async loginClick() {
+		let isShowAgreeModal = localStorage.getItem('isShowAgreeModal');
+		if (isShowAgreeModal === '1') {
+			this.loginMethods();
+		} else {
+			let l = await show({
+				title: '服务协议',
+				text: <div style={{ textAlign: 'left' }}>&nbsp;&nbsp;&nbsp;&nbsp; 请您务必认真阅读，充分理解<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} > “Hashii隐私协议”</span>各条款，包括但不限于：为了向您提供数据、分享等服务所需要获取的权限信息，<br />
+					<div style={{ marginTop: '.2rem' }}>	&nbsp;&nbsp;&nbsp;&nbsp;您可以阅读 <span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} >《Hashii隐私协议》</span>了解详细信息 ，
+						如您同意请点击“同意”开始接受我们的服务.</div>
+				</div>,
+				buttons: {
+					'暂不使用': () => {
+						console.log('我取消了');
+						console.log(l.close(), 'l');
+					},
+					'@同意': () => {
+						console.log('我同意了');
+						localStorage.setItem('isShowAgreeModal', '1');
+						this.loginMethods();
+					},
+				},
+			});
+		}
+
+
+	
+	}
+
+	async loginMethods() {
 		this.setState({ loading: true });
-		let { username, password, login_method, v_code, checked} = this.state;
+		let { username, password, login_method, v_code, checked } = this.state;
 		let isRegister = false;
 		try {
 			await register(username, password, '000000');

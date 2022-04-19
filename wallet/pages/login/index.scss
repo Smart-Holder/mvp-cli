@@ -1,5 +1,8 @@
 @import "../index.scss";
-
+.argee_text {
+			color: #1890ff;
+			cursor: pointer;
+		}
 .login_page {
 	height: 100%;
 	background-color: #fefefe;
@@ -27,10 +30,6 @@
 		white-space: nowrap;
 		display: flex;
 		justify-content: center;
-		.argee_text {
-			color: #1890ff;
-			cursor: pointer;
-		}
 	}
 	.top_part {
 		padding: 2.45rem 0.3rem 1.34rem;
