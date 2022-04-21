@@ -1,5 +1,5 @@
 module.exports = {
-	host: 'https://mvp-wallet.stars-mine.com',
+	host: 'https://mvp-wallet-cn.stars-mine.com',
 	sdk: 'https://mvp-cn.stars-mine.com/service-api',
 	platform: 'eth',
 	env: 'prod',

@@ -365,11 +365,12 @@
 				CODE_SIGN_ENTITLEMENTS = "mvp-wallet/mvp-wallet.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8B9F56ZRXA;
+				DEVELOPMENT_TEAM = C4R8MKMBQY;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "mvp-wallet/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_CFBundleDisplayName = Hashii;
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要相机权限";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要相册权限";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -383,10 +384,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet3.stars-mine.com";
+				PRODUCT_BUNDLE_IDENTIFIER = hashii;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -398,11 +399,12 @@
 				CODE_SIGN_ENTITLEMENTS = "mvp-wallet/mvp-wallet.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8B9F56ZRXA;
+				DEVELOPMENT_TEAM = C4R8MKMBQY;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "mvp-wallet/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_CFBundleDisplayName = Hashii;
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要相机权限";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要相册权限";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -416,10 +418,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "mvp-wallet3.stars-mine.com";
+				PRODUCT_BUNDLE_IDENTIFIER = hashii;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

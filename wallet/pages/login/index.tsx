@@ -14,6 +14,7 @@ import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import "./index.scss";
 import {  Checkbox } from 'antd-mobile';
+import { PrivacyArgeeBox, UserArgeeBox } from '../../../src/components/argee_box';
 type IMethodType = 'vcode' | 'password'
 const { Countdown } = Statistic;
 
@@ -40,7 +41,9 @@ class Login extends NavPage {
 		var state = await storage.get('loginState');
 		let keyname = await native.getKeysName();
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
+		let isShowAgreeModal = localStorage.getItem('isShowAgreeModal');
 
+		isShowAgreeModal !== "1" && this.showAgreeModal(true);
 	}
 
 	async loginMethodClick(login_method: IMethodType) {
@@ -53,28 +56,35 @@ class Login extends NavPage {
 		if (isShowAgreeModal === '1') {
 			this.loginMethods();
 		} else {
-			let l = await show({
-				title: '服务协议',
-				text: <div style={{ textAlign: 'left' }}>&nbsp;&nbsp;&nbsp;&nbsp; 请您务必认真阅读，充分理解<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} > “Hashii隐私协议”</span>各条款，包括但不限于：为了向您提供数据、分享等服务所需要获取的权限信息，<br />
-					<div style={{ marginTop: '.2rem' }}>	&nbsp;&nbsp;&nbsp;&nbsp;您可以阅读 <span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} >《Hashii隐私协议》</span>了解详细信息 ，
-						如您同意请点击“同意”开始接受我们的服务.</div>
-				</div>,
-				buttons: {
-					'暂不使用': () => {
-						console.log('我取消了');
-						console.log(l.close(), 'l');
-					},
-					'@同意': () => {
-						console.log('我同意了');
-						localStorage.setItem('isShowAgreeModal', '1');
-						this.loginMethods();
-					},
-				},
-			});
+			this.showAgreeModal()
 		}
+	}
 
-
-	
+	async showAgreeModal(isFirst?: boolean) {
+		let l = await show({
+			title: '服务协议',
+			text: <div style={{ textAlign: 'left' }}>&nbsp;&nbsp;&nbsp;&nbsp; 请您务必认真阅读，充分理解
+				<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} > “Hashii隐私协议”</span>与
+				<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement_user'); }} > “Hashii服务协议”</span>
+				各条款，包括但不限于：为了向您提供数据、分享等服务所需要获取的权限信息，<br />
+				<div style={{ marginTop: '.2rem' }}>	&nbsp;&nbsp;&nbsp;&nbsp;您可以阅读
+					<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement'); }} >《Hashii隐私协议》</span>与
+					<span className="argee_text" onClick={() => { l.close(); this.pushPage('/agreement_user'); }} >《Hashii服务协议》</span>
+					了解详细信息 ，
+					如您同意请点击“同意”开始接受我们的服务.</div>
+			</div>,
+			buttons: {
+				'暂不使用': () => {
+					console.log('我取消了');
+					console.log(l.close(), 'l');
+				},
+				'@同意': () => {
+					console.log('我同意了');
+					localStorage.setItem('isShowAgreeModal', '1');
+					!isFirst && this.loginMethods();
+				},
+			},
+		});
 	}
 
 	async loginMethods() {
@@ -127,6 +137,12 @@ class Login extends NavPage {
 		}
 	}
 
+	checkAgree() {
+		let isShowAgreeModal = localStorage.getItem('isShowAgreeModal');
+		// isShowAgreeModal !== "1" && this.showAgreeModal(true);
+		return isShowAgreeModal === "1";
+	}
+
 	render() {
 		let { login_method, isCountdown, username, v_code, password, loading, checked } = this.state;
 		return <div className="login_page">
@@ -143,7 +159,9 @@ class Login extends NavPage {
 						<div className={`pwdcode_login ${login_method == 'password' && 'active'}`} onClick={this.loginMethodClick.bind(this, 'password')}>密码登录</div>
 					</div>
 
-					<div className="login_input_box">
+					<div className="login_input_box" onClick={() => {
+						!this.checkAgree() && this.showAgreeModal(true);
+					}} >
 						<Col className="input_col">
 							<Input value={username} onInput={this.inputChange.bind(this, 'username')} maxLength={11} className="input_item" placeholder='请输入手机号' />
 						</Col>
@@ -167,19 +185,30 @@ class Login extends NavPage {
 
 						<div className="more_login_action">
 							{login_method == 'vcode' && <div />}
-							<div className="register_btn"> <Button type="link" onClick={() => this.pushPage(`/register?pageType=register`)}>立即注册</Button></div>
-							{login_method == 'password' && <div className="forget_password"><Button onClick={() => this.pushPage(`/register?pageType=reset_password`)} type="link">忘记密码</Button></div>}
+							<div className="register_btn"> <Button type="link" onClick={() => {
+								let isAgee = this.checkAgree();
+								if (!isAgee) return false;
+								this.pushPage(`/register?pageType=register`);
+							}}>立即注册</Button></div>
+							{login_method == 'password' && <div className="forget_password"><Button onClick={() => {
+								let isAgee = this.checkAgree();
+								if (!isAgee) return false;
+								this.pushPage(`/register?pageType=reset_password`)
+							}} type="link">忘记密码</Button></div>}
 						</div>
 					</div>
 				</div>
 
 				<div className="bottom_part">
-					<Button disabled={Boolean((username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password) || !checked )} className="login_btn" type="primary" onClick={this.loginClick.bind(this)}>登录</Button>
+					<Button disabled={Boolean((username.length < 11 || login_method == 'vcode' ? v_code.length < 6 : !password) || !checked )} className="login_btn" type="primary" onClick={this.loginClick.bind(this,false)}>登录</Button>
 					<div className="login_agreement_box">
 						<Checkbox checked={checked} className="login_checkbox" onChange={(e) => this.setState({ checked:e.target.checked})}>
 						<span>登录即代表您同意</span> 
 						</Checkbox>
-						{<span className="argee_text" onClick={() => this.pushPage('/agreement')} >“Hashii隐私协议”</span>}
+
+						<PrivacyArgeeBox page={this} /> 与
+						<UserArgeeBox page={this} />
+						{/* {<span className="argee_text" onClick={() => this.pushPage('/agreement')} >“Hashii隐私协议”</span>} */}
 					</div>
 				</div>
 			</Spin>

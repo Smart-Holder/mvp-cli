@@ -91,7 +91,7 @@ export function loginState() {
 }
 
 export function logout() {
-	if (['/agreement', '/login','/nft_detail'].includes(location.pathname)) return false;
+	if (['/agreement', '/login', '/nft_detail','/agreement_user'].includes(location.pathname)) return false;
 	useTouristState(); // tourist user
 	storage.delete('loginState');
 	var nav = Root.current.refs.nav as Nav;

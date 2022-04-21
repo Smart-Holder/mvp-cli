@@ -1,0 +1,12 @@
+
+.agreement_box {
+	display: flex;
+	flex-direction: column;
+	.agree_box {
+		overflow: auto;
+		height: 100%;
+		padding: 0.3rem;
+		flex: 1;
+		padding-bottom: 1rem;
+	}
+}

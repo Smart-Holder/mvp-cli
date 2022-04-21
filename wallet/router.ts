@@ -7,7 +7,12 @@ export default [
 		path: '/',
 		page: () => import('./pages/login'),
 	},
+	
 
+	{
+		path: '/agreement_user',
+		page: () => import('./pages/agreement_user'),
+	},
 	{
 		path: '/agreement',
 		page: () => import('./pages/agreement'),
