@@ -81,6 +81,7 @@ class Login extends NavPage {
 				'@同意': () => {
 					console.log('我同意了');
 					localStorage.setItem('isShowAgreeModal', '1');
+					this.setState({ isShowAgreeModal: 1 });
 					!isFirst && this.loginMethods();
 				},
 			},
@@ -163,13 +164,13 @@ class Login extends NavPage {
 						!this.checkAgree() && this.showAgreeModal(true);
 					}} >
 						<Col className="input_col">
-							<Input value={username} onInput={this.inputChange.bind(this, 'username')} maxLength={11} className="input_item" placeholder='请输入手机号' />
+							<Input disabled={!this.checkAgree()} value={username} onInput={this.inputChange.bind(this, 'username')} maxLength={11} className="input_item" placeholder='请输入手机号' />
 						</Col>
 
 
 
 						{login_method == 'vcode' && <Col className="input_col v_code_col">
-							<Input value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
+							<Input disabled={!this.checkAgree()} value={v_code} onInput={this.inputChange.bind(this, 'v_code')} maxLength={6} className="input_item" placeholder='请输入验证码' />
 							<div className="get_vcode_box">
 								{isCountdown ?
 									<Countdown onFinish={() => this.setState({ isCountdown: false })} valueStyle={{ fontSize: '.28rem', marginRight: ".3rem", whiteSpace: "nowrap" }} format="s 秒" value={this.state.dateNow + 60 * 1000} /> :
@@ -178,7 +179,7 @@ class Login extends NavPage {
 						</Col>}
 
 						{login_method == 'password' && <Col className="input_col">
-							<Input inputType="password" value={password} onInput={this.inputChange.bind(this, 'password')} maxLength={30} className="input_item" placeholder='请输入密码' />
+							<Input disabled={!this.checkAgree()} inputType="password" value={password} onInput={this.inputChange.bind(this, 'password')} maxLength={30} className="input_item" placeholder='请输入密码' />
 						</Col>}
 
 
