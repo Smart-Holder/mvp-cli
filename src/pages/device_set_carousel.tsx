@@ -101,7 +101,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			type === SettingDarwerType.brightness ? screenLight(address, light) : screenVolume(address, volume);
+			type === SettingDarwerType.brightness ? screenLight(address, light ? light:1) : screenVolume(address, volume);
 		}, 500);
 		if (type === SettingDarwerType.brightness) {
 			this.setState({ light: e, dsq_id: newDsqId });
