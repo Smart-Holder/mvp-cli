@@ -97,7 +97,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	}
 
 	async setCurrentKey(keyName: string) {
-		var json = await native.getKey(keyName);
+		var json = await native.getKey(keyName,true);
 		var keystore = JSON.parse(String(json));
 		var key = '0x' + keystore.address === this._currentKey?.address ? this._currentKey : new SecretKey(keystore);
 		// var key = new SecretKey(keystore);
@@ -137,9 +137,9 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 	async keys() {
 		if (!this._accounts || !Object.keys(this._accounts).length) {
 			this._accounts = {};
-			var keysName = await native?.getKeysName() || [];
+			var keysName = await native?.getKeysName('',true) || [];
 			for (var name of keysName) {
-				var json = await native.getKey(name);
+				var json = await native.getKey(name,true);
 				if (json) {
 					try {
 						var keystore = JSON.parse(json);
@@ -242,7 +242,7 @@ export class UIWalletManager extends WalletManagerAbstract implements DeviceSign
 
 	async getUserTx(tx: Transaction): Promise<Transaction> {
 		let { from, to, gas, gasPrice, value } = tx;
-		let keysName = await native.getKeysName() || [];
+		let keysName = await native.getKeysName('',true) || [];
 
 		let unit = (chainTraits as any)[unitLabel[String(chain.chain)]][2]
 		let walletName = keysName.find((key) => {

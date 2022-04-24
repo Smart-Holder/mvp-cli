@@ -151,14 +151,14 @@ class AndroidAPI extends APIIMPL {
 		});
 	}
 
-	async getKeysName(): Promise<string[]> {
-		var json = this._api.getKeysName();
+	async getKeysName(isCheck?:boolean): Promise<string[]> {
+		var json = this._api.getKeysName(isCheck);
 		var keys = JSON.parse(json);
 		return keys;
 	}
 
-	async getKey(name: string): Promise<string | undefined> {
-		return this._api.getKey(name);
+	async getKey(name: string, isUnCheck?:boolean): Promise<string | undefined> {
+		return this._api.getKey(name, isUnCheck);
 	}
 
 	async setKey(name: string, value: any): Promise<void> {

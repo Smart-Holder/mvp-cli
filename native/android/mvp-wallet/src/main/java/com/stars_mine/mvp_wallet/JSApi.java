@@ -42,13 +42,13 @@ public class JSApi {
 
 	private void TestKeys() {
 		Log.d("Test", _keystore2);
-		Log.d("Test", getKeysName());
-		Log.d("Test", getKey("a"));
-		Log.d("Test", getKey("b"));
+		Log.d("Test", getKeysName(true));
+		Log.d("Test", getKey("a",false));
+		Log.d("Test", getKey("b",false));
 		setKey("a", "A");
 		setKey("b", "B");
-		Log.d("Test", getKey("a"));
-		Log.d("Test", getKey("b"));
+		Log.d("Test", getKey("a",false));
+		Log.d("Test", getKey("b",false));
 		deleteKey("a");
 	}
 
@@ -60,7 +60,7 @@ public class JSApi {
 			_keystore2 = file.getPath();
 			List<String> names = getKeysNameList();
 			for(int i = 0; i < names.size(); i++) {
-				getKey(names.get(i));
+				getKey(names.get(i),false);
 			}
 			return true;
 		}
@@ -103,7 +103,7 @@ public class JSApi {
 		file.mkdirs();
 		_keystore1 = file.getPath();
 
-		checkExternalStorage();
+		// checkExternalStorage();
 	}
 
 	private static String extname(String path) {
@@ -244,16 +244,21 @@ public class JSApi {
 	}
 
 	@JavascriptInterface
-	public String getKeysName() {
-		checkExternalStorage();
+	public String getKeysName(boolean isUnCheck) {
+		if (isUnCheck != true) {
+					checkExternalStorage();
+		}
+
 		JSONArray jsonArray = new JSONArray(getKeysNameList());
 		String json = jsonArray.toString();
 		return json;
 	}
 
 	@JavascriptInterface
-	public String getKey(String name) {
-		checkExternalStorage();
+	public String getKey(String name,boolean isUnCheck) {
+		if (isUnCheck != true) {
+			checkExternalStorage();
+		}
 		String value = readFile(_keystore1 + "/" + name + ".key");
 		if (value == null) {
 			if (_keystore2 != null) {

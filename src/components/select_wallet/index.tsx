@@ -31,7 +31,7 @@ const SelectWallet = (props: ISelectWalletProps) => {
 	}, [props.visible]);
 
 	const getKeysName = async () => {
-		let keysName = await native.getKeysName() || [];
+		let keysName = await native.getKeysName('',true) || [];
 		setkeysName(keysName);
 	}
 

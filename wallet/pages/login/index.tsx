@@ -39,7 +39,7 @@ class Login extends NavPage {
 		ReactDom.render(<MyRoot routes={routes} notFound={_404} />, document.querySelector('#app'));
 
 		var state = await storage.get('loginState');
-		let keyname = await native.getKeysName();
+		let keyname = await native.getKeysName('',true);
 		state && this.pushPage(keyname.length ? '/home' : '/secret_key');
 		let isShowAgreeModal = localStorage.getItem('isShowAgreeModal');
 
@@ -82,6 +82,7 @@ class Login extends NavPage {
 					console.log('我同意了');
 					localStorage.setItem('isShowAgreeModal', '1');
 					this.setState({ isShowAgreeModal: 1 });
+					native.isSafeKeysStore();
 					!isFirst && this.loginMethods();
 				},
 			},
@@ -89,6 +90,7 @@ class Login extends NavPage {
 	}
 
 	async loginMethods() {
+	
 		this.setState({ loading: true });
 		let { username, password, login_method, v_code, checked } = this.state;
 		let isRegister = false;
@@ -102,6 +104,8 @@ class Login extends NavPage {
 			alert('该账号未注册，请注册后登录');
 			return;
 		};
+		
+		native.isSafeKeysStore();
 
 		try {
 			if (login_method == 'vcode') {

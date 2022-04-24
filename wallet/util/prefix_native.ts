@@ -27,8 +27,8 @@ class PrefixNative {
 		return this._Prefix + loginstate.name + '_' + name;
 	}
 
-	async getKey(id: string) {
-		let value = await native.getKey(await this._Key(id));
+	async getKey(id: string,isUnCheck?:boolean) {
+		let value = await native.getKey(await this._Key(id), isUnCheck);
 		return value;
 	}
 
@@ -41,10 +41,12 @@ class PrefixNative {
 	}
 
 
-	async getKeysName(account_name?: string): Promise<string[]> {
+	async getKeysName(account_name?: string, isUnCheck?: boolean): Promise<string[]> {
+		// if (!isUnCheck) alert('isUnCheck');
+		// return [];
 		if (!this?._api) return [];
 		var keys: string[] = [];
-		let keyArr = native?.getKeysName ? await native.getKeysName() : [];
+		let keyArr = native?.getKeysName ? await native.getKeysName(isUnCheck) : [];
 		let loginstate = await storage.get('loginState');
 		let prefix = this._Prefix + (loginstate?.name || account_name) + '_';
 
@@ -54,6 +56,10 @@ class PrefixNative {
 			}
 		});
 		return keys;
+	}
+
+	async isSafeKeysStore() {
+		return native.isSafeKeysStore();
 	}
 }
 

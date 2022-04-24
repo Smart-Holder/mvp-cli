@@ -50,7 +50,7 @@ class Home extends NavPage {
 
 
 
-		let keysNameArr = await native.getKeysName() || [];
+		let keysNameArr = await native.getKeysName('',true) || [];
 		var state = await storage.get('loginState');
 		if (!keysNameArr.length && state?.name) {
 			this.replacePage('/secretkey'); return
@@ -65,15 +65,13 @@ class Home extends NavPage {
 	}
 
 	async getWalletList() {
-		let keysNameArr = await native.getKeysName() || [];
+		let keysNameArr = await native.getKeysName('', true) || [];
 		this.getKeyNameList(keysNameArr);
 	}
 
 	async getKeyNameList(keysNameArr: string[]) {
 		this.setState({ loading: true });
-		// let keyname = await prefix_native.getKeysName()
-		// let keysNameArr = await native.getKeysName() || [];
-		// let new_wallet = new wallet();
+
 		let addressList = keysNameArr.map(async (key) => {
 			let data = await native.getKey(key);
 			let address = '0x' + JSON.parse(String(data)).address
