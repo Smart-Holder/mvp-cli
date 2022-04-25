@@ -136,7 +136,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselConfig.data.forEach(item => {
 			if (nftListObj[item.id]) newselectedList[item.id] = item as NFT;;
 		});
-		return carouselConfig.data;
+		// console.log(Object.values(newselectedList), 'Object.values(newselectedList)', carouselConfig.data);
+		return Object.values(newselectedList);
 	}
 
 	rendNftItem(nft: NFT, index: number) {
