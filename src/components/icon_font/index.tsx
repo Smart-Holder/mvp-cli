@@ -6,7 +6,7 @@ import "./index.scss";
 const IconFontCN = createFromIconfontCN({
 	// scriptUrl: '//at.alicdn.com/t/font_2717960_zvh1qlvpq7.js',
 	//at.alicdn.com/t/font_2717960_4tyhyvdxrd.js
-	scriptUrl: '//at.alicdn.com/t/font_2968355_t2ehvuj8yl.js'
+	scriptUrl: '//at.alicdn.com/t/font_2968355_s1w9w8oiekg.js'
 });
 
 

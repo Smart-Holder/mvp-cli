@@ -1,5 +1,14 @@
 @import "../index.scss";
 
+.remove_modal {
+	.am-modal-button-group-h .am-modal-button:first-child {
+		color: #ccc;
+	}
+}
+
+.dialog {
+	z-index: 1000;
+}
 
 .wallet_setting_page {
 	background-color: #f5f5f5;

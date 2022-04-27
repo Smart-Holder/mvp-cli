@@ -6,17 +6,22 @@ import IconFont from '../../../src/components/icon_font';
 import Button from '../../../src/components/button';
 import native from '../../util/prefix_native';
 import { copyText } from '../../../src/util/tools';
-import { confirm } from 'webpkit/lib/dialog';
+import { confirm ,alert,show} from 'webpkit/lib/dialog';
 import buffer, { IBuffer } from 'somes/buffer';
 
 import { inputPasswordModal } from '../../util/tools';
 import { decryptPrivateKey } from 'webpkit/deps/crypto-tx/keystore';
+import { Modal } from 'antd-mobile';
 import "./index.scss";
+import models from '../../../src/models';
+import { INftItem } from '../../../src/pages/interface';
+import { Device, devices } from '../../../src/models/device';
 
 export default class Account extends NavPage<{ key: string }> {
 
 	state = {
-		addressInfo: { address: '', key: '' }
+		addressInfo: { address: '', key: '' },
+		visible:false
 	}
 
 	async triggerLoad() {
@@ -39,13 +44,31 @@ export default class Account extends NavPage<{ key: string }> {
 
 	// 删除事件
 	async deleteAddress() {
-		confirm('确定删除当前密钥?', async (isOk) => {
-			if (isOk) {
-				// alert((this.popPage));
-				await native.deleteKey(this.params.key);
-				this.popPage();
-			};
-		});
+		let { addressInfo } = this.state;
+		let currAddress = addressInfo.address.toUpperCase();
+		let nftList: INftItem[] = (await models.nft.methods.getNFTByOwner({ owner: addressInfo.address }));
+		let deviceList: Device[] = await devices();
+		
+		let isHasNft = nftList.length;
+		let isHasBindDevice = deviceList.some(item => item.owner?.toUpperCase() === currAddress);
+		if (isHasNft || isHasBindDevice) {
+			show({
+				title: <div><img style={{height:'0.3rem',width:'0.3rem'}} src={require('../../../src/assets/dangerous.png')} alt=""/> 重要提示</div>,
+				text: '您的管理秘钥有绑定设备/数字藏品，暂不能删除',
+				buttons: {
+					'@确定':() => {}
+				}
+			})
+		} else {
+			
+			confirm('确定删除当前密钥?', async (isOk) => {
+				if (isOk) {
+					await native.deleteKey(this.params.key);
+					this.setState({ visible: false });
+					this.popPage();
+				};
+			});
+		}
 	}
 
 	// 导出私钥
@@ -65,7 +88,7 @@ export default class Account extends NavPage<{ key: string }> {
 
 
 	render() {
-		let { addressInfo } = this.state;
+		let { addressInfo, visible } = this.state;
 		return <div className="wallet_setting_page">
 			<Header page={this} title="设置" />
 			<div className="account_item">
@@ -99,8 +122,26 @@ export default class Account extends NavPage<{ key: string }> {
 			</div>
 
 			<div className="btn_box">
-				<Button type="primary" className="width_btn" danger onClick={this.deleteAddress.bind(this)}>删除管理密钥</Button>
+				<Button type="primary" className="width_btn" danger onClick={() => this.setState({ visible:true})}>删除管理密钥</Button>
 			</div>
+
+			<Modal
+				className='remove_modal'
+				transparent
+				closable
+				title={<div><IconFont style={{ color: 'red' }} type='icon-weixian' /> 重要提示</div>}
+				visible={visible}
+				footer={[
+					{ text: '确认删除', onPress: this.deleteAddress.bind(this) },
+					{ text: '取消删除', onPress: () => this.setState({ visible:false}) }
+				]}
+				onClose={() => this.setState({visible:false})}
+			>
+					
+				<div style={{ overflow: 'scroll' }}>
+					&nbsp;&nbsp;&nbsp;&nbsp; 删除后该管理密钥将从该APP消失，删除前请妥善保管好您的私钥，<IconFont style={{ color: 'red' ,fontSize:'0.25rem'}} type='icon-weixian' />切勿丢失！
+				</div>
+			</Modal>
 		</div>
 	}
 }

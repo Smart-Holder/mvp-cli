@@ -8,7 +8,11 @@ export default [
 		page: () => import('./pages/login'),
 	},
 	
-
+	
+	{
+		path: '/authentication',
+		page: () => import('./pages/authentication'),
+	},
 	{
 		path: '/agreement_user',
 		page: () => import('./pages/agreement_user'),

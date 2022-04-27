@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 import native from '../../wallet/util/prefix_native';
 import * as config from '../../config';
 import { alert } from 'webpkit/lib/dialog';
-import { check } from '../../wallet/user';
+import { check, loginState } from '../../wallet/user';
 import Header from '../util/header';
 
 
@@ -18,6 +18,7 @@ import '../css/index.scss';
 import "../../wallet/util/wallet_ui.scss";
 import SelectWallet from '../components/select_wallet';
 import { setCurrWallet_BindDevice } from '../util/tools';
+import { isRealName } from '../models/user';
 
 // const { t } = Translation(); //把使用方法结构
 type ICarouselType = 'imToken' | 'TokenPocket' | 'MateMask';

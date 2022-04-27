@@ -16,6 +16,9 @@ import wallet from '../../wallet/wallet_ui';
 import { setDeviceSigner } from '../models/device';
 import * as device from '../models/device';
 import { getParams } from '../../wallet/util/tools';
+import { isRealName } from '../models/user';
+import { loginState } from '../../wallet/user';
+import NavPage from '../nav';
 const crypto_tx = require('crypto-tx');
 
 class Tab extends ViewController<{ nav: () => Nav }> {
@@ -241,4 +244,22 @@ export const setCurrWallet_BindDevice = async (key: string, href: string) => {
 		throw Error('请扫描设备绑定二维码!')
 	}
 	await device.bind(crypto_tx.checksumAddress(a), c, v);
+}
+
+
+// 检查当前实名认证
+export const checkIsRealname = async (page: NavPage) => {
+	let data = await isRealName(loginState().name);
+	if (!data) {
+		show({
+			title: '实名认证',
+			text: '当前账号未进行实名认证,点击去认证进行认证.',
+			buttons: {
+				'取消': () => { },
+				'@去认证': () => { page.pushPage('/authentication') }
+			}
+		});
+		return false;
+	}
+	return true;
 }

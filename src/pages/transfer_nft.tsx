@@ -8,16 +8,15 @@ import { INftItem } from './interface';
 import models, { AssetType } from '../models';
 import Loading from '../../deps/webpkit/lib/loading';
 import { show, alert } from '../../deps/webpkit/lib/dialog';
-import { removeNftDisabledTimeItem, setNftDisabledTime } from '../util/tools';
+import { checkIsRealname, removeNftDisabledTimeItem, setNftDisabledTime } from '../util/tools';
 import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import { withTranslation } from 'react-i18next';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
-import '../css/transfer_nft.scss';
 import native from '../../wallet/util/prefix_native';
+import '../css/transfer_nft.scss';
 
-const tp = require('tp-js-sdk');
 
 class TransferNft extends NavPage<INftItem> {
 	state = { nftItem: this.props.params as INftItem, owner: "", inputToken: '' }
@@ -53,6 +52,10 @@ class TransferNft extends NavPage<INftItem> {
 	}
 
 	async transferAction(nft: INftItem, address: string) {
+
+		let data = await checkIsRealname(this);
+		if (!data) return;
+		
 		const { t } = this;
 		var l = await Loading.show(t('正在转移,请勿操作'));
 		try {

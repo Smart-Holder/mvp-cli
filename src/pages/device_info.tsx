@@ -9,8 +9,8 @@ import chain from '../chain';
 import { CloseOutlined } from '@ant-design/icons';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-import { alert } from 'webpkit/lib/dialog';
-import { ArrayToObj, getDistinguishNftList, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
+import { alert, show} from 'webpkit/lib/dialog';
+import { ArrayToObj, checkIsRealname, getDistinguishNftList, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
@@ -21,6 +21,8 @@ import '../css/device_info.scss';
 import { Empty } from 'antd';
 import native from '../../wallet/util/prefix_native';
 import wallet_ui from '../../wallet/wallet_ui';
+import { isRealName } from '../models/user';
+import { loginState } from '../../wallet/user';
 
 interface IDeviceProps extends Device {
 	key:string
@@ -40,7 +42,7 @@ class DeviceInfo extends NavPage<IDeviceProps>  {
 	}
 
 	async triggerLoad() {
-		let {address:owner} = this.params;
+		let { address: owner } = this.params;
 		
 		this.getNFTList(owner);
 		models.msg.addEventListener('UpdateNFT', e => {
@@ -85,10 +87,15 @@ class DeviceInfo extends NavPage<IDeviceProps>  {
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
+
+		let data = await checkIsRealname(this);
+		if (!data) return;
+
+
 		const { t } = this;
-		const getNFTList = this.getNFTList.bind(this, this.params.address)
 		const { nftList } = this.state;
 		const deviceOwner = this.params.owner;
+		const getNFTList = this.getNFTList.bind(this, this.params.address);
 
 		let newNftList = [...nftList];
 

@@ -13,7 +13,7 @@ import erc721 from '../chain/erc721';
 import erc1155 from '../chain/erc1155';
 import { Empty, Spin } from 'antd';
 import { Tabs, NoticeBar } from 'antd-mobile';
-import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, getDistinguishNftList } from '../util/tools';
+import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, getDistinguishNftList, checkIsRealname } from '../util/tools';
 import Loading from '../../deps/webpkit/lib/loading';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
@@ -22,7 +22,6 @@ import models from '../sdk';
 import Header from '../../src/util/header';
 
 import '../css/my.scss';
-import * as config from '../../config';
 
 
 class My extends NavPage<{ address: string }> {
@@ -109,6 +108,9 @@ class My extends NavPage<{ address: string }> {
 
 	// 选择设备弹框确认按钮点击事件
 	async selectDeviceModalok(deviceItem?: Device | { address: string }, nftItem?: NFT, isWithdraw?: boolean) {
+
+		let data = await checkIsRealname(this);
+		if (!data) return;
 		let { currDevice, currNFT, nft } = this.state;
 		// 进行存入操作的设备
 		let device = deviceItem || currDevice;
