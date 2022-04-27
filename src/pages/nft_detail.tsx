@@ -111,12 +111,16 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 
 												<div className='order_row'>
 													<div className="label">{t("发送方")}</div>
-													<div className="value textNoWrap">{fromAddres}</div>
+													<div className="value textNoWrap" onClick={() => {
+														copyText(fromAddres);
+													}}>{getSubStr(fromAddres,10)}</div>
 												</div>
 
 												<div className='order_row'>
 													<div className="label">{t("接收方")}</div>
-													<div className="value textNoWrap">{toAddress}</div>
+													<div className="value textNoWrap" onClick={() => {
+														copyText(toAddress);
+													}}>{getSubStr(toAddress,10)}</div>
 												</div>
 
 												<div className='order_row'>
