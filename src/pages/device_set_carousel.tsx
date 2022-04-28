@@ -38,8 +38,15 @@ const callDeviceConfig: { [key: string]: { title: string, btnText: string } } = 
 }
 
 const colorListConfig = [
-	{ label: "黑色", color: "#000000" },
-	{ label: "白色", color: "#ffffff" },
+	{ label: "#000000", color: "#000000" },
+	{ label: "#ffffff", color: "#ffffff" },
+	{ label: "#e6e6e6", color: "#e6e6e6" },
+	{ label: "#dadada", color: "#dadada" },
+	{ label: "#cdcdcd", color: "#cdcdcd" },
+	{ label: "#c1c1c1", color: "#c1c1c1" },
+	{ label: "#b4b4b4", color: "#b4b4b4" },
+	{ label: "#a7a7a7", color: "#a7a7a7" },
+	{ label: "#9a9a9a", color: "#9a9a9a" },
 ];
 
 const rotationConfig = [

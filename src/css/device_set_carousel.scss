@@ -51,10 +51,14 @@
 		align-items: start;
 		flex-direction: row;
 		justify-content: space-between;
+		flex-wrap: wrap;
+		// height: auto;
+		overflow: auto;
 		.color_item {
 			width: 47%;
 			border-radius: 0.16rem;
 			position: relative;
+			margin-bottom: .2rem;
 		}
 
 		.color_bg_item {
@@ -179,7 +183,7 @@
 						border: 0.02rem solid #f5f5f5;
 						background-color: #f5f5f5;
 						border-radius: 0.08rem;
-						padding: 0.35rem 0.32rem;
+						padding: 0.25rem 0.22rem;
 						transition: 0.3s all;
 					}
 					.active {

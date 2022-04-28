@@ -3,7 +3,7 @@ import * as device from '../../models/device';
 import Button from "../button";
 import { React } from 'webpkit/mobile';
 import { show } from "../../../deps/webpkit/lib/dialog";
-import { getSubStr } from "../../util/tools";
+import { copyText, getSubStr } from "../../util/tools";
 import { useTranslation } from 'react-i18next';
 import {alert} from '../../util/tools'
 import "./index.scss";
@@ -15,11 +15,12 @@ interface IDeviceItemProps {
 	onClick?: () => void;
 	onOk?: () => void;
 	onUnbindDevice?: () => void;
-	loading?: boolean
+	loading?: boolean;
+	isCopy?:boolean
 }
 
 export const DeviceItem = (props: IDeviceItemProps) => {
-	const { deviceInfo, showArrow = true, onClick, showActionBtn = false, onOk, onUnbindDevice, loading } = props;
+	const { deviceInfo, showArrow = true, onClick, showActionBtn = false, onOk, onUnbindDevice, loading, isCopy=true} = props;
 	const { t } = useTranslation();
 	// 解绑设备按钮点击
 	const unbind_device = () => {
@@ -50,11 +51,15 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 				<div className="right_box">
 					<div className="sn_box">
 						<div className="sn_title">SN</div>
-						<div className="sn">{(deviceInfo.sn)}</div>
+						<div className="sn" onClick={() => {
+							isCopy && copyText(deviceInfo.sn);
+						}}>{(deviceInfo.sn)}</div>
 					</div>
 					<div className="address_box">
 						<div className="address_title">Address</div>
-						<div className="address">{getSubStr(deviceInfo.address)}</div>
+						<div className="address" onClick={() => {
+							isCopy && copyText(deviceInfo.address);
+						}}>{getSubStr(deviceInfo.address)}</div>
 					</div>
 				</div>
 			</div>

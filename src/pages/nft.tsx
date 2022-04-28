@@ -90,7 +90,7 @@ class DeviceList extends NavPage {
 					</div>
 					<Spin delay={500} className="device_list_loading" spinning={loading} tip={'loading'} />
 					{device.map(item => {
-						return <DeviceItem key={item.sn} deviceInfo={item} onClick={() => {
+						return <DeviceItem isCopy={false} key={item.sn} deviceInfo={item} onClick={() => {
 							this.pushPage({ url: `/device_info`, params: { ...item } });
 						}} />
 					})}

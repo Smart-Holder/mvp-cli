@@ -15,10 +15,11 @@ import chain from "../../chain";
 import './index.scss';
 
 const intervalTimeConfig = [
-	// { label: "5s", value: 5 },
+	{ label: "5s", value: 5 },
 	{ label: "10s", value: 10 },
 	{ label: "15s", value: 15 },
 	{ label: "20s", value: 20 },
+	{ label: "30s", value: 30 },
 ];
 
 

@@ -137,5 +137,9 @@
 	"上一笔交易未完成": "Previous transaction not completed",
 	"发送以太坊交易失败": "Failed to send Ethereum transaction",
 	"调整屏幕角度将重启设备，确定调整屏幕角度吗？": "Adjusting the screen angle will restart the device. Are you sure to adjust the screen angle?",
-	"Gas费用不足，请充值": "Gas charge is insufficient, please recharge"
+	"Gas费用不足，请充值": "Gas charge is insufficient, please recharge",
+	"红色": "red",
+	"蓝色": "blue",
+	"绿色": "green",
+	"黄色": "yellow"
 }

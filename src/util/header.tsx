@@ -1,7 +1,6 @@
 
 import { React, NavPage, Root, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
-import IconFont from '../components/icon_font';
 
 export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element }> {
 
