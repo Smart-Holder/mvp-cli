@@ -8,6 +8,7 @@ import { logout } from '../../user';
 import _404 from '../../../src/pages/404';
 import routes from '../../router';
 import { MyRoot } from '../..';
+import { PrivacyArgeeBox, UserArgeeBox } from '../../../src/components/argee_box';
 
 // import { LeftOutlined} from '@ant-design/icons';
 
@@ -45,6 +46,13 @@ class SecretKeyPage extends NavPage<{ isHomePage?: string }> {
 			<div className="loginout_btn_box">
 
 				{!this.params.isHomePage && <Button type="link" onClick={logout}>  退出登录 </Button>}
+			</div>
+
+
+			<div  style={{textAlign:'center', width:'100%',position:'absolute',bottom:'.6rem' }}>
+
+			<PrivacyArgeeBox page={this} /> 与
+			<UserArgeeBox page={this} />
 			</div>
 		</div>
 	}
