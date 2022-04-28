@@ -88,7 +88,7 @@ export default class Account extends NavPage<{ key: string }> {
 
 			<div className="setting_item bot_line" onClick={this.pushAgree.bind(this)}>
 				<div className="setting_title">隐私协议</div>
-				<div className="setting_icon"> <IconFont type="icon-houtui" /></div>
+				<div className="setting_icon"> <IconFont type="icon-houtui" style={{ width: '.36rem', height: '.36rem' }}/></div>
 			</div>
 
 			<div className="setting_item" onClick={this.pushAgreeUser.bind(this)}>
