@@ -129,7 +129,7 @@ export default class Account extends NavPage<{ key: string }> {
 				className='remove_modal'
 				transparent
 				closable
-				title={<div><IconFont style={{ color: 'red' }} type='icon-weixian' /> 重要提示</div>}
+				title={<div><IconFont className="title_icon" style={{ color: 'red' }} type='icon-weixian' /> 重要提示</div>}
 				visible={visible}
 				footer={[
 					{ text: '确认删除', onPress: this.deleteAddress.bind(this) },
@@ -139,7 +139,7 @@ export default class Account extends NavPage<{ key: string }> {
 			>
 					
 				<div style={{ overflow: 'scroll' }}>
-					&nbsp;&nbsp;&nbsp;&nbsp; 删除后该管理密钥将从该APP消失，删除前请妥善保管好您的私钥，<IconFont style={{ color: 'red' ,fontSize:'0.25rem'}} type='icon-weixian' />切勿丢失！
+					&nbsp;&nbsp;&nbsp;&nbsp; 删除后该管理密钥将从该APP消失，删除前请妥善保管好您的私钥，<IconFont className="body_icon" style={{ color: 'red' ,fontSize:'0.25rem'}} type='icon-weixian' />切勿丢失！
 				</div>
 			</Modal>
 		</div>

@@ -83,6 +83,10 @@ class My extends NavPage<{ address: string }> {
 
 	// 存入设备按钮点击
 	async saveNftOfDeviceClick(nft: NFT) {
+
+		let data = await checkIsRealname(this);
+		if (!data) return;
+		
 		let device = await devices() as Device[];
 		let visible = true;
 		let bindDeviceTipVisible = false;
@@ -109,8 +113,6 @@ class My extends NavPage<{ address: string }> {
 	// 选择设备弹框确认按钮点击事件
 	async selectDeviceModalok(deviceItem?: Device | { address: string }, nftItem?: NFT, isWithdraw?: boolean) {
 
-		let data = await checkIsRealname(this);
-		if (!data) return;
 		let { currDevice, currNFT, nft } = this.state;
 		// 进行存入操作的设备
 		let device = deviceItem || currDevice;
