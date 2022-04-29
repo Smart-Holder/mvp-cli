@@ -81,8 +81,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
 		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time }) => {
-			if (light > 100) light = 100;
-			light = parseInt(String(light / 20));
+			// if (light > 100) light = 100;
+			light = parseInt(String(light / 51));
 			volume = volume / 3;
 			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time });
 		}).catch((err: any) => {
@@ -93,13 +93,13 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	sliderChange(type: SettingDarwerType, e: number) {
 		let volume = e * 3;
-		let light = e * 20;
+		let light = e * 51;
 		let { address } = this.params;
 		let { dsq_id } = this.state;
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			type === SettingDarwerType.brightness ? screenLight(address, light) : screenVolume(address, volume);
+			type === SettingDarwerType.brightness ? screenLight(address, light ? light :1) : screenVolume(address, volume);
 		}, 500);
 		if (type === SettingDarwerType.brightness) {
 			this.setState({ light: e, dsq_id: newDsqId });

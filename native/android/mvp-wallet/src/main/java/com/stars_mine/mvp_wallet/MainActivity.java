@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 		_webview.requestFocusFromTouch();
 		_webview.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
 
-		if (isDebugger())
+//		if (isDebugger())
 			_webview.setWebContentsDebuggingEnabled(true);
 
 		_webview.addJavascriptInterface(_jsapi = new JSApi(this, _webview), "__android_api");

@@ -49,7 +49,7 @@ export default class AuthenticationPage extends NavPage {
 			await realNameAuth({ verify, idCard, mobile, realName });
 			alert('实名认证成功!', () => this.popPage());
 		} catch (error: any) {
-			if (error.code === 100323) return alert('认证失败!请填写真实信息.');
+			if (error.code === 100323) return alert(error.message || '认证失败!请填写真实信息.');
 			alert(error.message);
 		}
 	}
