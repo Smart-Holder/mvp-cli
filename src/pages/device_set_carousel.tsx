@@ -14,8 +14,9 @@ import { checkVersion, getScreenSettings, screenColor, screenLight, screenOrient
 import Loading from '../../deps/webpkit/lib/loading';
 
 import '../css/device_set_carousel.scss';
+import PreviewNftCard from '../components/preview_nftlist';
 
-enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
+enum SettingDarwerType { preview = 'preview', audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
 
 const settingDarwerConfig = [
 	{ label: "音量", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
@@ -28,6 +29,7 @@ const settingDarwerConfig = [
 	{ label: "NFT信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
 	{ label: "投屏", value: SettingDarwerType.shadow, icon: 'icon-pingmu' },
+	{ label: "预览设置", value: SettingDarwerType.preview, icon: 'icon-yulan' }
 ];
 
 export enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
@@ -80,7 +82,9 @@ class DeviceSetCarousel extends NavPage<Device> {
 		autoLightLoading: false,
 		autoLight: false,
 		time: 10,
-		versionCode:0
+		versionCode: 0,
+		screenWidth: 1920,
+		screenHeight: 1080
 	}
 
 	async triggerLoad() {
@@ -92,8 +96,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 			light = parseInt(String(light / 51));
 			volume = volume / 3;
 			console.log(versionCode);
-			
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode});
+
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -108,7 +112,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			type === SettingDarwerType.brightness ? screenLight(address, light ? light:1) : screenVolume(address, volume);
+			type === SettingDarwerType.brightness ? screenLight(address, light ? light : 1) : screenVolume(address, volume);
 		}, 500);
 		if (type === SettingDarwerType.brightness) {
 			this.setState({ light: e, dsq_id: newDsqId });
@@ -206,6 +210,12 @@ class DeviceSetCarousel extends NavPage<Device> {
 		</div>
 	}
 
+	// 渲染nft列表
+	previewNftCard() {
+		const { screenWidth, screenHeight } = this.state;
+		return <PreviewNftCard page={this} screenWidth={screenWidth} screenHeight={screenHeight} />;
+	}
+
 	getCurrPageContent() {
 		const { currSettingIndex, time } = this.state;
 		switch (currSettingIndex) {
@@ -219,6 +229,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.colorCard();
 			case SettingDarwerType.detail:
 				return this.nftDetailCard();
+
+			case SettingDarwerType.preview:
+				return this.previewNftCard();
+
 			case SettingDarwerType.shadow:
 				return <SetCarousel time={time} page={this} mode='shadow' />;
 
@@ -266,7 +280,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	render() {
 
-		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction, versionCode} = this.state;
+		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction, versionCode } = this.state;
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -289,7 +303,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				{settingDarwerConfig.map(item => {
 					let ele = <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>;
 					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
-						return ele;
+					return ele;
 				})}
 			</Drawer>
 

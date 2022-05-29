@@ -1,0 +1,112 @@
+.sub_btn {
+	position: absolute;
+	right: 0;
+	padding: 0;
+	height: 0;
+}
+.cropper_page {
+	display: flex;
+	flex-direction: column;
+	background-color: #f5f5f5;
+	// ._b {
+	// 	position: absolute !important;
+	// }
+}
+.cropper_wapper {
+	// width: 30%;
+	padding: 0.2rem;
+	overflow: auto;
+	padding-bottom: 1.2rem;
+	.action_box {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 0.1rem;
+	}
+	// .cropper-container {
+	// 	width: 3.6rem !important;
+	// 	height: 6.4rem !important;
+	// }
+	.radio_box {
+		.ant-radio-button-wrapper {
+			width: 50%;
+			text-align: center;
+		}
+	}
+	.loading_text {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.item_radio {
+		display: flex;
+		justify-content: space-around;
+		width: 100%;
+		.ant-radio-group {
+			width: 100%;
+			display: flex;
+			justify-content: space-around;
+		}
+		.ant-radio-wrapper {
+			text-align: center;
+			display: flex;
+			flex-direction: column-reverse;
+			align-items: center;
+			.ant-radio {
+				margin: 0.15rem;
+			}
+			span {
+				padding: 0;
+			}
+		}
+		.route_box {
+			// background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
+			width: 2rem;
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	.cropper_box {
+		position: relative;
+		width: 100%;
+		// text-align: center;
+		display: flex;
+		justify-content: center;
+		padding: 0.2rem;
+		background-color: rgb(225, 225, 225);
+		border-radius: 0.2rem;
+		margin-bottom: 0.1rem;
+		.cropper_box_bg {
+			background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
+			background-size: 100% 100%;
+		}
+	}
+
+	.pre_part {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+	.pre_box {
+		background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
+		background-size: 100% 100%;
+		// height: 3.6rem;
+		// width: 6.4rem;
+		padding: 0.2rem;
+	}
+
+	.img_list {
+		margin-bottom: 0.1rem;
+		text-align: center;
+		img {
+			margin-right: 0.1rem;
+			border-radius: 0.2rem;
+			width: 1rem;
+			height: 1rem;
+			object-fit: cover;
+		}
+	}
+}
