@@ -53,7 +53,7 @@
 	"其他网络NFT": "Other network NFT",
 	"网络": "Network",
 	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备": "You can only view NFTs in other networks and cannot do anything. If you want to bind NFTs in other networks to devices, you need to switch to the network where the NFT is located before binding the NFT to devices",
-	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT取出到钱包":"You can only view NFTs on other networks and cannot do anything. If you want to take NFTs from other networks out of your wallet, you need to switch to the network where the NFT is located before you can take the NFT out of your wallet",
+	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT取出到钱包": "You can only view NFTs on other networks and cannot do anything. If you want to take NFTs from other networks out of your wallet, you need to switch to the network where the NFT is located before you can take the NFT out of your wallet",
 	"转移到": "Receiver",
 	"请复制或扫码输入钱包地址": "copy or scan the code to enter the wallet address",
 	"转移内容": "Transfer Content",
@@ -137,10 +137,21 @@
 	"上一笔交易未完成": "Previous transaction not completed",
 	"发送以太坊交易失败": "Failed to send Ethereum transaction",
 	"调整屏幕角度将重启设备，确定调整屏幕角度吗？": "Adjusting the screen angle will restart the device. Are you sure to adjust the screen angle?",
-	"Gas费用不足，请充值":"Gas charge is insufficient, please recharge",
+	"Gas费用不足，请充值": "Gas charge is insufficient, please recharge",
 	"红色": "red",
 	"蓝色": "blue",
 	"绿色": "green",
-	"黄色": "yellow"
-
+	"黄色": "yellow",
+	"设备NFT": "Device NFT",
+	"预览设置": "Preview settings",
+	"当前裁剪框大于图像区域,请重新裁剪": "The current crop box is larger than the image area, please crop again",
+	"预览设置成功!": "Preview setting succeeded!",
+	"图片裁剪": "Crop picture",
+	"选择方向": "Select direction",
+	"裁剪模式": "Crop mode",
+	"缩放模式": "Zoom mode",
+	"预览效果": "Preview",
+	"重置": "Reset",
+	"使用原图": "Original Image",
+	"提交": "Submit"
 }

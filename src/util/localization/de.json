@@ -141,5 +141,17 @@
 	"红色": "red",
 	"蓝色": "blue",
 	"绿色": "green",
-	"黄色": "yellow"
+	"黄色": "yellow",
+	"设备NFT": "Device NFT",
+	"预览设置": "Preview settings",
+	"当前裁剪框大于图像区域,请重新裁剪": "The current crop box is larger than the image area, please crop again",
+	"预览设置成功!": "Preview setting succeeded!",
+	"图片裁剪": "Crop picture",
+	"选择方向": "Select direction",
+	"裁剪模式": "Crop mode",
+	"缩放模式": "Zoom mode",
+	"预览效果": "Preview",
+	"重置": "Reset",
+	"使用原图": "Original Image",
+	"提交": "Submit"
 }

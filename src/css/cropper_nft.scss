@@ -1,19 +1,29 @@
 .sub_btn {
 	position: absolute;
 	right: 0;
-	padding: 0;
-	height: 0;
+	.ant-btn {
+		padding-top: 0;
+		height: 0;
+	}
 }
+.ant-slider-rail {
+	background-color: #dcdcdc;
+}
+// .cropper_root_box {
+// 	padding: 0.2rem;
+// }
 .cropper_page {
 	display: flex;
 	flex-direction: column;
-	background-color: #f5f5f5;
+	background-color: #f5f5f9;
 	// ._b {
 	// 	position: absolute !important;
 	// }
 }
 .cropper_wapper {
+	// background-color: #fff;
 	// width: 30%;
+	margin-top: 0.3rem;
 	padding: 0.2rem;
 	overflow: auto;
 	padding-bottom: 1.2rem;
@@ -21,12 +31,26 @@
 		display: flex;
 		justify-content: space-between;
 		margin-top: 0.1rem;
+		flex-wrap: wrap;
+		.button_btn {
+			font-size: 0.32rem;
+		}
 	}
 	// .cropper-container {
 	// 	width: 3.6rem !important;
 	// 	height: 6.4rem !important;
 	// }
 	.radio_box {
+		background-color: #fff;
+		padding: 0.1rem;
+		border-radius: 0.2rem;
+		margin-bottom: 0.2rem;
+
+		.title {
+			font-weight: bold;
+			margin: 0.2rem;
+			margin-bottom: 0;
+		}
 		.ant-radio-button-wrapper {
 			width: 50%;
 			text-align: center;

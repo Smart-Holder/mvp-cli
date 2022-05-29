@@ -9,8 +9,10 @@ import { Radio, Slider } from 'antd';
 import models, { NFT } from '../../src/models';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { transformImage } from '../../src/models/device';
-import { alert } from 'webpkit/lib/dialog';
+// import { alert } from 'webpkit/lib/dialog';
 import '../css/cropper_nft.scss';
+import { alert } from '../util/tools';
+import { withTranslation } from 'react-i18next';
 
 export interface ICropConfig {
 	originWidth: number;
@@ -81,7 +83,7 @@ let cropBoxConfig = {
 	}
 };
 
-export default class WalletAddress extends NavPage<{ id: string | number, address: string }> {
+class CropImage extends NavPage<{ id: string | number, address: string, screenWidth: string | number, screenHeight: string | number }> {
 
 	cropper: any = React.createRef();
 
@@ -322,7 +324,7 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 
 		if (newScaleType == 'crop' && ((cropWidth > originWidth) || (cropHeight > originHeight))) {
 			console.log(cropWidth, originWidth, cropHeight, originHeight, newScaleType, imgScale, imgScaleY);
-			return alert('当前裁剪框大于图像区域,请重新裁剪');
+			return alert(this.t('当前裁剪框大于图像区域,请重新裁剪'));
 		}
 
 		let targetWidth = Math.floor(imageData.width * scale);
@@ -392,12 +394,14 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 	async subImageConfig() {
 		let imgPreConfig = this.getImageTransform();
 
-		let { nft } = this.state;
+		let { nft, radioVal } = this.state;
 		try {
 			await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
-			await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
+			if (this.params.screenWidth == canvasConfig[radioVal].width && this.params.screenHeight == canvasConfig[radioVal].height) {
+				await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
+			}
 			// localStorage.setItem('imgPreConfig', JSON.stringify(imgPreConfig));
-			alert('预览设置成功!', () => this.popPage());
+			alert(this.t('预览设置成功!'), () => this.popPage());
 		} catch (error: any) {
 			alert(error.message);
 		}
@@ -408,95 +412,98 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 			cropBoxResizable,
 			viewMode,
 			movable, zoom2, autoCropArea, isReady, radioVal } = this.state;
+		let { t } = this;
 		return <div className="cropper_page">
-			<Header page={this} title='测试裁剪' actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>提交</Button></div>} />
-			<div className='cropper_wapper'>
+			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
 
-				<div className="radio_box">
-					<div className="title">选择方向</div>
-					<div className="body">
-						<div className="item_radio">
-							<Radio.Group name="radiogroup" defaultValue={0} onChange={this.radioChange.bind(this)}>
-								<Radio value={0}>
-									<div className="route_box">
-										<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
-									</div>
-								</Radio>
-								<Radio value={1}>
-									<div className="route_box" style={{ height: '1.5rem', width: '1rem' }}>
-										<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
-									</div>
-								</Radio>
-							</Radio.Group>
+			<div className="cropper_root_box">
+
+				<div className='cropper_wapper'>
+					<div className="radio_box">
+						<div className="title">{t("选择方向")}</div>
+						<div className="body">
+							<div className="item_radio">
+								<Radio.Group name="radiogroup" defaultValue={0} onChange={this.radioChange.bind(this)}>
+									<Radio value={0}>
+										<div className="route_box">
+											<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
+										</div>
+									</Radio>
+									<Radio value={1}>
+										<div className="route_box" style={{ height: '1.5rem', width: '1rem' }}>
+											<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
+										</div>
+									</Radio>
+								</Radio.Group>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
-					<div className="loading_text">切换...</div>
-					{/* <div className="cropper_box_bg" > */}
+					<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
+						<div className="loading_text">loading...</div>
+						{/* <div className="cropper_box_bg" > */}
 
-					{!loading && <Cropper
-						src={nft.image || nft.imageOrigin}
-						ref={this.cropper}
-						style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}
-						viewMode={viewMode}
-						aspectRatio={aspectRatio}
-						// guides={false}
-						dragMode={'move'}
-						autoCropArea={autoCropArea}
-						// zoomable={false}
-						zoomOnTouch={false}
-						zoomOnWheel={false}
-						movable={movable}
-						// cropBoxResizable={false}
-						// wheelZoomRatio={.5}
-						// background={false}
-						cropBoxMovable={cropBoxMovable}
-						cropBoxResizable={cropBoxResizable}
-						toggleDragModeOnDblclick={false}
-						responsive={false}
-						restore={false}
-						ready={() => {
-							let { scaleType, viewMode, nft, isInit } = this.state;
-							this.setState({ isReady: true });
-							!isInit && this.initCropBox((nft as any).imageTransform);
-							if (!viewMode && scaleType == 'zoom') {
-								this.maxCropBox();
-							}
-						}}
-					/>}
-					{/* </div> */}
-				</div>
+						{!loading && <Cropper
+							src={nft.image || nft.imageOrigin}
+							ref={this.cropper}
+							style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}
+							viewMode={viewMode}
+							aspectRatio={aspectRatio}
+							// guides={false}
+							dragMode={'move'}
+							autoCropArea={autoCropArea}
+							// zoomable={false}
+							zoomOnTouch={false}
+							zoomOnWheel={false}
+							movable={movable}
+							// cropBoxResizable={false}
+							// wheelZoomRatio={.5}
+							// background={false}
+							cropBoxMovable={cropBoxMovable}
+							cropBoxResizable={cropBoxResizable}
+							toggleDragModeOnDblclick={false}
+							responsive={false}
+							restore={false}
+							ready={() => {
+								let { scaleType, viewMode, nft, isInit } = this.state;
+								this.setState({ isReady: true });
+								!isInit && this.initCropBox((nft as any).imageTransform);
+								if (!viewMode && scaleType == 'zoom') {
+									this.maxCropBox();
+								}
+							}}
+						/>}
+						{/* </div> */}
+					</div>
 
-				<div className="radio_box">
-					<Radio.Group defaultValue={'crop'} style={{ width: '100%' }} optionType="button" onChange={this.modeRadioChange.bind(this)} options={[
-						{ label: '裁剪模式', value: 'crop' },
-						{ label: '缩放模式', value: 'zoom' },
-					]} />
-				</div>
+					<div className="radio_box">
+						<Radio.Group defaultValue={'crop'} style={{ width: '100%' }} optionType="button" onChange={this.modeRadioChange.bind(this)} options={[
+							{ label: t('裁剪模式'), value: 'crop' },
+							{ label: t('缩放模式'), value: 'zoom' },
+						]} />
+					</div>
 
-				<div className="action_box">
-					<Button disabled={!isReady} onClick={async () => {
-						let cropper = this.cropper.current.cropper;
-						this.getImageTransform();
-						// console.log(this.params.address, { ...nft, imageTransform: imgPreConfig }, 'this.params.address, { ...nft, imageTransform: imgPreConfig }');
+					<div className="action_box">
+						<Button disabled={!isReady} onClick={async () => {
+							let cropper = this.cropper.current.cropper;
+							this.getImageTransform();
+							// console.log(this.params.address, { ...nft, imageTransform: imgPreConfig }, 'this.params.address, { ...nft, imageTransform: imgPreConfig }');
 
-						// let { nft } = this.state;
-						// let res = await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
-						// console.log(res);
+							// let { nft } = this.state;
+							// let res = await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
+							// console.log(res);
 
-						// try {
-						// 	await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
-						// 	localStorage.setItem('imgPreConfig', JSON.stringify(imgPreConfig));
-						// 	alert('预览设置成功!');
-						// } catch (error: any) {
-						// 	alert(error.message);
-						// }
-						this.setState({ testUrl: cropper.getCroppedCanvas().toDataURL() });
-					}}>预览效果</Button>
+							// try {
+							// 	await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
+							// 	localStorage.setItem('imgPreConfig', JSON.stringify(imgPreConfig));
+							// 	alert('预览设置成功!');
+							// } catch (error: any) {
+							// 	alert(error.message);
+							// }
+							this.setState({ testUrl: cropper.getCroppedCanvas().toDataURL() });
+						}}>{t('预览效果')}</Button>
 
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					let cropper = this.cropper.current.cropper;
 					cropper.setCropBoxData({
 						height: 999999,
@@ -506,16 +513,16 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 					最大crop框
 				</Button> */}
 
-					<Button disabled={!isReady} onClick={() => {
-						this.setState({ loading: true, isReady: false, testUrl: '' });
-						setTimeout(() => {
-							this.setState({ ...cropBoxConfig[scaleType] });
-						}, 100);
-					}}>
-						重置
-					</Button>
+						<Button disabled={!isReady} onClick={() => {
+							this.setState({ loading: true, isReady: false, testUrl: '' });
+							setTimeout(() => {
+								this.setState({ ...cropBoxConfig[scaleType] });
+							}, 100);
+						}}>
+							{t('重置')}
+						</Button>
 
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					this.setState({ loading: true });
 					setTimeout(() => {
 						this.setState({
@@ -529,7 +536,7 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 						});
 					}, 100);
 				}}>裁剪模式</Button> */}
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					this.setState({ loading: true });
 					setTimeout(() => {
 						this.setState({
@@ -543,11 +550,11 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 					}, 100);
 				}}>缩放模式</Button> */}
 
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					this.setState({ viewMode: 0 });
 				}}>viewMode 0</Button> */}
 
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					let cropper = this.cropper.current.cropper;
 					let imageData = cropper.getImageData();
 					let canvasData = cropper.getCanvasData();
@@ -563,7 +570,7 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 
 				}}> 限制crop框</Button> */}
 
-					{/* <Button onClick={() => {
+						{/* <Button onClick={() => {
 					let cropper = this.cropper.current.cropper;
 					let imageData = cropper.getImageData();
 					let canvasData = cropper.getCanvasData();
@@ -590,23 +597,24 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 
 				}}> setCanvasData</Button> */}
 
-					<Button disabled={!isReady} onClick={async () => {
-						this.setState({ loading: true, isReady: false });
-						setTimeout(() => {
-							this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], testUrl: '' });
-						}, 100);
-						await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '' } as any });
-						await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
-						alert("已切换为原图片");
-					}} >使用原图</Button>
-				</div>
+						<Button disabled={!isReady} onClick={async () => {
+							this.setState({ loading: true, isReady: false });
+							setTimeout(() => {
+								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], testUrl: '' });
+							}, 100);
+							await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '' } as any });
+							await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
+							alert("已切换为原图片");
+						}} >{t('使用原图')}</Button>
+					</div>
 
-				{scaleType === 'crop' ? <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={1} value={zoom} />
-					: <Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />}
+					{scaleType === 'crop' ? <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={1} value={zoom} />
+						: <Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />}
 
-				<div className="pre_part">
-					<div className="pre_box" style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}>
-						{Boolean(testUrl) && <img src={testUrl} alt="" style={{ width: '100%', height: '100%' }} />}
+					<div className="pre_part">
+						<div className="pre_box" style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}>
+							{Boolean(testUrl) && <img src={testUrl} alt="" style={{ width: '100%', height: '100%' }} />}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -614,3 +622,5 @@ export default class WalletAddress extends NavPage<{ id: string | number, addres
 		</div >
 	}
 }
+
+export default withTranslation('translations', { withRef: true })(CropImage);

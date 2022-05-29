@@ -21,7 +21,7 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 	t = this.props.page.t;
 
 	tabsConfig = [
-		{ title: this.t('管理密钥藏品'), index: 0 }, { title: this.t('设备藏品'), index: 1 }
+		{ title: this.t('我的NFT'), index: 0 }, { title: this.t('设备NFT'), index: 1 }
 	];
 	state = {
 		tabs: this.tabsConfig,
