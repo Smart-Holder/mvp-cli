@@ -20,7 +20,7 @@ export interface DeviceScreenSave {
 }
 
 interface ITransformImageProps extends NFT {
-	imageTransform: ICropConfig;
+	imageTransform?: ICropConfig;
 }
 
 export function devices(): Promise<Device[]> {

@@ -172,7 +172,7 @@ class DeviceInfo extends NavPage<Device> {
 						await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' } as any] }, 'single', true);
 						await device.unbind(address);
 
-						alert(t('解绑设备成功'), () => window.history.back());
+						alert(t('解绑设备成功'), () => this.replacePage('/device'));
 					} catch (error: any) {
 						console.log(error);
 

@@ -91,13 +91,13 @@ class DeviceSetCarousel extends NavPage<Device> {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time, versionCode }) => {
+		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time, versionCode, screenWidth, screenHeight }) => {
 			// if (light > 100) light = 100;
 			light = parseInt(String(light / 51));
 			volume = volume / 3;
-			console.log(versionCode);
+			console.log(screenWidth, screenHeight);
 
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode });
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode, screenWidth, screenHeight });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -217,7 +217,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 	}
 
 	getCurrPageContent() {
-		const { currSettingIndex, time } = this.state;
+		const { currSettingIndex, time, screenWidth, screenHeight } = this.state;
 		switch (currSettingIndex) {
 			case SettingDarwerType.audio:
 				return this.audioCard();
@@ -234,10 +234,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.previewNftCard();
 
 			case SettingDarwerType.shadow:
-				return <SetCarousel time={time} page={this} mode='shadow' />;
+				return <SetCarousel time={time} page={this} mode='shadow' address={this.params.address} screenWidth={screenWidth} screenHeight={screenHeight} />;
 
 			default:
-				return <SetCarousel time={time} page={this} mode='normal' />;
+				return <SetCarousel time={time} page={this} mode='normal' address={this.params.address} screenWidth={screenWidth} screenHeight={screenHeight} />;
 		}
 	}
 

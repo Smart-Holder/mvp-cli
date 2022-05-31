@@ -39,9 +39,12 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 	async getNftList(list?: NFT[], mode?: number) {
 		this.setState({ loading: true, rightNftList: [], leftNftList: [] });
 		let { address } = this.props.page.params;
+		let { screenWidth, screenHeight } = this.props;
 		let owner = await chain.getDefaultAccount();
 		let ownerAddress = !mode ? owner : address;
-		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
+		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({
+			owner: ownerAddress, screenWidth, screenHeight
+		});
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
 		let videoNftList: NFT[] = [];

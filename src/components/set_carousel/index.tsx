@@ -39,6 +39,9 @@ interface ISetCarouselProps {
 	page: NavPage<device.Device>,
 	mode: 'normal' | 'shadow',
 	time?: number,
+	screenWidth?: number;
+	screenHeight?: number;
+	address?: string;
 }
 
 class SetCarousel extends Component<ISetCarouselProps> {
@@ -90,9 +93,12 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async getNftList(list?: NFT[], type?: CarouselType) {
 		let { mode } = this.props;
 		let { address } = this.props.page.params;
+		let { screenWidth, screenHeight, address: deviceAddress } = this.props;
 		let owner = await chain.getDefaultAccount();
 		let ownerAddress = mode == 'shadow' ? owner : address;
-		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
+		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({
+			owner: ownerAddress, screenWidth, screenHeight, address: deviceAddress
+		});
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
 		let videoNftList: NFT[] = [];
@@ -109,7 +115,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
 
-		let newState: any = { leftNftList, rightNftList, nft: nftList};
+		let newState: any = { leftNftList, rightNftList, nft: nftList };
 
 		// type !== CarouselType.video && (newState.nft = nftList);
 
@@ -142,7 +148,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	rendNftItem(nft: NFT, index: number) {
-		const {  selectedArrList } = this.state;
+		const { selectedArrList } = this.state;
 		let ids = selectedArrList.map(item => item.id);
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />}
@@ -153,18 +159,18 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// nft列表项点击事件
 	nftItemClick(nftItem: NFT) {
-		let {  isShowAbbreviation,  selectedArrList} = this.state;
-		let newselectedArrList = JSON.parse(JSON.stringify([ ...selectedArrList ]));
+		let { isShowAbbreviation, selectedArrList } = this.state;
+		let newselectedArrList = JSON.parse(JSON.stringify([...selectedArrList]));
 
-		let findNftIndex = newselectedArrList.findIndex((item:any) => item.id === nftItem.id);
+		let findNftIndex = newselectedArrList.findIndex((item: any) => item.id === nftItem.id);
 
 		if (findNftIndex >= 0) {
 			// 删除已选择的nft
 			newselectedArrList.splice(findNftIndex, 1);
-			
+
 			// 如果没有选中项了 收起底部弹框
 			!newselectedArrList.length ? (isShowAbbreviation = false) : (isShowAbbreviation = true);
-			
+
 
 		} else {
 			// 选中当前点击的nft
@@ -182,7 +188,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async saveCarouselIntervalTime() {
 		let { t } = this;
 		const { address } = this.props.page.params;
-		const { carouselConfig,  carouselIntervalTime } = this.state;
+		const { carouselConfig, carouselIntervalTime } = this.state;
 		// 修改当前选择的时间间隔
 		let newCarouselConfig = { ...carouselConfig, time: carouselIntervalTime };
 		// let { mode } = this.props;
@@ -206,11 +212,11 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	async saveCarousel() {
 		let { t } = this;
 		let { address } = this.props.page.params;
-		let { carouselConfig,  selectedArrList } = this.state;
+		let { carouselConfig, selectedArrList } = this.state;
 		let newCarouselConfig = { ...carouselConfig, data: selectedArrList };
 		let { mode } = this.props;
-		console.log(newCarouselConfig,"newCarouselConfig");
-		
+		console.log(newCarouselConfig, "newCarouselConfig");
+
 		try {
 			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, 'nft');
 			mode == 'shadow' && localStorage.setItem('isShadow', '1');
@@ -251,7 +257,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	render() {
-		const {  isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs,  selectedArrList } = this.state;
+		const { isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs, selectedArrList } = this.state;
 		const { mode } = this.props;
 		let t = this.t;
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
@@ -268,11 +274,11 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					<div className="item_page" >
 						{leftNftList.length ? <div className="nft_list">
 							<div className="left_box">
-								{leftNftList.map((item,index) => this.rendNftItem(item,index))}
+								{leftNftList.map((item, index) => this.rendNftItem(item, index))}
 							</div>
 
 							<div className="right_box">
-								{rightNftList.map((item,index) => this.rendNftItem(item,index))}
+								{rightNftList.map((item, index) => this.rendNftItem(item, index))}
 							</div>
 						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
 					</div>

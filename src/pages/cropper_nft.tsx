@@ -5,11 +5,11 @@ import Cropper from 'react-cropper' // 引入Cropper
 import 'cropperjs/dist/cropper.css';
 import Button from '../../src/components/button';
 import { Radio, Slider } from 'antd';
-// import "./index.scss";
+import { NoticeBar } from 'antd-mobile';
 import models, { NFT } from '../../src/models';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { transformImage } from '../../src/models/device';
-// import { alert } from 'webpkit/lib/dialog';
+import { CloseOutlined } from '@ant-design/icons';
 import '../css/cropper_nft.scss';
 import { alert } from '../util/tools';
 import { withTranslation } from 'react-i18next';
@@ -101,7 +101,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		canvasWidth: 6.4,
 		canvasHeight: 3.6,
 		aspectRatio: 16 / 9,
-		loading: false,
+		loading: true,
 		radioVal: 0,
 		cropBoxMovable: true,
 		cropBoxResizable: true,
@@ -126,8 +126,8 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 	}
 
 	async init() {
-		let nft = await this.getNftByScreen();
-
+		let { screenWidth, screenHeight } = this.params;
+		let nft = await this.getNftByScreen(Number(screenWidth), Number(screenHeight));
 		// setTimeout(() => {
 
 		// (imgPreConfig.zoom && cropper.zoomTo((imgPreConfig.zoom / 100) * diviceWidth / 350, {
@@ -139,7 +139,15 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		// this.setState({ zoom: imgPreConfig.zoom });
 
 		// }, 1000);
-		this.setState({ nft });
+		let val = 0;
+
+		if (Boolean(screenWidth == 1080 && screenHeight == 1920)) val = 1;
+
+		console.log(screenWidth, canvasConfig[val]);
+		let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
+		this.setState({ nft, ...canvasCfg, loading: false });
+		// this.setState({ testUrl: '', nft, canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val, loading: false });
+
 	}
 
 	initCropBox(imageTransform: IimageTransformProps) {
@@ -412,18 +420,19 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 			cropBoxResizable,
 			viewMode,
 			movable, zoom2, autoCropArea, isReady, radioVal } = this.state;
+		let { screenWidth, screenHeight } = this.params;
 		let { t } = this;
 		return <div className="cropper_page">
 			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
-
 			<div className="cropper_root_box">
-
 				<div className='cropper_wapper'>
 					<div className="radio_box">
+						{!Boolean(screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) && <NoticeBar marqueeProps={{ loop: true, text: t("当前裁剪比例与设备比例不符合,提交将不生效") }}>
+						</NoticeBar>}
 						<div className="title">{t("选择方向")}</div>
 						<div className="body">
 							<div className="item_radio">
-								<Radio.Group name="radiogroup" defaultValue={0} onChange={this.radioChange.bind(this)}>
+								<Radio.Group name="radiogroup" value={radioVal} onChange={this.radioChange.bind(this)}>
 									<Radio value={0}>
 										<div className="route_box">
 											<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
@@ -442,7 +451,6 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 					<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
 						<div className="loading_text">loading...</div>
 						{/* <div className="cropper_box_bg" > */}
-
 						{!loading && <Cropper
 							src={nft.image || nft.imageOrigin}
 							ref={this.cropper}
@@ -602,7 +610,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 							setTimeout(() => {
 								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], testUrl: '' });
 							}, 100);
-							await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '' } as any });
+							await transformImage(this.params.address, { ...nft });
 							await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
 							alert("已切换为原图片");
 						}} >{t('使用原图')}</Button>

@@ -153,5 +153,6 @@
 	"预览效果": "Preview",
 	"重置": "Reset",
 	"使用原图": "Original Image",
-	"提交": "Submit"
+	"提交": "Submit",
+	"当前裁剪比例与设备比例不符合,提交将不生效": "The current cutting scale does not conform to the equipment scale, and the submission will not take effect"
 }
