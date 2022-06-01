@@ -8,11 +8,12 @@ import { Radio, Slider } from 'antd';
 import { NoticeBar } from 'antd-mobile';
 import models, { NFT } from '../../src/models';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import { transformImage } from '../../src/models/device';
+import { getScreenSettings, transformImage } from '../../src/models/device';
 import { CloseOutlined } from '@ant-design/icons';
 import '../css/cropper_nft.scss';
 import { alert } from '../util/tools';
 import { withTranslation } from 'react-i18next';
+import Loading from '../../deps/webpkit/lib/loading';
 
 export interface ICropConfig {
 	originWidth: number;
@@ -112,7 +113,9 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		zoom2: 10,
 		autoCropArea: .7,
 		isReady: false,
-		isInit: false
+		isInit: false,
+		screenWidth: 1920,
+		screenHeight: 1080
 	}
 
 	async getNftByScreen(screenWidth?: number, screenHeight?: number) {
@@ -126,27 +129,24 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 	}
 
 	async init() {
-		let { screenWidth, screenHeight } = this.params;
-		let nft = await this.getNftByScreen(Number(screenWidth), Number(screenHeight));
-		// setTimeout(() => {
 
-		// (imgPreConfig.zoom && cropper.zoomTo((imgPreConfig.zoom / 100) * diviceWidth / 350, {
-		// 	x: containerData.width / 2,
-		// 	y: containerData.height / 2,
-		// }));
-		// console.log(imgPreConfig,'imgPreConfig');
+		// 获取设备当前设置参数
+		let l = await Loading.show(this.t('正在加载屏幕设置'));
+		getScreenSettings(this.params.address).then(async ({ screenWidth, screenHeight }) => {
+			// let { screenWidth, screenHeight } = this.params;
+			console.log(screenWidth, screenHeight);
+			let nft = await this.getNftByScreen(Number(screenWidth), Number(screenHeight));
+			let val = 0;
 
-		// this.setState({ zoom: imgPreConfig.zoom });
+			if (Boolean(screenWidth == 1080 && screenHeight == 1920)) val = 1;
 
-		// }, 1000);
-		let val = 0;
+			console.log(screenWidth, canvasConfig[val]);
+			let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
+			this.setState({ nft, ...canvasCfg, loading: false, screenWidth, screenHeight });
+		}).catch((err: any) => {
+			alert(err.message);
+		}).finally(() => l.close());
 
-		if (Boolean(screenWidth == 1080 && screenHeight == 1920)) val = 1;
-
-		console.log(screenWidth, canvasConfig[val]);
-		let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
-		this.setState({ nft, ...canvasCfg, loading: false });
-		// this.setState({ testUrl: '', nft, canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val, loading: false });
 
 	}
 
@@ -162,8 +162,12 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 
 		let originWidth = imageData.naturalWidth;
 		let originHeight = imageData.naturalHeight;
-		let imgScale = originWidth / containerData.width;
-		let imgScaleY = originHeight / containerData.height;
+		// let imgScaleX = originWidth / containerData.width;
+		// let imgScaleY = originHeight / containerData.height;
+		// let imgScale = imgScaleX;
+		// imgScale = ((originWidth >= originHeight && containerData.width < containerData.height) ? imgScaleY : imgScaleX);
+		let imgScale = this.getImgScale(originWidth, originHeight, containerData.width, containerData.height);
+
 
 		let cropX = Math.abs(Number(imgPreConfig.cropX));
 		let cropY = Math.abs(Number(imgPreConfig.cropY));
@@ -275,11 +279,12 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 
 	async radioChange(e: RadioChangeEvent) {
 		let val: number = e.target.value;
-
+		let { scaleType } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, zoom: 0, zoom2: 10 });
 		let nft = await this.getNftByScreen(canvasConfig[val].width, canvasConfig[val].height);
 		setTimeout(() => {
-			this.setState({ testUrl: '', nft, canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val, loading: false });
+			let aspectRatio = (val == 1 && scaleType == 'zoom') ? 0 : canvasConfig[val].aspectRatio;
+			this.setState({ testUrl: '', nft, canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio, radioVal: val, loading: false });
 		}, 500);
 	}
 
@@ -291,6 +296,13 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		});
 	}
 
+	getImgScale(originWidth: number, originHeight: number, containerWidth: number, containerHeight: number) {
+		let imgScaleX = originWidth / containerWidth;
+		let imgScaleY = originHeight / containerHeight;
+		let imgScale = imgScaleX;
+		imgScale = ((originWidth > originHeight && containerWidth < containerHeight) ? imgScaleY : imgScaleX);
+		return imgScale;
+	}
 
 	getImageTransform() {
 		let cropper = this.cropper.current.cropper;
@@ -300,14 +312,22 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		let cropBoxData = cropper.getCropBoxData();
 		let { radioVal, scaleType, zoom, zoom2 } = this.state;
 		// console.log(containerData, 'getContainerData', canvasData, 'getCanvasData', imageData, 'getImageData', cropBoxData, 'getCropBoxData', 'this.cropper');
-		let scale = canvasConfig[radioVal].width / containerData.width;
+		let scaleX = canvasConfig[radioVal].width / containerData.width;
+		let scaleY = canvasConfig[radioVal].height / containerData.height;
+		let scale = scaleX;
 
 		let originWidth = imageData.naturalWidth;
 		let originHeight = imageData.naturalHeight;
+		scale = ((containerData.width < containerData.height) ? scaleY : scaleX);
+
 		let newScaleType = scaleType;
-		let imgScale = originWidth / containerData.width;
-		let imgScaleY = originHeight / containerData.height;
+		// let imgScaleX = originWidth / containerData.width;
+		// let imgScaleY = originHeight / containerData.height;
+		// let imgScale = imgScaleX;
+		// imgScale = ((originWidth > originHeight) ? imgScaleY : imgScaleX);
+
 		// imgScale = imgScale > imgScaleY? :
+		let imgScale = this.getImgScale(originWidth, originHeight, containerData.width, containerData.height);
 		let cropX = Math.floor(Number('-' + (cropBoxData.left + Math.abs(canvasData.left)) * imgScale));
 		let cropY = Math.floor(Number('-' + (cropBoxData.top + Math.abs(canvasData.top)) * imgScale));
 		// console.log(cropBoxData.left, Math.abs(canvasData.left), 'cropBoxData ======================');
@@ -331,7 +351,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 		}
 
 		if (newScaleType == 'crop' && ((cropWidth > originWidth) || (cropHeight > originHeight))) {
-			console.log(cropWidth, originWidth, cropHeight, originHeight, newScaleType, imgScale, imgScaleY);
+			console.log(cropWidth, originWidth, cropHeight, originHeight, newScaleType, imgScale, cropBoxData);
 			return alert(this.t('当前裁剪框大于图像区域,请重新裁剪'));
 		}
 
@@ -352,7 +372,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 			targetHeight, 'targetHeight',
 			newScaleType, 'scaleType',
 			imgScale, "imgScale",
-			imgScaleY, 'imgScaleY'
+			// imgScaleY, 'imgScaleY'
 		);
 
 
@@ -393,7 +413,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 			}, 100);
 		} else {
 			setTimeout(() => {
-				this.setState({ ...cropBoxConfig.zoom, ...canvasConfig[radioVal] });
+				this.setState({ ...cropBoxConfig.zoom, ...canvasConfig[radioVal], aspectRatio: 0 });
 			}, 100);
 		}
 		console.log(val);
@@ -402,10 +422,10 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 	async subImageConfig() {
 		let imgPreConfig = this.getImageTransform();
 
-		let { nft, radioVal } = this.state;
+		let { nft, radioVal, screenHeight, screenWidth } = this.state;
 		try {
 			await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
-			if (this.params.screenWidth == canvasConfig[radioVal].width && this.params.screenHeight == canvasConfig[radioVal].height) {
+			if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
 				await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
 			}
 			// localStorage.setItem('imgPreConfig', JSON.stringify(imgPreConfig));
@@ -420,7 +440,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 			cropBoxResizable,
 			viewMode,
 			movable, zoom2, autoCropArea, isReady, radioVal } = this.state;
-		let { screenWidth, screenHeight } = this.params;
+		let { screenWidth, screenHeight } = this.state;
 		let { t } = this;
 		return <div className="cropper_page">
 			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
@@ -524,7 +544,7 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 						<Button disabled={!isReady} onClick={() => {
 							this.setState({ loading: true, isReady: false, testUrl: '' });
 							setTimeout(() => {
-								this.setState({ ...cropBoxConfig[scaleType] });
+								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal] });
 							}, 100);
 						}}>
 							{t('重置')}
@@ -608,11 +628,20 @@ class CropImage extends NavPage<{ id: string | number, address: string, screenWi
 						<Button disabled={!isReady} onClick={async () => {
 							this.setState({ loading: true, isReady: false });
 							setTimeout(() => {
-								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], testUrl: '' });
+								let aspectRatio = (radioVal == 1 && scaleType == 'zoom') ? 0 : canvasConfig[radioVal].aspectRatio;
+								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], aspectRatio, testUrl: '' });
 							}, 100);
-							await transformImage(this.params.address, { ...nft });
-							await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
-							alert("已切换为原图片");
+							try {
+								// console.log({ ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } });
+								if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
+									await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any });
+								}
+
+								await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
+								alert("已切换为原图片");
+							} catch (error: any) {
+								alert(error.message);
+							}
 						}} >{t('使用原图')}</Button>
 					</div>
 

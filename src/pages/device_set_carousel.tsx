@@ -88,6 +88,10 @@ class DeviceSetCarousel extends NavPage<Device> {
 	}
 
 	async triggerLoad() {
+		await this.getDeviceInfo();
+	}
+
+	async getDeviceInfo() {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
@@ -152,6 +156,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			<Button ghost type="primary" onClick={async () => {
 				confirm(t('调整屏幕角度将重启设备，确定调整屏幕角度吗？'), async (isok) => {
 					isok && await screenOrientation(this.params.address, currRotation);
+					// isok && await this.getDeviceInfo();
 				})
 			}}>{t('确认')}</Button>
 		</div>
