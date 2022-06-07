@@ -303,11 +303,25 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let imgScaleX = originWidth / containerWidth;
 		let imgScaleY = originHeight / containerHeight;
 		let imgScale = imgScaleX;
-		console.log(imgScaleX, 'imgScaleX', imgScaleY, 'imgScaleY');
+		// console.log('==================================================', originWidth > originHeight);
 
 		// imgScale = ((originWidth > originHeight && containerWidth < containerHeight) ? imgScaleY : imgScaleX);
-		imgScale = ((originWidth > originHeight || containerWidth < containerHeight) ? imgScaleY : imgScaleX);
-		// imgScale = ((containerWidth < containerHeight) ? imgScaleY : imgScaleX);
+		// imgScale = ((originWidth > originHeight || containerWidth < containerHeight) ? imgScaleY : imgScaleX);
+		imgScale = ((containerWidth < containerHeight) ? imgScaleY : imgScaleX);
+		// if (containerWidth < containerHeight) {
+		// 	if (originWidth > originHeight) {
+		// 		imgScale = imgScaleX;
+		// 	} else {
+		// 		imgScale = imgScaleY;
+		// 	}
+		// } else {
+		// 	if (originWidth > originHeight) {
+		// 		imgScale = imgScaleX;
+		// 	} else {
+		// 		imgScale = imgScaleY;
+		// 	}
+		// }
+		console.log(imgScaleX, 'imgScaleX', imgScaleY, 'imgScaleY', imgScale, 'imgScale');
 
 		return imgScale;
 	}
@@ -330,7 +344,24 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let originHeight = imageData.naturalHeight;
 
 		let zoomScale = zoomScaleY;
-		zoomScale = ((originWidth > originHeight || containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
+		zoomScale = ((containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
+
+		// zoomScale = ((originWidth > originHeight && containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
+		// 如果竖屏
+		// if (containerWidth < containerHeight) {
+		// 	// 如果竖图
+		// 	if (originWidth > originHeight) {
+		// 		zoomScale = zoomScaleY
+		// 	} else {
+		// 		zoomScale = zoomScaleX
+		// 	}
+		// } else {
+		// 	if (originWidth > originHeight) {
+		// 		zoomScale = zoomScaleX
+		// 	} else {
+		// 		zoomScale = zoomScaleY
+		// 	}
+		// }
 		console.log(zoomScaleX, 'zoomScaleX', zoomScaleY, 'zoomScaleY');
 		return zoomScale;
 	}
@@ -481,7 +512,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 					await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any });
 				}
 				await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
-				alert("已切换为原图片", () => this.popPage());
+				alert(this.t("已切换为原图片"), () => this.popPage());
 			} catch (error: any) {
 				alert(error.message);
 			}
