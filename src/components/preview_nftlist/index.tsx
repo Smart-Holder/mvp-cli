@@ -28,11 +28,12 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 		leftNftList: [] as NFT[],
 		rightNftList: [] as NFT[],
 		tabIndex: 0,
-		loading: false
+		loading: false,
+		mode: 0
 	}
 
 	componentDidMount() {
-		this.getNftList();
+		this.getNftList(undefined, 0);
 	}
 
 	// 获取nft列表
@@ -66,14 +67,16 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 
 		let newState: any = { leftNftList, rightNftList, videoNftList, loading: false };
 
+		console.log(mode, 'mode');
 
-		this.setState({ ...newState });
+		this.setState({ ...newState, mode });
 		return nftList;
 	}
 
 	nftItemClick(nft: NFT) {
 		let { screenHeight, screenWidth } = this.props;
-		this.props.page.pushPage(`/cropper_nft?id=${nft.id}&screenWidth=${screenWidth}&screenHeight=${screenHeight}&address=${this.props.page.params.address}&token=${nft.token}&tokenId=${nft.tokenId}`);
+		let { mode } = this.state;
+		this.props.page.pushPage(`/cropper_nft?id=${nft.id}&mode=${mode}&screenWidth=${screenWidth}&screenHeight=${screenHeight}&address=${this.props.page.params.address}&token=${nft.token}&tokenId=${nft.tokenId}`);
 	}
 
 	rendNftItem(nft: NFT) {

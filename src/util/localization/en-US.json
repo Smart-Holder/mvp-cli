@@ -154,5 +154,9 @@
 	"重置": "Reset",
 	"使用原图": "Original Image",
 	"提交": "Submit",
-	"当前裁剪比例与设备比例不符合,提交将不生效": "The current cutting scale does not conform to the equipment scale, and the submission will not take effect"
+	"当前裁剪比例与设备比例不符合,提交将不生效": "The current cutting scale does not conform to the equipment scale, and the submission will not take effect",
+	"确定退出设置使用原图吗？退出后您可在“设置-投屏”将原图显示在设备上": "Are you sure to exit the setting and use the original drawing? After exiting, you can display the original image on the device in 'Setting - Preview settings'",
+	"确定退出设置使用原图吗？退出后您可在“设置-轮播图”将原图显示在设备上": "Are you sure to exit the setting and use the original drawing? After exiting, you can display the original image on the device in 'Setting - Rotation chart'",
+	"系统检测到您的设备目前是横屏，无法保存竖屏设置": "The system has detected that your device is currently horizontal, and cannot save the vertical settings",
+	"系统检测到您的设备目前是竖屏，无法保存横屏设置": "The system has detected that your device currently has a vertical screen and cannot save the horizontal screen settings"
 }
