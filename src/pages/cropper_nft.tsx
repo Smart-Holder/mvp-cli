@@ -307,7 +307,9 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 
 		// imgScale = ((originWidth > originHeight && containerWidth < containerHeight) ? imgScaleY : imgScaleX);
 		// imgScale = ((originWidth > originHeight || containerWidth < containerHeight) ? imgScaleY : imgScaleX);
-		imgScale = ((containerWidth < containerHeight) ? imgScaleY : imgScaleX);
+		// imgScale = ((containerWidth < containerHeight) ? imgScaleY : imgScaleY);
+		imgScale = ((imgScaleY < imgScaleX) ? imgScaleY : imgScaleX);
+
 		// if (containerWidth < containerHeight) {
 		// 	if (originWidth > originHeight) {
 		// 		imgScale = imgScaleX;
@@ -344,7 +346,9 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let originHeight = imageData.naturalHeight;
 
 		let zoomScale = zoomScaleY;
-		zoomScale = ((containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
+		// zoomScale = ((containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
+		zoomScale = ((zoomScaleY < zoomScaleX) ? zoomScaleY : zoomScaleX);
+
 
 		// zoomScale = ((originWidth > originHeight && containerWidth < containerHeight) ? zoomScaleY : zoomScaleX);
 		// 如果竖屏
@@ -514,6 +518,10 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
 				alert(this.t("已切换为原图片"), () => this.popPage());
 			} catch (error: any) {
+				if (error.code == -10001) {
+					alert(this.t(`系统检测到您的设备目前是${(!radioVal ? '竖屏' : '横屏')}，无法保存${(!radioVal ? '横屏' : '竖屏')}设置`));
+					return;
+				}
 				alert(error.message);
 			}
 		});
