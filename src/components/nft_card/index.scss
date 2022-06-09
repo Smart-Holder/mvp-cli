@@ -3,6 +3,21 @@
 	background-color: #fefffe;
 	border-radius: 0.16rem;
 	margin-bottom: 0.4rem;
+	.ant-image {
+		min-height: 1.5rem;
+	}
+	.loading_icon_box {
+		height: 100%;
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+
+		.loading_icon {
+			color: #1677ff;
+			font-size: 0.7rem;
+		}
+	}
 	.nft_img_box {
 		width: 100%;
 		position: relative;

@@ -80,7 +80,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		autoLightLoading: false,
 		autoLight: false,
 		time: 10,
-		versionCode:0
+		versionCode: 0
 	}
 
 	async triggerLoad() {
@@ -92,8 +92,8 @@ class DeviceSetCarousel extends NavPage<Device> {
 			light = parseInt(String(light / 51));
 			volume = volume / 3;
 			console.log(versionCode);
-			
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode});
+
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -108,7 +108,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			type === SettingDarwerType.brightness ? screenLight(address, light ? light:1) : screenVolume(address, volume);
+			type === SettingDarwerType.brightness ? screenLight(address, light ? light : 1) : screenVolume(address, volume);
 		}, 500);
 		if (type === SettingDarwerType.brightness) {
 			this.setState({ light: e, dsq_id: newDsqId });
@@ -266,7 +266,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 
 	render() {
 
-		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction, versionCode} = this.state;
+		const { currSettingIndex, drawerVisible, currcallDeviceIndex, hasNew, hasNewLoading, hasNewAction, versionCode } = this.state;
 		const { t } = this;
 		return <div className="device_set_carousel_page">
 			<div className="device_set_carousel_page_content">
@@ -289,7 +289,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 				{settingDarwerConfig.map(item => {
 					let ele = <p onClick={this.drawerItemClick.bind(this, item.value)} className={item.value == currSettingIndex ? 'active' : ''} style={{ display: 'flex', alignItems: 'center' }}><IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)}</p>;
 					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
-						return ele;
+					return ele;
 				})}
 			</Drawer>
 

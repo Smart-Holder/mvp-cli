@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import NavPage from '../../nav';
 import "./index.scss";
 import * as config from '../../../config';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface INftCardProps {
 	nft: INftItem;
@@ -31,12 +32,15 @@ const NftCard = (props: INftCardProps) => {
 		<div className="nft_info_box">
 			<div className="nft_img_box">
 				{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
-				{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image width='100%' src={nft.image || nft.imageOrigin} alt="" placeholder={
-					<Image
-						preview={false}
-						src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
-						width='100%'
-					/>
+				{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image fallback={require('../../assets/img_error.jpg')} width='100%' src={nft.image || nft.imageOrigin} placeholder={
+					<div className="loading_icon_box">
+						<LoadingOutlined className="loading_icon" />
+					</div>
+					// <Image
+					// 	preview={false}
+					// 	src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
+					// 	width='100%'
+					// />
 				} />}
 			</div>
 			<div onClick={() => props.page?.pushPage(`/nft_detail?token=${nft.token}&tokenId=${nft.tokenId}`)}>

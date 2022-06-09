@@ -58,7 +58,7 @@
 			width: 47%;
 			border-radius: 0.16rem;
 			position: relative;
-			margin-bottom: .2rem;
+			margin-bottom: 0.2rem;
 		}
 
 		.color_bg_item {
@@ -84,129 +84,6 @@
 		}
 		img {
 			width: 100%;
-		}
-	}
-
-	.set_carousel {
-		height: 100%;
-		overflow: hidden;
-		transition: 0.3s all;
-
-		.am-tabs-default-bar {
-			width: 70%;
-		}
-		.am-tabs-pane-wrap {
-			overflow: hidden;
-		}
-
-		.am-tabs-tab-bar-wrap {
-			border-bottom: 1px solid #eee;
-		}
-
-		.am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
-			display: none;
-		}
-		.set_carousel_card {
-			background-color: #fefffe;
-			border-radius: 0.16rem;
-			overflow: hidden;
-			height: 100%;
-			.disabledTab {
-				color: #ccc;
-			}
-			.item_page {
-				padding: 0.3rem;
-				// padding-bottom: 3.5rem;
-				display: flex;
-				flex-direction: column;
-				height: 100%;
-			}
-
-			.radio_box {
-				display: flex;
-				flex-wrap: wrap;
-				.radio_item {
-					border-radius: 0.38rem;
-					background-color: #f5f5f5;
-					color: #999;
-					padding: 0.08rem 0.2rem;
-					margin-right: 0.15rem;
-					border: 1px solid transparent;
-					transition: 0.3s all;
-					white-space: nowrap;
-					font-size: 0.26rem;
-					margin-bottom: 0.3rem;
-				}
-				.active {
-					background-color: #f2f7ff;
-					color: #1677ff;
-					border: 1px solid #1677ff;
-					box-sizing: border-box;
-				}
-			}
-			.nft_list {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-between;
-				overflow: auto;
-				flex: 1;
-				.left_box,
-				.right_box {
-					width: 47.5%;
-				}
-				.nft_item {
-					// width: 48%;
-					margin-bottom: 0.3rem;
-					border-radius: 0.16rem;
-					overflow: hidden;
-					position: relative;
-					img,
-					video {
-						object-fit: contain;
-						width: 100%;
-					}
-					video {
-						border-radius: 0.16rem;
-					}
-				}
-			}
-
-			.item_page2 {
-				.time_box {
-					display: flex;
-					align-items: center;
-					padding: 0.3rem 0.24rem;
-					justify-content: space-between;
-					font-size: 0.32rem;
-					color: #999;
-					.time_item {
-						border: 0.02rem solid #f5f5f5;
-						background-color: #f5f5f5;
-						border-radius: 0.08rem;
-						padding: 0.25rem 0.22rem;
-						transition: 0.3s all;
-					}
-					.active {
-						border-color: #1677ff;
-						color: #1677ff;
-						background-color: #f2f7ff;
-					}
-				}
-			}
-		}
-
-		.item_page2_action {
-			margin-top: 0.8rem;
-			display: flex;
-			justify-content: space-between;
-			padding: 0 0.24rem;
-			.ant-btn {
-				width: 2.4rem;
-				border-radius: 0.08rem;
-				font-size: 0.32rem;
-				padding: 0.12rem 0;
-				height: auto;
-			}
 		}
 	}
 
