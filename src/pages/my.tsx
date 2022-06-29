@@ -69,9 +69,12 @@ class My extends NavPage {
 
 	// 获取nft列表
 	async getNFTList(owner: string, curPage?: number) {
-		this.setState({ loading: true })
-		// let nftList: INftItem[] = await models.nft.methods.getNFTByOwnerPage({ owner, curPage: curPage || 1,pageSize:10 });
-		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
+		this.setState({ loading: true });
+		let {  tabIndex } = this.state;
+		let params:any = { owner, curPage: curPage || 1, pageSize: 10 };
+		params[!tabIndex ? 'other_chain' : 'chain'] = chain.chain;
+		let nftList: INftItem[] = await models.nft.methods.getNFTByOwnerPage(params);
+		// let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 
 		nftList = setNftActionLoading(nftList, "nftDisabledTime");
 
