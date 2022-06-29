@@ -33,6 +33,7 @@ import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
 import { ChainType } from '../models/def';
+import { genPrivateKey, getAddress } from '../../deps/webpkit/deps/crypto-tx/account';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
@@ -61,12 +62,12 @@ export class Web3IMPL extends Web3Z {
 		if (!this._metaMask) {
 			this._metaMask = (globalThis as any).ethereum;
 			// check _metaMask
-			if (!this._metaMask) {
+			if (!this._metaMask && location.pathname != '/nft_detail') {
 				// history.push('/install');
 				// throw Error.new('Matemask wallet needs to be installed');
 				throw Error.new('请在Dapp浏览器中打开链接,并确认当前是否创建了钱包');
 			}
-			var currentChainId = this._metaMask.chainId;
+			var currentChainId = this._metaMask?.chainId || 4;
 			console.log('currentChainId', currentChainId);
 		}
 		return this._metaMask;
@@ -81,9 +82,18 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	async getDefaultAccount() {
+		
 		if (!this._defaultAccount) {
+			// debugger
 			var mask = this.metaMask;
-			var [from] = await mask.request({ method: 'eth_requestAccounts' });
+			let from = '';
+			let isNftdetailPage = location.pathname == '/nft_detail';
+			if ((!mask?.request) || isNftdetailPage) {
+				from = getAddress(genPrivateKey()) as string;
+			} else {
+				var [mask_from] = await mask.request({ method: 'eth_requestAccounts' });
+				from = mask_from;
+			}
 
 			console.log('eth_requestAccounts', from);
 
@@ -93,7 +103,7 @@ export class Web3IMPL extends Web3Z {
 			this._defaultAccount = (from || '') as string;
 			this.setDefaultAccount(this._defaultAccount);
 
-			var id = await this.web3.eth.getChainId();
+			var id = isNftdetailPage ? 4: await this.web3.eth.getChainId();
 
 			this._chain = ChainType[id] ? id: ChainType.UNKNOWN;
 		}

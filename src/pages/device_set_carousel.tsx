@@ -5,7 +5,7 @@ import { Modal } from 'antd-mobile';
 import Button from '../components/button';
 import SetCarousel from '../components/set_carousel';
 import { Device } from '../models';
-import { Drawer, Slider, Switch } from 'antd';
+import { Drawer, Slider, Switch, Menu } from 'antd';
 // import { confirm } from '../../deps/webpkit/lib/dialog';
 import { alert, confirm } from '../util/tools'
 import { withTranslation } from 'react-i18next';
@@ -291,6 +291,18 @@ class DeviceSetCarousel extends NavPage<Device> {
 					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
 					return ele;
 				})}
+				{/* <Menu
+					defaultSelectedKeys={['1']}
+					defaultOpenKeys={['sub1']}
+					mode="inline"
+					// theme="dark"
+				>
+					<Menu.SubMenu icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} title='屏幕设置'>
+						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
+						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
+						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
+					</Menu.SubMenu>
+				</Menu> */}
 			</Drawer>
 
 			<Modal

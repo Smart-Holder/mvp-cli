@@ -78,7 +78,7 @@
 	"已经是最新版本了": "It's already the latest version",
 	"音量": "volume",
 	"亮度": "brightness",
-	"屏幕角度": "Screen orientation",
+	"屏幕角度": "Screen Rotation",
 	"更新检查": "Update check",
 	"背景颜色": "Background color",
 	"NFT信息": "NFT QR Code",
@@ -141,5 +141,6 @@
 	"红色": "red",
 	"蓝色": "blue",
 	"绿色": "green",
-	"黄色": "yellow"
+	"黄色": "yellow",
+	"转移": "transfer"
 }

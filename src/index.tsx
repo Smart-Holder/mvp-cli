@@ -43,7 +43,7 @@ import * as moment from 'moment';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message, 'onUncaughtException');
-	if (e.data.message == 'ResizeObserver loop limit exceeded') return false;
+	if (['ResizeObserver loop limit exceeded','Script error.'].includes(e.data.message)) return false;
 	// errnoHandles(e.data);
 	handle(e.data);
 });
@@ -77,7 +77,7 @@ class MyRoot<P> extends Root<P> {
 	}
 
 	renderTools() {
-		return <Tools nav={this._nav} />;
+		return !['/nft_detail'].includes(location.pathname) && <Tools nav={this._nav} />;
 	}
 }
 

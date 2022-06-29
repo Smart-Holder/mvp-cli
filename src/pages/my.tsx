@@ -20,6 +20,7 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/my.scss';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 class My extends NavPage {
@@ -38,7 +39,8 @@ class My extends NavPage {
 		bindDeviceTipVisible: false,
 		carouselIndex: 0,
 		dsq_id: 0,
-		alert_id: {}
+		alert_id: {},
+		page:1
 	};
 
 
@@ -66,8 +68,9 @@ class My extends NavPage {
 	}
 
 	// 获取nft列表
-	async getNFTList(owner: string, isWithdraw?: boolean) {
+	async getNFTList(owner: string, curPage?: number) {
 		this.setState({ loading: true })
+		// let nftList: INftItem[] = await models.nft.methods.getNFTByOwnerPage({ owner, curPage: curPage || 1,pageSize:10 });
 		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
 
 		nftList = setNftActionLoading(nftList, "nftDisabledTime");
@@ -158,7 +161,7 @@ class My extends NavPage {
 	private async _transferToDevice(device_address: string, nft: NFT, isWithdraw?: boolean) {
 		const { t } = this;
 		const from = this.state.from;
-		const getNFTList = this.getNFTList.bind(this, from, isWithdraw);
+		const getNFTList = this.getNFTList.bind(this, from);
 
 		let btnText = t('我知道了');
 
@@ -223,7 +226,13 @@ class My extends NavPage {
 	}
 
 
-
+	// 触底加载
+	async loadMoreData() {
+		console.log('loadmore');
+		let { page, from} = this.state;
+		this.setState({ page: page + 1 });
+		this.getNFTList(from, page + 1);
+	}
 
 
 	render() {
@@ -244,9 +253,24 @@ class My extends NavPage {
 					}}
 					initialPage={0}
 				>
-					<div className="list_box">
+					{/* <div className="list_box"> */}
+					<div id="scrollableDiv" style={{
+						height: '100%',
+						overflow: 'auto',
+						marginTop: '.1rem'
+					}} >
+					<InfiniteScroll
+						dataLength={nftList1.length}
+						next={this.loadMoreData.bind(this)}
+						hasMore={true}
+						loader={'666'}
+						endMessage={"It is all, nothing more 🤐"}
+						scrollableTarget="scrollableDiv"
+					>
 						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showChain={chain.chain !== item.chain} key={item.id} transferBtnClick={this.transferBtnClick.bind(this, item)} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						</InfiniteScroll>
 					</div>
+					{/* </div> */}
 					<div className="list_box">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
 							{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备")}
