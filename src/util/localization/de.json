@@ -142,5 +142,6 @@
 	"蓝色": "blue",
 	"绿色": "green",
 	"黄色": "yellow",
-	"转移": "transfer"
+	"转移": "transfer",
+	"已经是全部数据了": "That's all the data"
 }

@@ -11,9 +11,11 @@ import { withTranslation } from 'react-i18next';
 import { clearShadow, timeMultiImage } from "../../models/device";
 import { alert } from '../../util/tools'
 import chain from "../../chain";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { LoadingOutlined, CloseOutlined } from '@ant-design/icons';
 import './index.scss';
+import { getNFTByOwnerPage } from "../../models/nft";
 
 const intervalTimeConfig = [
 	{ label: "5s", value: 5 },
@@ -61,7 +63,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselConfig: {} as device.DeviceScreenSave,
 		tabs: this.tabsConfig,
 		isShadow: false,
-		selectedArrList: [] as NFT[]
+		selectedArrList: [] as NFT[],
+		hasMore: true,
+		page: 1
 	}
 
 	componentWillMount() {
@@ -79,7 +83,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { address } = this.props.page.params;
 		let mode = newMode || this.props.mode;
 		let carouselConfig = await modeConfig[mode].get_screen_save(address);
-		let nftList = await this.getNftList(undefined, carouselConfig.type as CarouselType);
+		let nftList = await this.getNftList(undefined);
 		let newselectedList = await this.getNewSelectedList(nftList);
 		// const { time } = await getScreenSettings(address);
 		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
@@ -88,37 +92,30 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 
 	// 获取nft列表
-	async getNftList(list?: NFT[], type?: CarouselType) {
+	async getNftList(list?: NFT[], curPage?: number) {
+		curPage = curPage || 1;
 		let { mode } = this.props;
 		let { address } = this.props.page.params;
+		let { nft } = this.state;
 		let owner = await chain.getDefaultAccount();
 		let ownerAddress = mode == 'shadow' ? owner : address;
-		let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
+		// let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
+		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({ owner: ownerAddress, curPage, pageSize: 16 });
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
 		let videoNftList: NFT[] = [];
 		let imgNftList: NFT[] = [];
+		let newNftList = [...nft, ...nftList];
 
-		// nftList.forEach(item => {
-		// 	let { image, imageOrigin, media, mediaOrigin } = item;
-		// 	if (image && imageOrigin && media && mediaOrigin) {
-		// 		item.media.match(/\.mp4/i) ? videoNftList.push(item) : imgNftList.push(item)
-		// 	}
-		// });
-
-		(nftList).forEach((item, index) => {
+		(newNftList).forEach((item, index) => {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
 
-		let newState: any = { leftNftList, rightNftList, nft: nftList };
+		let newState: any = { leftNftList, rightNftList, nft: newNftList };
+		if (!nftList.length || newNftList.length < 16) newState.hasMore = false;
 
-		// type !== CarouselType.video && (newState.nft = nftList);
-		// nftList[1].image = nftList[1].image + '123';
-		// nftList[1].imageOrigin = '';
-		// nftList[2].image = '';
-		// nftList[2].imageOrigin = '';
 		this.setState({ ...newState });
-		return nftList;
+		return newNftList;
 	}
 
 	// 标签tab切换事件
@@ -255,13 +252,24 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		});
 	}
 
+	async loadMoreData() {
+		let { page } = this.state;
+		this.setState({ page: page + 1 }, () => {
+			this.getNftList(undefined, page + 1);
+		});
+	}
+
 	render() {
-		const { isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs, selectedArrList } = this.state;
+		const { isShowAbbreviation, leftNftList, rightNftList, tabsCurrent, carouselIntervalTime, tabs, selectedArrList, nft, hasMore } = this.state;
 		const { mode } = this.props;
 		let t = this.t;
+
+		let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
+
+		let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
+
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
 			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>{t('取消投屏')}</Button>}
-
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
 				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
 					initialPage={0}
@@ -270,18 +278,28 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					renderTab={(item) => <div onClick={() => {
 					}} className={`carousel_tabs`}>{item.title}</div>}
 				>
-					<div className="item_page" >
+					<div className="item_page" id={'scrollableDiv'}>
 						{/* {this.props.mode == 'shadow' && <NoticeBar marqueeProps={{ loop: true, text: t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备") }} mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />} />} */}
+						<InfiniteScroll
+							scrollThreshold={0.1}
+							key={"scrollableDiv"}
+							dataLength={nft.length}
+							next={this.loadMoreData.bind(this)}
+							hasMore={hasMore}
+							loader={loader}
+							endMessage={nft.length ? endMessage : ''}
+							scrollableTarget={"scrollableDiv"}
+						>
+							{leftNftList.length ? <div className="nft_list">
+								<div className="left_box">
+									{leftNftList.map((item, index) => this.rendNftItem(item, index))}
+								</div>
 
-						{leftNftList.length ? <div className="nft_list">
-							<div className="left_box">
-								{leftNftList.map((item, index) => this.rendNftItem(item, index))}
-							</div>
-
-							<div className="right_box">
-								{rightNftList.map((item, index) => this.rendNftItem(item, index))}
-							</div>
-						</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
+								<div className="right_box">
+									{rightNftList.map((item, index) => this.rendNftItem(item, index))}
+								</div>
+							</div> : <Empty style={{ marginTop: '2rem', color: '#ccc' }} image={require('../../assets/empty_img.png')} description={t("暂无NFT，请添加NFT至钱包")} />}
+						</InfiniteScroll>
 					</div>
 					<div className="item_page2" >
 						<div className="time_box">

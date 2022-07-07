@@ -7,7 +7,22 @@
 		margin-top: 0.3rem;
 		overflow: auto;
 	}
-
+	#scrollableDiv,
+	#scrollableDiv2 {
+		height: 100%;
+		overflow: auto;
+		margin-top: 0.1rem;
+		padding-bottom: 1.2rem;
+		.bottom_box {
+			width: 100%;
+			text-align: center;
+			padding-bottom: 0.2rem;
+			color: #ccc;
+			span {
+				font-size: 0.4rem;
+			}
+		}
+	}
 	.device_info_page_title {
 		font-size: 0.36rem;
 		margin-bottom: 0.24rem;
@@ -15,8 +30,20 @@
 		margin-left: 0.02rem;
 	}
 
-	.am-tabs {
-		height: auto;
+	.am-tabs-pane-wrap {
+		height: 100%;
+		overflow: hidden;
+	}
+
+	// .am-tabs {
+	// 	height: auto;
+	// }
+
+	.back_top {
+		position: absolute;
+		bottom: 10%;
+		right: 5%;
+		z-index: 999;
 	}
 
 	.device_card_box {
@@ -27,6 +54,7 @@
 	}
 	.list_box {
 		margin-top: 0.1rem;
+		height: 100%;
 	}
 
 	.nft_box {

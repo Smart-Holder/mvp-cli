@@ -6,20 +6,22 @@ import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
-import { CloseOutlined } from '@ant-design/icons';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-// import { alert } from 'webpkit/lib/dialog';
 import { alert } from '../util/tools';
-import { ArrayToObj, getDistinguishNftList, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
+import { ArrayToObj, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
 import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { Tabs, NoticeBar } from 'antd-mobile';
 
-import '../css/device_info.scss';
 import { Empty } from 'antd';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
+import { getNFTByOwnerPage, IGetNFTByOwnerPageProps } from '../models/nft';
+import '../css/device_info.scss';
+
 const tp = require('tp-js-sdk');
 
 
@@ -33,12 +35,17 @@ class DeviceInfo extends NavPage<Device> {
 		deviceInfo: this.params,
 		loading: false,
 		alert_id: {},
-		dsq_id: 0
+		dsq_id: 0,
+		isRefresh: false,
+		showToTop: false,
+		page: 1,
+		hasMore: true
 	}
 
 	async triggerLoad() {
 		let owner = this.params.address;
 		this.getNFTList(owner);
+		window.addEventListener('scroll', this.handleScroll.bind(this), true);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
 			if (data.ownerBase === owner) {
@@ -49,8 +56,20 @@ class DeviceInfo extends NavPage<Device> {
 		}, this);
 	}
 
+	handleScroll(e: any) {
+		if (e.target.className !== 'device_info_page_content') return false;
+		let { showToTop } = this.state;
+		if (e.target.scrollTop > 200) {
+			!showToTop && this.setState({ showToTop: true });
+		} else {
+			showToTop && this.setState({ showToTop: false });
+		}
+	}
+
 
 	triggerRemove() {
+		window.removeEventListener('scroll', this.handleScroll.bind(this), true);
+
 		clearInterval(this.state.dsq_id);
 		models.msg.removeEventListenerWithScope(this);
 	}
@@ -59,17 +78,29 @@ class DeviceInfo extends NavPage<Device> {
 	async getDeviceInfo(address: string) {
 		let device = await devices();
 		let deviceObj = ArrayToObj(device, 'address');
-		this.setState({ deviceInfo: deviceObj[address] })
+		this.setState({ deviceInfo: deviceObj[address] });
 	}
 
 	// 获取nft列表
-	async getNFTList(owner: string) {
-		let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
-		nftList = setNftActionLoading(nftList, "drawNftDisabledTime");
-		let { nftList1, nftList2 } = getDistinguishNftList(nftList);
+	async getNFTList(owner: string, curPage?: number, tabIndex?: number) {
+		curPage = curPage || 1;
+		// let nftList: INftItem[] = await models.nft.methods.getNFTByOwner({ owner });
+		let params: IGetNFTByOwnerPageProps = { owner, curPage: curPage || 1, pageSize: 10 };
+		let { nftList1, nftList2 } = this.state;
+		let preNftList = !tabIndex ? nftList1 : nftList2;
+
+		params[tabIndex ? 'other_chain' : 'chain'] = chain.chain;
+
+		let nftList: INftItem[] = await getNFTByOwnerPage(params);
+
+		let newNftList = [...preNftList, ...nftList];
+
+		newNftList = setNftActionLoading(newNftList, "drawNftDisabledTime");
+		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
+		let list_key = tabIndex ? 'nftList2' : 'nftList1';
 
 		clearInterval(this.state.dsq_id);
-		this.setState({ nftList, nftList1, nftList2 });
+		this.setState({ [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
 		this.getDeviceInfo(owner);
 	}
 
@@ -186,18 +217,40 @@ class DeviceInfo extends NavPage<Device> {
 		})
 	}
 
+	// 触底加载
+	async loadMoreData() {
+		console.log('loadmore');
+		let { tabIndex, page } = this.state;
+		this.getNFTList(this.params.address, page + 1, tabIndex);
+	}
+
+	// 切换tab
+	async tabOnChange(item: any, index: number) {
+		this.setState({ tabIndex: index, nftList1: [], nftList2: [], page: 1 }, () => {
+			this.getNFTList(this.params.address, 1, index);
+		});
+	}
+
 	render() {
-		let { nftList, loading, nftList1, nftList2, tabIndex } = this.state;
+		let { loading, nftList1, nftList2, tabIndex, showToTop, hasMore } = this.state;
 		const { t } = this;
 
+		let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
+		let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
+
+
 		return <div className="device_info_page">
-			{/* <div className="device_info_page_title">设备列表</div> */}
 			<Header title={t("设备列表")} page={this} />
 
+			{showToTop && <div className="back_top" onClick={() => {
+				let ele = document.querySelector('.device_info_page_content');
+				let scrollEle = document.querySelector('.list_box');
+				if (!ele || !scrollEle) return false;
+				ele.scrollTop = 0;
+				scrollEle.scrollTop = 0;
+			}}> <img style={{ width: '.62rem' }} src={require('../assets/back_top.png')} /> </div>}
 
 			<div className="device_info_page_content">
-
-
 				<div className="device_card_box">
 					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
@@ -206,19 +259,39 @@ class DeviceInfo extends NavPage<Device> {
 				<Tabs tabBarUnderlineStyle={{ backgroundColor: '#1677ff', color: '#1677ff', borderColor: '#1677ff' }} tabBarBackgroundColor={'#f5f5f5'} tabBarActiveTextColor={'#1677ff'} tabs={
 					[{ title: this.t('本网络NFT'), index: 0 }, { title: this.t('其他网络NFT'), index: 1 }]
 				}
-					onChange={(item, index) => {
-						this.setState({ tabIndex: index })
-					}}
+					onChange={this.tabOnChange.bind(this)}
 					initialPage={0}
 				>
-					<div className="list_box">
-						{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+					<div className="list_box" id="scrollableDiv">
+						<InfiniteScroll
+							key={"scrollableDiv"}
+							dataLength={nftList1.length}
+							next={this.loadMoreData.bind(this)}
+							hasMore={hasMore}
+							loader={loader}
+							endMessage={nftList1.length ? endMessage : ''}
+							scrollableTarget={"scrollableDiv"}
+						>
+							{(nftList1.length) ? nftList1.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						</InfiniteScroll>
+						{/* {tabIndex == 0 && <NftList page={this} owner={this.params.address} isRefresh={isRefresh} listType='chain' />} */}
 					</div>
-					<div className="list_box">
+					<div className="list_box" id="scrollableDiv2">
 						{tabIndex === 1 && <NoticeBar mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />}>
 							{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT取出到钱包，需切换到该NFT所在的网络后才可以将该NFT取出到钱包")}
 						</NoticeBar>}
-						{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						<InfiniteScroll
+							key={"scrollableDiv2"}
+							dataLength={nftList2.length}
+							next={this.loadMoreData.bind(this)}
+							hasMore={hasMore}
+							loader={loader}
+							endMessage={nftList2.length ? endMessage : ''}
+							scrollableTarget={"scrollableDiv2"}
+						>
+							{(nftList2.length) ? nftList2.map(item => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />) : (!loading && <Empty style={{ marginTop: '30%' }} image={require('../assets/empty_img.png')} description={t('暂无NFT，请添加NFT至钱包')} />)}
+						</InfiniteScroll>
+						{/* {tabIndex == 1 && <NftList page={this} owner={this.params.address} isRefresh={isRefresh} id="scrollableDiv" listType='other_chain' />} */}
 					</div>
 				</Tabs>
 
