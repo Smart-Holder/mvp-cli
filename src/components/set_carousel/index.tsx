@@ -74,7 +74,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
 		if (props.mode != this.props.mode || props.time != this.props.time) {
-			this.getCarouselConfig(props.mode, props.time);
+			this.setState({ nft: [], page: 1, hasMore: true }, () => {
+				this.getCarouselConfig(props.mode, props.time);
+			});
 		}
 	}
 
@@ -103,8 +105,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({ owner: ownerAddress, curPage, pageSize: 16 });
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
-		let videoNftList: NFT[] = [];
-		let imgNftList: NFT[] = [];
+
 		let newNftList = [...nft, ...nftList];
 
 		(newNftList).forEach((item, index) => {
@@ -112,7 +113,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		});
 
 		let newState: any = { leftNftList, rightNftList, nft: newNftList };
-		if (!nftList.length || newNftList.length < 16) newState.hasMore = false;
+		if (!nftList.length || nftList.length < 16) newState.hasMore = false;
 
 		this.setState({ ...newState });
 		return newNftList;
@@ -138,7 +139,6 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		carouselConfig.data.forEach(item => {
 			if (nftListObj[item.id]) newselectedList[item.id] = item as NFT;;
 		});
-		// console.log(Object.values(newselectedList), 'Object.values(newselectedList)', carouselConfig.data);
 		return Object.values(newselectedList);
 	}
 
@@ -278,17 +278,17 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					renderTab={(item) => <div onClick={() => {
 					}} className={`carousel_tabs`}>{item.title}</div>}
 				>
-					<div className="item_page" id={'scrollableDiv'}>
+					<div className="item_page" id={'scroll_carousel'}>
 						{/* {this.props.mode == 'shadow' && <NoticeBar marqueeProps={{ loop: true, text: t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备") }} mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />} />} */}
 						<InfiniteScroll
 							scrollThreshold={0.1}
-							key={"scrollableDiv"}
+							key={"scroll_carousel"}
 							dataLength={nft.length}
 							next={this.loadMoreData.bind(this)}
 							hasMore={hasMore}
 							loader={loader}
 							endMessage={nft.length ? endMessage : ''}
-							scrollableTarget={"scrollableDiv"}
+							scrollableTarget={"scroll_carousel"}
 						>
 							{leftNftList.length ? <div className="nft_list">
 								<div className="left_box">

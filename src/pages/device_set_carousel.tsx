@@ -123,9 +123,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 		return <div className='setting_card_box'>
 			<div>{t("调整音量")}</div>
 			<Slider max={5} min={0} value={volume} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.audio)} />
-
-			{/* <div style={{ marginTop: '.2rem' }}>{t("调整亮度")}</div> */}
-			{/* <Slider max={5} min={0} defaultValue={light} dots step={1} onChange={this.sliderChange.bind(this, SettingDarwerType.brightness)} /> */}
 		</div>
 	}
 
@@ -252,7 +249,6 @@ class DeviceSetCarousel extends NavPage<Device> {
 			}
 			this.setState({ settingModalVisible: false, hasNewAction: false });
 		}
-		// currcallDeviceIndex === SettingDarwerType.wifi ? await screenWiFi(address) : hasNew ? await checkVersion(address) : this.setState({ settingModalVisible: false });
 	}
 
 	// 检查版本更新
@@ -291,18 +287,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
 					return ele;
 				})}
-				{/* <Menu
-					defaultSelectedKeys={['1']}
-					defaultOpenKeys={['sub1']}
-					mode="inline"
-					// theme="dark"
-				>
-					<Menu.SubMenu icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} title='屏幕设置'>
-						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
-						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
-						<Menu.Item title="投屏" icon={<IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={'icon-pingmu'} />} />
-					</Menu.SubMenu>
-				</Menu> */}
+
 			</Drawer>
 
 			<Modal
