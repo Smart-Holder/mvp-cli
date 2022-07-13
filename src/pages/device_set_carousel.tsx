@@ -14,8 +14,9 @@ import { checkVersion, getScreenSettings, screenColor, screenLight, screenOrient
 import Loading from '../../deps/webpkit/lib/loading';
 
 import '../css/device_set_carousel.scss';
+import PreviewNftCard from '../components/preview_nftlist';
 
-enum SettingDarwerType { audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
+enum SettingDarwerType { preview = 'preview', audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
 
 const settingDarwerConfig = [
 	{ label: "音量", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
@@ -28,6 +29,7 @@ const settingDarwerConfig = [
 	{ label: "NFT信息", value: SettingDarwerType.detail, icon: 'icon-luojituxianshiyincang' },
 	{ label: "轮播图", value: SettingDarwerType.image, icon: 'icon-lunbotu' },
 	{ label: "投屏", value: SettingDarwerType.shadow, icon: 'icon-pingmu' },
+	{ label: "预览设置", value: SettingDarwerType.preview, icon: 'icon-yulan' }
 ];
 
 export enum CarouselType { single = 'single', multi = 'multi', video = 'video' };
@@ -80,20 +82,26 @@ class DeviceSetCarousel extends NavPage<Device> {
 		autoLightLoading: false,
 		autoLight: false,
 		time: 10,
-		versionCode: 0
+		versionCode: 0,
+		screenWidth: 1920,
+		screenHeight: 1080
 	}
 
 	async triggerLoad() {
+		await this.getDeviceInfo();
+	}
+
+	async getDeviceInfo() {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time, versionCode }) => {
+		getScreenSettings(address).then(({ switchDetails, volume, light, color, switchAutoLight, time, versionCode, screenWidth, screenHeight }) => {
 			// if (light > 100) light = 100;
 			light = parseInt(String(light / 51));
 			volume = volume / 3;
-			console.log(versionCode);
+			console.log(screenWidth, screenHeight);
 
-			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode });
+			this.setState({ switchValue: switchDetails, volume, light, currColor: color, autoLight: switchAutoLight, time, versionCode, screenWidth, screenHeight });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -145,6 +153,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 			<Button ghost type="primary" onClick={async () => {
 				confirm(t('调整屏幕角度将重启设备，确定调整屏幕角度吗？'), async (isok) => {
 					isok && await screenOrientation(this.params.address, currRotation);
+					// isok && await this.getDeviceInfo();
 				})
 			}}>{t('确认')}</Button>
 		</div>
@@ -203,8 +212,14 @@ class DeviceSetCarousel extends NavPage<Device> {
 		</div>
 	}
 
+	// 渲染nft列表
+	previewNftCard() {
+		const { screenWidth, screenHeight } = this.state;
+		return <PreviewNftCard page={this} screenWidth={screenWidth} screenHeight={screenHeight} />;
+	}
+
 	getCurrPageContent() {
-		const { currSettingIndex, time } = this.state;
+		const { currSettingIndex, time, screenWidth, screenHeight } = this.state;
 		switch (currSettingIndex) {
 			case SettingDarwerType.audio:
 				return this.audioCard();
@@ -216,11 +231,15 @@ class DeviceSetCarousel extends NavPage<Device> {
 				return this.colorCard();
 			case SettingDarwerType.detail:
 				return this.nftDetailCard();
+
+			case SettingDarwerType.preview:
+				return this.previewNftCard();
+
 			case SettingDarwerType.shadow:
-				return <SetCarousel time={time} page={this} mode='shadow' />;
+				return <SetCarousel time={time} page={this} mode='shadow' address={this.params.address} screenWidth={screenWidth} screenHeight={screenHeight} />;
 
 			default:
-				return <SetCarousel time={time} page={this} mode='normal' />;
+				return <SetCarousel time={time} page={this} mode='normal' address={this.params.address} screenWidth={screenWidth} screenHeight={screenHeight} />;
 		}
 	}
 

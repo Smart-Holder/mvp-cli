@@ -8,6 +8,7 @@ import sdk from '../sdk';
 import chain from '../chain';
 import { t } from 'i18next';
 import { alert } from '../util/tools';
+import { ICropConfig } from '../pages/cropper_nft';
 
 export { Device };
 
@@ -16,6 +17,10 @@ export interface DeviceScreenSave {
 	time: number;
 	type: 'single' | 'multi' | 'video' | 'nft';
 	data: NFT[];
+}
+
+interface ITransformImageProps extends NFT {
+	imageTransform?: ICropConfig;
 }
 
 export function devices(): Promise<Device[]> {
@@ -161,6 +166,10 @@ export function shadowNFTs(target: string, data: { token: string, tokenId: strin
 	return call(target, 'shadowNFTs', { type: 'nft', time: 0, data });
 }
 
+export function transformImage(target: string, data: ITransformImageProps) {
+	return call(target, 'transformImage', { ...data });
+}
+
 
 export function sign(target: string, msg: IBuffer): Promise<{ signer: string, sign: string }[]> {
 	return call(target, 'sign', { message: msg.toString('base64') });
@@ -203,28 +212,12 @@ export async function set_screen_save(address: string,
 	}
 
 	ss.data = ss.data.filter(e => nfts_set.has(e.token + e.tokenId));
-
-	if (!ss.data.length && nfts.length) {
-		// ss.data = [nfts[0]];
-	}
-
 	ss.type = type;
 	await storage.set('__device_set_screen_save_cur_' + address, type);
 	await storage.set('__device_set_screen_save_' + address + type, ss);
 
 	if (pss.data) {
-		// if (type == 'single') {
-		// 	somes.assert(pss.data.length, 'Bad param for call displaySingleImage()');
-		// 	!isNotCall && await displaySingleImage(address, pss.data[0].token, pss.data[0].tokenId);
-		// } else if (type == 'multi') {
-		!isNotCall && await displayNFTs(address, pss.data);
-		// } else {
-		// 	somes.assert(pss.data.length, 'Bad param for call displayVideo()');
-		// 	await displayVideo(address, pss.data[0].token, pss.data[0].tokenId);
-		// }
-	} else if (pss.time) {
-		// if (type == 'multi')
-		// 	await displayMultiImage(address, ss.time, ss.data);
+		await displayNFTs(address, pss.data);
 	}
 }
 
@@ -237,39 +230,13 @@ export async function get_shadow_screen_save(address: string, _type?: 'single' |
 
 export async function set_shadow_screen_save(address: string,
 	pss: Partial<DeviceScreenSave>, type: 'single' | 'multi' | 'video' | 'nft', isNotCall?: boolean) {
-	var ss = Object.assign(await get_shadow_screen_save(address, type), pss);
-	var nfts = await sdk.nft.methods.getNFTByOwner({ owner: address }) as NFT[];
-	var nfts_set = new Set();
-
-	for (var nft of nfts) {
-		nfts_set.add(nft.token + nft.tokenId);
-	}
-
-	ss.data = ss.data.filter(e => nfts_set.has(e.token + e.tokenId));
-
-	ss.type = type;
-	// await storage.set('__device_set_shadow_screen_save_cur_' + address, type);
-	// await storage.set('__device_set_shadow_screen_save_' + address + type, ss);
 
 	if (pss.data) {
-		let nft = { ...pss.data[0], shadow: 1 };
-		// if (type == 'single') {
-		// 	somes.assert(pss.data.length, 'Bad param for call shadowSingleImage()');
-		// 	!isNotCall && await shadowSingleImage(address, pss.data[0].token, pss.data[0].tokenId, nft);
-		// } else if (type == 'multi') {
+
 		let nftList = pss.data.map(item => {
 			return { ...item, shadow: 1 };
 		});
+		console.log(nftList, 'nftList');
 		await shadowNFTs(address, nftList);
-		// } else {
-		// 	somes.assert(pss.data.length, 'Bad param for call shadowVideo()');
-		// 	await shadowVideo(address, pss.data[0].token, pss.data[0].tokenId, nft);
-		// }
-	} else if (pss.time) {
-		// let nftList = ss.data.map(item => {
-		// 	return { ...item, shadow: 1 };
-		// });
-		// if (type == 'multi')
-		// 	await shadowMultiImage(address, ss.time, nftList);
 	}
 }

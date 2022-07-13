@@ -5,6 +5,10 @@ export default [
 		page: () => import('./pages/nft'),
 	},
 	{
+		path: '/cropper_nft',
+		page: () => import('./pages/cropper_nft'),
+	},
+	{
 		path: '/device',
 		page: () => import('./pages/nft'),
 	},

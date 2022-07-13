@@ -20,8 +20,6 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/my.scss';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { getNFTByOwnerPage, IGetNFTByOwnerPageProps } from '../models/nft';
 import NftList from '../components/nft_list';
 
 

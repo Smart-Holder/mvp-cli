@@ -8,14 +8,15 @@ import { ArrayToObj, showModal } from "../../util/tools";
 import Button from '../../components/button';
 import { Empty, Image } from 'antd';
 import { withTranslation } from 'react-i18next';
-import { clearShadow, timeMultiImage } from "../../models/device";
+import { clearShadow, getScreenSettings, timeMultiImage } from "../../models/device";
 import { alert } from '../../util/tools'
 import chain from "../../chain";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Loading from '../../../deps/webpkit/lib/loading';
 
 import { LoadingOutlined, CloseOutlined } from '@ant-design/icons';
-import './index.scss';
 import { getNFTByOwnerPage } from "../../models/nft";
+import './index.scss';
 
 const intervalTimeConfig = [
 	{ label: "5s", value: 5 },
@@ -42,6 +43,9 @@ interface ISetCarouselProps {
 	page: NavPage<device.Device>,
 	mode: 'normal' | 'shadow',
 	time?: number,
+	screenWidth?: number;
+	screenHeight?: number;
+	address?: string;
 }
 
 class SetCarousel extends Component<ISetCarouselProps> {
@@ -65,7 +69,9 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		isShadow: false,
 		selectedArrList: [] as NFT[],
 		hasMore: true,
-		page: 1
+		page: 1,
+		screenWidth: 1920,
+		screenHeight: 1080
 	}
 
 	componentWillMount() {
@@ -82,19 +88,25 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 	// 获取本地轮播图配置
 	async getCarouselConfig(newMode?: 'normal' | 'shadow', newTime?: number) {
-		let { address } = this.props.page.params;
-		let mode = newMode || this.props.mode;
-		let carouselConfig = await modeConfig[mode].get_screen_save(address);
-		let nftList = await this.getNftList(undefined);
-		let newselectedList = await this.getNewSelectedList(nftList);
-		// const { time } = await getScreenSettings(address);
-		let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
-		this.setState({ carouselConfig, radioValue: carouselConfig.type, selectedArrList: newselectedList, carouselIntervalTime: newTime || this.props.time, isShowAbbreviation: false, isShadow });
+		let l = await Loading.show(this.t('正在加载屏幕设置'));
+		try {
+			let { address } = this.props.page.params;
+			let mode = newMode || this.props.mode;
+			let carouselConfig = await modeConfig[mode].get_screen_save(address);
+			const { screenWidth, screenHeight, time } = await getScreenSettings(address);
+			let nftList = await this.getNftList(undefined, 0, screenWidth, screenHeight);
+			let newselectedList = await this.getNewSelectedList(nftList);
+			l.close();
+			let isShadow = Boolean(localStorage.getItem('isShadow') == '1');
+			this.setState({ screenWidth, screenHeight, carouselConfig, radioValue: carouselConfig.type, selectedArrList: newselectedList, carouselIntervalTime: time, isShowAbbreviation: false, isShadow });
+		} catch (error: any) {
+			l.close();
+		}
 	}
 
 
 	// 获取nft列表
-	async getNftList(list?: NFT[], curPage?: number) {
+	async getNftList(list?: NFT[], curPage?: number, screenWidth?: number, screenHeight?: number) {
 		curPage = curPage || 1;
 		let { mode } = this.props;
 		let { address } = this.props.page.params;
