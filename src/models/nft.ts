@@ -8,6 +8,8 @@ export interface IGetNFTByOwnerPageProps {
 	pageSize: number;
 	chain?: number;
 	other_chain?: number;
+	screenHeight?: number;
+	screenWidth?: number;
 }
 
 export function getNFTByOwnerPage(props: IGetNFTByOwnerPageProps): Promise<NFT[]> {

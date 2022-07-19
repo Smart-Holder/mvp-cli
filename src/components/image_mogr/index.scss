@@ -1,0 +1,15 @@
+.ant-image {
+	width: 100%;
+
+	// min-height: 1.5rem;
+	.ant-image-placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.loading_icon {
+			font-size: 0.7rem;
+			color: #1677ff;
+		}
+	}
+}

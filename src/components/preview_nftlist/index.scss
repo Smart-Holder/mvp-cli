@@ -1,4 +1,22 @@
 .pre_nftlist_page {
+	#preview_scroll_box {
+		height: 100%;
+		overflow: auto;
+		margin-top: 0.1rem;
+		padding-bottom: 1.2rem;
+
+		.bottom_box {
+			width: 100%;
+			text-align: center;
+			padding-bottom: 0.2rem;
+			color: #ccc;
+
+			span {
+				font-size: 0.4rem;
+			}
+		}
+	}
+
 	.list_loading {
 		position: absolute;
 		left: 50%;
@@ -7,19 +25,23 @@
 		font-size: 0.8rem;
 		color: #1677ff;
 	}
+
 	.item_page {
 		padding-top: 0.2rem;
 	}
+
 	.nft_list {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
 		overflow: auto;
 		flex: 1;
+
 		.left_box,
 		.right_box {
 			width: 47.5%;
 		}
+
 		.nft_item {
 			// width: 48%;
 			border: 1px solid rgb(237, 237, 237);
@@ -27,11 +49,14 @@
 			border-radius: 0.16rem;
 			overflow: hidden;
 			position: relative;
+			min-height: 1.5rem;
+
 			img,
 			video {
 				object-fit: contain;
 				width: 100%;
 			}
+
 			video {
 				border-radius: 0.16rem;
 			}
