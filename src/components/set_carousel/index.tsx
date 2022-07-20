@@ -293,7 +293,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					<div className="item_page" id={'scroll_carousel'}>
 						{/* {this.props.mode == 'shadow' && <NoticeBar marqueeProps={{ loop: true, text: t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备") }} mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />} />} */}
 						<InfiniteScroll
-							scrollThreshold={0.1}
+							// scrollThreshold={0.1}
 							key={"scroll_carousel"}
 							dataLength={nft.length}
 							next={this.loadMoreData.bind(this)}

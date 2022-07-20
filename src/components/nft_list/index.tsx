@@ -68,7 +68,7 @@ class NftList extends Component<INftListItemProps> {
 		}, this);
 	}
 
-	triggerRemove() {
+	componentWillUnmount() {
 		console.log('清除clearInterval' + this.state.dsq_id);
 		clearInterval(this.state.dsq_id);
 		models.msg.removeEventListenerWithScope(this.props.page);
@@ -148,7 +148,7 @@ class NftList extends Component<INftListItemProps> {
 		var l = await Loading.show(isWithdraw ? t('正在取出到您的钱包中,请勿操作') : t('正在存入到您的设备中,请勿操作'));
 		try {
 			if (device?.address) {
-				this.setState({ visible: false, nft: newNftList, ...getDistinguishNftList(newNftList) });
+				this.setState({ visible: false, nftList: newNftList, ...getDistinguishNftList(newNftList) });
 				await this._transferToDevice(device.address, nftInfo, isWithdraw);
 			}
 
@@ -157,7 +157,7 @@ class NftList extends Component<INftListItemProps> {
 			newNftItem[disabledKey] = false;
 
 			newNftList[index] = newNftItem;
-			this.setState({ nft: newNftList, ...getDistinguishNftList(newNftList) });
+			this.setState({ nftList: newNftList, ...getDistinguishNftList(newNftList) });
 			let errorText = error;
 			let errorCode = error.msg || error.message || error.description;
 			if (error?.code == 4001 || error.errno == -30000) { errorText = t('已取消存储操作') }

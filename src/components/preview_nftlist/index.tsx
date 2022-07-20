@@ -127,6 +127,7 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 						loader={loader}
 						endMessage={nftList.length ? endMessage : ''}
 						scrollableTarget={"preview_scroll_box"}
+						scrollThreshold={'300px'}
 					>
 						{nftList.length ? <div className="nft_list">
 							<div className="left_box">
