@@ -1,11 +1,11 @@
-.index {
-}
+.index {}
+
 .index .list {
 	padding-top: 0.42rem;
 	padding-bottom: 0.42rem;
 }
 
-.index .list > div {
+.index .list>div {
 	width: 6.48rem;
 	height: 2.32rem;
 	border: solid 0.01rem #979797;
@@ -15,11 +15,11 @@
 	box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.06);
 }
 
-.index .list > div:active {
+.index .list>div:active {
 	opacity: 0.5;
 }
 
-.index .list > div.a {
+.index .list>div.a {
 	font-size: 0.32rem;
 	color: #2a2a30;
 	text-align: center;
@@ -30,12 +30,12 @@
 	background-position: 2rem center;
 }
 
-.index .list > div.b {
+.index .list>div.b {
 	background-color: #f9f9f9;
 	box-shadow: 0 0.07rem 0.04rem rgba(0, 0, 0, 0.1);
 }
 
-.index .list > div.b .more {
+.index .list>div.b .more {
 	height: 0.15rem;
 	line-height: 0.15rem;
 	color: #2a2a30;
@@ -46,14 +46,16 @@
 	text-align: right;
 	margin-bottom: 0.1rem;
 }
-.index .list > div.b .txt1 {
+
+.index .list>div.b .txt1 {
 	font-size: 0.28rem;
 	line-height: 0.45rem;
 	margin: 0rem 0.32rem 0 0.32rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.index .list > div.b .txt2 {
+
+.index .list>div.b .txt2 {
 	font-size: 0.24rem;
 	line-height: 0.33rem;
 	margin: 0rem 0.32rem 0 0.32rem;
@@ -67,6 +69,7 @@
 	background-image: url("../assets/home_bg2.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
+
 	.page_title {
 		// font-size: ;
 		z-index: 107;
@@ -77,7 +80,7 @@
 		font-family: PingFangSC-Regular;
 		white-space: nowrap;
 		text-align: left;
-		margin-top: 1.25rem;
+		margin-top: 2.4rem;
 		margin-left: 0.24rem;
 		position: fixed;
 		z-index: 2;
@@ -88,23 +91,27 @@
 	padding: 0.24rem;
 	background-color: rgba(254, 255, 254, 0.639);
 	border-radius: 0.32rem;
-	margin-top: 2.12rem;
+	margin-top: 3.37rem;
 	z-index: 9;
 	position: relative;
+
 	.list_title {
-		font-size: 0.36rem;
+		font-size: 0.32rem;
+		font-weight: 500;
 		color: #333;
 		margin-bottom: 0.24rem;
 	}
+
 	.bind_device_btn {
-		padding: 0.49rem 0;
+		padding: 0.46rem 0;
 		border-radius: 0.16rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		background-color: rgba(245, 245, 245, 0.502);
 		margin-bottom: 0.4rem;
-		font-size: 0.32rem;
+		font-size: 0.3rem;
+
 		.add_icon {
 			width: 0.36rem;
 			margin-right: 0.08rem;
@@ -116,4 +123,3 @@
 		padding: 0.6rem 0;
 	}
 }
-

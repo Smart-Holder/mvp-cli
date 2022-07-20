@@ -1,38 +1,58 @@
+@import '../../css/color.scss';
+
 .device_item {
 	// padding-top: 0.2rem;
 	position: relative;
-	margin-bottom: 0.2rem;
+	margin-bottom: 0.29rem;
+
 	.device_desc_box {
 		border: 1px solid #eeeeee;
-		padding: 0.24rem;
+		padding: 0.3rem;
 		border-radius: 0.16rem;
 		background-color: #fefffe;
 	}
-	.right_arrow {
-		width: 0.36rem;
-		position: absolute;
-		right: 0.24rem;
-		top: 0.2rem;
+
+	.desc_box {
+		display: flex;
 	}
+
+	.arrow_box {
+		// padding-right: .3rem;
+		align-items: center;
+		display: flex;
+	}
+
+	.right_arrow {
+		width: 0.3rem;
+		// position: absolute;
+		// right: 0.24rem;
+		// top: 0.2rem;
+	}
+
 	.top_part {
 		display: flex;
+		flex: 80%;
+
 		.right_box {
-			margin-left: 0.18rem;
+			margin-left: 0.23rem;
 			// overflow: hidden;
 		}
+
 		.sn_title,
 		.address_title {
 			margin-top: 0.04rem;
-			font-size: 0.32rem;
+			font-size: 0.28rem;
 			font-weight: 500;
 		}
+
 		.sn,
 		.address {
-			font-size: 0.28rem;
+			font-size: 0.24rem;
 			white-space: nowrap;
 			// overflow: hidden;
 			text-overflow: ellipsis;
 			word-break: break-all;
+			color: $baseGary;
 		}
 
 		.sn_box {
@@ -42,7 +62,9 @@
 		.left_box {
 			img {
 				height: 100%;
-				width: 1.68rem;
+				width: 1.15rem;
+				height: 1.66rem;
+
 				object-fit: contain;
 			}
 		}
@@ -55,14 +77,16 @@
 		padding-right: 0.01rem;
 		background-color: #fafafa;
 		border-radius: 0.08rem;
-		color: #0061f9;
+		color: $baseBule;
 		align-items: center;
 		font-weight: 500;
+
 		.nft_title {
-			font-size: 0.32rem;
+			font-size: 0.28rem;
 		}
+
 		.nft_price {
-			font-size: 0.44rem;
+			font-size: 0.28rem;
 		}
 	}
 
@@ -83,6 +107,7 @@
 		.unbind_btn {
 			color: #1677ff;
 		}
+
 		.setting_btn {
 			color: #fafafa;
 			min-width: 1.6rem;

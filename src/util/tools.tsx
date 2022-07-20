@@ -42,11 +42,11 @@ class Tab extends ViewController<{ nav: () => Nav }> {
 		return (
 			<div className="_tools" >
 				<div className="btn" onClick={this.m_click_1}>
-					{(current === 0 && location.pathname.startsWith("/device")) ? <IconFont type="icon-shouyexuanzhong" /> : <IconFont type="icon-shouye" />}
+					{(current === 0 && location.pathname.startsWith("/device")) ? <img src={require('../assets/tab1_selected.png')} /> : <img src={require('../assets/tab1.png')} />}
 					<div className={`txt ${(current === 0 && location.pathname.startsWith("/device")) && 'active'}`}>{t("首页")}</div>
 				</div>
 				<div className="btn" onClick={this.m_click_2}>
-					{(current === 1 || location.pathname.startsWith("/my")) ? <IconFont type="icon-wodexuanzhong" /> : <IconFont type="icon-wode" />}
+					{(current === 1 || location.pathname.startsWith("/my")) ? <img src={require('../assets/tab2_selected.png')} /> : <img src={require('../assets/tab2.png')} />}
 					<div className={`txt ${(current === 1 || location.pathname.startsWith("/my")) && 'active'}`}>{t("我的")}</div>
 				</div>
 			</div>
