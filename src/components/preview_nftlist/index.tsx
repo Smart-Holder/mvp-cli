@@ -10,7 +10,7 @@ import ImageMogr from "../image_mogr";
 import { LoadingOutlined } from '@ant-design/icons';
 import chain from "../../chain";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getNFTByOwnerPage } from "../../models/nft";
+import { getNFTByOwnerPage, getNFTByOwner } from "../../models/nft";
 
 // previewNftCard
 interface IPreviewNftCardProps {
@@ -50,7 +50,8 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 		let ownerAddress = !mode ? owner : address;
 		let { curPage, nftList: preNftList } = this.state;
 		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({
-			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 16
+			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 16,
+			address: this.props.page.params.address
 		});
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
