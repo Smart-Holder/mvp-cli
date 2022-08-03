@@ -1,4 +1,4 @@
-@import '../../css/color.scss';
+@import "../../css/color.scss";
 
 .device_item {
 	// padding-top: 0.2rem;
@@ -17,16 +17,12 @@
 	}
 
 	.arrow_box {
-		// padding-right: .3rem;
 		align-items: center;
 		display: flex;
 	}
 
 	.right_arrow {
 		width: 0.3rem;
-		// position: absolute;
-		// right: 0.24rem;
-		// top: 0.2rem;
 	}
 
 	.top_part {
@@ -34,20 +30,22 @@
 		flex: 80%;
 
 		.right_box {
-			margin-left: 0.23rem;
+			margin-left: 0.24rem;
 			// overflow: hidden;
 		}
 
 		.sn_title,
 		.address_title {
-			margin-top: 0.04rem;
 			font-size: 0.28rem;
+			line-height: 0.28rem;
 			font-weight: 500;
+			margin-bottom: 0.15rem;
 		}
 
 		.sn,
 		.address {
 			font-size: 0.24rem;
+			line-height: 0.24rem;
 			white-space: nowrap;
 			// overflow: hidden;
 			text-overflow: ellipsis;
@@ -73,45 +71,63 @@
 	.bottom_part {
 		display: flex;
 		justify-content: space-between;
-		padding: 0.14rem;
-		padding-right: 0.01rem;
+		padding: 0.22rem 0.31rem;
+		// padding-right: 0.01rem;
 		background-color: #fafafa;
 		border-radius: 0.08rem;
 		color: $baseBule;
 		align-items: center;
 		font-weight: 500;
-
-		.nft_title {
-			font-size: 0.28rem;
-		}
-
-		.nft_price {
-			font-size: 0.28rem;
-		}
+		font-size: 0.28rem;
+		line-height: 0.3rem;
+		margin-top: 0.2rem;
 	}
 
 	.action_btn_box {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
 		// background-color: #fefffe;
 		margin-top: 0.24rem;
 
 		.ant-btn {
-			border-color: #1677ff;
-			font-size: 0.32rem;
+			font-size: 0.24rem;
+			line-height: 0.24rem;
 			height: auto;
 			border-radius: 0.08rem;
-			padding: 4px 0.5rem;
 		}
 
 		.unbind_btn {
-			color: #1677ff;
+			color: #fff;
+			border-color: #fff;
+			margin-right: 0.13rem;
+			padding: 0.19rem 0.43rem;
 		}
 
 		.setting_btn {
 			color: #fafafa;
 			min-width: 1.6rem;
-			padding: 4px 0.75rem;
+			padding: 0.19rem 0.66rem;
+		}
+	}
+}
+
+.device_info_box {
+	background-color: #383950;
+	margin: 0;
+
+	.device_desc_box {
+		background-color: #383950;
+		border: 0;
+		padding: 0;
+
+		.sn_title,
+		.address_title {
+			color: #fff;
+		}
+
+		.bottom_part {
+			background-color: #77799e;
+			color: #fff;
 		}
 	}
 }

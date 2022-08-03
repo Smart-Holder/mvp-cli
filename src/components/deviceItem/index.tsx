@@ -41,9 +41,9 @@ export const DeviceItem = (props: IDeviceItemProps) => {
 
 	}
 
-	return <div className="device_item" onClick={onClick && onClick}>
+	return <div className={`device_item  ${showActionBtn && 'device_info_box'}`} onClick={onClick && onClick}>
 		{/* {showArrow && <img className="right_arrow" src={require("../../assets/right_arrow.png")} alt=">" />} */}
-		<div className="device_desc_box">
+		<div className={`device_desc_box`}>
 			<div className="desc_box">
 				<div className="top_part">
 					<div className="left_box">

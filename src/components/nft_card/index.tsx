@@ -42,12 +42,12 @@ const NftCard = (props: INftCardProps) => {
 
 				<div className="nft_address_box">
 					<div className="nft_address_title">Address</div>
-					<div className="nft_address textNoWrap">{getSubStr(nft.token, 18)}</div>
+					<div className="nft_address textNoWrap">{getSubStr(nft.token, 19)}</div>
 				</div>
 
 				<div className="nft_address_box">
 					<div className="nft_hash_title">Hash</div>
-					<div className="nft_hash textNoWrap">{getSubStr(nft.tokenId, 18)}</div>
+					<div className="nft_hash textNoWrap">{getSubStr(nft.tokenId, 19)}</div>
 				</div>
 
 				{showChain && <div className="nft_hash_box">
@@ -60,7 +60,7 @@ const NftCard = (props: INftCardProps) => {
 
 		{!showChain && <div className={`action_btn_box ${showTransferBtn && 'btn_list'}`}>
 			{showTransferBtn && <Button loading={transfer_btn_disabled} disabled={btn_disabled || transfer_btn_disabled} type="primary" ghost={true} onClick={transferBtnClick}>{t('转移NFT')}</Button>}
-			<Button loading={btn_disabled} disabled={transfer_btn_disabled || btn_disabled} type="primary" ghost={true} onClick={btnClick}>{btn_disabled ? btnLoadingText : btnText}</Button>
+			<Button loading={btn_disabled} disabled={transfer_btn_disabled || btn_disabled} onClick={btnClick}>{btn_disabled ? btnLoadingText : btnText}</Button>
 		</div>}
 	</div>;
 }

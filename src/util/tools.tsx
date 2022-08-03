@@ -231,6 +231,7 @@ export enum unitChainIdLabel {
 	UNKNOWN = 0, // UNKNOWN
 	ETHEREUM = 1, // ETHEREUM
 	MATIC = 137, // MATIC
+	METIS = 588, // MATIC
 	KLAYTN = 8217, // KLAYTN
 	XDAI = 100, // XDAI
 	BSC = 56, // BSC

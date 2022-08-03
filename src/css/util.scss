@@ -1,4 +1,4 @@
-@import './color.scss';
+@import "./color.scss";
 
 body {
 	font-family: sans-serif, STHeiti, Microsoft YaHei, Helvetica, Arial;
@@ -9,8 +9,8 @@ body {
 	background: none;
 }
 
-._main>div {
-	padding-bottom: 1.35rem;
+._main > div {
+	padding-bottom: 1.09rem;
 }
 
 ._main ._title {
@@ -20,7 +20,25 @@ body {
 
 ._main .title_box {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
+	font-size: 0.32rem;
+	color: #fff;
+	position: relative;
+
+	.back_icon {
+		color: #fff;
+		width: 0.35rem;
+		object-fit: contain;
+		position: absolute;
+		top: 50%;
+		transform: translate(0, -50%);
+		left: 0;
+	}
+
+	.anticon {
+		position: absolute;
+		right: 0;
+	}
 }
 
 ._main ._title ._b:after {
@@ -31,7 +49,7 @@ body {
 	// display: none;
 	position: relative;
 	// height: auto;
-	padding: 0.56rem 0.32rem 0;
+	padding: 0.46rem 0.3rem 0;
 	background-color: transparent;
 	// background-color: pink;
 	// overflow: hidden;
@@ -45,10 +63,7 @@ body {
 	font-weight: 500;
 	display: flex;
 	align-items: baseline;
-	// align-items: center;
 }
-
-._mini_app ._title {}
 
 .g_loading {
 	justify-content: none;
@@ -65,7 +80,7 @@ body {
 	text-align: center;
 }
 
-._mini_app ._title ._b>div:first-child {
+._mini_app ._title ._b > div:first-child {
 	display: none;
 	position: static;
 	width: auto;
@@ -73,11 +88,11 @@ body {
 	margin-bottom: 0.05rem;
 }
 
-._mini_app>div {
+._mini_app > div {
 	padding-top: 0;
 }
 
-._main ._title ._b>div:before {
+._main ._title ._b > div:before {
 	font-size: 0.4rem;
 	line-height: normal;
 }
@@ -119,8 +134,8 @@ body {
 ._tools {
 	position: fixed;
 	// height: 1.35rem;
-	padding-top: .16rem;
-	padding-bottom: .09rem;
+	padding-top: 0.16rem;
+	padding-bottom: 0.09rem;
 	width: 100%;
 	bottom: 0;
 	left: 0;
@@ -145,7 +160,7 @@ body {
 		// flex-wrap: wrap;
 		text-align: center;
 
-		>div {
+		> div {
 			display: inline-block;
 		}
 
@@ -190,9 +205,6 @@ body {
 }
 
 // .dialog .btns > div,
-.dialog .btns .ok {
-	color: #1677ff;
-}
 
 .transferToDeviceTipBox {
 	color: #333;
@@ -214,8 +226,13 @@ body {
 	}
 }
 
+.dialog .btns > div {
+	font-size: 0.3rem;
+}
+
 .dialog .default {
-	border-radius: 0.16rem;
+	border-radius: 0.12rem;
+	color: $baseBlack;
 
 	.tip_box {
 		position: relative;
@@ -230,6 +247,9 @@ body {
 	}
 
 	.a {
+		color: $baseBlack;
+		font-weight: 500;
+
 		.anticon {
 			position: absolute;
 			right: 0.2rem;
@@ -237,6 +257,16 @@ body {
 			// font-size: 0.3rem;
 			color: #888;
 		}
+	}
+
+	.b {
+		color: $baseBlack;
+		font-size: 0.28rem;
+	}
+
+	.ok {
+		font-size: 0.3rem;
+		color: $baseBtnColor;
 	}
 }
 

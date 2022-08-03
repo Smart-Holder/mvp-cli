@@ -93,7 +93,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			let { address } = this.props.page.params;
 			let mode = newMode || this.props.mode;
 			let carouselConfig = await modeConfig[mode].get_screen_save(address);
-			const { screenWidth, screenHeight, time } = await getScreenSettings(address);
+			let screenWidth = 1920;
+			let screenHeight = 1080;
+			let time = 10;
+			// const { screenWidth, screenHeight, time } = await getScreenSettings(address);
 			let nftList = await this.getNftList(undefined, 0, screenWidth, screenHeight);
 			let newselectedList = await this.getNewSelectedList(nftList);
 			l.close();
@@ -160,7 +163,8 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{/* {nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />} */}
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image className="nft_image" preview={false} placeholder={<LoadingOutlined className="loading_icon" /> || <img src={require("../../assets/img_loading.jpg")} />} src={nft.image || nft.imageOrigin} alt="" fallback={require("../../assets/img_error.jpg")} />}
-			<div className={`select_btn ${ids.includes(nft.id) && 'select_btn_active'}`} />
+			{/* <div className={`select_btn ${ids.includes(nft.id) && 'select_btn_active'}`} /> */}
+			<img className={`select_img ${ids.includes(nft.id) && 'select_img_active'}`} src={require(`../../assets/${ids.includes(nft.id) ? 'selected' : 'select'}.png`)} />
 		</div>
 	}
 
@@ -280,10 +284,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 		let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
 
-		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '2.4rem' } : {}}>
+		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '1.4rem' } : {}}>
 			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>{t('取消投屏')}</Button>}
 			<div className="set_carousel_card" style={tabsCurrent ? { height: 'auto' } : {}} >
-				<Tabs tabBarActiveTextColor={'#1677ff'} tabBarUnderlineStyle={{ width: "10%", marginLeft: ".95rem" }} tabs={tabs}
+				<Tabs tabBarBackgroundColor={"transparent"} tabBarUnderlineStyle={{ border: 0, width: "40%", marginLeft: ".24rem", height: '3px', background: 'linear-gradient(90deg, #4881FA, #6ED6F5)', borderRadius: '3px' }} tabs={tabs}
 					initialPage={0}
 					page={tabsCurrent}
 					onChange={this.onTabsChange.bind(this)}
@@ -322,12 +326,12 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			</div>
 
 			{Boolean(tabsCurrent === 1) && <div className="item_page2_action">
-				<Button className="ant-btn-background-ghost" type="primary" onClick={() => this.props.page.popPage()}>{t('取消')}</Button>
-				<Button type="primary" onClick={this.saveCarouselIntervalTime.bind(this)}>{t('保存')}</Button>
+				<Button className='save_time_btn' type="primary" onClick={this.saveCarouselIntervalTime.bind(this)}>{t('保存')}</Button>
+				<Button className="cancel_btn" type="primary" onClick={() => this.props.page.popPage()}>{t('取消')}</Button>
 			</div>}
 
 
-			{isShowAbbreviation && <div className="bottom_modal_box">
+			{/* {isShowAbbreviation && <div className="bottom_modal_box">
 				<div className="top_part">
 					<Button className="ant-btn-background-ghost" type="primary" size="small" onClick={() => this.setState({ isShowAbbreviation: false })}>{t('取消')}</Button>
 					<Button type="primary" size="small" onClick={this.saveCarousel.bind(this)}>{t('确定')} ( {selectedArrList.length} )</Button>
@@ -338,11 +342,14 @@ class SetCarousel extends Component<ISetCarouselProps> {
 							<div className="close_btn">
 								<img onClick={this.nftItemClick.bind(this, item)} src={require('../../assets/close.png')} alt="x" />
 							</div>
-							{/* <img className="nft_img" src={item.image || item.imageOrigin} alt="" /> */}
 							<Image className="selected_nft_item_image nft_img" preview={false} placeholder={<LoadingOutlined className="loading_icon" /> || <img src={require("../../assets/img_loading.jpg")} />} src={item.image || item.imageOrigin} alt="" fallback={require("../../assets/img_error.jpg")} />
 						</div>
 					})}
 				</div>
+			</div>} */}
+
+			{isShowAbbreviation && <div className="bottom_confirm_box">
+				<Button className='confirm_btn' onClick={this.saveCarousel.bind(this)}>{t('确定')}</Button>
 			</div>}
 		</div>
 	}
