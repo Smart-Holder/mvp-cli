@@ -2,7 +2,7 @@
 import { React, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
-import { ChainType, NFT } from '../models';
+import { NFT } from '../models';
 import { DefaultOptions, DialogIn, show } from '../../deps/webpkit/lib/dialog';
 import { CloseOutlined } from '@ant-design/icons';
 import { withTranslation } from 'react-i18next';
@@ -208,6 +208,7 @@ export const unitLabel: { [key: string]: any } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 	5555: "BSN_TEST",
+	588: "METIS",
 }
 
 export const unitLabelProd: { [key: string]: any } = {
@@ -225,9 +226,29 @@ export const unitLabelProd: { [key: string]: any } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 	5555: "BSN",
+	588: "METIS",
 }
 
 export enum unitChainIdLabel {
+	UNKNOWN = 0, // UNKNOWN
+	ETHEREUM = 1, // ETHEREUM
+	MATIC = 137, // MATIC
+	METIS = 588, // METIS
+	KLAYTN = 8217, // KLAYTN
+	XDAI = 100, // XDAI
+	BSC = 56, // BSC
+	FLOW = -2, // FLOW
+	LOCAL = -1, // LOCAL
+	ROPSTEN = 3, // ROPSTEN
+	RINKEBY = 4, // RINKEBY
+	MUMBAI = 80001, // MUMBAI
+	BAOBAB = 1001, // BAOBAB
+	BSC_TESTNET = 97, // BSC_TESTNET
+	GOERLI = 5, // GOERLI
+	HCETH = 64, // hard-chain ETHEREUM
+	BSN = 5555,
+}
+export enum ChainType {
 	UNKNOWN = 0, // UNKNOWN
 	ETHEREUM = 1, // ETHEREUM
 	MATIC = 137, // MATIC
@@ -243,9 +264,10 @@ export enum unitChainIdLabel {
 	BSC_TESTNET = 97, // BSC_TESTNET
 	GOERLI = 5, // GOERLI
 	HCETH = 64, // hard-chain ETHEREUM
+	// BSN_TEST = 5555,
 	BSN = 5555,
+	METIS = 588,
 }
-
 
 export class ChainTraits {
 	UNKNOWN = [ChainType.UNKNOWN, 0, 'UNK'];
@@ -265,6 +287,7 @@ export class ChainTraits {
 	HCETH = [ChainType.HCETH, 18, 'ETH'];
 	// BSN_TEST = [ChainType.BSN_TEST, 18, 'BSN_TEST'];
 	BSN = [ChainType.BSN, 18, 'BSN'];
+	METIS = [ChainType.METIS, 18, 'METIS'];
 }
 
 export const chainTraits = new ChainTraits();

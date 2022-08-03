@@ -1,7 +1,7 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import Header from '../util/header';
-import index, { AssetOrder,  NFT } from '../models';
+import index, { AssetOrder, NFT } from '../models';
 import { Image, Spin } from 'antd';
 import { Tabs } from 'antd-mobile';
 
@@ -33,14 +33,14 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 		this.setState({ nft: data[0], nftOrderList: orderData, loading: false });
 	}
 
-	 getUri(item: NFT) {
+	getUri(item: NFT) {
 		let uri = item.uri
 		if (!uri) return '';
 		if (uri.indexOf('0x{id}')) {
 			uri = uri.replace('0x{id}', item.tokenId);
 		}
 		return uri;
-		
+
 	}
 
 	render() {
@@ -86,7 +86,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 
 										<div className="nft_address_box">
 											<div className="nft_hash_title">{t("元数据")}</div>
-											<div style={{ wordWrap: 'break-word', wordBreak: 'break-all'}} className="nft_hash" onClick={() => {
+											<div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }} className="nft_hash" onClick={() => {
 												copyText(nft.uri);
 											}}>{this.getUri(nft)}</div>
 										</div>
@@ -97,7 +97,8 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 											let { fromAddres, value, toAddress, date } = item;
 											// let 
 											// let unit = (chainTraits as any)[unitLabel[String(nft?.chain)]][2];
-											let unit = (chainTraits as any)[unitChainIdLabel[Number(nft?.chain)]][2];
+											let unitObj = (chainTraits as any)[unitChainIdLabel[Number(nft?.chain)]];
+											let unit = unitObj ? unitObj[2] : nft.chain;
 											return <div className="order_item" key={item.id}>
 
 												<div className='order_row'>
