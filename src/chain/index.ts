@@ -32,8 +32,9 @@ import somes from 'somes';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
-import { ChainType } from '../models/def';
+// import { ChainType } from '../models/def';
 import { genPrivateKey, getAddress } from '../../deps/webpkit/deps/crypto-tx/account';
+import { ChainType } from '../util/tools';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
@@ -82,7 +83,7 @@ export class Web3IMPL extends Web3Z {
 	}
 
 	async getDefaultAccount() {
-		
+
 		if (!this._defaultAccount) {
 			// debugger
 			var mask = this.metaMask;
@@ -103,9 +104,9 @@ export class Web3IMPL extends Web3Z {
 			this._defaultAccount = (from || '') as string;
 			this.setDefaultAccount(this._defaultAccount);
 
-			var id = isNftdetailPage ? 4: await this.web3.eth.getChainId();
+			var id = isNftdetailPage ? 4 : await this.web3.eth.getChainId();
 
-			this._chain = ChainType[id] ? id: ChainType.UNKNOWN;
+			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
 	}
