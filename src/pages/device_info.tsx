@@ -8,7 +8,7 @@ import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-import { alert } from '../util/tools';
+import { alert, getDistinguishNftList } from '../util/tools';
 import { ArrayToObj, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
@@ -121,12 +121,10 @@ class DeviceInfo extends NavPage<Device> {
 		let newNftItem = { ...nftList[index] };
 
 		let disabledKey: IDisabledKey = toAddress ? 'transfer_btn_disabled' : 'btn_disabled';
-		console.log(nftList, 'nftList', newNftItem, 'newNftItem');
-
 		try {
 			newNftItem[disabledKey] = true;
 			newNftList[index] = newNftItem;
-			this.setState({ nftList: newNftList });
+			this.setState({ nftList: newNftList, ...getDistinguishNftList(newNftList) });
 
 			let to = toAddress || await chain.getDefaultAccount();
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
@@ -152,13 +150,13 @@ class DeviceInfo extends NavPage<Device> {
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
 			// window.alert((Object.keys(error)));
-
+			removeNftDisabledTimeItem(newNftItem, "nftDisabledTime");
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(t(errorText))}</div> });
 
 		} finally {
 			newNftList[index] = newNftItem;
-			this.setState({ nftList: newNftList });
+			this.setState({ nftList: newNftList, ...getDistinguishNftList(newNftList) });
 
 		}
 	}
