@@ -246,7 +246,6 @@ class NftList extends Component<INftListItemProps> {
 		let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
 
 		let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
-
 		return <div id={id || "scrollableDiv2"} className="scroll_box">
 			<InfiniteScroll
 				key={id || "scrollableDiv2"}
