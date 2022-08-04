@@ -93,7 +93,7 @@ class DeviceInfo extends NavPage<Device> {
 
 		let nftList: INftItem[] = await getNFTByOwnerPage(params);
 
-		let newNftList = [...preNftList, ...nftList];
+		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
 		newNftList = setNftActionLoading(newNftList, "drawNftDisabledTime");
 		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
