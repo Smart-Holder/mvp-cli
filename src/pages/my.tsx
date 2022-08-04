@@ -64,8 +64,8 @@ class My extends NavPage {
 			if (!data.ownerBase) {
 				console.log(e.data, "--------ws-------");
 				removeNftDisabledTimeItem(data, "nftDisabledTime");
-				// this.getNFTList(owner);
-				this.setState({ isRefresh: !this.state.isRefresh });
+				this.getNFTList(owner);
+				// this.setState({ isRefresh: !this.state.isRefresh });
 			}
 		}, this);
 

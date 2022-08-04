@@ -100,7 +100,7 @@ class DeviceInfo extends NavPage<Device> {
 		let list_key = tabIndex ? 'nftList2' : 'nftList1';
 
 		clearInterval(this.state.dsq_id);
-		this.setState({ [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
+		this.setState({ nftList, [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
 		this.getDeviceInfo(owner);
 	}
 
@@ -115,13 +115,13 @@ class DeviceInfo extends NavPage<Device> {
 		const { t } = this;
 		const getNFTList = this.getNFTList.bind(this, this.params.address)
 		const { nftList } = this.state;
-
 		let newNftList = [...nftList];
 
 		let index = nftList.findIndex((item) => item.tokenId === nft.tokenId);
 		let newNftItem = { ...nftList[index] };
 
 		let disabledKey: IDisabledKey = toAddress ? 'transfer_btn_disabled' : 'btn_disabled';
+		console.log(nftList, 'nftList', newNftItem, 'newNftItem');
 
 		try {
 			newNftItem[disabledKey] = true;
