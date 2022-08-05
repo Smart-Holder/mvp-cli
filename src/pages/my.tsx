@@ -96,8 +96,7 @@ class My extends NavPage {
 
 		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
-		newNftList = setNftActionLoading(newNftList, "drawNftDisabledTime");
-		console.log(newNftList, 'newNftList');
+		newNftList = setNftActionLoading(newNftList, "nftDisabledTime");
 
 		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
 		let list_key = tabIndex ? 'nftList2' : 'nftList1';
@@ -196,13 +195,12 @@ class My extends NavPage {
 		let showTip = () => show({
 			buttons: {
 				[btnText]: async () => {
-					// await getNFTList();
-					this.setState({ isRefresh: !isRefresh });
+					await getNFTList();
 					let dsq_id = setTimeout(async () => {
 						let { alert_id } = this.state;
 						(alert_id as any).close && (alert_id as any).close();
 						console.log(alert_id, dsq_id);
-						let l = await alert(t('数据正在运行中，请耐心等待...'), () => this.setState({ isRefresh: !isRefresh }));
+						let l = await alert(t('数据正在运行中，请耐心等待...'), () => getNFTList());
 						this.setState({ alert_id: l });
 					}, 20000);
 					this.setState({ dsq_id });

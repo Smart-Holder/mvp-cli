@@ -88,7 +88,7 @@ export const removeNftDisabledTimeItem = (nft: NFT, storageType: IDisabledType) 
 	let nftDisabledTime: INftDisabledTimeProps = nftDisabledTimeStr ? JSON.parse(nftDisabledTimeStr) : {};
 	let dsq_id = Number(localStorage.getItem(nft.tokenId));
 	delete nftDisabledTime[nft.tokenId];
-	console.log('删除nft操作时间', storageType, '清除定时器>', dsq_id);
+	console.log('删除nft操作时间', storageType, nftDisabledTime, '清除定时器>', dsq_id);
 	localStorage.setItem(storageType, JSON.stringify(nftDisabledTime));
 	localStorage.removeItem(nft.tokenId);
 	clearTimeout(dsq_id);
@@ -106,6 +106,7 @@ export const setNftActionLoading = (nftList: INftItem[], storageType: IDisabledT
 	let otherDisabledTime: INftDisabledTimeProps = otherDisabledTimeStr ? JSON.parse(otherDisabledTimeStr) : {};
 
 
+	// console.log(otherDisabledTime, 'otherDisabledTime', nftDisabledTime, storageType);
 
 	nftList.forEach(item => {
 		let nftDisabledTimeItem = nftDisabledTime[item.tokenId];
