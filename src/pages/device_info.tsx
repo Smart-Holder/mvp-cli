@@ -100,7 +100,7 @@ class DeviceInfo extends NavPage<Device> {
 		let list_key = tabIndex ? 'nftList2' : 'nftList1';
 
 		clearInterval(this.state.dsq_id);
-		this.setState({ nftList, [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
+		this.setState({ nftList: newNftList, [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
 		this.getDeviceInfo(owner);
 	}
 
