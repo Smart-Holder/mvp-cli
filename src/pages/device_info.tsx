@@ -150,7 +150,7 @@ class DeviceInfo extends NavPage<Device> {
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
 			// window.alert((Object.keys(error)));
-			removeNftDisabledTimeItem(newNftItem, "nftDisabledTime");
+			removeNftDisabledTimeItem(newNftItem, "drawNftDisabledTime");
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(t(errorText))}</div> });
 

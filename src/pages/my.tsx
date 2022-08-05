@@ -84,6 +84,7 @@ class My extends NavPage {
 		tabIndex = tabIndex || 0;
 
 		// this.setState({ isRefresh: !this.state.isRefresh });
+		this.setState({ loading: true });
 		let { nftList1, nftList2 } = this.state;
 		let preNftList = !tabIndex ? nftList1 : nftList2;
 		let pageSize = 10;
@@ -96,6 +97,8 @@ class My extends NavPage {
 		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
 		newNftList = setNftActionLoading(newNftList, "drawNftDisabledTime");
+		console.log(newNftList, 'newNftList');
+
 		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
 		let list_key = tabIndex ? 'nftList2' : 'nftList1';
 
