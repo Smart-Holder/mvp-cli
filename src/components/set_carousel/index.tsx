@@ -79,7 +79,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
-		if (props.mode != this.props.mode || props.time != this.props.time) {
+		if (props.mode != this.props.mode) {
 			this.setState({ nft: [], page: 1, hasMore: true }, () => {
 				this.getCarouselConfig(props.mode, props.time);
 			});
