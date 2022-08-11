@@ -227,14 +227,16 @@ export const unitLabelProd: { [key: string]: any } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 	5555: "BSN",
-	588: "METIS",
+	588: "METIS_TEST",
+	1088: "METIS",
 }
 
 export enum unitChainIdLabel {
 	UNKNOWN = 0, // UNKNOWN
 	ETHEREUM = 1, // ETHEREUM
 	MATIC = 137, // MATIC
-	METIS = 588, // METIS
+	METIS_TEST = 588, // METIS
+	METIS = 1088, // METIS
 	KLAYTN = 8217, // KLAYTN
 	XDAI = 100, // XDAI
 	BSC = 56, // BSC
@@ -267,7 +269,8 @@ export enum ChainType {
 	HCETH = 64, // hard-chain ETHEREUM
 	// BSN_TEST = 5555,
 	BSN = 5555,
-	METIS = 588,
+	METIS_TEST = 588,
+	METIS = 1088, // METIS
 }
 
 export class ChainTraits {
@@ -288,6 +291,7 @@ export class ChainTraits {
 	HCETH = [ChainType.HCETH, 18, 'ETH'];
 	// BSN_TEST = [ChainType.BSN_TEST, 18, 'BSN_TEST'];
 	BSN = [ChainType.BSN, 18, 'BSN'];
+	METIS_TEST = [ChainType.METIS_TEST, 18, 'METIS_TEST'];
 	METIS = [ChainType.METIS, 18, 'METIS'];
 }
 
