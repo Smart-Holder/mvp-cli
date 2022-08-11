@@ -32,7 +32,8 @@ import somes from 'somes';
 import { Web3Z } from 'web3z';
 import { TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
-import { ChainType } from '../models/def';
+import { ChainType } from '../util/tools';
+// import { ChainType } from '../models/def';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
@@ -95,7 +96,7 @@ export class Web3IMPL extends Web3Z {
 
 			var id = await this.web3.eth.getChainId();
 
-			this._chain = ChainType[id] ? id: ChainType.UNKNOWN;
+			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
 	}
