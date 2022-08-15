@@ -8,7 +8,8 @@ import { contracts } from '../../config';
 import * as device from '../models/device';
 import index, { encodeParameters } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
-import { ChainType, AssetType } from '../models/def';
+import { AssetType } from '../models/def';
+import { ChainType } from '../util/tools';
 
 var tx_sign = require('crypto-tx/sign');
 var crypto_tx = require('crypto-tx');
@@ -168,7 +169,7 @@ export default class ProxyAPI {
 }
 
 export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): any {
-	
+
 	somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 
 	if (type < 256) {
