@@ -10,7 +10,7 @@ import ImageMogr from "../image_mogr";
 import { LoadingOutlined } from '@ant-design/icons';
 import chain from "../../chain";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getNFTByOwnerPage } from "../../models/nft";
+import { getNFTByOwnerPage, getNFTByOwner } from "../../models/nft";
 
 // previewNftCard
 interface IPreviewNftCardProps {
@@ -50,7 +50,8 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 		let ownerAddress = !mode ? owner : address;
 		let { curPage, nftList: preNftList } = this.state;
 		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({
-			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 16
+			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 16,
+			address: this.props.page.params.address
 		});
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
@@ -112,7 +113,7 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 
 		return <div className="setting_card_box pre_nftlist_page">
 
-			<Tabs animated={false} onChange={(e) => {
+			<Tabs tabBarBackgroundColor={"transparent"} tabBarUnderlineStyle={{ border: 0, height: '3px', background: 'linear-gradient(90deg, #4881FA, #6ED6F5)', borderRadius: '3px' }} animated={false} onChange={(e) => {
 				// this.setState({ tabIndex: e.index });
 				this.setState({ curPage: 1, nftList: [], rightNftList: [], leftNftList: [] }, () => {
 					this.getNftList(undefined, e.index);
@@ -127,6 +128,7 @@ class PreviewNftCard extends Component<IPreviewNftCardProps> {
 						loader={loader}
 						endMessage={nftList.length ? endMessage : ''}
 						scrollableTarget={"preview_scroll_box"}
+						scrollThreshold={'300px'}
 					>
 						{nftList.length ? <div className="nft_list">
 							<div className="left_box">

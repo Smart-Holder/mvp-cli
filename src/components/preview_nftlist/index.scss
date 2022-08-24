@@ -1,4 +1,7 @@
+@import "../../css/color.scss";
+
 .pre_nftlist_page {
+	background-color: $baseBlack;
 	#preview_scroll_box {
 		height: 100%;
 		overflow: auto;

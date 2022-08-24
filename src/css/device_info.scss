@@ -12,6 +12,9 @@
 	.am-tabs-tab-bar-wrap {
 		border-radius: 0.08rem;
 		overflow: hidden;
+		.am-tabs-default-bar-tab {
+			color: #fff;
+		}
 	}
 
 	#scrollableDiv,

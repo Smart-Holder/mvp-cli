@@ -10,8 +10,13 @@ export interface IGetNFTByOwnerPageProps {
 	other_chain?: number;
 	screenHeight?: number;
 	screenWidth?: number;
+	address?: string;
 }
 
 export function getNFTByOwnerPage(props: IGetNFTByOwnerPageProps): Promise<NFT[]> {
 	return sdk.nft.methods.getNFTByOwnerPage(props);
+}
+
+export function getNFTByOwner(props: IGetNFTByOwnerPageProps): Promise<NFT[]> {
+	return sdk.nft.methods.getNFTByOwner(props);
 }

@@ -79,7 +79,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 	}
 
 	componentWillReceiveProps(props: ISetCarouselProps) {
-		if (props.mode != this.props.mode || props.time != this.props.time) {
+		if (props.mode != this.props.mode) {
 			this.setState({ nft: [], page: 1, hasMore: true }, () => {
 				this.getCarouselConfig(props.mode, props.time);
 			});
@@ -93,10 +93,10 @@ class SetCarousel extends Component<ISetCarouselProps> {
 			let { address } = this.props.page.params;
 			let mode = newMode || this.props.mode;
 			let carouselConfig = await modeConfig[mode].get_screen_save(address);
-			let screenWidth = 1920;
-			let screenHeight = 1080;
-			let time = 10;
-			// const { screenWidth, screenHeight, time } = await getScreenSettings(address);
+			// let screenWidth = 1920;
+			// let screenHeight = 1080;
+			// let time = 10;
+			const { screenWidth, screenHeight, time } = await getScreenSettings(address);
 			let nftList = await this.getNftList(undefined, 0, screenWidth, screenHeight);
 			let newselectedList = await this.getNewSelectedList(nftList);
 			l.close();
@@ -297,7 +297,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 					<div className="item_page" id={'scroll_carousel'}>
 						{/* {this.props.mode == 'shadow' && <NoticeBar marqueeProps={{ loop: true, text: t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备") }} mode="closable" action={<CloseOutlined style={{ color: '#a1a1a1', }} />} />} */}
 						<InfiniteScroll
-							scrollThreshold={0.1}
+							// scrollThreshold={0.1}
 							key={"scroll_carousel"}
 							dataLength={nft.length}
 							next={this.loadMoreData.bind(this)}

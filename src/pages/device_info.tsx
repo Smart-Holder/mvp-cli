@@ -8,7 +8,7 @@ import somes from '../../deps/webpkit/deps/somes';
 import chain from '../chain';
 import nft_proxy, { proxyAddress } from '../chain/nftproxy';
 import Loading from 'webpkit/lib/loading';
-import { alert } from '../util/tools';
+import { alert, getDistinguishNftList } from '../util/tools';
 import { ArrayToObj, IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, showModal } from '../util/tools';
 import Header from '../util/header';
 import * as device from '../models/device';
@@ -93,14 +93,14 @@ class DeviceInfo extends NavPage<Device> {
 
 		let nftList: INftItem[] = await getNFTByOwnerPage(params);
 
-		let newNftList = [...preNftList, ...nftList];
+		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
 		newNftList = setNftActionLoading(newNftList, "drawNftDisabledTime");
 		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
 		let list_key = tabIndex ? 'nftList2' : 'nftList1';
 
 		clearInterval(this.state.dsq_id);
-		this.setState({ [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
+		this.setState({ nftList: newNftList, [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= 10) });
 		this.getDeviceInfo(owner);
 	}
 
@@ -115,18 +115,16 @@ class DeviceInfo extends NavPage<Device> {
 		const { t } = this;
 		const getNFTList = this.getNFTList.bind(this, this.params.address)
 		const { nftList } = this.state;
-
 		let newNftList = [...nftList];
 
 		let index = nftList.findIndex((item) => item.tokenId === nft.tokenId);
 		let newNftItem = { ...nftList[index] };
 
 		let disabledKey: IDisabledKey = toAddress ? 'transfer_btn_disabled' : 'btn_disabled';
-
 		try {
 			newNftItem[disabledKey] = true;
 			newNftList[index] = newNftItem;
-			this.setState({ nftList: newNftList });
+			this.setState({ nftList: newNftList, ...getDistinguishNftList(newNftList) });
 
 			let to = toAddress || await chain.getDefaultAccount();
 			setNftDisabledTime(nft, "drawNftDisabledTime", getNFTList);
@@ -152,13 +150,13 @@ class DeviceInfo extends NavPage<Device> {
 
 			if (error?.errno == 100400) errorText = '请切换至对应链的钱包';
 			// window.alert((Object.keys(error)));
-
+			removeNftDisabledTimeItem(newNftItem, "drawNftDisabledTime");
 			newNftItem[disabledKey] = false;
 			alert({ text: <div className="tip_box"><img className="tip_icon" src={require('../assets/error.jpg')} alt="" /> {String(t(errorText))}</div> });
 
 		} finally {
 			newNftList[index] = newNftItem;
-			this.setState({ nftList: newNftList });
+			this.setState({ nftList: newNftList, ...getDistinguishNftList(newNftList) });
 
 		}
 	}
@@ -256,7 +254,7 @@ class DeviceInfo extends NavPage<Device> {
 				</div>
 
 
-				<Tabs tabBarUnderlineStyle={{ backgroundColor: '#1677ff', color: '#1677ff', borderColor: '#1677ff' }} tabBarBackgroundColor={'#f5f5f5'} tabBarActiveTextColor={'#1677ff'} tabs={
+				<Tabs tabBarUnderlineStyle={{ border: 0, width: "30%", marginLeft: ".66rem", bottom: '15%', height: '3px', background: 'linear-gradient(90deg, #4881FA, #6ED6F5)', borderRadius: '3px' }} tabBarBackgroundColor={'#131425'} tabs={
 					[{ title: this.t('本网络NFT'), index: 0 }, { title: this.t('其他网络NFT'), index: 1 }]
 				}
 					onChange={this.tabOnChange.bind(this)}

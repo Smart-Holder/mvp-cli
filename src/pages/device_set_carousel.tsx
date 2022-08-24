@@ -88,7 +88,7 @@ class DeviceSetCarousel extends NavPage<Device> {
 	}
 
 	async triggerLoad() {
-		// await this.getDeviceInfo();
+		await this.getDeviceInfo();
 	}
 
 	async getDeviceInfo() {
