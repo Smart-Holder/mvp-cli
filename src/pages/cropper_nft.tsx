@@ -115,7 +115,8 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		isReady: false,
 		isInit: false,
 		screenWidth: 1920,
-		screenHeight: 1080
+		screenHeight: 1080,
+		preLoading: false
 	}
 
 	async getNftByScreen(screenWidth?: number, screenHeight?: number) {
@@ -534,7 +535,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let { testUrl, zoom, scaleType, nft, canvasWidth, canvasHeight, aspectRatio, loading, cropBoxMovable,
 			cropBoxResizable,
 			viewMode,
-			movable, zoom2, autoCropArea, isReady, radioVal } = this.state;
+			movable, zoom2, autoCropArea, isReady, radioVal, preLoading } = this.state;
 		let { screenWidth, screenHeight } = this.state;
 		let { t } = this;
 		return <div className="cropper_page">
@@ -608,7 +609,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 					</div>
 
 					<div className="action_box">
-						<Button disabled={!isReady} onClick={async () => {
+						<Button loading={preLoading} disabled={!isReady} onClick={async () => {
 							let cropper = this.cropper.current.cropper;
 							this.getImageTransform();
 							// console.log(this.params.address, { ...nft, imageTransform: imgPreConfig }, 'this.params.address, { ...nft, imageTransform: imgPreConfig }');
@@ -625,14 +626,19 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 							// 	alert(error.message);
 							// }
 							let that = this;
-							let croppedCanvas = cropper.getCroppedCanvas();
+							let croppedCanvas = cropper.getCroppedCanvas({ maxWidth: 1920 });
+							this.setState({ preLoading: true });
 							// let testUrl = croppedCanvas.toDataURL("image/png");
-							croppedCanvas.toBlob(function (e: any) {
+							// that.setState({ testUrl: testUrl, preLoading: false });
+
+							croppedCanvas.toBlob(function (e?: any) {
+								if (!e) return false;
 								let timestamp = Date.parse(new Date() + '');
 								e.name = timestamp + ".png";
 								let bUrl = URL.createObjectURL(e);
-								that.setState({ testUrl: bUrl });
-							}, 'image/png');
+								// console.log(bUrl, 'bUrl', e);
+								that.setState({ testUrl: bUrl, preLoading: false });
+							}, 'image/png', 0.5);
 							// console.log(testUrl, croppedCanvas);
 
 						}}>{t('预览效果')}</Button>
@@ -648,7 +654,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				</Button> */}
 
 						<Button disabled={!isReady} onClick={() => {
-							this.setState({ loading: true, isReady: false, testUrl: '' });
+							this.setState({ loading: true, isReady: false, testUrl: '', preLoading: false });
 							setTimeout(() => {
 								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal] });
 							}, 100);
