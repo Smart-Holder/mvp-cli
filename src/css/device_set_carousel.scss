@@ -1,6 +1,9 @@
 @import "./color.scss";
 
 .device_set_carousel_page {
+	.am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
+		display: none !important;
+	}
 	background-color: $baseBlack;
 
 	.device_set_carousel_page_content {

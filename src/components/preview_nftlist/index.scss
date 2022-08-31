@@ -2,6 +2,7 @@
 
 .pre_nftlist_page {
 	background-color: $baseBlack;
+
 	#preview_scroll_box {
 		height: 100%;
 		overflow: auto;
@@ -53,7 +54,7 @@
 			overflow: hidden;
 			position: relative;
 			min-height: 1.5rem;
-
+			line-height: 1.5rem;
 			img,
 			video {
 				object-fit: contain;

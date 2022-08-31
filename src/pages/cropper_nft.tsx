@@ -371,6 +371,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	}
 
 	getImageTransform() {
+
 		let cropper = this.cropper.current.cropper;
 		let containerData = cropper.getContainerData();
 		let canvasData = cropper.getCanvasData();
@@ -426,19 +427,18 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		targetWidth = targetWidth > canvasConfig[radioVal].width ? canvasConfig[radioVal].width : targetWidth;
 		targetHeight = targetHeight > canvasConfig[radioVal].height ? canvasConfig[radioVal].height : targetHeight;
 
-		console.log(
-			originWidth, 'originWidth',
-			originHeight, 'originHeight',
-			cropX, 'cropX',
-			cropY, 'cropY',
-			cropWidth, 'cropWidth',
-			cropHeight, 'cropHeight',
-			targetWidth, 'targetWidth',
-			targetHeight, 'targetHeight',
-			newScaleType, 'scaleType',
-			imgScale, "imgScale",
-			// imgScaleY, 'imgScaleY'
-		);
+		// console.log(
+		// 	originWidth, 'originWidth',
+		// 	originHeight, 'originHeight',
+		// 	cropX, 'cropX',
+		// 	cropY, 'cropY',
+		// 	cropWidth, 'cropWidth',
+		// 	cropHeight, 'cropHeight',
+		// 	targetWidth, 'targetWidth',
+		// 	targetHeight, 'targetHeight',
+		// 	newScaleType, 'scaleType',
+		// 	imgScale, "imgScale",
+		// );
 
 
 		let imgPreConfig: any = {
@@ -464,6 +464,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			}
 		}
 		return imgPreConfig;
+
 	}
 
 
@@ -578,6 +579,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 							zoomOnTouch={false}
 							zoomOnWheel={false}
 							movable={movable}
+							outputType="png"
 							// cropBoxResizable={false}
 							// wheelZoomRatio={.5}
 							// background={false}
@@ -622,7 +624,17 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 							// } catch (error: any) {
 							// 	alert(error.message);
 							// }
-							this.setState({ testUrl: cropper.getCroppedCanvas().toDataURL() });
+							let that = this;
+							let croppedCanvas = cropper.getCroppedCanvas();
+							// let testUrl = croppedCanvas.toDataURL("image/png");
+							croppedCanvas.toBlob(function (e: any) {
+								let timestamp = Date.parse(new Date() + '');
+								e.name = timestamp + ".png";
+								let bUrl = URL.createObjectURL(e);
+								that.setState({ testUrl: bUrl });
+							}, 'image/png');
+							// console.log(testUrl, croppedCanvas);
+
 						}}>{t('预览效果')}</Button>
 
 						{/* <Button onClick={() => {

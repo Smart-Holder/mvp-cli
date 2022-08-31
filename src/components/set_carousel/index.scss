@@ -4,6 +4,9 @@
 	height: 100%;
 	overflow: hidden;
 	transition: 0.3s all;
+	.am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
+		display: none !important;
+	}
 
 	#scroll_carousel {
 		height: 100%;
@@ -160,6 +163,7 @@
 			.nft_item {
 				.ant-image {
 					min-height: 1.5rem;
+					line-height: 1.5rem;
 				}
 
 				// width: 48%;
