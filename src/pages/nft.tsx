@@ -12,7 +12,7 @@ import IconFont from '../components/icon_font';
 import { withTranslation } from 'react-i18next';
 import { BindDeviceCarousel } from '../components/carousel';
 import '../css/index.scss';
-
+import * as packageJson from '../../package.json';
 const tp = require('tp-js-sdk');
 
 // const { t } = Translation(); //把使用方法结构
@@ -80,6 +80,7 @@ class DeviceList extends NavPage {
 		return (
 			<div className="index device_list_page">
 				{/* <Header title="我的NFT" page={this} /> */}
+				<div className="ver">{packageJson.version}</div>
 				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏品')}</div>
 				<div className="device_list">
 					<div className="list_title" >{t("全部设备")}</div>

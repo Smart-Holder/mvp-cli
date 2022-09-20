@@ -116,7 +116,8 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		isInit: false,
 		screenWidth: 1920,
 		screenHeight: 1080,
-		preLoading: false
+		preLoading: false,
+		cropper: undefined
 	}
 
 	async getNftByScreen(screenWidth?: number, screenHeight?: number) {
@@ -281,8 +282,8 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 
 	}
 
-	async radioChange(e: RadioChangeEvent) {
-		let val: number = e.target.value;
+	async radioChange(val: number) {
+		// let val: number = e.target.value;
 		let { scaleType } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, zoom: 0, zoom2: 10 });
 		let nft = await this.getNftByScreen(canvasConfig[val].width, canvasConfig[val].height);
@@ -374,6 +375,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	getImageTransform() {
 
 		let cropper = this.cropper.current.cropper;
+
 		let containerData = cropper.getContainerData();
 		let canvasData = cropper.getCanvasData();
 		let imageData = cropper.getImageData();
@@ -548,208 +550,138 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 						<div className="title">{t("选择方向")}</div>
 						<div className="body">
 							<div className="item_radio">
-								<Radio.Group name="radiogroup" value={radioVal} onChange={this.radioChange.bind(this)}>
+								<div className="select_radio_box">
+									<div className="radio_select_box">
+										<div className="radio_transverse" onClick={this.radioChange.bind(this, 0)}>
+											<div className="label">{t("选择横屏")}</div>
+											<div className={`value ${radioVal == 0 && 'active'}`}>
+												<div className={`image_box pre_box${0}`} style={{ height: '56%', width: '80%' }}>
+													<img src={nft.image || nft.imageOrigin} />
+												</div>
+											</div>
+										</div>
+										<div className="radio_vertical" onClick={this.radioChange.bind(this, 1)}>
+											<div className="label">{t("选择竖屏")}</div>
+
+											<div className={`value ${radioVal == 1 && 'active'}`}>
+												<div className={`image_box pre_box${1}`} style={{ height: '80%', width: '56%' }}>
+													<img src={nft.image || nft.imageOrigin} />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								{/* <Radio.Group name="radiogroup" value={radioVal} onChange={this.radioChange.bind(this)}>
 									<Radio value={0}>
-										<div className="route_box">
-											<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
+										<div className={`route_box pre_box${radioVal}`} style={{ height: '1rem', width: '2rem' }}>
+											<img src={nft.image || nft.imageOrigin} />
 										</div>
 									</Radio>
 									<Radio value={1}>
-										<div className="route_box" style={{ height: '1.5rem', width: '1rem' }}>
-											<img src="https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png" />
+										<div className={`route_box pre_box${radioVal}`} style={{ height: '1.5rem', width: '1rem' }}>
+											<img src={nft.image || nft.imageOrigin} />
 										</div>
 									</Radio>
-								</Radio.Group>
+								</Radio.Group> */}
 							</div>
 						</div>
 					</div>
-
-					<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
-						<div className="loading_text">loading...</div>
-						{/* <div className="cropper_box_bg" > */}
-						{!loading && <Cropper
-							src={nft.image || nft.imageOrigin}
-							ref={this.cropper}
-							style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}
-							viewMode={viewMode}
-							aspectRatio={aspectRatio}
-							// guides={false}
-							dragMode={'move'}
-							autoCropArea={autoCropArea}
-							// zoomable={false}
-							zoomOnTouch={false}
-							zoomOnWheel={false}
-							movable={movable}
-							outputType="png"
-							// cropBoxResizable={false}
-							// wheelZoomRatio={.5}
-							// background={false}
-							cropBoxMovable={cropBoxMovable}
-							cropBoxResizable={cropBoxResizable}
-							toggleDragModeOnDblclick={false}
-							responsive={false}
-							restore={false}
-							ready={() => {
-								let { scaleType, viewMode, nft, isInit } = this.state;
-								this.setState({ isReady: true });
-								!isInit && this.initCropBox((nft as any).imageTransform);
-								if (!viewMode && scaleType == 'zoom') {
-									this.maxCropBox();
-								}
-							}}
-						/>}
-						{/* </div> */}
-					</div>
-
-					<div className="radio_box">
-						<Radio.Group defaultValue={'crop'} style={{ width: '100%' }} optionType="button" onChange={this.modeRadioChange.bind(this)} options={[
-							{ label: t('裁剪模式'), value: 'crop' },
-							{ label: t('缩放模式'), value: 'zoom' },
-						]} />
-					</div>
-
-					<div className="action_box">
-						<Button loading={preLoading} disabled={!isReady} onClick={async () => {
-							let cropper = this.cropper.current.cropper;
-							this.getImageTransform();
-							// console.log(this.params.address, { ...nft, imageTransform: imgPreConfig }, 'this.params.address, { ...nft, imageTransform: imgPreConfig }');
-
-							// let { nft } = this.state;
-							// let res = await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
-							// console.log(res);
-
-							// try {
-							// 	await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
-							// 	localStorage.setItem('imgPreConfig', JSON.stringify(imgPreConfig));
-							// 	alert('预览设置成功!');
-							// } catch (error: any) {
-							// 	alert(error.message);
-							// }
-							let that = this;
-							let croppedCanvas = cropper.getCroppedCanvas({ maxWidth: 1920 });
-							this.setState({ preLoading: true });
-							// let testUrl = croppedCanvas.toDataURL("image/png");
-							// that.setState({ testUrl: testUrl, preLoading: false });
-
-							croppedCanvas.toBlob(function (e?: any) {
-								if (!e) return false;
-								let timestamp = Date.parse(new Date() + '');
-								e.name = timestamp + ".png";
-								let bUrl = URL.createObjectURL(e);
-								// console.log(bUrl, 'bUrl', e);
-								that.setState({ testUrl: bUrl, preLoading: false });
-							}, 'image/png', 0.5);
-							// console.log(testUrl, croppedCanvas);
-
-						}}>{t('预览效果')}</Button>
-
-						{/* <Button onClick={() => {
-					let cropper = this.cropper.current.cropper;
-					cropper.setCropBoxData({
-						height: 999999,
-						width: 999999
-					});
-				}}>
-					最大crop框
-				</Button> */}
-
-						<Button disabled={!isReady} onClick={() => {
-							this.setState({ loading: true, isReady: false, testUrl: '', preLoading: false });
-							setTimeout(() => {
-								this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal] });
-							}, 100);
-						}}>
-							{t('重置')}
-						</Button>
-
-						{/* <Button onClick={() => {
-					this.setState({ loading: true });
-					setTimeout(() => {
-						this.setState({
-							cropBoxMovable: true,
-							cropBoxResizable: true,
-							viewMode: 3,
-							movable: true,
-							loading: false,
-							scaleType: 'crop',
-							autoCropArea: .7
-						});
-					}, 100);
-				}}>裁剪模式</Button> */}
-						{/* <Button onClick={() => {
-					this.setState({ loading: true });
-					setTimeout(() => {
-						this.setState({
-							cropBoxMovable: true,
-							cropBoxResizable: false,
-							viewMode: 0,
-							movable: false,
-							loading: false,
-							scaleType: 'zoom'
-						});
-					}, 100);
-				}}>缩放模式</Button> */}
-
-						{/* <Button onClick={() => {
-					this.setState({ viewMode: 0 });
-				}}>viewMode 0</Button> */}
-
-						{/* <Button onClick={() => {
-					let cropper = this.cropper.current.cropper;
-					let imageData = cropper.getImageData();
-					let canvasData = cropper.getCanvasData();
-					let cropBoxData = cropper.getCropBoxData();
-
-					cropper.setCropBoxData({
-						height: imageData.height,
-						width: imageData.width,
-						left: canvasData.left,
-						top: imageData.height / 4,
-					});
-					console.log(imageData, 'imageData');
-
-				}}> 限制crop框</Button> */}
-
-						{/* <Button onClick={() => {
-					let cropper = this.cropper.current.cropper;
-					let imageData = cropper.getImageData();
-					let canvasData = cropper.getCanvasData();
-					let cropBoxData = cropper.getCropBoxData();
-
-					let containerData = cropper.getContainerData();
-
-
-					cropper.setCanvasData({
-						height: containerData.height,
-						width: containerData.width,
-						left: 0,
-						top: -10
-						// top: containerData.height / 4,
-					});
-
-					this.setState({
-						cropBoxMovable: true,
-						cropBoxResizable: true,
-					});
-					console.log(cropper.setDefaults, Cropper.setDefaults);
-
-					console.log(canvasData, 'canvasData');
-
-				}}> setCanvasData</Button> */}
-
-						<Button disabled={!isReady} onClick={async () => {
-							this.removeImagePreview();
-						}} >{t('使用原图')}</Button>
-					</div>
-
-					{scaleType === 'crop' ? <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} />
-						: <Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />}
-
-					<div className="pre_part">
-						<div className="pre_box" style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}>
-							{Boolean(testUrl) && <img src={testUrl} alt="" style={{ width: '100%', height: '100%' }} />}
+					<div className="cropper_part">
+						<div className="radio_box">
+							<Radio.Group defaultValue={'crop'} style={{ width: '100%' }} optionType="button" onChange={this.modeRadioChange.bind(this)} options={[
+								{ label: t('裁剪模式'), value: 'crop' },
+								{ label: t('缩放模式'), value: 'zoom' },
+							]} />
 						</div>
+
+						<div className="action_box">
+							<Button loading={preLoading} disabled={!isReady} onClick={async () => {
+								let cropper = this.cropper.current.cropper;
+								this.getImageTransform();
+								let that = this;
+								let croppedCanvas = cropper.getCroppedCanvas({ maxWidth: 1920 });
+								this.setState({ preLoading: true });
+
+								croppedCanvas.toBlob(function (e?: any) {
+									if (!e) return false;
+									let timestamp = Date.parse(new Date() + '');
+									e.name = timestamp + ".png";
+									let bUrl = URL.createObjectURL(e);
+									that.setState({ testUrl: bUrl, preLoading: false });
+								}, 'image/png', 0.5);
+
+							}}>{t('预览效果')}</Button>
+
+
+							<Button disabled={!isReady} onClick={() => {
+								this.setState({ loading: true, isReady: false, testUrl: '', preLoading: false });
+								setTimeout(() => {
+									this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal] });
+								}, 100);
+							}}>
+								{t('重置')}
+							</Button>
+
+
+							<Button disabled={!isReady} onClick={async () => {
+								this.removeImagePreview();
+							}} >{t('使用原图')}</Button>
+						</div>
+
+						<div className="slider_box">
+							{scaleType === 'crop' ? <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} />
+								: <Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />}
+						</div>
+
+						<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
+							{!testUrl && <div className="loading_text">loading...</div>}
+							{Boolean(testUrl) && <div className="pre_part">
+								<div className={`pre_box pre_box${radioVal}`} style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}>
+									{Boolean(testUrl) && <img src={testUrl} alt="" style={{ width: '100%', height: '100%' }} />}
+								</div>
+							</div>}
+
+							<div className={`cropper_warrper ${testUrl && 'cropper_prebox'}`}>
+								{!loading && <Cropper
+									src={nft.image || nft.imageOrigin}
+									ref={this.cropper}
+									style={{ height: `${canvasHeight}rem`, width: `${canvasWidth}rem` }}
+									viewMode={viewMode}
+									aspectRatio={aspectRatio}
+									// guides={false}
+									dragMode={'move'}
+									autoCropArea={autoCropArea}
+									// zoomable={false}
+									zoomOnTouch={false}
+									zoomOnWheel={false}
+									movable={movable}
+									outputType="png"
+									cropBoxMovable={cropBoxMovable}
+									cropBoxResizable={cropBoxResizable}
+									toggleDragModeOnDblclick={false}
+									responsive={false}
+									restore={false}
+									ready={() => {
+										let { scaleType, viewMode, nft, isInit } = this.state;
+										this.setState({ isReady: true });
+										!isInit && this.initCropBox((nft as any).imageTransform);
+										if (!viewMode && scaleType == 'zoom') {
+											this.maxCropBox();
+										}
+									}}
+								/>}
+							</div>
+
+						</div>
+
+
+
+
 					</div>
+
+
+
 				</div>
 			</div>
 

@@ -1,3 +1,13 @@
+.setting-drawer {
+	p {
+		padding: 6px 24px;
+	}
+
+	.active {
+		background-color: #1677ff3e;
+	}
+}
+
 .device_info_page {
 	background-color: #131425;
 	display: flex;
@@ -7,6 +17,10 @@
 		padding: 0 0.3rem;
 		margin-top: 0.3rem;
 		overflow: auto;
+	}
+
+	.ant-empty-description {
+		color: #fff;
 	}
 
 	.am-tabs-tab-bar-wrap {

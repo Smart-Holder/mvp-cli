@@ -3,6 +3,7 @@ import { Button as AtButton, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, LockOutlined, UnlockOutlined, SearchOutlined } from "@ant-design/icons";
 import { React } from 'webpkit/mobile';
 import { ButtonProps } from "antd/lib/button";
+import { t } from 'i18next';
 
 import "./index.scss";
 
@@ -46,7 +47,7 @@ const Button = (props: IBottomBtnProps) => {
 
 	const button = (
 		<AtButton type={btnType ? "primary" : props.type} disabled={btnDisabled} loading={btnLoading} className={`button_btn ${className} ${props.ghost && 'ant-btn-background-ghost'} ${btnType} ${(btnLoading && props.ghost) && 'ant-btn-ghost-loading'}`} onClick={btnClick} {...rest}>
-			{(btnType && btnIcon[btnType]) || children}
+			{(btnType && btnIcon[btnType]) || (typeof children === 'string' ? t(children) : children)}
 		</AtButton>
 	);
 

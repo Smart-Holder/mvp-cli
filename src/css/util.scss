@@ -5,6 +5,16 @@ body {
 	color: $baseBlack;
 }
 
+.am-tabs-default-bar-top .am-tabs-default-bar-tab {
+	border: 0 !important;
+}
+
+.am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
+	background-color: transparent !important;
+}
+// .ant-empty-description {
+// 	color: #fff;
+// }
 ._main {
 	background: none;
 }

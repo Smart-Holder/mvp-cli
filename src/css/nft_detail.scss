@@ -1,5 +1,6 @@
+@import "./color.scss";
 .nft_detail_page {
-	background-color: #f5f5f5;
+	background-color: $baseBlack;
 	display: flex;
 	flex-direction: column;
 	.nft_detail_page_card_box {

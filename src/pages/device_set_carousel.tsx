@@ -20,7 +20,6 @@ enum SettingDarwerType { preview = 'preview', audio = 'audio', autoLight = 'auto
 
 const settingDarwerConfig = [
 	{ label: "音量", value: SettingDarwerType.audio, icon: 'icon-shengyin' },
-	// { label: "自动调整亮度", value: SettingDarwerType.autoLight, icon: 'icon-sunliangdu' },
 	{ label: "亮度", value: SettingDarwerType.brightness, icon: 'icon-liangdu1' },
 	{ label: "WI-FI", value: SettingDarwerType.wifi, icon: 'icon-WIFI' },
 	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: 'icon-zhizhangfangxiang' },

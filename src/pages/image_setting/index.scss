@@ -1,0 +1,40 @@
+@import "../../css/color.scss";
+
+.image_page {
+	background-color: $baseBlack;
+	position: relative;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+
+	.device_set_carousel_body {
+		height: 100%;
+		padding: 0.24rem 0.3rem 0.24rem;
+		overflow: hidden;
+	}
+
+	.setting_box {
+		// padding: 0 0.3rem;
+		position: relative;
+		flex: 1;
+		overflow: hidden;
+	}
+	.card_box {
+		padding: 0 0.3rem;
+		background-color: #fff;
+		border-radius: 0.12rem;
+		.ant-slider-rail {
+			background-color: #cde9ff;
+			height: 0.1rem;
+		}
+		.ant-slider-dot {
+			width: 10px;
+			height: 10px;
+		}
+
+		.bottom_part {
+			padding: 0.6rem 0;
+			display: flex;
+		}
+	}
+}

@@ -4,6 +4,47 @@ export default [
 		path: '/',
 		page: () => import('./pages/nft'),
 	},
+
+	{
+		path: '/image',
+		page: () => import('./pages/image_setting'),
+	},
+	{
+		path: '/shadow',
+		page: () => import('./pages/shadow_setting'),
+	},
+	{
+		path: '/preview',
+		page: () => import('./pages/preview_nft_list'),
+	},
+	{
+		path: '/detail',
+		page: () => import('./pages/detail_setting'),
+	},
+	{
+		path: '/color',
+		page: () => import('./pages/color_setting'),
+	},
+	{
+		path: '/version',
+		page: () => import('./pages/update_setting'),
+	},
+	{
+		path: '/rotation',
+		page: () => import('./pages/rotation_setting'),
+	},
+	{
+		path: '/wifi',
+		page: () => import('./pages/wifi_setting'),
+	},
+	{
+		path: '/audio',
+		page: () => import('./pages/audio_setting'),
+	},
+	{
+		path: '/brightness',
+		page: () => import('./pages/brightness'),
+	},
 	{
 		path: '/cropper_nft',
 		page: () => import('./pages/cropper_nft'),

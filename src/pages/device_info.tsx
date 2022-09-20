@@ -16,14 +16,27 @@ import { INftItem } from './interface';
 import { withTranslation } from 'react-i18next';
 import { Tabs, NoticeBar } from 'antd-mobile';
 
-import { Empty } from 'antd';
+import { Empty, Drawer } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getNFTByOwnerPage, IGetNFTByOwnerPageProps } from '../models/nft';
 import '../css/device_info.scss';
 
-const tp = require('tp-js-sdk');
 
+enum SettingDarwerType { preview = 'preview', audio = 'audio', autoLight = 'autoLight', brightness = 'brightness', wifi = 'wifi', image = 'image', rotation = 'rotation', color = 'color', version = 'version', detail = 'detail', shadow = 'shadow' };
+
+const settingDarwerConfig = [
+	{ label: "音量", value: SettingDarwerType.audio, icon: require('../assets/yinliang.png') },
+	{ label: "亮度", value: SettingDarwerType.brightness, icon: require('../assets/liangdu.png') },
+	{ label: "WI-FI", value: SettingDarwerType.wifi, icon: require('../assets/wifi.png') },
+	{ label: "屏幕角度", value: SettingDarwerType.rotation, icon: require('../assets/jiaodu.png') },
+	{ label: "更新检查", value: SettingDarwerType.version, icon: require('../assets/gengxin.png') },
+	{ label: "背景颜色", value: SettingDarwerType.color, icon: require('../assets/yanse.png') },
+	{ label: "NFT信息", value: SettingDarwerType.detail, icon: require('../assets/nft_icon.png') },
+	{ label: "轮播图", value: SettingDarwerType.image, icon: require('../assets/lunbo.png') },
+	{ label: "投屏", value: SettingDarwerType.shadow, icon: require('../assets/touping.png') },
+	{ label: "预览设置", value: SettingDarwerType.preview, icon: require('../assets/yulan.png') }
+];
 
 class DeviceInfo extends NavPage<Device> {
 
@@ -39,7 +52,9 @@ class DeviceInfo extends NavPage<Device> {
 		isRefresh: false,
 		showToTop: false,
 		page: 1,
-		hasMore: true
+		hasMore: true,
+		drawerVisible: false,
+		versionCode: 0
 	}
 
 	async triggerLoad() {
@@ -106,9 +121,9 @@ class DeviceInfo extends NavPage<Device> {
 
 	// 转出nft按钮点击
 	async transferBtnClick(nftItem: NFT) {
-		tp.invokeQRScanner().then((res: string) => {
-			this.takeAwayNftOfDeviceClick(nftItem, res);
-		});
+		// tp.invokeQRScanner().then((res: string) => {
+		// 	this.takeAwayNftOfDeviceClick(nftItem, res);
+		// });
 	}
 
 	async takeAwayNftOfDeviceClick(nft: NFT, toAddress: string = '') {
@@ -229,8 +244,35 @@ class DeviceInfo extends NavPage<Device> {
 		});
 	}
 
+	// 抽屉项点击事件
+	async drawerItemClick(currSettingIndex: SettingDarwerType) {
+		console.log(currSettingIndex, 'currSettingIndex');
+
+		// if ([SettingDarwerType.wifi, SettingDarwerType.version].includes(currSettingIndex)) {
+		// 	this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, });
+		// } else {
+		// 	this.setState({ currSettingIndex, });
+		// }
+		this.setState({ drawerVisible: false });
+		this.pushPage(`/${currSettingIndex}?address=${this.params.address}`);
+	}
+
+	// 设备设置按钮点击
+	async deviceSetting() {
+		let l = await Loading.show(this.t('正在加载屏幕设置'));
+		let { address } = this.params;
+		device.getScreenSettings(address).then(({ versionCode }) => {
+			this.setState({ versionCode }, () => {
+				this.setState({ drawerVisible: true });
+			});
+		}).catch((err: any) => {
+			alert(err.message);
+		}).finally(() => l.close());
+		// this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo })
+	}
+
 	render() {
-		let { loading, nftList1, nftList2, tabIndex, showToTop, hasMore } = this.state;
+		let { loading, nftList1, nftList2, tabIndex, showToTop, hasMore, drawerVisible, versionCode } = this.state;
 		const { t } = this;
 
 		let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
@@ -250,7 +292,7 @@ class DeviceInfo extends NavPage<Device> {
 
 			<div className="device_info_page_content">
 				<div className="device_card_box">
-					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => { this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo }) }} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
+					<DeviceItem loading={loading} onUnbindDevice={this.onUnbindDevice.bind(this)} onOk={() => this.deviceSetting()} deviceInfo={this.state.deviceInfo} showArrow={false} showActionBtn={true} />
 				</div>
 
 
@@ -296,6 +338,29 @@ class DeviceInfo extends NavPage<Device> {
 				{/* {nftList.map(item => <NftCard showTransferBtn={false} key={item.id} btnClick={this.takeAwayNftOfDeviceClick.bind(this, item, '')} nft={item} btnText={t("取出到钱包")} btnLoadingText={t("取出到钱包")} />)} */}
 			</div>
 
+
+			<Drawer
+				className='setting-drawer'
+				title={t("更多设置")}
+				closable={false}
+				visible={drawerVisible}
+				width='5rem'
+				bodyStyle={{ padding: '24px 0' }}
+				onClose={() => this.setState({ drawerVisible: false })}
+			>
+				{settingDarwerConfig.map(item => {
+					let ele = <p onClick={this.drawerItemClick.bind(this, item.value)} style={{ display: 'flex', alignItems: 'center' }}>
+						{/* <IconFont style={{ width: '.34rem', height: '.34rem', marginRight: '.2rem' }} type={item.icon} /> {t(item.label)} */}
+						<img src={(item.icon)} style={{ width: '.4rem', marginRight: '.4rem' }} />
+						<span style={{ fontSize: '.28rem' }}>
+							{t(item.label)}
+						</span>
+					</p>;
+					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
+					return ele;
+				})}
+
+			</Drawer>
 		</div>
 	}
 }

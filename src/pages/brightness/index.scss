@@ -1,0 +1,52 @@
+@import "../../css/color.scss";
+
+.brightness_page {
+	background-color: $baseBlack;
+	.setting_title {
+		color: #fff;
+		font-size: 0.3rem;
+		margin-bottom: 0.28rem;
+		margin-top: 0.36rem;
+	}
+	.setting_box {
+		padding: 0 0.3rem;
+		.card_box {
+			padding: 0 0.3rem;
+			background-color: #fff;
+			border-radius: 0.12rem;
+			.ant-slider-rail {
+				background-color: #cde9ff;
+				height: 0.1rem;
+			}
+			.ant-slider-dot {
+				width: 10px;
+				height: 10px;
+			}
+
+			.bottom_part {
+				padding: 0.4rem 0 0.6rem;
+				display: flex;
+				.voice_low_img {
+					margin-right: 0.13rem;
+				}
+				.voice_height_img {
+					margin-left: 0.1rem;
+				}
+				img {
+					width: 0.33rem;
+					object-fit: contain;
+				}
+
+				.slider_box {
+					flex: 1;
+				}
+			}
+			.top_part {
+				border-bottom: 1px solid #ededed;
+				padding: 0.6rem 0;
+				display: flex;
+				// color: #131212;
+			}
+		}
+	}
+}

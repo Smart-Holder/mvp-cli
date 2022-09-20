@@ -1,7 +1,6 @@
 import models, { NFT } from "../../models";
 import { React, Component } from 'webpkit/mobile';
 import { Tabs, NoticeBar } from 'antd-mobile';
-import { CarouselType } from "../../pages/device_set_carousel";
 import NavPage from "../../nav";
 import * as device from '../../models/device';
 import { ArrayToObj, showModal } from "../../util/tools";
@@ -40,7 +39,7 @@ const modeConfig = {
 }
 
 interface ISetCarouselProps {
-	page: NavPage<device.Device>,
+	page: NavPage<{ address: string }>,
 	mode: 'normal' | 'shadow',
 	time?: number,
 	screenWidth?: number;

@@ -1,9 +1,14 @@
+@import "./color.scss";
+
 .sub_btn {
 	position: absolute;
 	right: 0;
 	.ant-btn {
 		padding-top: 0;
-		height: 0;
+		height: auto;
+	}
+	.ant-btn-link[disabled] {
+		color: rgba(143, 143, 143, 0.502);
 	}
 }
 .ant-slider-rail {
@@ -16,9 +21,48 @@
 .cropper_page {
 	display: flex;
 	flex-direction: column;
-	background-color: #f5f5f9;
+	background-color: $baseBlack;
+
+	.cropper_prebox {
+		position: absolute;
+		visibility: hidden;
+	}
 	._title {
 		padding-bottom: 0.2rem;
+	}
+
+	.cropper_part {
+		padding-top: 0.43rem;
+		background-color: #fff;
+		border-radius: 0.12rem;
+		margin-bottom: 0.2rem;
+		.radio_box {
+			.ant-radio-button-wrapper-checked::after {
+				content: " ";
+				height: 0.06rem;
+				border-radius: 0.43rem;
+				width: 100%;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				// border-bottom: 1px;
+				// border-color: linear-gradient(96deg, #64c2f7, #2769f5);
+				background: linear-gradient(96deg, #64c2f7, #2769f5);
+			}
+			.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+				border: none;
+			}
+			.ant-radio-button-wrapper {
+				border: none;
+			}
+			.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
+				display: none;
+			}
+
+			.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within {
+				box-shadow: none;
+			}
+		}
 	}
 }
 .cropper_wapper {
@@ -32,24 +76,70 @@
 		justify-content: space-between;
 		margin-top: 0.1rem;
 		flex-wrap: wrap;
+		padding: 0.2rem 0.3rem;
+
 		.button_btn {
-			font-size: 0.32rem;
+			font-size: 0.26rem;
+			border-radius: 0.47rem;
+			border-color: #3771fb;
+			color: #3771fb;
+			background: #f8fbff;
 		}
+	}
+	.slider_box {
+		padding: 0.35rem;
+		padding-top: 0;
 	}
 	// .cropper-container {
 	// 	width: 3.6rem !important;
 	// 	height: 6.4rem !important;
 	// }
 	.radio_box {
-		background-color: #fff;
-		padding: 0.1rem;
-		border-radius: 0.2rem;
+		// background-color: #fff;
+		// padding: 0.1rem;
+		// border-radius: 0.2rem;
 		margin-bottom: 0.2rem;
+		.select_radio_box {
+			width: 100%;
+		}
+		.radio_select_box {
+			justify-content: space-between;
+			display: flex;
 
+			.active {
+				border: 2px solid rgb(49, 128, 240);
+			}
+		}
+		.radio_transverse,
+		.radio_vertical {
+			.label {
+				padding-bottom: 0.2rem;
+				text-align: center;
+			}
+			.value {
+				// padding: 0.2rem;
+				width: 2.87rem;
+				height: 2.79rem;
+				// background-color: pink;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.image_box {
+				background-size: 100% 100%;
+				padding: 0.1rem;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+				}
+			}
+		}
 		.title {
 			font-weight: bold;
 			margin: 0.2rem;
-			margin-bottom: 0;
+			margin-bottom: 0.26rem;
+			color: #fff;
 		}
 		.ant-radio-button-wrapper {
 			width: 50%;
@@ -66,6 +156,9 @@
 		display: flex;
 		justify-content: space-around;
 		width: 100%;
+		padding: 0.33rem 0.47rem;
+		background-color: #fff;
+		border-radius: 0.12rem;
 		.ant-radio-group {
 			width: 100%;
 			display: flex;
@@ -86,9 +179,12 @@
 		.route_box {
 			// background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
 			width: 2rem;
+			background-size: 100% 100%;
+			padding: 0.04rem;
 			img {
 				width: 100%;
 				height: 100%;
+				object-fit: contain;
 			}
 		}
 	}
@@ -115,11 +211,17 @@
 		width: 100%;
 	}
 	.pre_box {
-		background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
+		// background-image: url("https://nftimg.stars-mine.com/file/3f12c11b-d1e4-11ec-853b-0242ac110003.png");
 		background-size: 100% 100%;
 		// height: 3.6rem;
 		// width: 6.4rem;
-		padding: 0.2rem;
+		padding: 0.25rem;
+	}
+	.pre_box0 {
+		background-image: url("../assets/pre_box_bg1.png");
+	}
+	.pre_box1 {
+		background-image: url("../assets/pre_box_bg2.png");
 	}
 
 	.img_list {

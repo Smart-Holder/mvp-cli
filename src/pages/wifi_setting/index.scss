@@ -1,0 +1,28 @@
+@import "../../css/color.scss";
+
+.audio_page {
+	background-color: $baseBlack;
+	.setting_title {
+		color: #fff;
+		font-size: 0.3rem;
+		margin-bottom: 0.28rem;
+		margin-top: 0.36rem;
+	}
+
+	.setting_box {
+		padding: 0 0.3rem;
+	}
+	.card_box {
+		padding: 0 0.3rem;
+		background-color: #fff;
+		border-radius: 0.12rem;
+
+		.bottom_part {
+			padding: 0.6rem 0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 0.3rem;
+		}
+	}
+}

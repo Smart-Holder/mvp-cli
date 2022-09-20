@@ -1,7 +1,7 @@
 
 import storage from 'somes/storage';
-import buffer, {IBuffer} from 'somes/buffer';
-import {Signer} from 'somes/request';
+import buffer, { IBuffer } from 'somes/buffer';
+import { Signer } from 'somes/request';
 import { sha256 } from 'somes/hash';
 import somes from 'somes';
 import chain from './chain';
@@ -40,7 +40,7 @@ function privateKey() {
 }
 
 export function publicKey() {
-	return '0x' + crypto_tx.getPublic( privateKey(), true).toString('hex');
+	return '0x' + crypto_tx.getPublic(privateKey(), true).toString('hex');
 }
 
 export function address() {
@@ -54,7 +54,7 @@ export function authName() {
 export function sign(msg: IBuffer) {
 	var signature = crypto_tx.sign(msg, privateKey());
 	return {
-		signature: buffer.from(signature.signature), 
+		signature: buffer.from(signature.signature),
 		recovery: signature.recovery as number,
 	};
 }

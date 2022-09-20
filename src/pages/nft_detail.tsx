@@ -66,7 +66,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 									} />}
 								</div>}
 
-								<Tabs tabBarActiveTextColor={'#1677ff'} tabs={this.tabsConfig}
+								<Tabs tabBarActiveTextColor={"#5396F7"} tabBarUnderlineStyle={{ border: 0, height: '3px', background: 'linear-gradient(90deg, #4881FA, #6ED6F5)', borderRadius: '3px' }} tabs={this.tabsConfig}
 									initialPage={0}
 								>
 									<div className="item_page" >

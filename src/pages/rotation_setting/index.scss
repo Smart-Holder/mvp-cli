@@ -1,0 +1,54 @@
+@import "../../css/color.scss";
+
+.rotation_page {
+	background-color: $baseBlack;
+	.setting_title {
+		color: #fff;
+		font-size: 0.3rem;
+		margin-bottom: 0.28rem;
+		margin-top: 0.36rem;
+	}
+
+	.setting_box {
+		padding: 0 0.3rem;
+	}
+	.card_box {
+		padding: 0 0.45rem;
+		background-color: #fff;
+		border-radius: 0.12rem;
+
+		.bottom_part {
+			padding: 0.6rem 0;
+			// display: flex;
+			// align-items: center;
+			// justify-content: space-between;
+			font-size: 0.3rem;
+
+			.rotation_icon_box {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				flex: 1;
+				margin-bottom: 1.08rem;
+				align-items: flex-start;
+				.rotation_item {
+					font-size: 0.24rem;
+					text-align: center;
+					width: 33%;
+					img {
+						width: 1.49rem;
+						object-fit: contain;
+						margin-bottom: 0.18rem;
+					}
+					.label {
+						padding: 0.02rem;
+					}
+				}
+			}
+
+			.ant-btn {
+				@include baseBtnStyle;
+			}
+		}
+	}
+}

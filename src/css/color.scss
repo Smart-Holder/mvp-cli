@@ -2,3 +2,16 @@ $baseBule: #408df6;
 $baseBlack: #131425;
 $baseGary: #85869f;
 $baseBtnColor: #3771fb;
+
+@mixin baseBtnStyle {
+	width: 100%;
+	border-radius: 0.16rem;
+	font-size: 0.3rem;
+	line-height: 0.3rem;
+	height: auto;
+	padding: 0.33rem 0;
+	background: linear-gradient(96deg, #64c2f7, #2769f5);
+	color: #fff;
+	border: 0;
+	border-radius: 0.47rem;
+}
