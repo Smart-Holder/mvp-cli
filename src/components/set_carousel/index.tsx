@@ -116,7 +116,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let owner = await chain.getDefaultAccount();
 		let ownerAddress = mode == 'shadow' ? owner : address;
 		// let nftList: NFT[] = list?.length ? list : await models.nft.methods.getNFTByOwner({ owner: ownerAddress });
-		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({ owner: ownerAddress, curPage, pageSize: 16, screenWidth, screenHeight });
+		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({ owner: ownerAddress, address, curPage, pageSize: 16, screenWidth, screenHeight });
 		let leftNftList: NFT[] = [];
 		let rightNftList: NFT[] = [];
 
