@@ -357,6 +357,7 @@ class DeviceInfo extends NavPage<Device> {
 						</span>
 					</p>;
 					if ([SettingDarwerType.shadow].includes(item.value) && versionCode < 139) return false;
+					if ([SettingDarwerType.preview].includes(item.value) && versionCode < 350) return false;
 					return ele;
 				})}
 

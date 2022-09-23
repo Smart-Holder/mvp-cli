@@ -519,7 +519,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
 					await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any });
 				}
-				await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, });
+				await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height });
 				alert(this.t("已切换为原图片"), () => this.popPage());
 			} catch (error: any) {
 				if (error.code == -10001) {

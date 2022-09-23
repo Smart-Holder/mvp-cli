@@ -326,7 +326,7 @@ export const confirm = async (text: string | DialogIn, onOk?: (isOk?: any) => Pr
 
 	return show({
 		...text,
-		buttons: { [btnText]: () => onOk && onOk() },
+		buttons: { [btnText]: () => onOk && onOk(true) },
 	});
 }
 const dialog_handles: Dict<any> = {};
