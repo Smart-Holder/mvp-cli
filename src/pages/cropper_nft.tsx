@@ -84,7 +84,7 @@ let cropBoxConfig = {
 	}
 };
 
-class CropImage extends NavPage<{ id: string | number, mode: number | string, address: string, screenWidth: string | number, screenHeight: string | number }> {
+class CropImage extends NavPage<{ id: string | number, mode: number | string, address: string, screenWidth: string | number, screenHeight: string | number, }> {
 
 	cropper: any = React.createRef();
 
@@ -492,8 +492,11 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let imgPreConfig = this.getImageTransform();
 
 		let { nft, radioVal, screenHeight, screenWidth } = this.state;
+		let { mode } = this.params;
 		try {
-			await transformImage(this.params.address, { ...nft, imageTransform: imgPreConfig });
+			let newNft: any = { ...nft, imageTransform: imgPreConfig }
+			mode == '0' && (newNft.shadow = 1);
+			await transformImage(this.params.address, newNft);
 			await models.nft.methods.setNFTPreview({ address: this.params.address, id: nft.id, imageTransform: imgPreConfig });
 			// if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
 			// }
@@ -508,7 +511,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	// 使用原图
 	async removeImagePreview() {
 		let { scaleType, nft, radioVal, screenWidth, screenHeight } = this.state;
-
+		let { mode } = this.params;
 		confirm(this.t(`确定退出设置使用原图吗？退出后您可在“设置-${this.params.mode == '0' ? '投屏' : '轮播图'}”将原图显示在设备上`), async () => {
 			this.setState({ loading: true, isReady: false });
 			setTimeout(() => {
@@ -517,7 +520,10 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			}, 100);
 			try {
 				if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
-					await transformImage(this.params.address, { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any });
+					let newNft: any = { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any }
+					mode == '0' && (newNft.shadow = 1);
+					await transformImage(this.params.address, newNft);
+					console.log('transformImage', newNft, newNft.shadow, mode);
 				}
 				await models.nft.methods.delSetPreview({ address: this.params.address, id: nft.id, screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height });
 				alert(this.t("已切换为原图片"), () => this.popPage());
