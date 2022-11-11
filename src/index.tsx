@@ -43,7 +43,7 @@ import * as moment from 'moment';
 
 utils.onUncaughtException.on((e) => {
 	console.log(e.data.message, 'onUncaughtException');
-	if (['ResizeObserver loop limit exceeded','Script error.'].includes(e.data.message)) return false;
+	if (['ResizeObserver loop limit exceeded', 'Script error.'].includes(e.data.message)) return false;
 	// errnoHandles(e.data);
 	handle(e.data);
 });

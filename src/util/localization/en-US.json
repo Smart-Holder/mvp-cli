@@ -1,5 +1,5 @@
 {
-	"智能数字收藏品": "Smart digital collectibles",
+	"智能数字收藏屏": "Smart digital collection screen",
 	"全部设备": "All devices",
 	"绑定新设备": "Bind new device",
 	"首页": "Home",
@@ -115,7 +115,8 @@
 	"设备升级中...": "Device upgrade in progress...",
 	"设备调用超时": "Device call timeout",
 	"无效的短信验证码": "Invalid SMS verification code",
-	"每次获取验证码需间隔1分钟以上，请勿频繁操作`, '验证码发送太频繁": "Every time you get the verification code, the interval should be more than 1 minute. Do not operate frequently. 'the verification code is sent too frequently",
+	"每次获取验证码需间隔1分钟以上，请勿频繁操作": "Every time you get the verification code, the interval should be more than 1 minute. Do not operate frequently.",
+	"验证码发送太频繁": "the verification code is sent too frequently",
 	"参数错误": "Parameter error",
 	"请求无响应或被拒绝": "Request unresponsive or rejected",
 	"已有用户发起请求，请稍后尝试": "A user has initiated a request. Please try later",
@@ -171,5 +172,6 @@
 	"旋转180°": "Rotate 180 °",
 	"向右旋转90°": "Rotate 90 ° to the right",
 	"选择背景颜色": "Choose a background color",
-	"设置NFT信息": "Set NFT information"
+	"设置NFT信息": "Set NFT information",
+	"消息验证未通过~": "Message validation failed~"
 }

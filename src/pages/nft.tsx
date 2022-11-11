@@ -81,7 +81,7 @@ class DeviceList extends NavPage {
 			<div className="index device_list_page">
 				{/* <Header title="我的NFT" page={this} /> */}
 				<div className="ver">{packageJson.version}</div>
-				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏品')}</div>
+				<div className="page_title" style={localStorage.getItem('language') != 'ZH' ? { letterSpacing: 0 } : {}}>{t('智能数字收藏屏')}</div>
 				<div className="device_list">
 					<div className="list_title" >{t("全部设备")}</div>
 					<div className="list_top_extra">

@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 let locLanguage = navigator.language || localStorage.getItem('language');
 if (locLanguage === 'zh-CN') locLanguage = 'zh';
-if (![ 'zh','de'].includes(String(locLanguage))) locLanguage = 'EN';
+if (!['zh', 'de'].includes(String(locLanguage))) locLanguage = 'EN';
 const defaultLanguage: LanguageType = locLanguage?.toLocaleUpperCase() as LanguageType || 'EN'; //默认英语
 
 export type LanguageType = 'ZH' | 'EN' | 'DE';
@@ -20,6 +20,9 @@ i18n
 			},
 			ZH: {
 				translations: require("./localization/zh-CN.json"),
+			},
+			JA: {
+				translations: require("./localization/ja.json"),
 			},
 		},
 		lng: defaultLanguage,
