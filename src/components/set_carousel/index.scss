@@ -42,9 +42,14 @@
 		}
 	}
 
+	.am-tabs-default-bar-tab {
+		height: auto;
+
+	}
 	.carousel_tabs {
 		font-size: 0.3rem;
-		white-space: nowrap;
+		// white-space: nowrap;
+		line-height: .36rem;
 		color: #fff;
 	}
 

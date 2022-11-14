@@ -3,6 +3,16 @@
 	display: flex;
 	flex-direction: column;
 
+	.am-tabs-default-bar-content {
+		
+		// white-space: nowrap;
+		.am-tabs-default-bar-tab {
+			height: auto;
+			font-size: .2rem;
+			line-height: .3rem;
+		}
+	}
+
 	#scrollableDiv,
 	#scrollableDiv2 {
 		height: 100%;

@@ -173,5 +173,6 @@
 	"向右旋转90°": "Rotate 90 ° to the right",
 	"选择背景颜色": "Choose a background color",
 	"设置NFT信息": "Set NFT information",
-	"消息验证未通过~": "Message validation failed~"
+	"消息验证未通过~": "Message validation failed~",
+	"请求操时": "Request timeout"
 }
