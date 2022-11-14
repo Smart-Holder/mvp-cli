@@ -44,6 +44,7 @@
 
 	.am-tabs-default-bar-tab {
 		height: auto;
+		margin-bottom: .1rem;
 
 	}
 	.carousel_tabs {
@@ -58,6 +59,9 @@
 		z-index: 99;
 		right: 0.3rem;
 		transform: translate(0px, 0.12rem);
+		padding-top: 0;
+		height: auto;
+		line-height: normal;
 	}
 
 	.ant-btn-link[disabled] {
