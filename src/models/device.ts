@@ -65,13 +65,13 @@ export async function ping(target: string) {
 }
 
 // 设置音量
-export function screenVolume(target: string, volume: number) {
-	return send(target, 'screenVolume', { volume });
+export function screenVolume(target: string, data: { volume: number, volumeScale?: number }) {
+	return send(target, 'screenVolume', data);
 }
 
 // 设置亮度
-export function screenLight(target: string, light: number) {
-	return send(target, 'screenLight', { light });
+export function screenLight(target: string, data: { light: number, lightScale?: number }) {
+	return send(target, 'screenLight', data);
 }
 
 // 设置唤起wifi

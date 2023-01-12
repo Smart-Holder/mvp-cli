@@ -8,7 +8,7 @@ import { Slider } from 'antd';
 
 import './index.scss';
 
-class AudioSetting extends NavPage<{ address: string }> {
+class AudioSetting extends NavPage<{ address: string, env: string }> {
 
 	state = {
 		volume: 0,
@@ -19,8 +19,10 @@ class AudioSetting extends NavPage<{ address: string }> {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ volume }) => {
-			volume = volume / 3;
+		getScreenSettings(address).then(({ volume, env }) => {
+			let unit = env.includes('t982') ? 20 : 3;
+			volume = volume / unit;
+
 			this.setState({ volume });
 		}).catch((err: any) => {
 			alert(err.message);
@@ -28,13 +30,16 @@ class AudioSetting extends NavPage<{ address: string }> {
 	}
 
 	sliderChange(e: number) {
-		let volume = e * 3;
-		let { address } = this.params;
+
+
+		let { address, env } = this.params;
+		let unit = env.includes('t982') ? 20 : 3;
+		let volume = e * unit;
 		let { dsq_id } = this.state;
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			screenVolume(address, volume);
+			screenVolume(address, { volume, volumeScale: ((100 / 5) * e) / 100 });
 		}, 500);
 		this.setState({ volume: e, dsq_id: newDsqId });
 

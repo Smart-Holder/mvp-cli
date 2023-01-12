@@ -54,7 +54,8 @@ class DeviceInfo extends NavPage<Device> {
 		page: 1,
 		hasMore: true,
 		drawerVisible: false,
-		versionCode: 0
+		versionCode: 0,
+		env: ''
 	}
 
 	async triggerLoad() {
@@ -247,22 +248,22 @@ class DeviceInfo extends NavPage<Device> {
 	// 抽屉项点击事件
 	async drawerItemClick(currSettingIndex: SettingDarwerType) {
 		console.log(currSettingIndex, 'currSettingIndex');
-
+		let { env } = this.state;
 		// if ([SettingDarwerType.wifi, SettingDarwerType.version].includes(currSettingIndex)) {
 		// 	this.setState({ currcallDeviceIndex: currSettingIndex, settingModalVisible: true, });
 		// } else {
 		// 	this.setState({ currSettingIndex, });
 		// }
 		this.setState({ drawerVisible: false });
-		this.pushPage(`/${currSettingIndex}?address=${this.params.address}`);
+		this.pushPage(`/${currSettingIndex}?address=${this.params.address}&env=${env}`);
 	}
 
 	// 设备设置按钮点击
 	async deviceSetting() {
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		let { address } = this.params;
-		device.getScreenSettings(address).then(({ versionCode }) => {
-			this.setState({ versionCode }, () => {
+		device.getScreenSettings(address).then(({ versionCode, env }) => {
+			this.setState({ versionCode, env }, () => {
 				this.setState({ drawerVisible: true });
 			});
 		}).catch((err: any) => {

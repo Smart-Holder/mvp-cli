@@ -63,7 +63,7 @@ class PreviewNftCard extends NavPage<{ address: string }> {
 		let ownerAddress = !mode ? owner : address;
 		let { curPage, nftList: preNftList } = this.state;
 		let nftList: NFT[] = list?.length ? list : await getNFTByOwnerPage({
-			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 16,
+			owner: ownerAddress, screenWidth, screenHeight, curPage, pageSize: 999,
 			address: this.params.address
 		});
 		let leftNftList: NFT[] = [];
@@ -86,9 +86,14 @@ class PreviewNftCard extends NavPage<{ address: string }> {
 		allNftList.forEach((item, index) => {
 			!Boolean(index % 2) ? leftNftList.push(item) : rightNftList.push(item);
 		});
+
+
+		// let hasMore = Boolean((!mode ? imgNftList?.length : nftList?.length) >= 16);
+		let hasMore = Boolean(nftList?.length >= 999);
+
 		// console.log(nftList.length, 'nftList', nftList?.length >= 16, hasMore, 'hasMore');
 
-		let newState: any = { leftNftList, rightNftList, videoNftList, loading: false, nftList: allNftList, hasMore: Boolean(nftList?.length >= 16) };
+		let newState: any = { leftNftList, rightNftList, videoNftList, loading: false, nftList: allNftList, hasMore };
 
 
 		this.setState({ ...newState, mode });

@@ -37,6 +37,7 @@ const NftCard = (props: INftCardProps) => {
 						<LoadingOutlined className="loading_icon" />
 					</div>
 				} />}
+				{/* {nft.image} */}
 			</div>
 			<div onClick={() => props.page?.pushPage(`/nft_detail?token=${nft.token}&tokenId=${nft.tokenId}`)}>
 

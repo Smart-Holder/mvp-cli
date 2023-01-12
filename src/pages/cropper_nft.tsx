@@ -15,6 +15,27 @@ import { alert, confirm } from '../util/tools';
 import { withTranslation } from 'react-i18next';
 import Loading from '../../deps/webpkit/lib/loading';
 
+export interface IImgPreConfigProps {
+	originWidth: number;
+	originHeight: number;
+	targetWidth?: number;
+	targetHeight?: number;
+	scaleType: string;
+	zoom?: number;
+	screenWidth?: number;
+	screenHeight?: number;
+	canvasDataLeft: number;
+	canvasDataTop: number;
+	cropX?: number
+	cropY?: number
+	cropWidth?: number
+	cropHeight?: number
+}
+// type IImgPreConfigKey = "originWidth" | "originHeight" | "targetWidth" | "targetHeight" | "zoom" | "scaleType" | "screenWidth" | "screenHeight" | "canvasDataLeft" | "canvasDataTop" | "cropX" | "cropY" | "cropWidth" | "cropHeight";
+type IImgPreConfigKey = keyof IImgPreConfigProps;
+
+// const a: IImgPreConfigKey = ""
+
 export interface ICropConfig {
 	originWidth: number;
 	originHeight: number;
@@ -56,8 +77,16 @@ let canvasConfig: {
 } = {
 	0: { width: 1920, height: 1080, canvasWidth: 6.4, canvasHeight: 3.6, aspectRatio: 16 / 9 },
 	1: { width: 1080, height: 1920, canvasWidth: 3.6 * 1.13, canvasHeight: 6.4 * 1.13, aspectRatio: 9 / 16 },
-	// 1: { width: 1080, height: 1920, canvasWidth: 3.6, canvasHeight: 6.4, aspectRatio: 9 / 16 },
 }
+
+interface IMultiplyConfigProps {
+	[key: number]: { multiple: number, original: number }
+}
+
+const multiplyConfig: IMultiplyConfigProps = {
+	3840: { multiple: 2, original: 0.5 },
+	1920: { multiple: 1, original: 1 },
+};
 
 let cropBoxConfig = {
 	'crop': {
@@ -116,35 +145,54 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		isInit: false,
 		screenWidth: 1920,
 		screenHeight: 1080,
+		originScreenWidth: 1920,
+		originScreenHeight: 1080,
 		preLoading: false,
-		cropper: undefined
+		cropper: undefined,
+		canvasConfig
 	}
 
 	async getNftByScreen(screenWidth?: number, screenHeight?: number) {
-		let { radioVal } = this.state;
+		let { radioVal, } = this.state;
 		let nft = await models.nft.methods.getNFTById({
 			id: this.params.id, owner: '', address: this.params.address,
 			screenWidth: screenWidth || canvasConfig[radioVal].width,
+			// screenWidth: radioVal ? originScreenWidth : originScreenHeight,
 			screenHeight: screenHeight || canvasConfig[radioVal].height
+			// screenHeight: radioVal ? originScreenHeight : originScreenWidth
 		});
 		return nft[0];
 	}
 
 	async init() {
-
+		// const { canvasConfig } = this.state;
 		// 获取设备当前设置参数
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		getScreenSettings(this.params.address).then(async ({ screenWidth, screenHeight }) => {
 			// let { screenWidth, screenHeight } = this.params;
 			console.log(screenWidth, screenHeight);
-			let nft = await this.getNftByScreen(Number(screenWidth), Number(screenHeight));
+			let originScreenWidth = screenWidth;
+			let originScreenHeight = screenHeight;
+
+			let newCanvasConfig = { 0: { ...canvasConfig[0], width: screenWidth, height: screenHeight }, 1: { ...canvasConfig[1], width: screenHeight, height: screenWidth } };
+			canvasConfig = newCanvasConfig;
+
+			if (screenWidth === 3840) {
+				screenWidth = screenWidth / 2;
+				screenHeight = screenHeight / 2;
+			}
+
+			let nft = await this.getNftByScreen(Number(originScreenWidth), Number(originScreenHeight));
+			// console.log(nft.imageTransform, 'nft.imageTransform1');
+			nft.imageTransform && (nft.imageTransform = this.formatImgPreConfig(nft.imageTransform, multiplyConfig[originScreenWidth].original));
+
 			let val = 0;
 
 			if (Boolean(screenWidth == 1080 && screenHeight == 1920)) val = 1;
 
-			console.log(screenWidth, canvasConfig[val]);
+			// console.log(screenWidth, canvasConfig[val]);
 			let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
-			this.setState({ nft, ...canvasCfg, loading: false, screenWidth, screenHeight });
+			this.setState({ nft, ...canvasCfg, loading: false, screenWidth, screenHeight, originScreenWidth, originScreenHeight });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -161,7 +209,6 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		const containerData = cropper.getContainerData();
 		let imageData = cropper.getImageData();
 		let { scaleType, canvasDataLeft, canvasDataTop, zoom } = imgPreConfig;
-		console.log(imgPreConfig, 'imgPreConfig');
 
 		let originWidth = imageData.naturalWidth;
 		let originHeight = imageData.naturalHeight;
@@ -224,6 +271,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			// 	(imgPreConfig.zoom && cropper.zoom(-0.1));
 			// }
 		}
+		console.log(scaleType == 'zoom' ? zoom : 10, `scaleType == 'zoom' ? zoom : 10`);
 
 		this.setState({ isInit: true, zoom: scaleType == 'crop' ? zoom : 1, zoom2: scaleType == 'zoom' ? zoom : 10 });
 
@@ -444,15 +492,10 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		// );
 
 
-		let imgPreConfig: any = {
+		let imgPreConfig: IImgPreConfigProps = {
 			originWidth,
 			originHeight,
-			targetWidth,
-			targetHeight,
-			zoom: newScaleType == 'crop' ? zoom : zoom2,
 			scaleType: newScaleType,
-			screenWidth: canvasConfig[radioVal].width,
-			screenHeight: canvasConfig[radioVal].height,
 			canvasDataLeft: canvasData.left,
 			canvasDataTop: canvasData.top,
 		};
@@ -466,8 +509,37 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				cropHeight
 			}
 		}
-		return imgPreConfig;
+		let { originScreenWidth } = this.state;
 
+
+		imgPreConfig = this.formatImgPreConfig(imgPreConfig, multiplyConfig[originScreenWidth].multiple);
+		// 不用处理的数据
+		imgPreConfig = {
+			...imgPreConfig,
+			zoom: newScaleType == 'crop' ? zoom : zoom2,
+			screenWidth: canvasConfig[radioVal].width,
+			screenHeight: canvasConfig[radioVal].height,
+			targetWidth,
+			targetHeight,
+		}
+		console.log(imgPreConfig, 'imgPreConfig');
+
+		// newimgPreConfig.targetHeight = 2048 + 56 * 2;
+		// newimgPreConfig.targetWidth = 3840;
+		return imgPreConfig;
+	}
+
+	formatImgPreConfig(imgPreConfig: IImgPreConfigProps, multiplyNumber: number): IImgPreConfigProps {
+		// let { originScreenWidth } = this.state;
+		let newImgPreConfig = Object.keys(imgPreConfig).reduce((pre: IImgPreConfigProps, cur) => {
+			// console.log(imgPreConfig[cur], cur, pre, 'imgPreConfig[cur]');
+			let item = imgPreConfig[cur as IImgPreConfigKey]!;
+			// if (item === 1080) { item = item - 56 }
+			return { ...pre, [cur]: isNaN(Number(item)) ? item : Number(item) * (multiplyNumber) };
+		}, imgPreConfig);
+
+		// console.log(newImgPreConfig, 'imgPreConfig');
+		return newImgPreConfig;
 	}
 
 
@@ -510,7 +582,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 
 	// 使用原图
 	async removeImagePreview() {
-		let { scaleType, nft, radioVal, screenWidth, screenHeight } = this.state;
+		let { scaleType, nft, radioVal, screenWidth, screenHeight, originScreenWidth, originScreenHeight } = this.state;
 		let { mode } = this.params;
 		confirm(this.t(`确定退出设置使用原图吗？退出后您可在“设置-${this.params.mode == '0' ? '投屏' : '轮播图'}”将原图显示在设备上`), async () => {
 			this.setState({ loading: true, isReady: false });
@@ -519,7 +591,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], aspectRatio, testUrl: '' });
 			}, 100);
 			try {
-				if (screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) {
+				if (originScreenWidth == canvasConfig[radioVal].width && originScreenHeight == canvasConfig[radioVal].height) {
 					let newNft: any = { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any }
 					mode == '0' && (newNft.shadow = 1);
 					await transformImage(this.params.address, newNft);
@@ -544,14 +616,14 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			cropBoxResizable,
 			viewMode,
 			movable, zoom2, autoCropArea, isReady, radioVal, preLoading } = this.state;
-		let { screenWidth, screenHeight } = this.state;
+		let { screenWidth, screenHeight, originScreenHeight, originScreenWidth } = this.state;
 		let { t } = this;
 		return <div className="cropper_page">
 			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
 			<div className="cropper_root_box">
 				<div className='cropper_wapper'>
 					<div className="radio_box">
-						{!Boolean(screenWidth == canvasConfig[radioVal].width && screenHeight == canvasConfig[radioVal].height) && <NoticeBar marqueeProps={{ loop: true, text: t("当前裁剪比例与设备比例不符合,提交将不生效") }}>
+						{!Boolean(originScreenWidth == canvasConfig[radioVal].width && originScreenHeight == canvasConfig[radioVal].height) && <NoticeBar marqueeProps={{ loop: true, text: t("当前裁剪比例与设备比例不符合,提交将不生效") }}>
 						</NoticeBar>}
 						<div className="title">{t("选择方向")}</div>
 						<div className="body">
@@ -670,6 +742,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 									restore={false}
 									ready={() => {
 										let { scaleType, viewMode, nft, isInit } = this.state;
+										// debugger
 										this.setState({ isReady: true });
 										!isInit && this.initCropBox((nft as any).imageTransform);
 										if (!viewMode && scaleType == 'zoom') {

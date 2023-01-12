@@ -7,7 +7,7 @@ import { getScreenSettings, screenLight, switchAutoLight } from '../../models/de
 import './index.scss';
 import Loading from '../../../deps/webpkit/lib/loading';
 
-class AudioSetting extends NavPage<{ address: string }> {
+class AudioSetting extends NavPage<{ address: string, env: string }> {
 
 	state = {
 		light: 0,
@@ -20,8 +20,10 @@ class AudioSetting extends NavPage<{ address: string }> {
 		let { address } = this.params;
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
 		// 获取设备当前设置参数
-		getScreenSettings(address).then(({ light, switchAutoLight }) => {
-			light = parseInt(String(light / 51));
+		getScreenSettings(address).then(({ light, switchAutoLight, env }) => {
+			let unit = env.includes('t982') ? 20 : 51;
+			console.log(light, 'light');
+			light = parseInt(String(light / unit));
 			this.setState({ light, autoLight: switchAutoLight, });
 		}).catch((err: any) => {
 			alert(err.message);
@@ -29,13 +31,15 @@ class AudioSetting extends NavPage<{ address: string }> {
 	}
 
 	sliderChange(e: number) {
-		let light = e * 51;
-		let { address } = this.params;
+		let { address, env } = this.params;
+		let unit = env.includes('t982') ? 20 : 51;
+		let light = e * unit;
+
 		let { dsq_id } = this.state;
 		// let dsq_id = 0;
 		clearTimeout(dsq_id);
 		let newDsqId = setTimeout(() => {
-			screenLight(address, light ? light : 1);
+			screenLight(address, { light: light ? light : 1, lightScale: ((100 / 5) * e) / 100 });
 		}, 500);
 		this.setState({ light: e, dsq_id: newDsqId });
 	}
