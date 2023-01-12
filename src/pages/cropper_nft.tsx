@@ -85,7 +85,9 @@ interface IMultiplyConfigProps {
 
 const multiplyConfig: IMultiplyConfigProps = {
 	3840: { multiple: 2, original: 0.5 },
+	2160: { multiple: 2, original: 0.5 },
 	1920: { multiple: 1, original: 1 },
+	1080: { multiple: 1, original: 1 },
 };
 
 let cropBoxConfig = {
@@ -174,10 +176,10 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			let originScreenWidth = screenWidth;
 			let originScreenHeight = screenHeight;
 
-			let newCanvasConfig = { 0: { ...canvasConfig[0], width: screenWidth, height: screenHeight }, 1: { ...canvasConfig[1], width: screenHeight, height: screenWidth } };
-			canvasConfig = newCanvasConfig;
 
-			if (screenWidth === 3840) {
+			if (screenWidth === 3840 || screenWidth === 2160) {
+				let newCanvasConfig = { 0: { ...canvasConfig[0], width: screenWidth, height: screenHeight }, 1: { ...canvasConfig[1], width: screenHeight, height: screenWidth } };
+				canvasConfig = newCanvasConfig;
 				screenWidth = screenWidth / 2;
 				screenHeight = screenHeight / 2;
 			}
@@ -522,7 +524,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			targetWidth,
 			targetHeight,
 		}
-		console.log(imgPreConfig, 'imgPreConfig');
+		console.log(imgPreConfig, 'imgPreConfig', radioVal);
 
 		// newimgPreConfig.targetHeight = 2048 + 56 * 2;
 		// newimgPreConfig.targetWidth = 3840;
@@ -591,6 +593,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 				this.setState({ ...cropBoxConfig[scaleType], ...canvasConfig[radioVal], aspectRatio, testUrl: '' });
 			}, 100);
 			try {
+
 				if (originScreenWidth == canvasConfig[radioVal].width && originScreenHeight == canvasConfig[radioVal].height) {
 					let newNft: any = { ...nft, imageTransform: { scaleType: '', screenWidth: canvasConfig[radioVal].width, screenHeight: canvasConfig[radioVal].height } as any }
 					mode == '0' && (newNft.shadow = 1);
