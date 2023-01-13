@@ -622,7 +622,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let { screenWidth, screenHeight, originScreenHeight, originScreenWidth } = this.state;
 		let { t } = this;
 		return <div className="cropper_page">
-			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
+			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button disabled={!isReady} type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
 			<div className="cropper_root_box">
 				<div className='cropper_wapper'>
 					<div className="radio_box">
