@@ -155,7 +155,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	}
 
 	async getNftByScreen(screenWidth?: number, screenHeight?: number) {
-		let { radioVal, } = this.state;
+		let { radioVal, canvasConfig } = this.state;
 		let nft = await models.nft.methods.getNFTById({
 			id: this.params.id, owner: '', address: this.params.address,
 			screenWidth: screenWidth || canvasConfig[radioVal].width,
@@ -170,19 +170,25 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		// const { canvasConfig } = this.state;
 		// 获取设备当前设置参数
 		let l = await Loading.show(this.t('正在加载屏幕设置'));
-		getScreenSettings(this.params.address).then(async ({ screenWidth, screenHeight }) => {
+		getScreenSettings(this.params.address).then(async ({ screenWidth, screenHeight, screenOriLand, env }) => {
 			// let { screenWidth, screenHeight } = this.params;
-			console.log(screenWidth, screenHeight);
+			// console.log(screenWidth, screenHeight, '--------------------->origin');
+			// if (!screenOriLand && env.includes('t982')) [screenWidth, screenHeight] = [screenHeight, screenWidth];
+			console.log(screenWidth, 'screenWidth', screenHeight, 'screenHeight', screenOriLand);
+
 			let originScreenWidth = screenWidth;
 			let originScreenHeight = screenHeight;
 
 
+			let newCanvasConfig = canvasConfig;
 			if (screenWidth === 3840 || screenWidth === 2160) {
-				let newCanvasConfig = { 0: { ...canvasConfig[0], width: screenWidth, height: screenHeight }, 1: { ...canvasConfig[1], width: screenHeight, height: screenWidth } };
-				canvasConfig = newCanvasConfig;
+				newCanvasConfig = { 0: { ...canvasConfig[0], width: 3840, height: 2160 }, 1: { ...canvasConfig[1], width: 2160, height: 3840 } };
+				// canvasConfig = newCanvasConfig;
 				screenWidth = screenWidth / 2;
 				screenHeight = screenHeight / 2;
 			}
+			console.log(newCanvasConfig, 'newCanvasConfig', canvasConfig);
+
 
 			let nft = await this.getNftByScreen(Number(originScreenWidth), Number(originScreenHeight));
 			// console.log(nft.imageTransform, 'nft.imageTransform1');
@@ -194,7 +200,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 
 			// console.log(screenWidth, canvasConfig[val]);
 			let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
-			this.setState({ nft, ...canvasCfg, loading: false, screenWidth, screenHeight, originScreenWidth, originScreenHeight });
+			this.setState({ nft, ...canvasCfg, canvasConfig: newCanvasConfig, loading: false, screenWidth, screenHeight, originScreenWidth, originScreenHeight });
 		}).catch((err: any) => {
 			alert(err.message);
 		}).finally(() => l.close());
@@ -327,14 +333,13 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		// }
 		this.setState({ zoom: e, scaleType: newCcaleType });
 
-		console.log(newCcaleType, Math.floor(canvasData.width) > containerData.width, Math.floor(canvasData.height), containerData.height, canvasData);
 
 
 	}
 
 	async radioChange(val: number) {
 		// let val: number = e.target.value;
-		let { scaleType } = this.state;
+		let { scaleType, canvasConfig } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, zoom: 0, zoom2: 10 });
 		let nft = await this.getNftByScreen(canvasConfig[val].width, canvasConfig[val].height);
 		setTimeout(() => {
@@ -381,7 +386,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	}
 
 	getScale(originWidth: number, originHeight: number, containerWidth: number, containerHeight: number) {
-		let { radioVal } = this.state;
+		let { radioVal, canvasConfig } = this.state;
 		let scaleX = canvasConfig[radioVal].width / containerWidth;
 		let scaleY = canvasConfig[radioVal].height / containerHeight;
 		let scale = scaleX;
@@ -430,7 +435,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 		let canvasData = cropper.getCanvasData();
 		let imageData = cropper.getImageData();
 		let cropBoxData = cropper.getCropBoxData();
-		let { radioVal, scaleType, zoom, zoom2 } = this.state;
+		let { radioVal, scaleType, zoom, zoom2, canvasConfig } = this.state;
 		// console.log(containerData, 'getContainerData', canvasData, 'getCanvasData', imageData, 'getImageData', cropBoxData, 'getCropBoxData', 'this.cropper');
 		let scaleX = canvasConfig[radioVal].width / containerData.width;
 		let scaleY = canvasConfig[radioVal].height / containerData.height;
@@ -524,6 +529,14 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			targetWidth,
 			targetHeight,
 		}
+		// imgPreConfig = {
+		// 	...imgPreConfig,
+		// 	zoom: newScaleType == 'crop' ? zoom : zoom2,
+		// 	screenWidth: canvasConfig[radioVal].height,
+		// 	screenHeight: canvasConfig[radioVal].width,
+		// 	targetWidth: targetHeight,
+		// 	targetHeight: targetWidth,
+		// }
 		console.log(imgPreConfig, 'imgPreConfig', radioVal);
 
 		// newimgPreConfig.targetHeight = 2048 + 56 * 2;
@@ -548,7 +561,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 	async modeRadioChange(e: RadioChangeEvent) {
 		let val = e.target.value;
 		let nft = await this.getNftByScreen();
-		let { radioVal } = this.state;
+		let { radioVal, canvasConfig } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, nft, scaleType: val });
 		if (val === 'crop') {
 			setTimeout(() => {
@@ -584,7 +597,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 
 	// 使用原图
 	async removeImagePreview() {
-		let { scaleType, nft, radioVal, screenWidth, screenHeight, originScreenWidth, originScreenHeight } = this.state;
+		let { scaleType, nft, radioVal, screenWidth, screenHeight, canvasConfig, originScreenWidth, originScreenHeight } = this.state;
 		let { mode } = this.params;
 		confirm(this.t(`确定退出设置使用原图吗？退出后您可在“设置-${this.params.mode == '0' ? '投屏' : '轮播图'}”将原图显示在设备上`), async () => {
 			this.setState({ loading: true, isReady: false });
@@ -619,7 +632,7 @@ class CropImage extends NavPage<{ id: string | number, mode: number | string, ad
 			cropBoxResizable,
 			viewMode,
 			movable, zoom2, autoCropArea, isReady, radioVal, preLoading } = this.state;
-		let { screenWidth, screenHeight, originScreenHeight, originScreenWidth } = this.state;
+		let { screenWidth, screenHeight, originScreenHeight, originScreenWidth, canvasConfig } = this.state;
 		let { t } = this;
 		return <div className="cropper_page">
 			<Header page={this} title={t('图片裁剪')} actionBtn={<div className="sub_btn"><Button disabled={!isReady} type="link" onClick={this.subImageConfig.bind(this)}>{t("提交")}</Button></div>} />
