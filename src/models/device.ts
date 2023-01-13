@@ -3,15 +3,18 @@ import storage from 'somes/storage';
 import index, { NFT, Device } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
 import * as key from '../key';
-import somes from 'somes';
 import sdk from '../sdk';
 import chain from '../chain';
 import { t } from 'i18next';
-import { alert } from '../util/tools';
 import { ICropConfig } from '../pages/cropper_nft';
 
+interface IDeviceActivationProps {
+	address: string;
+}
 export { Device };
-
+interface IDeviceProps extends Device {
+	activation: number
+}
 export interface DeviceScreenSave {
 	address: string;
 	time: number;
@@ -190,10 +193,40 @@ export async function bind(target: string, authCode: string, vCheck?: string) {
 	await sdk.user.methods.addDevice({ address: target, sn: o.sn || target, vCheck, screen: o.screen });
 }
 
+export async function bindDevice(target: string, authCode: string, vCheck?: string) {
+	let owner = await chain.getDefaultAccount();
+	await sdk.user.methods.bindDevice({
+		address: key.address(),
+		deviceAddress: target,
+		owner,
+		vCheck,
+		publicKey: key.publicKey(),
+		name: key.authName(),
+		authCode,
+		addressOrigin: owner,
+		timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+		// sign: hashData.signature
+	});
+}
+
+
 export async function unbind(target: string) {
 	await call(target, 'unbind', { name: key.authName() });
 	await sdk.user.methods.deleteDevice({ address: target });
 }
+
+export function deviceActivation(props: IDeviceActivationProps): Promise<Device[]> {
+	return sdk.user.methods.deviceActivation(props);
+}
+
+export async function checkBindDeviceStatus(address: string, owner?: string): Promise<number> {
+	return await sdk.user.methods.checkBindDeviceStatus({ address, owner });
+}
+
+export function getDeviceInfoByAddress(props: { address: string }): Promise<IDeviceProps> {
+	return sdk.user.methods.getDeviceInfoByAddress(props);
+}
+
 
 export async function get_screen_save(address: string, _type?: 'single' | 'multi' | 'video' | 'nft'): Promise<DeviceScreenSave> {
 	var type = _type || await storage.get('__device_set_screen_save_cur_' + address, 'single');
@@ -241,3 +274,5 @@ export async function set_shadow_screen_save(address: string,
 		await shadowNFTs(address, nftList);
 	}
 }
+
+

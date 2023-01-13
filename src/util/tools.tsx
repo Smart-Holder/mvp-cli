@@ -13,6 +13,8 @@ import { Toast } from 'antd-mobile';
 import "./tools.scss";
 import chain from '../chain';
 import { t } from 'i18next';
+import { bindDevice, bind, deviceActivation, checkBindDeviceStatus, getDeviceInfoByAddress } from '../models/device';
+const crypto_tx = require('crypto-tx');
 
 class Tab extends ViewController<{ nav: () => Nav }> {
 	triggerLoad() {
@@ -298,6 +300,7 @@ export class ChainTraits {
 export const chainTraits = new ChainTraits();
 
 export const alert = (text: string | DialogIn, onOk?: () => void) => {
+	if (!text) return;
 	let btnText = t('@确认');
 	if (typeof text === 'string') {
 		return show({
@@ -326,7 +329,7 @@ export const confirm = async (text: string | DialogIn, onOk?: (isOk?: any) => Pr
 
 	return show({
 		...text,
-		buttons: { [btnText]: () => onOk && onOk(true) },
+		buttons: { [btnTextCanel]: () => onOk && onOk(false), [btnText]: () => onOk && onOk(true) },
 	});
 }
 const dialog_handles: Dict<any> = {};
@@ -350,3 +353,94 @@ export const handle = function (e: any) {
 		alert({ text });
 	}
 };
+
+// 获取路由中的参数
+export const getParams = (url: string) => {
+	var temp1 = url.split('?');
+	var pram = temp1[1];
+	var keyValue = pram.split('&');
+	var obj: { [key: string]: string } = {};
+	for (var i = 0; i < keyValue.length; i++) {
+		var item = keyValue[i].split('=');
+		var key = item[0];
+		var value = item[1];
+		obj[key] = value;
+	}
+	return obj;
+}
+
+
+
+
+// const bind_device = async (href: string, isActivation?: boolean) => {
+// 	let { a, c, v, n = 0 } = getParams(href);
+// 	return new Promise(async (resolve, reject) => {
+// 		try {
+// 			if (!a) {
+// 				// alert("请扫描设备绑定二维码!");
+// 				throw Error('请扫描设备绑定二维码!');
+// 			}
+// 			Number(n) < 316 ? await bind(crypto_tx.checksumAddress(a), c, v) : await bindDevice(a, c, v);
+// 			if (isActivation && Number(n) < 316) {
+// 				await deviceActivation({ address: a });
+// 			}
+
+// 			if (Number(n) < 316) return resolve('');
+
+// 			let index = 0;
+// 			let dsq_id = setInterval(async () => {
+// 				try {
+// 					let data = await checkBindDeviceStatus(a);
+// 					index++;
+// 					if (index >= 5) {
+// 						reject(data);
+// 						clearInterval(dsq_id);
+// 						alert('设备绑定失败超时');
+// 					}
+// 					if (!data) {
+// 						clearInterval(dsq_id);
+// 						resolve('');
+// 					} else if (data == 3) {
+// 						reject(data);
+// 						clearInterval(dsq_id);
+// 						alert('绑定失败,绑定二维码过期');
+// 					}
+// 				} catch (error) {
+// 					clearInterval(dsq_id);
+// 					reject(error);
+// 				}
+// 			}, 1000);
+// 		} catch (error) {
+// 			reject(error);
+// 		}
+// 	});
+
+// }
+
+// // 绑定设备设置当前钱包
+// export const newBindDevice = async (a: string, code: string, vcheck?: string) => {
+// 	let data = await getDeviceInfoByAddress({ address: a });
+// 	return new Promise(async (resolve, reject) => {
+// 		try {
+// 			if (data?.activation) {
+// 				await bind_device(a);
+// 			} else {
+// 				confirm({
+// 					title: '激活提示',
+// 					text: '激活设备后将不支持退换，确定激活设备？'
+// 				}, async (isOk) => {
+// 					if (!isOk) {
+// 						return;
+// 					};
+// 					// 激活绑定
+// 					await bind_device(a, true);
+// 				});
+// 			}
+// 			resolve('');
+// 		} catch (error) {
+
+// 			reject(error);
+// 		}
+// 	});
+
+// }

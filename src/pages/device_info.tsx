@@ -61,6 +61,8 @@ class DeviceInfo extends NavPage<Device> {
 	async triggerLoad() {
 		let owner = this.params.address;
 		this.getNFTList(owner);
+		console.log(models, 'models');
+
 		window.addEventListener('scroll', this.handleScroll.bind(this), true);
 		models.msg.addEventListener('UpdateNFT', e => {
 			let data: NFT = e.data;
