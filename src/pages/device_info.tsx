@@ -1,7 +1,7 @@
 import { React } from 'webpkit/mobile';
 import NavPage from '../nav';
 import { DeviceItem } from '../components/deviceItem';
-import { Device, devices } from '../models/device';
+import { Device, devices, getScreenSettings, unBindDevice } from '../models/device';
 import models, { NFT } from '../models';
 import NftCard from '../components/nft_card';
 import somes from '../../deps/webpkit/deps/somes';
@@ -215,9 +215,14 @@ class DeviceInfo extends NavPage<Device> {
 				[cancel]: () => this.setState({ loading: false }), ['@' + confim]: async () => {
 					try {
 						this.setState({ loading: true });
-						const address = this.state.deviceInfo.address;
+						const { address, sn } = this.state.deviceInfo;
 						// await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' } as any] }, 'single', true);
-						await device.unbind(address);
+						// await device.unbind(address);
+						let { versionCode } = await getScreenSettings(address);
+						// console.log(versionCode, 'versionCode');
+
+						versionCode < 386 ? await device.unbind(address) : await unBindDevice(address, sn);
+
 
 						alert(t('解绑设备成功'), () => this.replacePage('/device'));
 					} catch (error: any) {

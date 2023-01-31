@@ -210,6 +210,10 @@ export async function bindDevice(target: string, authCode: string, vCheck?: stri
 }
 
 
+export async function unBindDevice(address: string, sn: string) {
+	await sdk.user.methods.unBindDevice({ address, sn });
+}
+
 export async function unbind(target: string) {
 	await call(target, 'unbind', { name: key.authName() });
 	await sdk.user.methods.deleteDevice({ address: target });

@@ -26,8 +26,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 	async _AddDevice() {
 		// https://mvp-dev.stars-mine.com/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=4627&v=EWC1wsYbkB65QJ&n=3860
 		const { t } = this;
-		// let href = 'http://192.168.202.147:8080/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=4627&v=EWC1wsYbkB65QJ&n=3860';
-		let href = window.location.href;
+		let href = 'https://mvp-dev.stars-mine.com/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=1683&v=EWC1wsYbkB65QJ&n=387';
+		// let href = window.location.href;
 
 		try {
 			// await device.bind(target, code, check);
@@ -46,12 +46,12 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 					// alert("请扫描设备绑定二维码!");
 					throw Error('请扫描设备绑定二维码!');
 				}
-				Number(n) < 316 ? await bind(crypto_tx.checksumAddress(a), c, v) : await bindDevice(a, c, v);
-				if (isActivation && Number(n) < 316) {
-					await deviceActivation({ address: a });
-				}
+				Number(n) < 386 ? await bind(crypto_tx.checksumAddress(a), c, v) : await bindDevice(a, c, v);
+				// if (isActivation && Number(n) < 316) {
+				// 	await deviceActivation({ address: a });
+				// }
 
-				if (Number(n) < 316) return resolve('');
+				if (Number(n) < 386) return resolve('');
 
 				let index = 0;
 				let dsq_id = setInterval(async () => {
@@ -94,8 +94,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 					await this.bind_device(href);
 				} else {
 					confirm({
-						title: '激活提示',
-						text: '激活设备后将不支持退换，确定激活设备？'
+						title: '绑定提示',
+						text: '首次绑定设备后将不支持退换，确定绑定设备？'
 					}, async (isOk) => {
 						if (!isOk) {
 							this._back();
