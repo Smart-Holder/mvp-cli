@@ -48,6 +48,7 @@ utils.onUncaughtException.on((e) => {
 	handle(e.data);
 });
 utils.onUnhandledRejection.on((e) => {
+	console.log(e.data, 'onUnhandledRejection');
 	// console.log(e.data, 'onUnhandledRejection');
 	handle(e.data.reason)
 });

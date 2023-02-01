@@ -26,8 +26,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 	async _AddDevice() {
 		// https://mvp-dev.stars-mine.com/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=4627&v=EWC1wsYbkB65QJ&n=3860
 		const { t } = this;
-		let href = 'https://mvp-dev.stars-mine.com/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=1683&v=EWC1wsYbkB65QJ&n=387';
-		// let href = window.location.href;
+		// let href = 'https://mvp-dev.stars-mine.com/device_add?a=0xD1eE3D79f46354807Eaa18a4242270f931500fdd&c=1297&v=EWC1wsYbkB65QJ&n=387';
+		let href = window.location.href;
 
 		try {
 			// await device.bind(target, code, check);
@@ -38,9 +38,11 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 		}
 	}
 
-	async bind_device(href: string, isActivation?: boolean) {
+	async bind_device(href: string, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+
 		let { a, c, v, n = 0 } = getParams(href);
-		return new Promise(async (resolve, reject) => {
+		return new Promise(async () => {
+
 			try {
 				if (!a) {
 					// alert("请扫描设备绑定二维码!");
@@ -69,8 +71,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 						} else if (data == 3) {
 							// reject(data);
 							clearInterval(dsq_id);
-							alert('绑定失败,绑定二维码过期');
-							reject({ message: '设备绑定失败超时' });
+							// alert('绑定失败,绑定二维码过期');
+							reject({ message: '绑定失败,绑定二维码过期' });
 						}
 					} catch (error) {
 						clearInterval(dsq_id);
@@ -91,7 +93,7 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				if (data?.activation) {
-					await this.bind_device(href);
+					await this.bind_device(href, resolve, reject);
 				} else {
 					confirm({
 						title: '绑定提示',
@@ -103,8 +105,9 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 							return;
 						};
 						// 激活绑定
-						await this.bind_device(href, true);
-						resolve('');
+						await this.bind_device(href, resolve, reject);
+
+						// resolve('');
 					});
 				}
 			} catch (error) {
