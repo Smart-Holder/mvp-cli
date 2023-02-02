@@ -41,6 +41,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 	async bind_device(href: string, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
 
 		let { a, c, v, n = 0 } = getParams(href);
+		let { t } = this;
+
 		return new Promise(async () => {
 
 			try {
@@ -62,7 +64,7 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 						index++;
 						if (index >= 5) {
 							clearInterval(dsq_id);
-							reject({ message: '设备绑定失败超时' });
+							reject({ message: t('设备绑定失败超时') });
 							// alert('设备绑定失败超时');
 						}
 						if (!data) {
@@ -72,7 +74,7 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 							// reject(data);
 							clearInterval(dsq_id);
 							// alert('绑定失败,绑定二维码过期');
-							reject({ message: '绑定失败,绑定二维码过期' });
+							reject({ message: t('绑定失败,绑定二维码过期') });
 						}
 					} catch (error) {
 						clearInterval(dsq_id);
@@ -89,6 +91,7 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 	// 绑定设备设置当前钱包
 	async newBindDevice(href: string) {
 		let { a } = getParams(href);
+		let { t } = this;
 		let data = await getDeviceInfoByAddress({ address: a });
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -96,8 +99,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string; }> {
 					await this.bind_device(href, resolve, reject);
 				} else {
 					confirm({
-						title: '绑定提示',
-						text: '首次绑定设备后将不支持退换，确定绑定设备？'
+						title: t('绑定提示'),
+						text: t('首次绑定设备后将不支持退换，确定绑定设备？')
 					}, async (isOk) => {
 						if (!isOk) {
 							this._back();

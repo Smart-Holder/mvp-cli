@@ -219,10 +219,10 @@ class DeviceInfo extends NavPage<Device> {
 						// await device.set_screen_save(address, { time: 10, data: [{ token: '', tokenId: '' } as any] }, 'single', true);
 						// await device.unbind(address);
 						let { versionCode } = await getScreenSettings(address);
-						// console.log(versionCode, 'versionCode');
+						console.log(versionCode, 'versionCode');
 
 						versionCode < 386 ? await device.unbind(address) : await unBindDevice(address, sn);
-
+						// await unBindDevice(address, sn);
 
 						alert(t('解绑设备成功'), () => this.replacePage('/device'));
 					} catch (error: any) {

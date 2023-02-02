@@ -174,5 +174,9 @@
 	"选择背景颜色": "Choose a background color",
 	"设置NFT信息": "Set NFT information",
 	"消息验证未通过~": "Message validation failed~",
-	"请求操时": "Request timeout"
+	"请求操时": "Request timeout",
+	"首次绑定设备后将不支持退换，确定绑定设备？": "After binding the equipment for the first time, return and exchange will not be supported. Are you sure to bind the equipment?",
+	"绑定提示": "Binding prompt",
+	"设备绑定失败超时": "Device binding failed timeout",
+	"绑定失败,绑定二维码过期": "Binding failed, binding QR code expired"
 }
