@@ -216,7 +216,6 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 		const containerData = cropper.getContainerData();
 		let imageData = cropper.getImageData();
 		let { scaleType, canvasDataLeft, canvasDataTop, zoom } = imgPreConfig;
-
 		let originWidth = imageData.naturalWidth;
 		let originHeight = imageData.naturalHeight;
 		// let imgScaleX = originWidth / containerData.width;
@@ -232,6 +231,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 		let isCrop = scaleType == "crop" && this.state.scaleType == "crop";
 		let isZoom = scaleType == "zoom" && this.state.scaleType == "zoom";
+		let canvasData = cropper.getCanvasData();
 		if (isCrop && zoom) {
 			console.log("处理放大后的crop位置");
 			imgPreConfig.zoom &&
@@ -239,7 +239,6 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 					x: containerData.width / 2,
 					y: containerData.height / 2,
 				});
-			let canvasData = cropper.getCanvasData();
 			// let zoomScale = canvasData.width / containerData.width;
 			let zoomScale = this.getZoomScale(canvasData.width, canvasData.height, containerData.width, containerData.height);
 
@@ -249,6 +248,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			cropHeight = Math.floor(cropHeight * zoomScale);
 			// console.log(cropX, cropY, cropWidth, cropHeight, zoomScale, 'old 初始化======================');
 		}
+		console.log(canvasData, "canvasData", containerData, "containerData");
 
 		if (isCrop) {
 			cropX = Math.abs(cropX) / imgScale;
@@ -274,7 +274,6 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			// 	(imgPreConfig.zoom && cropper.zoom(-0.1));
 			// }
 		}
-		console.log(scaleType == "zoom" ? zoom : 10, `scaleType == 'zoom' ? zoom : 10`);
 
 		this.setState({ isInit: true, zoom: scaleType == "crop" ? zoom : 1, zoom2: scaleType == "zoom" ? zoom : 10 });
 	}
@@ -329,9 +328,11 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 	async radioChange(val: number) {
 		// let val: number = e.target.value;
-		let { scaleType, canvasConfig } = this.state;
+		let { scaleType, canvasConfig, originScreenWidth } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, zoom: 0, zoom2: 10 });
 		let nft = await this.getNftByScreen(canvasConfig[val].width, canvasConfig[val].height);
+		nft.imageTransform && (nft.imageTransform = this.formatImgPreConfig(nft.imageTransform, multiplyConfig[originScreenWidth].original));
+
 		setTimeout(() => {
 			let aspectRatio = val == 1 && scaleType == "zoom" ? 0 : canvasConfig[val].aspectRatio;
 			this.setState({ testUrl: "", nft, canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio, radioVal: val, loading: false });
@@ -734,7 +735,14 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 								</Button>
 							</div>
 
-							<div className="slider_box">{scaleType === "crop" ? <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} /> : <Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />}</div>
+							<div className="slider_box">
+								{scaleType === "crop" ? (
+									// <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} />
+									<div></div>
+								) : (
+									<Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />
+								)}
+							</div>
 
 							<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
 								{!testUrl && <div className="loading_text">loading...</div>}
