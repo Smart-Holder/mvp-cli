@@ -21,7 +21,7 @@ export interface IImgPreConfigProps {
 	targetWidth?: number;
 	targetHeight?: number;
 	scaleType: string;
-	zoom?: number;
+	zoom: number;
 	screenWidth?: number;
 	screenHeight?: number;
 	canvasDataLeft: number;
@@ -114,6 +114,10 @@ let cropBoxConfig = {
 	},
 };
 
+interface ICropNftProps extends NFT {
+	imageTransform: IImgPreConfigProps;
+}
+
 class CropImage extends NavPage<{ id: string | number; mode: number | string; address: string; screenWidth: string | number; screenHeight: string | number }> {
 	cropper: any = React.createRef();
 
@@ -127,7 +131,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			{ name: "最后的晚餐", url: "https://nftimg.stars-mine.com/file/a00aa35d-d200-11ec-853b-0242ac110003.jpeg" },
 		],
 		currImg: {} as any,
-		nft: {} as NFT,
+		nft: {} as ICropNftProps,
 		canvasWidth: 6.4,
 		canvasHeight: 3.6,
 		aspectRatio: 16 / 9,
@@ -183,15 +187,14 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 				let newCanvasConfig = canvasConfig;
 				if (screenWidth === 3840 || screenWidth === 2160) {
 					newCanvasConfig = { 0: { ...canvasConfig[0], width: 3840, height: 2160 }, 1: { ...canvasConfig[1], width: 2160, height: 3840 } };
-					// canvasConfig = newCanvasConfig;
 					screenWidth = screenWidth / 2;
 					screenHeight = screenHeight / 2;
 				}
-				console.log(newCanvasConfig, "newCanvasConfig", canvasConfig);
 
 				let nft = await this.getNftByScreen(Number(originScreenWidth), Number(originScreenHeight));
-				// console.log(nft.imageTransform, 'nft.imageTransform1');
+				// console.log(nft.imageTransform, "nft.imageTransform1");
 				nft.imageTransform && (nft.imageTransform = this.formatImgPreConfig(nft.imageTransform, multiplyConfig[originScreenWidth].original));
+				// console.log(nft.imageTransform, "nft.imageTransform");
 
 				let val = 0;
 
@@ -207,7 +210,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			.finally(() => l.close());
 	}
 
-	initCropBox(imageTransform: IimageTransformProps) {
+	initCropBox(imageTransform: IImgPreConfigProps) {
 		if (!imageTransform) return false;
 		let diviceWidth = document.documentElement.clientWidth;
 		let cropper = this.cropper.current.cropper;
@@ -231,7 +234,6 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 		let isCrop = scaleType == "crop" && this.state.scaleType == "crop";
 		let isZoom = scaleType == "zoom" && this.state.scaleType == "zoom";
-		let canvasData = cropper.getCanvasData();
 		if (isCrop && zoom) {
 			console.log("处理放大后的crop位置");
 			imgPreConfig.zoom &&
@@ -239,6 +241,8 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 					x: containerData.width / 2,
 					y: containerData.height / 2,
 				});
+			let canvasData = cropper.getCanvasData();
+
 			// let zoomScale = canvasData.width / containerData.width;
 			let zoomScale = this.getZoomScale(canvasData.width, canvasData.height, containerData.width, containerData.height);
 
@@ -246,9 +250,9 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			cropY = Math.floor(cropY * zoomScale);
 			cropWidth = Math.floor(cropWidth * zoomScale);
 			cropHeight = Math.floor(cropHeight * zoomScale);
-			// console.log(cropX, cropY, cropWidth, cropHeight, zoomScale, 'old 初始化======================');
+			console.log(cropX, cropY, cropWidth, cropHeight, zoomScale, "old 初始化======================");
 		}
-		console.log(canvasData, "canvasData", containerData, "containerData");
+		// console.log(canvasData, "canvasData", containerData, "containerData");
 
 		if (isCrop) {
 			cropX = Math.abs(cropX) / imgScale;
@@ -493,6 +497,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 			scaleType: newScaleType,
 			canvasDataLeft: canvasData.left,
 			canvasDataTop: canvasData.top,
+			zoom: newScaleType == "crop" ? zoom : zoom2,
 		};
 
 		if (newScaleType == "crop") {
@@ -510,28 +515,17 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 		// 不用处理的数据
 		imgPreConfig = {
 			...imgPreConfig,
-			zoom: newScaleType == "crop" ? zoom : zoom2,
 			screenWidth: canvasConfig[radioVal].width,
 			screenHeight: canvasConfig[radioVal].height,
 			targetWidth,
 			targetHeight,
 		};
-		// imgPreConfig = {
-		// 	...imgPreConfig,
-		// 	zoom: newScaleType == 'crop' ? zoom : zoom2,
-		// 	screenWidth: canvasConfig[radioVal].height,
-		// 	screenHeight: canvasConfig[radioVal].width,
-		// 	targetWidth: targetHeight,
-		// 	targetHeight: targetWidth,
-		// }
-		console.log(imgPreConfig, "imgPreConfig", radioVal);
 
-		// newimgPreConfig.targetHeight = 2048 + 56 * 2;
-		// newimgPreConfig.targetWidth = 3840;
 		return imgPreConfig;
 	}
 
 	formatImgPreConfig(imgPreConfig: IImgPreConfigProps, multiplyNumber: number): IImgPreConfigProps {
+		// return imgPreConfig;
 		// let { originScreenWidth } = this.state;
 		let newImgPreConfig = Object.keys(imgPreConfig).reduce((pre: IImgPreConfigProps, cur) => {
 			// console.log(imgPreConfig[cur], cur, pre, 'imgPreConfig[cur]');
@@ -546,7 +540,10 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 	async modeRadioChange(e: RadioChangeEvent) {
 		let val = e.target.value;
+		let { originScreenWidth } = this.state;
 		let nft = await this.getNftByScreen();
+		nft.imageTransform = this.formatImgPreConfig(nft.imageTransform, multiplyConfig[originScreenWidth].original);
+
 		let { radioVal, canvasConfig } = this.state;
 		this.setState({ loading: true, isReady: false, isInit: false, nft, scaleType: val });
 		if (val === "crop") {
@@ -737,13 +734,12 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 							<div className="slider_box">
 								{scaleType === "crop" ? (
-									// <Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} />
-									<div></div>
+									<Slider disabled={!isReady} onChange={this.sliderChange.bind(this)} max={100} min={0} value={zoom} />
 								) : (
+									// <div></div>
 									<Slider disabled={!isReady} onChange={this.sliderChange2.bind(this)} max={10} min={1} value={zoom2} />
 								)}
 							</div>
-
 							<div className="cropper_box" style={{ minHeight: `${canvasHeight + 0.2}rem` }}>
 								{!testUrl && <div className="loading_text">loading...</div>}
 								{Boolean(testUrl) && (
@@ -776,10 +772,11 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 											responsive={false}
 											restore={false}
 											ready={() => {
-												let { scaleType, viewMode, nft, isInit } = this.state;
-												// debugger
+												let { scaleType, viewMode, nft, isInit, originScreenWidth } = this.state;
+												console.log((nft as any).imageTransform, "nft as any).imageTransform");
+
 												this.setState({ isReady: true });
-												!isInit && this.initCropBox((nft as any).imageTransform);
+												!isInit && this.initCropBox(nft.imageTransform);
 												if (!viewMode && scaleType == "zoom") {
 													this.maxCropBox();
 												}
