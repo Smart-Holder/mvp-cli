@@ -524,7 +524,8 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 		return imgPreConfig;
 	}
 
-	formatImgPreConfig(imgPreConfig: IImgPreConfigProps, multiplyNumber: number): IImgPreConfigProps {
+	formatImgPreConfig(imgPreConfig: IImgPreConfigProps, multiplyNumber?: number): IImgPreConfigProps {
+		if (!imgPreConfig || !multiplyNumber) return imgPreConfig;
 		// return imgPreConfig;
 		// let { originScreenWidth } = this.state;
 		let newImgPreConfig = Object.keys(imgPreConfig).reduce((pre: IImgPreConfigProps, cur) => {
