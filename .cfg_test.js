@@ -1,6 +1,6 @@
 
 module.exports = {
-	sdk: 'https://mvp-test.stars-mine.com/service-api',
+	sdk: 'https://mvp-test.smartholder.jp/service-api',
 	platform: 'eth',
 	env: 'test',
 	contracts: {
