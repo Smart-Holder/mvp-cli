@@ -211,7 +211,8 @@ export const unitLabel: { [key: string]: string } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 	5555: "BSN_TEST",
-	588: "METIS",
+	599: "METIS_TEST",
+	588: "METIS_TEST_OLD",
 	6666: "HASHII_TEST",
 };
 
@@ -230,7 +231,8 @@ export const unitLabelProd: { [key: string]: string } = {
 	97: "BSC_TESTNET",
 	5: "GOERLI",
 	5555: "BSN",
-	588: "METIS_TEST",
+	599: "METIS",
+	588: "METIS_TEST_OLD",
 	1088: "METIS",
 	6666: "HASHII",
 };
@@ -239,7 +241,8 @@ export enum unitChainIdLabel {
 	UNKNOWN = 0, // UNKNOWN
 	ETHEREUM = 1, // ETHEREUM
 	MATIC = 137, // MATIC
-	METIS_TEST = 588, // METIS
+	METIS_TEST = 599, // METIS
+	METIS_TEST_OLD = 588, // METIS
 	METIS = 1088, // METIS
 	KLAYTN = 8217, // KLAYTN
 	XDAI = 100, // XDAI
@@ -274,7 +277,8 @@ export enum ChainType {
 	HCETH = 64, // hard-chain ETHEREUM
 	// BSN_TEST = 5555,
 	BSN = 5555,
-	METIS_TEST = 588,
+	METIS_TEST = 599,
+	METIS_TEST_OLD = 588,
 	METIS = 1088, // METIS
 	HASHII_TEST = 6666,
 }
@@ -298,6 +302,7 @@ export class ChainTraits {
 	// BSN_TEST = [ChainType.BSN_TEST, 18, 'BSN_TEST'];
 	BSN = [ChainType.BSN, 18, "BSN"];
 	METIS_TEST = [ChainType.METIS_TEST, 18, "METIS_TEST"];
+	METIS_TEST_OLD = [ChainType.METIS_TEST_OLD, 18, "METIS_TEST"];
 	METIS = [ChainType.METIS, 18, "METIS"];
 	HASHII_TEST = [ChainType.HASHII_TEST, 18, "HASHII_TEST"];
 }

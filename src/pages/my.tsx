@@ -89,6 +89,7 @@ class My extends NavPage {
 		let preNftList = !tabIndex ? nftList1 : nftList2;
 		let pageSize = 10;
 		let params: IGetNFTByOwnerPageProps = { owner, curPage: curPage || 1, pageSize };
+		console.log(chain.chain, "chain.chain");
 
 		params[tabIndex ? "other_chain" : "chain"] = chain.chain;
 
