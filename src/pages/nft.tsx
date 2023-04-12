@@ -31,9 +31,9 @@ class DeviceList extends NavPage {
 	state = { nft: [] as NFT[], device: [] as Device[], loading: true, visible: false, carouselType: "matemask" as ICarouselType, visibleTip: false, language: "ZH" };
 
 	async triggerLoad() {
-		// alert(navigator.userAgent);
+		// alert(this.getCarouselType());
 		// console.log(["tokenpocket", "matemask"].includes(this.getCarouselType()), navigator.userAgent, '["tokenpocket", "matemask"].includes(this.getCarouselType())');
-
+		this.getCarouselType();
 		this.setState({
 			visibleTip: !Boolean(localStorage.getItem("alreadyCompleted")),
 			language: localStorage.getItem("language"),
@@ -65,10 +65,11 @@ class DeviceList extends NavPage {
 			carouselType = "imtoken";
 		} else if (userAgent.includes("TokenPocket")) {
 			carouselType = "tokenpocket";
-			return carouselType;
+			// return carouselType;
 		} else {
 			carouselType = "matemask";
 		}
+		this.setState({ carouselType });
 		return carouselType;
 	}
 
