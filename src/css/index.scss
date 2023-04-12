@@ -130,3 +130,24 @@
 		padding: 0.6rem 0;
 	}
 }
+
+.tip_modal {
+	width: 80%;
+	.tip_img {
+		width: 100%;
+	}
+	.am-modal-content {
+		height: 100vh;
+		// background-color: rgba(0, 0, 0, 0.625);
+		background-color: transparent;
+		// background-color: transparent;
+		// padding: 0.2rem 0.9rem;
+		// width: 80%;
+	}
+
+	.close {
+		position: absolute;
+		right: 2%;
+		z-index: 999;
+	}
+}

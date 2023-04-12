@@ -200,7 +200,7 @@ class CropImage extends NavPage<{ id: string | number; mode: number | string; ad
 
 				if (Boolean(screenWidth == 1080 && screenHeight == 1920)) val = 1;
 
-				// console.log(screenWidth, canvasConfig[val]);
+				console.log(screenWidth, canvasConfig[val], "canvasConfig[val]");
 				let canvasCfg = { canvasWidth: canvasConfig[val].canvasWidth, canvasHeight: canvasConfig[val].canvasHeight, aspectRatio: canvasConfig[val].aspectRatio, radioVal: val };
 				this.setState({ nft, ...canvasCfg, canvasConfig: newCanvasConfig, loading: false, screenWidth, screenHeight, originScreenWidth, originScreenHeight });
 			})
