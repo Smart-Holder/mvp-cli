@@ -34,10 +34,10 @@ class DeviceList extends NavPage {
 		// alert(this.getCarouselType());
 		// console.log(["tokenpocket", "matemask"].includes(this.getCarouselType()), navigator.userAgent, '["tokenpocket", "matemask"].includes(this.getCarouselType())');
 		this.getCarouselType();
-		this.setState({
-			visibleTip: !Boolean(localStorage.getItem("alreadyCompleted")),
-			language: localStorage.getItem("language"),
-		});
+		// this.setState({
+		// 	visibleTip: !Boolean(localStorage.getItem("alreadyCompleted")),
+		// 	language: localStorage.getItem("language"),
+		// });
 
 		var hex = encodeParameters(["address"], ["0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391"]);
 		console.log(hex);
@@ -121,7 +121,7 @@ class DeviceList extends NavPage {
 					<BindDeviceCarousel />
 				</Modal>
 
-				<Modal
+				{/* <Modal
 					// popup
 					transparent
 					visible={visibleTip}
@@ -141,8 +141,7 @@ class DeviceList extends NavPage {
 						src={require("../assets/close.png")}
 					/>
 					<img className="tip_img" src={require(`../assets/${carouselType}_${["ZH", "JA", "EN"].includes(language) ? language : "EN"}.png`)} />
-					{/* 6666 */}
-				</Modal>
+				</Modal> */}
 			</div>
 		);
 	}
