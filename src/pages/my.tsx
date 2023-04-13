@@ -356,7 +356,7 @@ class My extends NavPage {
 
 											<div className="select_device_item">
 												<div className="left_box">
-													<img src={item.screen <= 1 ? require("../assets/device2.png") : require("../assets/device1.png")} alt="" />
+													<img src={[-1, 3].includes(item.screen) ? require("../assets/device2.png") : require("../assets/device1.png")} alt="" />
 												</div>
 
 												<div className="right_box">
