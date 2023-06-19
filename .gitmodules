@@ -3,9 +3,9 @@
 	path = deps/webpkit
 	url = http://gitlab.stars-mine.com/hardware/webpkit.git
 
-[submodule "web3z"]
+[submodule "web3-tx"]
 	path = deps/web3z
-	url = http://gitlab.stars-mine.com/hardware/web3z.git
+	url = http://gitlab.stars-mine.com/hardware/web3-tx.git
 
 [submodule "mvp-ser"]
 	path = deps/mvp-ser
