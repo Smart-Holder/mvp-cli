@@ -1,16 +1,16 @@
 
 [submodule "webpkit"]
 	path = deps/webpkit
-	url = http://gitlab.stars-mine.com/hardware/webpkit.git
+	url = https://github.com/louis-tru/webpkit.git
 
 [submodule "web3-tx"]
 	path = deps/web3z
-	url = http://gitlab.stars-mine.com/hardware/web3-tx.git
+	url = https://github.com/louis-tru/web3-tx.git
 
 [submodule "mvp-ser"]
 	path = deps/mvp-ser
-	url = http://gitlab.stars-mine.com/hardware/mvp-ser.git
+	url = https://github.com/Smart-Holder/mvp-ser.git
 
 [submodule "mvp-sol"]
 	path = deps/mvp-sol
-	url = http://gitlab.stars-mine.com/hardware/mvp-sol.git
+	url = https://github.com/Smart-Holder/mvp-sol.git
