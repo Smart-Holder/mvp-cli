@@ -29,12 +29,12 @@
  * ***** END LICENSE BLOCK ***** */
 
 import somes from 'somes';
-import { Web3Z } from 'web3z';
-import { TransactionQueue } from 'web3z/queue';
+import { Web3 as Web3Z } from 'web3z';
+import { MemoryTransactionQueue as TransactionQueue } from 'web3z/queue';
 import buffer from 'somes/buffer';
 import { genPrivateKey, getAddress } from '../../deps/webpkit/deps/crypto-tx/account';
 import { ChainType } from '../util/tools';
-// import { ChainType } from '../models/def';
+import { ChainType as ChainType1 } from '../models/def';
 
 const AbiCoder = require('web3-eth-abi');
 const crypto_tx = require('crypto-tx');
@@ -102,9 +102,11 @@ export class Web3IMPL extends Web3Z {
 				from = '0x' + crypto_tx.toChecksumAddress(buffer.from(from.slice(2), 'hex'));
 			}
 			this._defaultAccount = (from || '') as string;
-			this.setDefaultAccount(this._defaultAccount);
+			// this.setDefaultAccount(this._defaultAccount);
 
-			var id = isNftdetailPage ? 4 : await this.web3.eth.getChainId();
+			this.defaultAccount
+
+			var id = isNftdetailPage ? 4 : await this.eth.getChainId();
 
 			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
 		}

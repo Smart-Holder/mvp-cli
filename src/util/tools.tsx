@@ -15,6 +15,8 @@ import { t } from "i18next";
 import { bindDevice, bind, deviceActivation, checkBindDeviceStatus, getDeviceInfoByAddress } from "../models/device";
 const crypto_tx = require("crypto-tx");
 
+import { ChainType,chainTraits } from '../models/def';
+
 class Tab extends ViewController<{ nav: () => Nav }> {
 	triggerLoad() {
 		let locLanguage = navigator.language || localStorage.getItem("language");
@@ -238,28 +240,7 @@ export const unitLabelProd: { [key: string]: string } = {
 };
 
 export enum unitChainIdLabel {
-	UNKNOWN = 0, // UNKNOWN
-	ETHEREUM = 1, // ETHEREUM
-	MATIC = 137, // MATIC
-	METIS_TEST = 599, // METIS
-	METIS_TEST_OLD = 588, // METIS
-	METIS = 1088, // METIS
-	KLAYTN = 8217, // KLAYTN
-	XDAI = 100, // XDAI
-	BSC = 56, // BSC
-	FLOW = -2, // FLOW
-	LOCAL = -1, // LOCAL
-	ROPSTEN = 3, // ROPSTEN
-	RINKEBY = 4, // RINKEBY
-	MUMBAI = 80001, // MUMBAI
-	BAOBAB = 1001, // BAOBAB
-	BSC_TESTNET = 97, // BSC_TESTNET
-	GOERLI = 5, // GOERLI
-	HCETH = 64, // hard-chain ETHEREUM
-	BSN = 5555,
-	HASHII_TEST = 6666,
-}
-export enum ChainType {
+
 	UNKNOWN = 0, // UNKNOWN
 	ETHEREUM = 1, // ETHEREUM
 	MATIC = 137, // MATIC
@@ -275,39 +256,20 @@ export enum ChainType {
 	BSC_TESTNET = 97, // BSC_TESTNET
 	GOERLI = 5, // GOERLI
 	HCETH = 64, // hard-chain ETHEREUM
-	// BSN_TEST = 5555,
+	BSN_TEST = 5555,
 	BSN = 5555,
-	METIS_TEST = 599,
-	METIS_TEST_OLD = 588,
-	METIS = 1088, // METIS
 	HASHII_TEST = 6666,
+	HASHII = 6667,
+	METIS = 1088,
+	METIS_TEST = 588,
+	TMETIS     = 599,
+	WENCHUANG =6669,
+	TEST_CHAIN=8595,
+
+	METIS_TEST_OLD = 588, // METIS ????
 }
 
-export class ChainTraits {
-	UNKNOWN = [ChainType.UNKNOWN, 0, "UNK"];
-	ETHEREUM = [ChainType.ETHEREUM, 18, "ETH"];
-	MATIC = [ChainType.MATIC, 18, "MATIC"];
-	KLAYTN = [ChainType.KLAYTN, 18, "KLAY"];
-	XDAI = [ChainType.XDAI, 18, "XDAI"];
-	BSC = [ChainType.BSC, 18, "BNB"];
-	FLOW = [ChainType.FLOW, 18, "FLOW"];
-	LOCAL = [ChainType.LOCAL, 18, "LOCAL"];
-	ROPSTEN = [ChainType.ROPSTEN, 18, "ROPSTEN"];
-	RINKEBY = [ChainType.RINKEBY, 18, "RINKEBY"];
-	MUMBAI = [ChainType.MUMBAI, 18, "MUMBAI"];
-	BAOBAB = [ChainType.BAOBAB, 18, "BAOBAB"];
-	BSC_TESTNET = [ChainType.BSC_TESTNET, 18, "BNB_TEST"];
-	GOERLI = [ChainType.GOERLI, 18, "GOERLI"];
-	HCETH = [ChainType.HCETH, 18, "ETH"];
-	// BSN_TEST = [ChainType.BSN_TEST, 18, 'BSN_TEST'];
-	BSN = [ChainType.BSN, 18, "BSN"];
-	METIS_TEST = [ChainType.METIS_TEST, 18, "METIS_TEST"];
-	METIS_TEST_OLD = [ChainType.METIS_TEST_OLD, 18, "METIS_TEST"];
-	METIS = [ChainType.METIS, 18, "METIS"];
-	HASHII_TEST = [ChainType.HASHII_TEST, 18, "HASHII_TEST"];
-}
-
-export const chainTraits = new ChainTraits();
+export {ChainType,chainTraits};
 
 export const alert = (text: string | DialogIn, onOk?: () => void) => {
 	if (!text) return;
