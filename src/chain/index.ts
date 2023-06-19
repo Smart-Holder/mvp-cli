@@ -78,7 +78,7 @@ export class Web3IMPL extends Web3Z {
 		return this._txQueue;
 	}
 
-	getProvider() {
+	get provider() {
 		return this.metaMask;
 	}
 
@@ -102,15 +102,16 @@ export class Web3IMPL extends Web3Z {
 				from = '0x' + crypto_tx.toChecksumAddress(buffer.from(from.slice(2), 'hex'));
 			}
 			this._defaultAccount = (from || '') as string;
-			// this.setDefaultAccount(this._defaultAccount);
-
-			this.defaultAccount
 
 			var id = isNftdetailPage ? 4 : await this.eth.getChainId();
 
 			this._chain = ChainType[id] ? id : ChainType.UNKNOWN;
 		}
 		return this._defaultAccount;
+	}
+
+	defaultAccount() {
+		return this.getDefaultAccount();
 	}
 
 	async initialize() {
