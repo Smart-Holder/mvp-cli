@@ -29,7 +29,12 @@ export function devices(): Promise<Device[]> {
 	return sdk.user.methods.devices();
 }
 
-export async function call(target: string, method: string, args?: any, vCheck?: string): Promise<any> {
+export async function call(
+	target: string,
+	method: string,
+	args?: any,
+	vCheck?: string
+): Promise<any> {
 	return new Promise(async (resolve, reject) => {
 		try {
 			var hash = (await index.mbx.methods.call({
@@ -50,7 +55,11 @@ export async function call(target: string, method: string, args?: any, vCheck?: 
 	});
 }
 
-export async function send(target: string, event: string, args?: any): Promise<any> {
+export async function send(
+	target: string,
+	event: string,
+	args?: any
+): Promise<any> {
 	var hash = (await index.mbx.methods.send({
 		target,
 		event,
@@ -72,12 +81,18 @@ export async function ping(target: string) {
 }
 
 // 设置音量
-export function screenVolume(target: string, data: { volume: number; volumeScale?: number }) {
+export function screenVolume(
+	target: string,
+	data: { volume: number; volumeScale?: number }
+) {
 	return send(target, "screenVolume", data);
 }
 
 // 设置亮度
-export function screenLight(target: string, data: { light: number; lightScale?: number }) {
+export function screenLight(
+	target: string,
+	data: { light: number; lightScale?: number }
+) {
 	return send(target, "screenLight", data);
 }
 
@@ -106,7 +121,7 @@ export function screenColor(target: string, color: string) {
 	return send(target, "screenColor", { color });
 }
 
-// 开关：显示/隐藏NFT信息和详情二维码
+// 选择是否在主画面显示NFT信息和详情二维码
 export function switchDetails(target: string, show: boolean) {
 	return send(target, "switchDetails", { show });
 }
@@ -133,15 +148,33 @@ export function clearShadow(target: string) {
 	return call(target, "clearShadow");
 }
 
-export function shadowSingleImage(target: string, token: string, tokenId: string, item: NFT) {
-	return call(target, "shadowSingleImage", { type: "image", time: 0, data: [item] });
+export function shadowSingleImage(
+	target: string,
+	token: string,
+	tokenId: string,
+	item: NFT
+) {
+	return call(target, "shadowSingleImage", {
+		type: "image",
+		time: 0,
+		data: [item],
+	});
 }
 
-export function shadowMultiImage(target: string, time: number, data: { token: string; tokenId: string }[]) {
+export function shadowMultiImage(
+	target: string,
+	time: number,
+	data: { token: string; tokenId: string }[]
+) {
 	return call(target, "shadowMultiImage", { type: "image", time, data });
 }
 
-export function shadowVideo(target: string, token: string, tokenId: string, item: NFT) {
+export function shadowVideo(
+	target: string,
+	token: string,
+	tokenId: string,
+	item: NFT
+) {
 	return call(target, "shadowVideo", { type: "video", time: 0, data: [item] });
 }
 
@@ -149,23 +182,45 @@ export function nftmvp_apk_upgrade() {
 	return index.mbx.methods.post("/files/res/apk/nftmvp_apk_upgrade.json");
 }
 
-export function displaySingleImage(target: string, token: string, tokenId: string) {
-	return call(target, "displaySingleImage", { type: "image", time: 0, data: [{ token, tokenId }] });
+export function displaySingleImage(
+	target: string,
+	token: string,
+	tokenId: string
+) {
+	return call(target, "displaySingleImage", {
+		type: "image",
+		time: 0,
+		data: [{ token, tokenId }],
+	});
 }
 
-export function displayMultiImage(target: string, time: number, data: { token: string; tokenId: string }[]) {
+export function displayMultiImage(
+	target: string,
+	time: number,
+	data: { token: string; tokenId: string }[]
+) {
 	return call(target, "displayMultiImage", { type: "image", time, data });
 }
 
 export function displayVideo(target: string, token: string, tokenId: string) {
-	return call(target, "displayVideo", { type: "video", time: 0, data: [{ token, tokenId }] });
+	return call(target, "displayVideo", {
+		type: "video",
+		time: 0,
+		data: [{ token, tokenId }],
+	});
 }
 
-export function displayNFTs(target: string, data: { token: string; tokenId: string }[]) {
+export function displayNFTs(
+	target: string,
+	data: { token: string; tokenId: string }[]
+) {
 	return call(target, "displayNFTs", { type: "nft", time: 0, data });
 }
 
-export function shadowNFTs(target: string, data: { token: string; tokenId: string }[]) {
+export function shadowNFTs(
+	target: string,
+	data: { token: string; tokenId: string }[]
+) {
 	return call(target, "shadowNFTs", { type: "nft", time: 0, data });
 }
 
@@ -173,7 +228,10 @@ export function transformImage(target: string, data: ITransformImageProps) {
 	return call(target, "transformImage", { ...data });
 }
 
-export function sign(target: string, msg: IBuffer): Promise<{ signer: string; sign: string }[]> {
+export function sign(
+	target: string,
+	msg: IBuffer
+): Promise<{ signer: string; sign: string }[]> {
 	return call(target, "sign", { message: msg.toString("base64") });
 }
 
@@ -195,10 +253,19 @@ export async function bind(target: string, authCode: string, vCheck?: string) {
 		o = { sn: o, screen: 0 };
 	}
 
-	await sdk.user.methods.addDevice({ address: target, sn: o.sn || target, vCheck, screen: o.screen });
+	await sdk.user.methods.addDevice({
+		address: target,
+		sn: o.sn || target,
+		vCheck,
+		screen: o.screen,
+	});
 }
 
-export async function bindDevice(target: string, authCode: string, vCheck?: string) {
+export async function bindDevice(
+	target: string,
+	authCode: string,
+	vCheck?: string
+) {
 	let owner = await chain.getDefaultAccount();
 	await sdk.user.methods.bindDevice({
 		address: key.address(),
@@ -223,28 +290,51 @@ export async function unbind(target: string) {
 	await sdk.user.methods.deleteDevice({ address: target });
 }
 
-export function deviceActivation(props: IDeviceActivationProps): Promise<Device[]> {
+export function deviceActivation(
+	props: IDeviceActivationProps
+): Promise<Device[]> {
 	return sdk.user.methods.deviceActivation(props);
 }
 
-export async function checkBindDeviceStatus(address: string, owner?: string): Promise<number> {
+export async function checkBindDeviceStatus(
+	address: string,
+	owner?: string
+): Promise<number> {
 	return await sdk.user.methods.checkBindDeviceStatus({ address, owner });
 }
 
-export function getDeviceInfoByAddress(props: { address: string }): Promise<IDeviceProps> {
+export function getDeviceInfoByAddress(props: {
+	address: string;
+}): Promise<IDeviceProps> {
 	return sdk.user.methods.getDeviceInfoByAddress(props);
 }
 
-export async function get_screen_save(address: string, _type?: "single" | "multi" | "video" | "nft"): Promise<DeviceScreenSave> {
-	var type = _type || (await storage.get("__device_set_screen_save_cur_" + address, "single"));
-	var save = await storage.get("__device_set_screen_save_" + address + type, { address, time: 10, type });
+export async function get_screen_save(
+	address: string,
+	_type?: "single" | "multi" | "video" | "nft"
+): Promise<DeviceScreenSave> {
+	var type =
+		_type ||
+		(await storage.get("__device_set_screen_save_cur_" + address, "single"));
+	var save = await storage.get("__device_set_screen_save_" + address + type, {
+		address,
+		time: 10,
+		type,
+	});
 	return { data: [], ...save };
 }
 
-export async function set_screen_save(address: string, pss: Partial<DeviceScreenSave>, type: "single" | "multi" | "video" | "nft", isNotCall?: boolean) {
+export async function set_screen_save(
+	address: string,
+	pss: Partial<DeviceScreenSave>,
+	type: "single" | "multi" | "video" | "nft",
+	isNotCall?: boolean
+) {
 	var ss = Object.assign(await get_screen_save(address, type), pss);
 
-	var nfts = (await index.nft.methods.getNFTByOwner({ owner: address })) as NFT[];
+	var nfts = (await index.nft.methods.getNFTByOwner({
+		owner: address,
+	})) as NFT[];
 	var nfts_set = new Set();
 	for (var nft of nfts) {
 		nfts_set.add(nft.token + nft.tokenId);
@@ -261,13 +351,29 @@ export async function set_screen_save(address: string, pss: Partial<DeviceScreen
 	}
 }
 
-export async function get_shadow_screen_save(address: string, _type?: "single" | "multi" | "video" | "nft"): Promise<DeviceScreenSave> {
-	var type = _type || (await storage.get("__device_set_shadow_screen_save_cur_" + address, "single"));
-	var save = await storage.get("__device_set_shadow_screen_save_" + address + type, { address, time: 10, type });
+export async function get_shadow_screen_save(
+	address: string,
+	_type?: "single" | "multi" | "video" | "nft"
+): Promise<DeviceScreenSave> {
+	var type =
+		_type ||
+		(await storage.get(
+			"__device_set_shadow_screen_save_cur_" + address,
+			"single"
+		));
+	var save = await storage.get(
+		"__device_set_shadow_screen_save_" + address + type,
+		{ address, time: 10, type }
+	);
 	return { data: [], ...save };
 }
 
-export async function set_shadow_screen_save(address: string, pss: Partial<DeviceScreenSave>, type: "single" | "multi" | "video" | "nft", isNotCall?: boolean) {
+export async function set_shadow_screen_save(
+	address: string,
+	pss: Partial<DeviceScreenSave>,
+	type: "single" | "multi" | "video" | "nft",
+	isNotCall?: boolean
+) {
 	if (pss.data) {
 		let nftList = pss.data.map((item) => {
 			return { ...item, shadow: 1 };
