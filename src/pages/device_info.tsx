@@ -207,7 +207,7 @@ class DeviceInfo extends NavPage<Device> {
 
 	_Withdraw = async (nft: NFT, to: string) => {
 		const { t } = this;
-		var from = nft.ownerBase || "";
+		var from = nft.ownerBase || this.params.address;
 		var l = await Loading.show(t("正在取出到您的钱包中,请勿操作"));
 		return new Promise(async (resolve, reject) => {
 			try {
