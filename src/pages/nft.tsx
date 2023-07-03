@@ -28,7 +28,15 @@ class DeviceList extends NavPage {
 		this.pushPage({ url: `/nft_details`, params: { id: e.id } });
 	}
 
-	state = { nft: [] as NFT[], device: [] as Device[], loading: true, visible: false, carouselType: "matemask" as ICarouselType, visibleTip: false, language: "ZH" };
+	state = {
+		nft: [] as NFT[],
+		device: [] as Device[],
+		loading: true,
+		visible: false,
+		carouselType: "matemask" as ICarouselType,
+		visibleTip: false,
+		language: "ZH",
+	};
 
 	async triggerLoad() {
 		// alert(this.getCarouselType());
@@ -39,7 +47,10 @@ class DeviceList extends NavPage {
 		// 	language: localStorage.getItem("language"),
 		// });
 
-		var hex = encodeParameters(["address"], ["0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391"]);
+		var hex = encodeParameters(
+			["address"],
+			["0xc2C09aABe77B718DA3f3050D0FDfe80D308Ea391"]
+		);
 		console.log(hex);
 		// var owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		// this.setState({ nft: await models.nft.methods.getNFTByOwner({ owner }) });
@@ -92,17 +103,35 @@ class DeviceList extends NavPage {
 			<div className="index device_list_page">
 				{/* <Header title="我的NFT" page={this} /> */}
 				<div className="ver">{packageJson.version}</div>
-				<div className="page_title" style={localStorage.getItem("language") != "ZH" ? { letterSpacing: 0 } : {}}>
-					{t("智能数字收藏屏")}
+				<div
+					className="page_title"
+					style={
+						localStorage.getItem("language") != "ZH" ? { letterSpacing: 0 } : {}
+					}
+				>
+					{t("数字收藏品管理系统")}
 				</div>
 				<div className="device_list">
-					<div className="list_title">{t("全部设备")}</div>
+					<div className="list_title">{t("设备列表")}</div>
 					<div className="list_top_extra">
-						<div className="bind_device_btn" onClick={this.addDevice.bind(this)}>
-							<img className="add_icon" src={require("../assets/add_icon.png")} alt="+" /> {t("绑定新设备")}
+						<div
+							className="bind_device_btn"
+							onClick={this.addDevice.bind(this)}
+						>
+							<img
+								className="add_icon"
+								src={require("../assets/add_icon.png")}
+								alt="+"
+							/>{" "}
+							{t("绑定新设备")}
 						</div>
 					</div>
-					<Spin delay={500} className="device_list_loading" spinning={loading} tip={"loading"} />
+					<Spin
+						delay={500}
+						className="device_list_loading"
+						spinning={loading}
+						tip={"loading"}
+					/>
 					{device.map((item) => {
 						return (
 							<DeviceItem
@@ -117,7 +146,17 @@ class DeviceList extends NavPage {
 					})}
 				</div>
 
-				<Modal visible={this.state.visible} transparent title={t("扫码绑定设备")} footer={[{ text: t("我知道了"), onPress: () => this.setState({ visible: false }) }]}>
+				<Modal
+					visible={this.state.visible}
+					transparent
+					title={t("扫码绑定设备")}
+					footer={[
+						{
+							text: t("我知道了"),
+							onPress: () => this.setState({ visible: false }),
+						},
+					]}
+				>
 					<BindDeviceCarousel />
 				</Modal>
 
