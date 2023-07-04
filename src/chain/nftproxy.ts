@@ -169,7 +169,6 @@ export default class ProxyAPI {
 }
 
 export function proxyAddress(type: AssetType, chain: ChainType, msg?: string): any {
-
 	somes.assert(chain, `ProxyAPI.constructor() "chain" parameter cannot be empty`);
 
 	if (type < 256) {

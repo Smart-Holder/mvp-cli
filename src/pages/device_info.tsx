@@ -289,7 +289,7 @@ class DeviceInfo extends NavPage<Device> {
 			try {
 				somes.assert(from, "#device_nft#_Withdraw: NOT_SUPPORT_WITHDRAW"); // 暂时只支持代理取出
 				// debugger
-				proxyAddress(
+				let address = proxyAddress(
 					nft.type,
 					nft.chain,
 					"#device_nft#_Withdraw: BAD_NFT_PROXY"
@@ -297,7 +297,7 @@ class DeviceInfo extends NavPage<Device> {
 
 				chain.assetChain(nft.chain, "请切换至对应链的钱包");
 				await nft_proxy
-					.New(nft.owner, nft.chain)
+					.New(nft.owner || address, nft.chain)
 					.withdrawFrom(
 						from,
 						to,

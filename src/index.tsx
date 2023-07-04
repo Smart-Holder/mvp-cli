@@ -31,7 +31,7 @@
 import { React, Root, ReactDom, dialog, Nav } from 'webpkit/mobile';
 import _404 from './pages/404';
 import routes from './router';
-import './css/util.scss';
+import './css/utils.scss';
 import './index.css';
 import sdk, { initialize } from './sdk';
 import chain from './chain';
