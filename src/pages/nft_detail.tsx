@@ -57,10 +57,11 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 							<div className="nft_info_box">
 								{Boolean(nft.tokenId) && <div className="nft_img_box">
 									{Boolean(Number(nft.count) > 1) && <div className="nft_count">{nft.count}</div>}
-									{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <Image width='100%' src={nft.image} alt="loading" placeholder={
+									{nft.media?.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image||nft.imageOrigin}></video> :
+										<Image width='100%' src={nft.image||nft.imageOrigin} alt="loading" placeholder={
 										<Image
 											preview={false}
-											src={`${nft.image}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
+											src={`${nft.image||nft.imageOrigin}?imageMogr2/thumbnail/!200x200r/blur/3x5`}
 											width='100%'
 										/>
 									} />}
