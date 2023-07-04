@@ -114,7 +114,7 @@ class PreviewNftCard extends NavPage<{ address: string }> {
 	rendNftItem(nft: NFT) {
 		return (
 			<div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
-				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image}></video> : <ImageMogr className="nft_img" src={nft.image} nft={nft} /> || <img src={nft.image} alt="" />}
+				{nft.media.match(/\.mp4/i) ? <video controls src={nft.media} poster={nft.image||nft.imageOrigin}></video> : <ImageMogr className="nft_img" src={nft.image||nft.imageOrigin} nft={nft} /> || <img src={nft.image||nft.imageOrigin} alt="" />}
 			</div>
 		);
 	}
