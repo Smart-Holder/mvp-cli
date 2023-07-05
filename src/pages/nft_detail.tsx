@@ -104,7 +104,7 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 
 												<div className='order_row'>
 													<div className="label letter_space">{t("事件")}</div>
-													<div className="value">{t(fromAddres ? "转移" : "上架")}</div>
+													<div className="value">{t(fromAddres!=='0x0000000000000000000000000000000000000000' && fromAddres ? "转移" : "上架")}</div>
 												</div>
 
 												<div className='order_row'>
