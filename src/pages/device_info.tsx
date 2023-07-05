@@ -494,7 +494,7 @@ class DeviceInfo extends NavPage<Device> {
 												page={this}
 												showTransferBtn={false}
 												showChain={chain.chain !== item.chain}
-												key={item.id}
+												key={item.tokenId}
 												btnClick={this.takeAwayNftOfDeviceClick.bind(
 													this,
 													item,
@@ -536,12 +536,12 @@ class DeviceInfo extends NavPage<Device> {
 								scrollableTarget={"scrollableDiv2"}
 							>
 								{nftList2.length
-									? nftList2.map((item) => (
+									? nftList2.map((item) => chain.chain !== item.chain &&(
 											<NftCard
 												page={this}
 												showTransferBtn={false}
 												showChain={chain.chain !== item.chain}
-												key={item.id}
+												key={item.tokenId}
 												btnClick={this.takeAwayNftOfDeviceClick.bind(
 													this,
 													item,

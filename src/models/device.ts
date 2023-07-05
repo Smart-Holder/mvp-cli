@@ -346,7 +346,6 @@ export async function set_screen_save(
 	await storage.set("__device_set_screen_save_" + address + type, ss);
 
 	if (pss.data) {
-		console.log(pss.data, "pss.data");
 		await displayNFTs(address, pss.data);
 	}
 }

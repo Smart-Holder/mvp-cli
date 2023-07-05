@@ -147,23 +147,23 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { mode } = this.props;
 		let carouselConfig = await modeConfig[mode].get_screen_save(this.props.page.params.address);
 
-		let nftListObj = ArrayToObj(nftList || [] as any, 'id');
+		let nftListObj = ArrayToObj(nftList || [] as any, 'tokenId');
 
 		let newselectedList: { [key: string]: NFT } = {};
 		carouselConfig.data.forEach(item => {
-			if (nftListObj[item.id]) newselectedList[item.id] = item as NFT;;
+			if (nftListObj[item.tokenId]) newselectedList[item.tokenId] = item as NFT;;
 		});
 		return Object.values(newselectedList);
 	}
 
 	rendNftItem(nft: NFT, index: number) {
 		const { selectedArrList } = this.state;
-		let ids = selectedArrList.map(item => item.id);
-		return <div key={nft.id} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
+		let ids = selectedArrList.map(item => item.tokenId);
+		return <div key={nft.tokenId} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{/* {nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />} */}
 			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image className="nft_image" preview={false} placeholder={<LoadingOutlined className="loading_icon" /> || <img src={require("../../assets/img_loading.jpg")} />} src={nft.image || nft.imageOrigin} alt="" fallback={require("../../assets/img_error.jpg")} />}
 			{/* <div className={`select_btn ${ids.includes(nft.id) && 'select_btn_active'}`} /> */}
-			<img className={`select_img ${ids.includes(nft.id) && 'select_img_active'}`} src={require(`../../assets/${ids.includes(nft.id) ? 'selected' : 'select'}.png`)} />
+			<img className={`select_img ${ids.includes(nft.tokenId) && 'select_img_active'}`} src={require(`../../assets/${ids.includes(nft.tokenId) ? 'selected' : 'select'}.png`)} />
 		</div>
 	}
 
@@ -173,7 +173,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { isShowAbbreviation, selectedArrList } = this.state;
 		let newselectedArrList = JSON.parse(JSON.stringify([...selectedArrList]));
 
-		let findNftIndex = newselectedArrList.findIndex((item: any) => item.id === nftItem.id);
+		let findNftIndex = newselectedArrList.findIndex((item: any) => item.tokenId === nftItem.tokenId);
 
 		if (findNftIndex >= 0) {
 			// 删除已选择的nft
@@ -226,7 +226,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		let { carouselConfig, selectedArrList } = this.state;
 		let newCarouselConfig = { ...carouselConfig, data: selectedArrList };
 		let { mode } = this.props;
-		console.log(newCarouselConfig, "newCarouselConfig");
+		console.log(newCarouselConfig, "newCarouselConfig", mode);
 
 		try {
 			await modeConfig[mode].set_screen_save(address, { ...newCarouselConfig }, 'nft');

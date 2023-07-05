@@ -329,7 +329,7 @@ class My extends NavPage {
 
 								<InfiniteScroll key={"scrollableDiv2"} dataLength={nftList2.length} next={this.loadMoreData.bind(this)} hasMore={hasMore} loader={loader} endMessage={nftList2.length ? endMessage : ""} scrollableTarget={"scrollableDiv2"}>
 									{nftList2.length
-										? nftList2.map((item: NFT) => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />)
+										? nftList2.map((item: NFT) => item.chain !== chain.chain && <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.id} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />)
 										: !loading && <Empty style={{ marginTop: "30%" }} image={require("../assets/empty_img.png")} description={t("暂无NFT，请添加NFT至钱包")} />}
 								</InfiniteScroll>
 								{/* {(tabIndex == 1 && from) && <NftList owner={from} page={this} isRefresh={isRefresh} id="scrollableDiv" listType='other_chain' />} */}
