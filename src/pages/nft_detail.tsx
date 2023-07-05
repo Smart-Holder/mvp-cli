@@ -94,13 +94,13 @@ class NftDetail extends NavPage<{ token: string, tokenId: string }> {
 
 									</div>
 									<div className="item_page" >
-										{nftOrderList.map(item => {
+										{nftOrderList.map((item,index) => {
 											let { fromAddres, value, toAddress, date } = item;
 											// let 
 											// let unit = (chainTraits as any)[unitLabel[String(nft?.chain)]][2];
 											let unitObj = (chainTraits as any)[unitChainIdLabel[Number(nft?.chain)]];
 											let unit = unitObj ? unitObj[2] : nft.chain;
-											return <div className="order_item" key={item.id}>
+											return <div className="order_item" key={index}>
 
 												<div className='order_row'>
 													<div className="label letter_space">{t("事件")}</div>
