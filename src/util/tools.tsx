@@ -266,7 +266,7 @@ export enum unitChainIdLabel {
 	WENCHUANG =6669,
 	TEST_CHAIN=8595,
 
-	METIS_TEST_OLD = 588, // METIS ????
+	// METIS_TEST_OLD = 588, // METIS ????
 }
 
 export {ChainType,chainTraits};
