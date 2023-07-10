@@ -11,6 +11,6 @@
 	path = deps/mvp-ser
 	url = https://github.com/Smart-Holder/mvp-ser.git
 
-[submodule "mvp-sol"]
-	path = deps/mvp-sol
-	url = https://github.com/Smart-Holder/mvp-sol.git
+# [submodule "mvp-sol"]
+# 	path = deps/mvp-sol
+# 	url = https://github.com/Smart-Holder/mvp-sol.git
