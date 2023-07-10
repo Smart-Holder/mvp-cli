@@ -1,6 +1,6 @@
 
 module.exports = {
-	sdk: 'https://mvp.smartholder.jp/service-api',
+	sdk: 'https://mvpv2.smartholder.jp/service-api',
 	platform: 'eth',
 	env: 'prod',
 	contracts: {
