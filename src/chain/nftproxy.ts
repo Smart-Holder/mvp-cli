@@ -9,7 +9,7 @@ import * as device from '../models/device';
 import index, { encodeParameters } from '.';
 import buffer, { IBuffer } from 'somes/buffer';
 import { AssetType } from '../models/def';
-import { ChainType } from '../util/tools';
+import { ChainType, getCurrentGasPrice } from '../util/tools';
 
 var tx_sign = require('crypto-tx/sign');
 var crypto_tx = require('crypto-tx');
@@ -42,13 +42,21 @@ export default class ProxyAPI {
 	}
 
 	async withdraw(to: Address, token: Address, tokenId: Uint256, amount: Uint256, data: Bytes = '0x') {
+		let gasPrice = 0
+		if(index.chain === 137){
+			gasPrice = await getCurrentGasPrice();
+		}
 		await this._artifacts.api.withdraw(to, token, tokenId, amount, data).call();
-		await this._artifacts.api.withdraw(to, token, tokenId, amount, data).post();
+		await this._artifacts.api.withdraw(to, token, tokenId, amount, data).post(index.chain === 137 ?{ gasPrice }:{});
 	}
 
 	async transfer(to: Address[], token: Address, tokenId: Uint256, amount: Uint256, signCount: bigint = BigInt(1)) {
+		let gasPrice = 0
+		if(index.chain === 137){
+			gasPrice = await getCurrentGasPrice();
+		}
 		await this._artifacts.api.transfer(to, token, tokenId, amount, signCount).call();
-		await this._artifacts.api.transfer(to, token, tokenId, amount, signCount).post();
+		await this._artifacts.api.transfer(to, token, tokenId, amount, signCount).post(index.chain === 137 ?{ gasPrice }:{});
 	}
 
 	private async _sign(buf: IBuffer, from: string) {
@@ -121,14 +129,22 @@ export default class ProxyAPI {
 	async withdrawFrom(from: Address, to: Address, token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
 		var tx = await this._tx(from, [to], token, tokenId, amount, data);
 		// var count = await this._artifacts.api.balanceOf(token, tokenId, from).call();
+		let gasPrice = 0
+		if(index.chain === 137){
+			gasPrice = await getCurrentGasPrice();
+		}
 		await this._artifacts.api.withdrawFrom(tx).call();
-		await this._artifacts.api.withdrawFrom(tx).post();
+		await this._artifacts.api.withdrawFrom(tx).post(index.chain === 137 ?{ gasPrice }:{});
 	}
 
 	async transferFrom(from: Address, to: Address[], token: Address, tokenId: Uint256, amount: Uint256, data?: Bytes) {
 		var tx = await this._tx(from, to, token, tokenId, amount, data);
+		let gasPrice = 0
+		if(index.chain === 137){
+			gasPrice = await getCurrentGasPrice();
+		}
 		await this._artifacts.api.transferFrom(tx).call();
-		await this._artifacts.api.transferFrom(tx).post();
+		await this._artifacts.api.transferFrom(tx).post(index.chain === 137 ?{ gasPrice }:{});
 	}
 
 	// test

@@ -14,7 +14,7 @@ import chain from "../chain";
 import { t } from "i18next";
 import { bindDevice, bind, deviceActivation, checkBindDeviceStatus, getDeviceInfoByAddress } from "../models/device";
 const crypto_tx = require("crypto-tx");
-
+import Web3 from "web3"
 import { ChainType,chainTraits } from '../models/def';
 
 class Tab extends ViewController<{ nav: () => Nav }> {
@@ -344,6 +344,14 @@ export const getParams = (url: string) => {
 	}
 	return obj;
 };
+
+// 获取当前的 Gas 价格
+export const  getCurrentGasPrice = async () => {
+	const res = await fetch( 'https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle');
+	const data = await res.json();
+	const { ProposeGasPrice } = data.result;
+	return ProposeGasPrice * 1000000000;
+}
 
 // const bind_device = async (href: string, isActivation?: boolean) => {
 // 	let { a, c, v, n = 0 } = getParams(href);

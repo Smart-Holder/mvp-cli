@@ -58,6 +58,14 @@ export class Web3IMPL extends Web3Z {
 	assetChain(chain?: ChainType, msg?: string) {
 		somes.assert(chain == this._chain, [100400, msg || 'chain is valid match wallet']);
 	}
+	// let GasPrice = await getCurrentGasPrice()
+
+	// get async getCurrentGasPrice(){
+	// 	const res = await fetch( 'https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle');
+	// 	const data = await res.json();
+	// 	const { ProposeGasPrice } = data.result;
+	// 	return ProposeGasPrice * 1000000000;
+	// }
 
 	get metaMask() {
 		if (!this._metaMask) {

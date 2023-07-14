@@ -3,6 +3,7 @@ import buffer from 'somes/buffer'
 import { Address } from 'web3z/solidity_types';
 import artifacts from './artifacts';
 import chain, {encodeParameters} from '.';
+import { getCurrentGasPrice } from '../util/tools';
 
 export class ApiIMPL {
 
@@ -57,8 +58,12 @@ export class ApiIMPL {
 		var data_ = data ? '0x' + buffer.from(data).toString('hex') : '0x0';
 		// var uri = await nft.api.tokenURI(tokenId).call();
 		// console.log(uri);
+		let gasPrice = 0;
+		if(chain.chain === 137){
+			gasPrice = await getCurrentGasPrice()
+		}
 		await nft.api.safeTransferFrom(from, to, tokenId, data_).call();
-		var r = await nft.api.safeTransferFrom(from, to, tokenId, data_).post();
+		var r =  await nft.api.safeTransferFrom(from, to, tokenId, data_).post(chain.chain === 137 ?{ gasPrice }:{});
 		var evt = await nft.findEventFromReceipt('Transfer', r);
 		var values = evt[0].returnValues as any;
 		return {

@@ -6,7 +6,7 @@ import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import chain from "../chain";
 import NftCard from "../components/nft_card";
 import { show } from "webpkit/lib/dialog";
-import { alert } from "../util/tools";
+import { alert, getCurrentGasPrice } from "../util/tools";
 import { devices } from "../models/device";
 import { Modal } from "antd-mobile";
 import nftproxy, { proxyAddress } from "../chain/nftproxy";
@@ -55,7 +55,6 @@ class My extends NavPage {
 		let owner = await chain.getDefaultAccount(); // '0xD6188Da7d84515ad4327cd29dCA8Adc1B1DABAa3'
 		this.setState({ from: owner });
 		this.getNFTList(owner);
-
 		models.msg.addEventListener(
 			"UpdateNFT",
 			(e) => {
@@ -187,7 +186,7 @@ class My extends NavPage {
 	}
 
 	// 将nft存入设备
-	private async _transferToDevice(device_address: string, nft: NFT, isWithdraw?: boolean) {
+	private async _transferToDevice(device_address: string, nft: NFT, isWithdraw?: boolean, gasPriceGwei?: number) {
 		const { t } = this;
 		const from = this.state.from;
 		const getNFTList = this.getNFTList.bind(this, from);
