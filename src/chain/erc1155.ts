@@ -2,7 +2,6 @@
 import buffer from 'somes/buffer'
 import artifacts from './artifacts';
 import chain, { encodeParameters } from '.';
-import { getPolygonCurrentGasPrice } from '../util/tools';
 
 export class ApiIMPL {
 
@@ -19,7 +18,7 @@ export class ApiIMPL {
 		// console.log(uri);
 		let gasPrice = 0;
 		if(chain.chain === 137){
-			gasPrice = await getPolygonCurrentGasPrice()
+			gasPrice = await chain.getPolygonCurrentGasPrice()
 		}
 		await nft.api.safeTransferFrom(from, to, tokenId, amount, data_).call();
 		var r = await nft.api.safeTransferFrom(from, to, tokenId, amount, data_).post(chain.chain === 137 ?{ gasPrice }:{});

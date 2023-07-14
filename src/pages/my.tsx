@@ -6,7 +6,7 @@ import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import chain from "../chain";
 import NftCard from "../components/nft_card";
 import { show } from "webpkit/lib/dialog";
-import { alert, getPolygonCurrentGasPrice } from "../util/tools";
+import { alert } from "../util/tools";
 import { devices } from "../models/device";
 import { Modal } from "antd-mobile";
 import nftproxy, { proxyAddress } from "../chain/nftproxy";
