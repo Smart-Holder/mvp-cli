@@ -346,7 +346,7 @@ export const getParams = (url: string) => {
 };
 
 // 获取当前的 Gas 价格
-export const  getCurrentGasPrice = async () => {
+export const  getPolygonCurrentGasPrice = async () => {
 	const res = await fetch( 'https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle');
 	const data = await res.json();
 	const { ProposeGasPrice } = data.result;
