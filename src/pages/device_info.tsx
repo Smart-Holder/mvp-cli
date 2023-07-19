@@ -89,11 +89,11 @@ const settingDarwerConfig = [
 		value: SettingDarwerType.image,
 		icon: require("../assets/lunbo.png"),
 	},
-	{
-		label: "投屏",
-		value: SettingDarwerType.shadow,
-		icon: require("../assets/touping.png"),
-	},
+	// {
+	// 	label: "投屏",
+	// 	value: SettingDarwerType.shadow,
+	// 	icon: require("../assets/touping.png"),
+	// },
 	// { label: "预览设置", value: SettingDarwerType.preview, icon: require('../assets/yulan.png') }
 ];
 
@@ -472,7 +472,7 @@ class DeviceInfo extends NavPage<Device> {
 						}}
 						tabBarBackgroundColor={"#131425"}
 						tabs={[
-							{ title: this.t("本网络NFT"), index: 0 },
+							{ title: this.t("设备内NFT"), index: 0 },
 							{ title: this.t("其他网络NFT"), index: 1 },
 						]}
 						onChange={this.tabOnChange.bind(this)}
