@@ -53,7 +53,7 @@ class ColorSetting extends NavPage<{ address: string }> {
 							if (item.color !== currColor) await screenColor(this.params.address, item.color);
 						}}>
 							<div className="color_bg_item" style={{ backgroundColor: item.color }}></div>
-							<div className="color_text">{t(item.label)}</div>
+							{/* <div className="color_text">{t(item.label)}</div> */}
 							<div className={`select_btn ${currColor === item.color && 'select_btn_active'}`} />
 						</div>
 					})}

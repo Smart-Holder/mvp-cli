@@ -41,7 +41,9 @@ class DetailSetting extends NavPage<{ address: string }> {
 				<Header title={t("设置NFT信息")} page={this} />
 
 				<div className="setting_box">
-					<div className="setting_title">{t("NFT信息")}</div>
+					<div className="setting_title">
+					{/* {t("NFT信息")} */}
+					</div>
 
 					<div className="card_box">
 						<div className="bottom_part">

@@ -25,7 +25,9 @@ class Wifi extends NavPage<{ address: string }> {
 
 			<div className="setting_box">
 
-				<div className="setting_title">{t("wifi")}</div>
+				<div className="setting_title">
+					{/* {t("wifi")} */}
+				</div>
 
 				<div className="card_box">
 

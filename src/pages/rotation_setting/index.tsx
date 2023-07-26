@@ -29,11 +29,13 @@ class Rotation extends NavPage<{ address: string }> {
 		let { t } = this;
 		let { currRotation } = this.state;
 		return <div className="rotation_page">
-			<Header title={t("设置屏幕角度")} page={this} />
+			<Header title={t("屏幕角度")} page={this} />
 
 			<div className="setting_box">
 
-				<div className="setting_title">{t("屏幕角度")}</div>
+				<div className="setting_title">
+				{/* {t("屏幕角度")} */}
+				</div>
 
 				<div className="card_box">
 

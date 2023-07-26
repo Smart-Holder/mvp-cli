@@ -48,8 +48,9 @@ export const BindDeviceCarousel = (props: IbindDeviceCarouselProps) => {
 			{ title: <div>{t('第二步：扫码绑定成功')}</div>, img: require(`../../assets/step_3${isZhCn ?'' :'_en'}.png`) },
 		],
 		MateMask: [
-			{ title: <div>{t('第一步：请点击左上角')}“<IconFont type="icon-danchuangicon1" />”{t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require(`../../assets/step_1${isZhCn ? '':'_en' }.png`) },
-			{ title: <div>{t('第二步：进入钱包后请点击右上角')} <br />“<IconFont type="icon-danchuangicon3" />”{t('按钮')}</div>, img: require(`../../assets/step_2${isZhCn ? '':'_en' }.png`) },
+			// { title: <div>{t('第一步：请点击左下角')}“<IconFont type="icon-danchuangicon1" />”{t('选择')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require(`../../assets/step_1${isZhCn ? '':'_en' }.png`) },
+			{ title: <div>{t('第一步：请点击左下角')}“<IconFont type="icon-danchuangicon2" />”</div>, img: require(`../../assets/step_1_1${isZhCn ? '':'_en' }.jpg`) },
+			{ title: <div>{t('第二步：进入钱包后请点击右上角')} <br />“<IconFont type="icon-danchuangicon3" />”{t('按钮')}</div>, img: require(`../../assets/step_2_2${isZhCn ? '':'_en' }.jpg`) },
 			{ title: <div>{t('第三步：扫码绑定成功')}</div>, img: require(`../../assets/step_3${isZhCn ? '':'_en' }.png`) },
 		],
 		imToken: [

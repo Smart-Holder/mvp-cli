@@ -45,14 +45,18 @@ class UpdateSetting extends NavPage<{ address: string }> {
 
 			<div className="setting_box">
 
-				<div className="setting_title">{t("检查版本更新")}</div>
+				<div className="setting_title">
+				{/* {t("检查版本更新")} */}
+				</div>
 
 				<div className="card_box">
 
 
 					<div className="bottom_part">
 
-						<div className="label">{t("检测版本")}</div>
+						<div className="label">
+						{/* {t("检测版本")} */}
+						</div>
 						<div className="action">
 
 							{hasNewAction ?
