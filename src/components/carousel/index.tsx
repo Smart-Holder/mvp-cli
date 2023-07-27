@@ -60,16 +60,9 @@ export const BindDeviceCarousel = (props: IbindDeviceCarouselProps) => {
 	// };
 
 	let carouselSetupTypeConfig:any = {
-		TokenPocket: [
-			{ title: <div>{t('设备端：通过【菜单】-【Dapp二维码】调出绑定所需二维码')} {t('手机端：进入钱包，找到扫一扫功能，扫描设备端显示的二维码即可绑定')}</div> },
-		],
-		MateMask: [
-			{ title: <div>{t('设备端：通过【菜单】-【Dapp二维码】调出绑定所需二维码')} {t('手机端：进入钱包，找到扫一扫功能，扫描设备端显示的二维码即可绑定')}</div> },
-		],
-		imToken: [
-			{ title: <div>{t('设备端：通过【菜单】-【Dapp二维码】调出绑定所需二维码')} {t('手机端：进入钱包，找到扫一扫功能，扫描设备端显示的二维码即可绑定')}</div> },
-		],
-		
+		TokenPocket: [],
+		MateMask: [],
+		imToken: [],
 	};
 
 	let carouselType: any = 'TokenPocket';
