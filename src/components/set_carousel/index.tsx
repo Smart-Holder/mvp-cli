@@ -281,7 +281,7 @@ class SetCarousel extends Component<ISetCarouselProps> {
 
 		let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
 
-		let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
+		let endMessage = <div className="bottom_box">{t('已经到底了')}</div>;
 
 		return <div className="set_carousel" style={isShowAbbreviation ? { paddingBottom: '1.4rem' } : {}}>
 			{mode == 'shadow' && <Button disabled={localStorage.getItem('isShadow') == '0' || !localStorage.getItem('isShadow')} type='link' className='clear_btn' onClick={this.clearShadowClick.bind(this)}>{t('取消投屏')}</Button>}

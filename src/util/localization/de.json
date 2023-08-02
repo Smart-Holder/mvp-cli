@@ -49,8 +49,7 @@
 	"选择视频NFT": "Select a video format work.",
 	"保存": "Save",
 	"转移NFT": "Transfer digital work",
-	"设备内NFT": "Digital Works Inside the Device",
-	"钱包内NFT": "Digital Works Inside your Wallet",
+	"本网络NFT": "Digital works on the current network",
 	"其他网络NFT": "Digital works on other networks",
 	"网络": "Network",
 	"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备": "Works on other networks can only be viewed. If you want to transfer a work from another network to the device, you need to firstly switch to the network where the work is located.",
@@ -181,5 +180,7 @@
 	"设备绑定失败超时": "Timeout. Failed to bind the device.",
 	"绑定失败,绑定二维码过期": "The QR code has expired.",
 	"设备端：通过【菜单】-【Dapp二维码】调出绑定所需二维码":"1.Device side: Select \"Dapp QR Code\" from the main menu to display the QR code required for binding.",
-	"手机端：进入钱包，找到扫一扫功能，扫描设备端显示的二维码即可绑定":"Mobile side: Enter your wallet, find the QR code scan function, then scan the QR code displayed on the device to complete the binding process."
+	"手机端：进入钱包，找到扫一扫功能，扫描设备端显示的二维码即可绑定":"Mobile side: Enter your wallet, find the QR code scan function, then scan the QR code displayed on the device to complete the binding process.",
+	"设备内NFT": "Digital Works Inside the Device",
+	"钱包内NFT": "Digital Works Inside your Wallet"
 }

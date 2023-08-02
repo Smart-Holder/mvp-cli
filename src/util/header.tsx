@@ -3,7 +3,7 @@ import { React, NavPage, Root, Nav } from 'webpkit/mobile';
 import { ViewController } from 'webpkit/lib/ctr';
 import IconFont from '../components/icon_font';
 
-export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element }> {
+export default class extends ViewController<{ page: NavPage; title: string; back?: boolean, actionBtn?: JSX.Element, color?:string }> {
 
 	private m_handleClick_1 = (e: any) => {
 		if (this.props.page) {
@@ -13,7 +13,7 @@ export default class extends ViewController<{ page: NavPage; title: string; back
 
 	render() {
 		var nav = Root.current.refs.nav as Nav;
-		let { actionBtn } = this.props;
+		let { actionBtn, color } = this.props;
 		// console.log(this.props.page, nav.length, this.props.back, "this.props.page");
 		return (
 			<div className="_title">
@@ -26,7 +26,7 @@ export default class extends ViewController<{ page: NavPage; title: string; back
 						// <IconFont className='back_icon' type="icon-houtui" />
 						<img onClick={this.m_handleClick_1} className='back_icon' src={require('../assets/back.png')} />
 						: null}
-					<div className="text">
+					<div className="text" style={{color:color}}>
 						{this.props.title || ''}
 					</div>
 					{/* </div> */}

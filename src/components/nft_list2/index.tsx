@@ -71,7 +71,7 @@ const NftList = (props: INftListItemProps) => {
 
 	let loader = <div className="bottom_box" > <LoadingOutlined className="loading_icon" /></div>;
 
-	let endMessage = <div className="bottom_box">{t('已经是全部数据了')}</div>;
+	let endMessage = <div className="bottom_box">{t('已经到底了')}</div>;
 
 	return <div id={id || "scrollableDiv2"} className="scroll_box">
 		<InfiniteScroll

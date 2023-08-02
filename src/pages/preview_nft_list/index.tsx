@@ -137,7 +137,7 @@ class PreviewNftCard extends NavPage<{ address: string }> {
 			</div>
 		);
 
-		let endMessage = <div className="bottom_box">{t("已经是全部数据了")}</div>;
+		let endMessage = <div className="bottom_box">{t("已经到底了")}</div>;
 
 		return (
 			<div className="setting_card_box pre_nftlist_page">

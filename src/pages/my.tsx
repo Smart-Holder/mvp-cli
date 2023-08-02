@@ -23,6 +23,7 @@ import "../css/my.scss";
 import NftList from "../components/nft_list";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getNFTByOwnerPage, IGetNFTByOwnerPageProps } from "../models/nft";
+import Header from "../util/header";
 
 class My extends NavPage {
 	state = {
@@ -293,11 +294,15 @@ class My extends NavPage {
 				<LoadingOutlined className="loading_icon" />
 			</div>
 		);
-		let endMessage = <div className="bottom_box">{t("已经是全部数据了")}</div>;
+		let endMessage = <div className="bottom_box">{t("已经到底了")}</div>;
 
 		return (
 			<div className="my_page">
+				<Header color="#000" title={t("钱包内NFT")} page={this} />
 				<div className="my_page_content">
+					{/* <div className="my_page_sub_title">
+						{t("钱包内NFT")}
+					</div> */}
 					<Tabs
 						tabBarUnderlineStyle={{ border: 0, height: "3px", background: "linear-gradient(90deg, #4881FA, #6ED6F5)", borderRadius: "3px" }}
 						tabBarBackgroundColor={"#f5f5f5"}

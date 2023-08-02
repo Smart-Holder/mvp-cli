@@ -423,7 +423,7 @@ class DeviceInfo extends NavPage<Device> {
 				<LoadingOutlined className="loading_icon" />
 			</div>
 		);
-		let endMessage = <div className="bottom_box">{t("已经是全部数据了")}</div>;
+		let endMessage = <div className="bottom_box">{t("已经到底了")}</div>;
 
 		return (
 			<div className="device_info_page">
@@ -459,7 +459,9 @@ class DeviceInfo extends NavPage<Device> {
 							showActionBtn={true}
 						/>
 					</div>
-
+					<div className="device_info_sub_title">
+						{t("设备内NFT")}
+					</div>
 					<Tabs
 						tabBarUnderlineStyle={{
 							border: 0,
@@ -472,7 +474,7 @@ class DeviceInfo extends NavPage<Device> {
 						}}
 						tabBarBackgroundColor={"#131425"}
 						tabs={[
-							{ title: this.t("设备内NFT"), index: 0 },
+							{ title: this.t("本网络NFT"), index: 0 },
 							{ title: this.t("其他网络NFT"), index: 1 },
 						]}
 						onChange={this.tabOnChange.bind(this)}
