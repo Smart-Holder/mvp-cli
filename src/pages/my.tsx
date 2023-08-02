@@ -308,7 +308,7 @@ class My extends NavPage {
 						tabBarBackgroundColor={"#f5f5f5"}
 						tabBarActiveTextColor={"#1677ff"}
 						tabs={[
-							{ title: this.t("钱包内NFT"), index: 0 },
+							{ title: this.t("本网络NFT"), index: 0 },
 							{ title: this.t("其他网络NFT"), index: 1 },
 						]}
 						onChange={this.onTagChange.bind(this)}
