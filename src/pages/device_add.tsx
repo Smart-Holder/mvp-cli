@@ -108,7 +108,8 @@ class DeviceAdd extends NavPage<{ a?: string; c?: string; v?: string }> {
 					confirm(
 						{
 							title: t("绑定提示"),
-							text: t("首次绑定设备后，如无故障将不支持退换。确定绑定设备吗？"),
+							// text: t("首次绑定设备后，如无故障将不支持退换。确定绑定设备吗？"),
+							text: t("即将进行首次绑定，请确认。"),
 						},
 						async (isOk) => {
 							if (!isOk) {
