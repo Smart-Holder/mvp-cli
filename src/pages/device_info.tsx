@@ -174,7 +174,7 @@ class DeviceInfo extends NavPage<Device> {
 
 		params[tabIndex ? "other_chain" : "chain"] = chain.chain;
 
-		let nftList: INftItem[] = await getNFTByOwnerPage(params);
+		let nftList = (await getNFTByOwnerPage(params)) as INftItem[];
 
 		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
@@ -404,6 +404,17 @@ class DeviceInfo extends NavPage<Device> {
 		// this.pushPage({ url: "/device_set_carousel", params: this.state.deviceInfo })
 	}
 
+	includesIsTransfer = (item: INftItem) => {
+		let propertiesJson = item.metadataJson?.extensions.properties;
+		let isTransfer = false;
+		propertiesJson?.forEach((data) => {
+			if (data.trait_type === "is_transfer" && data.value === "0") {
+				isTransfer = true;
+			}
+		});
+		return isTransfer;
+	};
+
 	render() {
 		let {
 			loading,
@@ -459,9 +470,7 @@ class DeviceInfo extends NavPage<Device> {
 							showActionBtn={true}
 						/>
 					</div>
-					<div className="device_info_sub_title">
-						{t("设备内NFT")}
-					</div>
+					<div className="device_info_sub_title">{t("设备内NFT")}</div>
 					<Tabs
 						tabBarUnderlineStyle={{
 							border: 0,
@@ -495,7 +504,10 @@ class DeviceInfo extends NavPage<Device> {
 											<NftCard
 												page={this}
 												showTransferBtn={false}
-												showChain={chain.chain !== item.chain}
+												showChain={
+													chain.chain !== item.chain ||
+													this.includesIsTransfer(item)
+												}
 												key={item.tokenId}
 												btnClick={this.takeAwayNftOfDeviceClick.bind(
 													this,
@@ -538,22 +550,25 @@ class DeviceInfo extends NavPage<Device> {
 								scrollableTarget={"scrollableDiv2"}
 							>
 								{nftList2.length
-									? nftList2.map((item) => chain.chain !== item.chain &&(
-											<NftCard
-												page={this}
-												showTransferBtn={false}
-												showChain={chain.chain !== item.chain}
-												key={item.tokenId}
-												btnClick={this.takeAwayNftOfDeviceClick.bind(
-													this,
-													item,
-													""
-												)}
-												nft={item}
-												btnText={t("取出到钱包")}
-												btnLoadingText={t("取出到钱包")}
-											/>
-									  ))
+									? nftList2.map(
+											(item) =>
+												chain.chain !== item.chain && (
+													<NftCard
+														page={this}
+														showTransferBtn={false}
+														showChain={chain.chain !== item.chain}
+														key={item.tokenId}
+														btnClick={this.takeAwayNftOfDeviceClick.bind(
+															this,
+															item,
+															""
+														)}
+														nft={item}
+														btnText={t("取出到钱包")}
+														btnLoadingText={t("取出到钱包")}
+													/>
+												)
+									  )
 									: !loading && (
 											<Empty
 												style={{ marginTop: "30%" }}

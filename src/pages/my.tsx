@@ -14,7 +14,13 @@ import erc721 from "../chain/erc721";
 import erc1155 from "../chain/erc1155";
 import { Empty, Spin } from "antd";
 import { Tabs, NoticeBar } from "antd-mobile";
-import { IDisabledKey, removeNftDisabledTimeItem, setNftActionLoading, setNftDisabledTime, getDistinguishNftList } from "../util/tools";
+import {
+	IDisabledKey,
+	removeNftDisabledTimeItem,
+	setNftActionLoading,
+	setNftDisabledTime,
+	getDistinguishNftList,
+} from "../util/tools";
 import Loading from "../../deps/webpkit/lib/loading";
 import { INftItem } from "./interface";
 import { withTranslation } from "react-i18next";
@@ -88,12 +94,16 @@ class My extends NavPage {
 		let { nftList1, nftList2 } = this.state;
 		let preNftList = !tabIndex ? nftList1 : nftList2;
 		let pageSize = 10;
-		let params: IGetNFTByOwnerPageProps = { owner, curPage: curPage || 1, pageSize };
+		let params: IGetNFTByOwnerPageProps = {
+			owner,
+			curPage: curPage || 1,
+			pageSize,
+		};
 		console.log(chain.chain, "chain.chain");
 
 		params[tabIndex ? "other_chain" : "chain"] = chain.chain;
 
-		let nftList: INftItem[] = await getNFTByOwnerPage(params);
+		let nftList = (await getNFTByOwnerPage(params)) as INftItem[];
 		let newNftList = [...(curPage != 1 ? preNftList : []), ...nftList];
 
 		newNftList = setNftActionLoading(newNftList, "nftDisabledTime");
@@ -101,7 +111,13 @@ class My extends NavPage {
 		// let { nftList1, nftList2 } = getDistinguishNftList(nftList);
 		let list_key = tabIndex ? "nftList2" : "nftList1";
 
-		this.setState({ nft: newNftList, [list_key]: newNftList, page: curPage, hasMore: Boolean(nftList.length && nftList.length >= pageSize), loading: false });
+		this.setState({
+			nft: newNftList,
+			[list_key]: newNftList,
+			page: curPage,
+			hasMore: Boolean(nftList.length && nftList.length >= pageSize),
+			loading: false,
+		});
 
 		// this.setState({ nft: nftList, loading: false, ...nftlist_obj, nftListConfig: newNftListConfig });
 		clearInterval(this.state.dsq_id);
@@ -131,7 +147,11 @@ class My extends NavPage {
 	}
 
 	// 选择设备弹框确认按钮点击事件
-	async selectDeviceModalok(deviceItem?: Device | { address: string }, nftItem?: NFT, isWithdraw?: boolean) {
+	async selectDeviceModalok(
+		deviceItem?: Device | { address: string },
+		nftItem?: NFT,
+		isWithdraw?: boolean
+	) {
 		const { t } = this;
 		let { currDevice, currNFT, nft } = this.state;
 		// 进行存入操作的设备
@@ -143,15 +163,25 @@ class My extends NavPage {
 		let newNftItem = { ...nft[index] };
 		let newNftList = [...nft];
 
-		let disabledKey: IDisabledKey = isWithdraw ? "transfer_btn_disabled" : "btn_disabled";
+		let disabledKey: IDisabledKey = isWithdraw
+			? "transfer_btn_disabled"
+			: "btn_disabled";
 		newNftItem[disabledKey] = true;
 
 		newNftList[index] = newNftItem;
 
-		var l = await Loading.show(isWithdraw ? t("正在取出到您的钱包中,请勿操作") : t("正在存入到您的设备中,请勿操作"));
+		var l = await Loading.show(
+			isWithdraw
+				? t("正在取出到您的钱包中,请勿操作")
+				: t("正在存入到您的设备中,请勿操作")
+		);
 		try {
 			if (device?.address) {
-				this.setState({ visible: false, nft: newNftList, ...getDistinguishNftList(newNftList) });
+				this.setState({
+					visible: false,
+					nft: newNftList,
+					...getDistinguishNftList(newNftList),
+				});
 				await this._transferToDevice(device.address, nftInfo, isWithdraw);
 			}
 		} catch (error: any) {
@@ -165,7 +195,9 @@ class My extends NavPage {
 			if (error?.code == 4001 || error.errno == -30000) {
 				errorText = t("已取消存储操作");
 			}
-			error?.code != 4001 && errorCode !== "cancel" && (errorText += " " + errorCode);
+			error?.code != 4001 &&
+				errorCode !== "cancel" &&
+				(errorText += " " + errorCode);
 
 			if (error?.errno == 100400) errorText = error.description;
 			if (error?.code == -32000) errorText = "Gas费用不足，请充值";
@@ -174,7 +206,12 @@ class My extends NavPage {
 			show({
 				text: (
 					<div className="tip_box">
-						<img className="tip_icon" src={require("../assets/error.jpg")} alt="" /> {t(errorText)}
+						<img
+							className="tip_icon"
+							src={require("../assets/error.jpg")}
+							alt=""
+						/>{" "}
+						{t(errorText)}
 					</div>
 				),
 				buttons: { [btnText]: () => {} },
@@ -187,7 +224,12 @@ class My extends NavPage {
 	}
 
 	// 将nft存入设备
-	private async _transferToDevice(device_address: string, nft: NFT, isWithdraw?: boolean, gasPriceGwei?: number) {
+	private async _transferToDevice(
+		device_address: string,
+		nft: NFT,
+		isWithdraw?: boolean,
+		gasPriceGwei?: number
+	) {
 		const { t } = this;
 		const from = this.state.from;
 		const getNFTList = this.getNFTList.bind(this, from);
@@ -204,7 +246,9 @@ class My extends NavPage {
 							let { alert_id } = this.state;
 							(alert_id as any).close && (alert_id as any).close();
 							console.log(alert_id, dsq_id);
-							let l = await alert(t("数据正在运行中，请耐心等待..."), () => getNFTList());
+							let l = await alert(t("数据正在运行中，请耐心等待..."), () =>
+								getNFTList()
+							);
 							this.setState({ alert_id: l });
 						}, 20000);
 						this.setState({ dsq_id });
@@ -213,10 +257,21 @@ class My extends NavPage {
 				title: t("NFT存入已发起申请"),
 				text: (
 					<div className="transferToDeviceTipBox">
-						<div>{t("请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。")}</div>
+						<div>
+							{t("请耐心等待，交易进行中...请您刷新页面进行获取最新交易进程。")}
+						</div>
 						<div className="tip_img_box">
-							<div className="tip_img_box_text">{t("请点击页面右下角“…”找到“重新加载”更新该页面")}</div>
-							<img src={localStorage.getItem("language") === "ZH" ? require("../assets/ref_bg.png") : require("../assets/ref_bg_en.jpg")} alt="" />
+							<div className="tip_img_box_text">
+								{t("请点击页面右下角“…”找到“重新加载”更新该页面")}
+							</div>
+							<img
+								src={
+									localStorage.getItem("language") === "ZH"
+										? require("../assets/ref_bg.png")
+										: require("../assets/ref_bg_en.jpg")
+								}
+								alt=""
+							/>
 						</div>
 					</div>
 				),
@@ -231,7 +286,14 @@ class My extends NavPage {
 					// erc721
 					setNftDisabledTime(nft, "nftDisabledTime", getNFTList);
 					if (nft.ownerBase) {
-						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(1));
+						await nftproxy
+							.New(nft.owner, nft.chain)
+							.transfer(
+								[device_address],
+								nft.token,
+								BigInt(nft.tokenId),
+								BigInt(1)
+							);
 					} else {
 						chain.assetChain(nft.chain, "请切换至对应链的钱包");
 						await erc721.safeTransferToProxy(
@@ -247,7 +309,14 @@ class My extends NavPage {
 				} else if (nft.type == AssetType.ERC1155) {
 					setNftDisabledTime(nft, "nftDisabledTime", getNFTList);
 					if (nft.ownerBase) {
-						await nftproxy.New(nft.owner, nft.chain).transfer([device_address], nft.token, BigInt(nft.tokenId), BigInt(nft.count));
+						await nftproxy
+							.New(nft.owner, nft.chain)
+							.transfer(
+								[device_address],
+								nft.token,
+								BigInt(nft.tokenId),
+								BigInt(nft.count)
+							);
 					} else {
 						chain.assetChain(nft.chain, "请切换至对应链的钱包");
 						await erc1155.safeTransferToProxy(
@@ -279,14 +348,27 @@ class My extends NavPage {
 	}
 
 	async onTagChange(item: any, index: number) {
-		this.setState({ tabIndex: index, nftList1: [], nftList2: [], page: 1 }, () => {
-			this.getNFTList(this.state.from, 1, index);
-		});
+		this.setState(
+			{ tabIndex: index, nftList1: [], nftList2: [], page: 1 },
+			() => {
+				this.getNFTList(this.state.from, 1, index);
+			}
+		);
 	}
 
 	render() {
 		const { t } = this;
-		let { currDevice, visible, device, tabIndex, carouselIndex, nftList1, loading, hasMore, nftList2 } = this.state;
+		let {
+			currDevice,
+			visible,
+			device,
+			tabIndex,
+			carouselIndex,
+			nftList1,
+			loading,
+			hasMore,
+			nftList2,
+		} = this.state;
 
 		let loader = (
 			<div className="bottom_box">
@@ -304,7 +386,12 @@ class My extends NavPage {
 						{t("钱包内NFT")}
 					</div> */}
 					<Tabs
-						tabBarUnderlineStyle={{ border: 0, height: "3px", background: "linear-gradient(90deg, #4881FA, #6ED6F5)", borderRadius: "3px" }}
+						tabBarUnderlineStyle={{
+							border: 0,
+							height: "3px",
+							background: "linear-gradient(90deg, #4881FA, #6ED6F5)",
+							borderRadius: "3px",
+						}}
 						tabBarBackgroundColor={"#f5f5f5"}
 						tabBarActiveTextColor={"#1677ff"}
 						tabs={[
@@ -316,32 +403,103 @@ class My extends NavPage {
 					>
 						{/* {(tabIndex == 0 && from) && <NftList owner={from} page={this} isRefresh={isRefresh} id="scrollableDiv" listType='chain' />} */}
 						<div className="list_box" id="scrollableDiv">
-							<InfiniteScroll key={"scrollableDiv"} dataLength={nftList1.length} next={this.loadMoreData.bind(this)} hasMore={hasMore} loader={loader} endMessage={nftList1.length ? endMessage : ""} scrollableTarget={"scrollableDiv"}>
+							<InfiniteScroll
+								key={"scrollableDiv"}
+								dataLength={nftList1.length}
+								next={this.loadMoreData.bind(this)}
+								hasMore={hasMore}
+								loader={loader}
+								endMessage={nftList1.length ? endMessage : ""}
+								scrollableTarget={"scrollableDiv"}
+							>
 								{nftList1.length
-									? nftList1.map((item: NFT) => <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.tokenId} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />)
-									: !loading && <Empty style={{ marginTop: "30%" }} image={require("../assets/empty_img.png")} description={t("暂无NFT，请添加NFT至钱包")} />}
+									? nftList1.map((item: NFT) => (
+											<NftCard
+												page={this}
+												showTransferBtn={false}
+												showChain={chain.chain !== item.chain}
+												key={item.tokenId}
+												btnClick={this.saveNftOfDeviceClick.bind(this, item)}
+												nft={item}
+												btnText={t("存入到设备")}
+												btnLoadingText={t("存入到设备")}
+											/>
+									  ))
+									: !loading && (
+											<Empty
+												style={{ marginTop: "30%" }}
+												image={require("../assets/empty_img.png")}
+												description={t("暂无NFT，请添加NFT至钱包")}
+											/>
+									  )}
 							</InfiniteScroll>
 						</div>
 
 						<div className="list_box" id="scrollableDiv2">
 							<div style={{ height: "100%" }}>
 								{tabIndex === 1 && (
-									<NoticeBar mode="closable" action={<CloseOutlined style={{ color: "#a1a1a1" }} />}>
-										{t("您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备")}
+									<NoticeBar
+										mode="closable"
+										action={<CloseOutlined style={{ color: "#a1a1a1" }} />}
+									>
+										{t(
+											"您只能查看在其他网络的NFT，不能进行任何操作，若您想把其他网络的NFT绑定到设备，需切换到该NFT所在的网络后才可以将该NFT绑定到设备"
+										)}
 									</NoticeBar>
 								)}
 
-								<InfiniteScroll key={"scrollableDiv2"} dataLength={nftList2.length} next={this.loadMoreData.bind(this)} hasMore={hasMore} loader={loader} endMessage={nftList2.length ? endMessage : ""} scrollableTarget={"scrollableDiv2"}>
+								<InfiniteScroll
+									key={"scrollableDiv2"}
+									dataLength={nftList2.length}
+									next={this.loadMoreData.bind(this)}
+									hasMore={hasMore}
+									loader={loader}
+									endMessage={nftList2.length ? endMessage : ""}
+									scrollableTarget={"scrollableDiv2"}
+								>
 									{nftList2.length
-										? nftList2.map((item: NFT) => item.chain !== chain.chain && <NftCard page={this} showTransferBtn={false} showChain={chain.chain !== item.chain} key={item.tokenId} btnClick={this.saveNftOfDeviceClick.bind(this, item)} nft={item} btnText={t("存入到设备")} btnLoadingText={t("存入到设备")} />)
-										: !loading && <Empty style={{ marginTop: "30%" }} image={require("../assets/empty_img.png")} description={t("暂无NFT，请添加NFT至钱包")} />}
+										? nftList2.map(
+												(item: NFT) =>
+													item.chain !== chain.chain && (
+														<NftCard
+															page={this}
+															showTransferBtn={false}
+															showChain={chain.chain !== item.chain}
+															key={item.tokenId}
+															btnClick={this.saveNftOfDeviceClick.bind(
+																this,
+																item
+															)}
+															nft={item}
+															btnText={t("存入到设备")}
+															btnLoadingText={t("存入到设备")}
+														/>
+													)
+										  )
+										: !loading && (
+												<Empty
+													style={{ marginTop: "30%" }}
+													image={require("../assets/empty_img.png")}
+													description={t("暂无NFT，请添加NFT至钱包")}
+												/>
+										  )}
 								</InfiniteScroll>
 								{/* {(tabIndex == 1 && from) && <NftList owner={from} page={this} isRefresh={isRefresh} id="scrollableDiv" listType='other_chain' />} */}
 							</div>
 						</div>
 					</Tabs>
 				</div>
-				<Modal onClose={() => this.setState({ visible: false })} closable visible={visible} transparent title={t("选择设备")} footer={[{ text: t("确定"), onPress: this.selectDeviceModalok.bind(this) }]} className="select_device">
+				<Modal
+					onClose={() => this.setState({ visible: false })}
+					closable
+					visible={visible}
+					transparent
+					title={t("选择设备")}
+					footer={[
+						{ text: t("确定"), onPress: this.selectDeviceModalok.bind(this) },
+					]}
+					className="select_device"
+				>
 					<div style={{ maxHeight: "7rem", overflow: "scroll" }}>
 						<div style={{ width: "100%" }}>
 							{device.map((item) => {
@@ -350,17 +508,33 @@ class My extends NavPage {
 										key={item.address}
 										className={`alert_device_list`}
 										onClick={() => {
-											this.setState({ currDevice: currDevice.address === item.address ? {} : item });
+											this.setState({
+												currDevice:
+													currDevice.address === item.address ? {} : item,
+											});
 										}}
 									>
 										<div className="device_select_box">
 											<div className="select_icon_box">
-												<img src={require(`../assets/${currDevice.address === item.address ? "selected" : "select"}.png`)} />
+												<img
+													src={require(`../assets/${
+														currDevice.address === item.address
+															? "selected"
+															: "select"
+													}.png`)}
+												/>
 											</div>
 
 											<div className="select_device_item">
 												<div className="left_box">
-													<img src={[-1, 3].includes(item.screen) ? require("../assets/device2.png") : require("../assets/device1.png")} alt="" />
+													<img
+														src={
+															[-1, 3].includes(item.screen)
+																? require("../assets/device2.png")
+																: require("../assets/device1.png")
+														}
+														alt=""
+													/>
 												</div>
 
 												<div className="right_box">
@@ -370,7 +544,9 @@ class My extends NavPage {
 													</div>
 													<div className="address_box">
 														<div className="address_title">Address</div>
-														<div className="address textNoWrap">{item.address}</div>
+														<div className="address textNoWrap">
+															{item.address}
+														</div>
 													</div>
 												</div>
 											</div>
@@ -382,7 +558,17 @@ class My extends NavPage {
 					</div>
 				</Modal>
 
-				<Modal visible={this.state.bindDeviceTipVisible} transparent title={!carouselIndex ? t("未绑定设备") : t("扫码绑定设备")} footer={[{ text: t("我知道了"), onPress: () => this.setState({ bindDeviceTipVisible: false }) }]}>
+				<Modal
+					visible={this.state.bindDeviceTipVisible}
+					transparent
+					title={!carouselIndex ? t("未绑定设备") : t("扫码绑定设备")}
+					footer={[
+						{
+							text: t("我知道了"),
+							onPress: () => this.setState({ bindDeviceTipVisible: false }),
+						},
+					]}
+				>
 					<BindDeviceCarousel
 						afterChange={(index) => {
 							this.setState({ carouselIndex: index });
