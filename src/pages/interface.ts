@@ -4,9 +4,7 @@ export interface INftItem extends NFT {
 	btn_disabled?: boolean;
 	transfer_btn_disabled?: boolean;
 	metadataJson?: {
-		extensions: {
-			properties?: { trait_type: string; value: string }[];
-		};
+		properties?: { trait_type: string; value: string }[];
 	};
 }
 

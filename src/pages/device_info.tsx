@@ -405,7 +405,7 @@ class DeviceInfo extends NavPage<Device> {
 	}
 
 	includesIsTransfer = (item: INftItem) => {
-		let propertiesJson = item.metadataJson?.extensions.properties;
+		let propertiesJson = item.metadataJson?.properties;
 		let isTransfer = false;
 		propertiesJson?.forEach((data) => {
 			if (data.trait_type === "is_transfer" && data.value === "0") {
