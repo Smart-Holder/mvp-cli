@@ -36,6 +36,17 @@ const NftCard = (props: INftCardProps) => {
 
 	const { t } = useTranslation();
 
+	const handleImage = (url: string) => {
+		let urlStr = url;
+		let isIpfs = ["http://", "https://"].some((value) =>
+			urlStr.includes(value)
+		);
+		if (!isIpfs) {
+			urlStr = `https://ipfs.io/ipfs/${urlStr}`;
+		}
+		return urlStr;
+	};
+
 	return (
 		<div className="nft_card">
 			<div className="nft_info_box">
@@ -53,7 +64,7 @@ const NftCard = (props: INftCardProps) => {
 						<Image
 							fallback={require("../../assets/img_error.jpg")}
 							width="100%"
-							src={nft.image || nft.imageOrigin}
+							src={handleImage(nft.image || nft.imageOrigin)}
 							placeholder={
 								<div className="loading_icon_box">
 									<LoadingOutlined className="loading_icon" />

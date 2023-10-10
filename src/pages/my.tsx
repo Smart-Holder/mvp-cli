@@ -413,12 +413,12 @@ class My extends NavPage {
 								scrollableTarget={"scrollableDiv"}
 							>
 								{nftList1.length
-									? nftList1.map((item: NFT) => (
+									? nftList1.map((item: NFT, index) => (
 											<NftCard
 												page={this}
 												showTransferBtn={false}
 												showChain={chain.chain !== item.chain}
-												key={item.tokenId}
+												key={item.tokenId + index}
 												btnClick={this.saveNftOfDeviceClick.bind(this, item)}
 												nft={item}
 												btnText={t("存入到设备")}
