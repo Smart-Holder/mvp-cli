@@ -58,13 +58,15 @@ const NftCard = (props: INftCardProps) => {
 						<video
 							controls
 							src={nft.media || nft.mediaOrigin}
-							poster={nft.image || nft.imageOrigin}
+							// poster={nft.image || nft.imageOrigin}
+							poster={handleImage(nft?.thumbnail || nft.image || nft.imageOrigin)}
 						></video>
 					) : (
 						<Image
 							fallback={require("../../assets/img_error.jpg")}
 							width="100%"
-							src={handleImage(nft.image || nft.imageOrigin)}
+							// src={handleImage(nft.image || nft.imageOrigin)}
+							src={handleImage(nft?.thumbnail || nft.image || nft.imageOrigin)}
 							placeholder={
 								<div className="loading_icon_box">
 									<LoadingOutlined className="loading_icon" />

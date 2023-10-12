@@ -500,7 +500,7 @@ class DeviceInfo extends NavPage<Device> {
 								scrollableTarget={"scrollableDiv"}
 							>
 								{nftList1.length
-									? nftList1.map((item) => (
+									? nftList1.map((item,index) => (
 											<NftCard
 												page={this}
 												showTransferBtn={false}

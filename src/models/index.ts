@@ -5,6 +5,8 @@ import {AssetMy} from '../../deps/mvp-ser/src/models/def';
 
 export * from '../../deps/mvp-ser/src/models/def';
 
-export type NFT = AssetMy;
+export interface  NFT extends AssetMy  {
+    thumbnail?: string;
+};
 
 export default sdk;

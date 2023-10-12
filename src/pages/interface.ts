@@ -6,6 +6,7 @@ export interface INftItem extends NFT {
 	metadataJson?: {
 		properties?: { trait_type: string; value: string }[];
 	};
+	thumbnail?: string;
 }
 
 // export interface IPageProps {

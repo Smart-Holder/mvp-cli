@@ -156,12 +156,23 @@ class SetCarousel extends Component<ISetCarouselProps> {
 		return Object.values(newselectedList);
 	}
 
+	handleImage = (url: string) => {
+		let urlStr = url;
+		let isIpfs = ["http://", "https://"].some((value) =>
+			urlStr.includes(value)
+		);
+		if (!isIpfs) {
+			urlStr = `https://ipfs.io/ipfs/${urlStr}`;
+		}
+		return urlStr;
+	};
+
 	rendNftItem(nft: NFT, index: number) {
 		const { selectedArrList } = this.state;
 		let ids = selectedArrList.map(item => item.tokenId);
 		return <div key={nft.tokenId} onClick={this.nftItemClick.bind(this, nft)} className="nft_item">
 			{/* {nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <img src={nft.image || nft.imageOrigin} alt="" />} */}
-			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={nft.image || nft.imageOrigin}></video> : <Image className="nft_image" preview={false} placeholder={<LoadingOutlined className="loading_icon" /> || <img src={require("../../assets/img_loading.jpg")} />} src={nft.image || nft.imageOrigin} alt="" fallback={require("../../assets/img_error.jpg")} />}
+			{nft.media.match(/\.mp4/i) ? <video controls src={nft.media || nft.mediaOrigin} poster={this.handleImage(nft?.thumbnail || nft.image || nft.imageOrigin)}></video> : <Image className="nft_image" preview={false} placeholder={<LoadingOutlined className="loading_icon" /> || <img src={require("../../assets/img_loading.jpg")} />} src={this.handleImage(nft?.thumbnail || nft.image || nft.imageOrigin)} alt="" fallback={require("../../assets/img_error.jpg")} />}
 			{/* <div className={`select_btn ${ids.includes(nft.id) && 'select_btn_active'}`} /> */}
 			<img className={`select_img ${ids.includes(nft.tokenId) && 'select_img_active'}`} src={require(`../../assets/${ids.includes(nft.tokenId) ? 'selected' : 'select'}.png`)} />
 		</div>
